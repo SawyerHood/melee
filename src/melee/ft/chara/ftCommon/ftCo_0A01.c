@@ -4988,15 +4988,19 @@ void ftCo_800AB224(Fighter* fp)
     Fighter* temp_r0;
     s32 var_r0_5;
     s32 var_r0_6;
+    s32 var_r0_4;
+    struct Fighter_x1A88_t* data1;
+    mp_UnkStruct0* data0;
 
-    u8 _[0x48];
+    u8 _[0x38];
 
+    Vec3 vec;
     u32 sp40;
     int sp3C;
     Vec3 sp30;
     Vec3 sp24;
 
-    PAD_STACK(0xC);
+    PAD_STACK(0x18);
 
     temp_r31 = &fp->x1A88;
     if (temp_r31->xFA_b6) {
@@ -5043,7 +5047,25 @@ void ftCo_800AB224(Fighter* fp)
         }
     } else {
     block_49:
-        if (ftCo_800A21FC(fp)) {
+        data1 = &fp->x1A88;
+        if (fp->ground_or_air == GA_Air) {
+            var_r0_4 = 0;
+            goto test;
+        }
+        if ((data0 = mpIsland_8005AB54(fp->coll_data.floor.index)) == NULL) {
+            var_r0_4 = 0;
+            goto test;
+        }
+        vec.x = data1->x54.x;
+        vec.y = 5.0 + data1->x54.y;
+        vec.z = 0.0f;
+        if (mpIsland_8005AC14(&vec, -10.0f) == data0) {
+            var_r0_4 = 1;
+        } else {
+            var_r0_4 = 0;
+        }
+    test:
+        if (var_r0_4 != 0) {
             ftCo_800AA42C(fp);
             return;
         }
