@@ -24,13 +24,13 @@ HSD_AnimJoint* it_80294364(Item_GObj* gobj)
     itWstarAttributes* attr = ip->xC4_article_data->x4_specialAttributes;
     s32 candidates[7];
     volatile s32 pad;
-    s32 i = 0;
-    s32 count = 0;
+    s32 i;
+    s32 count;
     s32 picked;
     s32 end = it_804D6D00;
     s32 var_ctr = attr->x24_count;
 
-    for (; i < var_ctr; i++) {
+    for (i = count = 0; i < var_ctr; i++) {
         if (i != end) {
             candidates[count] = i;
             count++;
