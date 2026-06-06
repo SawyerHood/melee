@@ -63,7 +63,6 @@ typedef struct lbl_804706D8_t {
     u8 x3;
 } lbl_804706D8_t;
 
-lbl_804706D8_t lbl_804706D8[12];
 
 struct lbl_80472D28_t {
     /*   +0 */ char pad_0[0x20];
@@ -126,12 +125,8 @@ struct lbl_80472E48_t {
     /* 0x10 */ u8 x10;
     /* 0x11 */ char pad_11[3];
     /* 0x14 */ s32 x14[0x1B];
-    /* 0x80 */ s32 x80;
-    /* 0x84 */ s32 x84;
-    /* 0x88 */ s32 x88;
-    /* 0x8C */ s32 x8C;
-}; /* size = 0x90 */
-STATIC_ASSERT(sizeof(struct lbl_80472E48_t) == 0x90);
+}; /* size = 0x80 */
+STATIC_ASSERT(sizeof(struct lbl_80472E48_t) == 0x80);
 
 /// Adventure mode stage data table entry (size 0x1A)
 /// Table has 110 entries: 22 stages × 5 difficulty levels
@@ -169,20 +164,6 @@ typedef struct RegClearEv {
     /* 0x20 */ f32 x20;
 } RegClearEv;
 
-static struct lbl_804706C0_t {
-    int x0;
-    int x4;
-    int x8;
-    int xC; // HP (stamina)
-    int x10;
-    int x14;
-} lbl_804706C0;
-
-static UnkAdventureData lbl_80472C30;
-static UnkAllstarData lbl_80472CB0;
-static struct lbl_80472D28_t lbl_80472D28;
-static struct lbl_80472E48_t lbl_80472E48;
-static int lbl_80472EC8[4];
 typedef struct RegClearSpawnEntry {
     /* 0x00 */ s32 x0;
     /* 0x04 */ u8 x4;
@@ -202,7 +183,32 @@ typedef struct RegClearCharEntry {
     /* 0x08 */ f32 x8;
 } RegClearCharEntry;
 
-struct {
+static struct lbl_804706C0_t {
+    int x0;
+    int x4;
+    int x8;
+    int xC; // HP (stamina)
+    int x10;
+    int x14;
+} lbl_804706C0;
+
+static lbl_804706D8_t lbl_804706D8[12];
+
+/// Storage for classic-mode data that shares this unit's .bss block
+/// (referenced as extern globals by gmclassic.c; placed here to mirror
+/// the original layout).
+static u8 gmClassic_80470708[0x148];
+static u8 gmClassic_80470850[0x1C];
+static u8 gmClassic_8047086C[0x228C];
+static u8 gmClassic_80472AF8[0x110];
+
+static UnkAdventureData lbl_80472C30;
+static UnkAllstarData lbl_80472CB0;
+static struct lbl_80472D28_t lbl_80472D28;
+static struct lbl_80472E48_t lbl_80472E48;
+static int lbl_80472EC8[4];
+
+static struct lbl_80472ED8_t {
     /* 0x000 */ s32 x0;
     /* 0x004 */ s32 x4;
     /* 0x008 */ s32 x8;
@@ -215,15 +221,17 @@ struct {
     /* 0x6B0 */ RegClearSpawnEntry* x6B0;
     /* 0x6B4 */ RegClearSpawnEntry* x6B4;
     /* 0x6B8 */ RegClearSpawnEntry* x6B8;
-    /* 0x6BC */ u8 x6BC;
-    /* 0x6BD */ u8 pad_6BD;
-    /* 0x6BE */ u16 x6BE;
-    /* 0x6C0 */ int x6C0;
-    /* 0x6C4 */ int x6C4;
-    /* 0x6C8 */ int x6C8;
-    /* 0x6CC */ s8 x6CC;
-    /* 0x6CD */ u8 x6CD;
 } lbl_80472ED8;
+
+static struct lbl_80473594_t {
+    /* 0x00 */ u8 x0;
+    /* 0x02 */ u16 x2;
+    /* 0x04 */ int x4;
+    /* 0x08 */ int x8;
+    /* 0x0C */ int xC;
+    /* 0x10 */ s8 x10;
+    /* 0x11 */ u8 x11;
+} lbl_80473594;
 
 void fn_8017C0C8(void)
 {
@@ -2319,11 +2327,12 @@ void fn_8017FBA4(void* arg0)
 void fn_8017FE54(HSD_GObj* gobj)
 {
     RegClearEv* ev = gobj->user_data;
+    struct lbl_80472D28_t* state = &lbl_80472D28;
 
     lb_800122C8(ev->x1C, 0, 0, 1);
-    lb_800138D8(lbl_80472D28.x2C, (int) (120.0F * lbl_80472D28.x10C) + 1);
+    lb_800138D8(state->x2C, (int) (120.0F * state->x10C) + 1);
 
-    ev->x20 = 0.0225F * (f32) lbl_80472D28.x110 - 0.175F;
+    ev->x20 = 0.0225F * (f32) state->x110 - 0.175F;
 
     if (ev->x20 < 0.05F) {
         ev->x20 = 0.0F;
@@ -2748,80 +2757,84 @@ void fn_80180C14(HSD_GObj* gobj)
 
 static s32 lbl_804D65D4;
 
-void fn_80180C60(HSD_GObj* gobj)
+void fn_80180C60(HSD_GObj* arg0)
 {
     typedef struct {
         u8 b76 : 2, b54 : 2, b32 : 2, b10 : 2;
     } x0_2bits;
-    HSD_JObj* jobj = gobj->hsd_obj;
+    f32 Ground_801C57F0();
+    HSD_GObj* gobj = arg0;
+    u8* base = (u8*) &lbl_80472E48;
+    HSD_JObj* jobj;
     s32 dist;
     s32 disp;
     s32 d;
     u32 b76;
 
-    dist = (s32) (0.1f * Ground_801C57F0());
+    dist = (s32) (0.1f * Ground_801C57F0(0));
+    jobj = gobj->hsd_obj;
     if (dist < 0) {
         dist = 0;
     }
 
-    lbl_80472E48.x80 = dist;
-    b76 = ((u8) lbl_80472E48.x0 >> 6) & 3;
+    *(s32*) (base + 0x80) = dist;
+    b76 = ((u8) base[0] >> 6) & 3;
 
-    if (b76 != 0 && (((u8) lbl_80472E48.x0 >> 4) & 3)) {
+    if (b76 != 0 && (((u8) base[0] >> 4) & 3)) {
         ifTime_HideTimers();
-        if (lbl_80472E48.x80 == lbl_80472E48.x84) {
-            lbl_80472E48.x8C = lbl_80472E48.x8C + 1;
+        if (*(s32*) (base + 0x80) == *(s32*) (base + 0x84)) {
+            *(s32*) (base + 0x8C) = *(s32*) (base + 0x8C) + 1;
         } else {
-            lbl_80472E48.x8C = 0;
+            *(s32*) (base + 0x8C) = 0;
         }
-        if (lbl_80472E48.x8C > 0x3C) {
-            ((x0_2bits*) &lbl_80472E48.x0)->b32 = 1;
-            if (dist == 0 && !(lbl_80472E48.x0 & 3)) {
-                ((x0_2bits*) &lbl_80472E48.x0)->b10 = 1;
+        if (*(s32*) (base + 0x8C) > 0x3C) {
+            ((x0_2bits*) base)->b32 = 1;
+            if (dist == 0 && !(base[0] & 3)) {
+                ((x0_2bits*) base)->b10 = 1;
             }
         }
     } else {
         if (b76 != 0) {
             ifTime_HideTimers();
-            if (lbl_80472E48.x80 == lbl_80472E48.x84) {
-                lbl_80472E48.x8C = lbl_80472E48.x8C + 1;
+            if (*(s32*) (base + 0x80) == *(s32*) (base + 0x84)) {
+                *(s32*) (base + 0x8C) = *(s32*) (base + 0x8C) + 1;
             } else {
-                lbl_80472E48.x8C = 0;
+                *(s32*) (base + 0x8C) = 0;
             }
-            if (lbl_80472E48.x8C > 0x78) {
-                ((x0_2bits*) &lbl_80472E48.x0)->b32 = 1;
-                if (!(lbl_80472E48.x0 & 3)) {
-                    ((x0_2bits*) &lbl_80472E48.x0)->b10 = 1;
+            if (*(s32*) (base + 0x8C) > 0x78) {
+                ((x0_2bits*) base)->b32 = 1;
+                if (!(base[0] & 3)) {
+                    ((x0_2bits*) base)->b10 = 1;
                 }
             }
         } else if (gm_8016AEEC() == 0 && gm_8016AEFC() == 0x3B) {
-            ((x0_2bits*) &lbl_80472E48.x0)->b76 = 1;
+            ((x0_2bits*) base)->b76 = 1;
             ifTime_HideTimers();
             Player_80031790(0);
         }
         if (Ground_801C1DC0() != 0) {
-            if (!(((u8) lbl_80472E48.x0 >> 6) & 3)) {
-                ((x0_2bits*) &lbl_80472E48.x0)->b76 = 1;
+            if (!(((u8) base[0] >> 6) & 3)) {
+                ((x0_2bits*) base)->b76 = 1;
                 ifTime_HideTimers();
                 Player_80031790(0);
             }
-            if (!(((u8) lbl_80472E48.x0 >> 4) & 3)) {
-                ((x0_2bits*) &lbl_80472E48.x0)->b54 = 1;
+            if (!(((u8) base[0] >> 4) & 3)) {
+                ((x0_2bits*) base)->b54 = 1;
                 Player_80031790(0);
             }
-            lbl_80472E48.x8C = 0;
+            *(s32*) (base + 0x8C) = 0;
         }
     }
 
-    if (!(((u8) lbl_80472E48.x0 >> 2) & 3)) {
+    if (!(((u8) base[0] >> 2) & 3)) {
         HSD_JObjReqAnimAll(jobj, 0.0f);
-    } else if (lbl_80472E48.x0 & 3) {
+    } else if (base[0] & 3) {
         HSD_JObjSetFlagsAll(jobj, 0x10U);
-    } else if (dist > lbl_80472E48.x14[gm_80164024((u8) lbl_80472E48.unk_4)]) {
+    } else if (dist > ((s32*) (base + 0x14))[gm_80164024(*(u8*) (base + 4))]) {
         if (lbl_804D65D4 == 0) {
             lbAudioAx_800237A8(0x9C40, 0x7F, 0x40);
             lbAudioAx_800237A8(0x144, 0x7F, 0x40);
-            gm_80167858((s32) (s8) lbl_80472E48.x10,
+            gm_80167858((s32) * (s8*) (base + 0x10),
                         (s32) Player_GetNametagSlotID(0), 0xD, 0x5A);
             lbl_804D65D4 = 1;
         }
@@ -2893,9 +2906,9 @@ void fn_80180C60(HSD_GObj* gobj)
     }
 
     HSD_JObjAnimAll(jobj);
-    lbl_80472E48.x84 = lbl_80472E48.x80;
-    if (lbl_80472E48.x80 > lbl_80472E48.x88 + 0xA) {
-        lbl_80472E48.x88 = lbl_80472E48.x80;
+    lbl_80472EC8[1] = lbl_80472EC8[0];
+    if (lbl_80472EC8[0] > lbl_80472EC8[2] + 0xA) {
+        lbl_80472EC8[2] = lbl_80472EC8[0];
         lbAudioAx_80023870(0xBB, 0x7F, 0x40, 0x8A);
     }
 }
@@ -2904,6 +2917,10 @@ extern s32 lbl_804D65D8;
 
 void fn_80181598(void)
 {
+    typedef struct {
+        u8 b76 : 2, b54 : 2, b32 : 2, b10 : 2;
+    } x0_2bits;
+    u8* base = (u8*) &lbl_80472E48;
     u32 mode;
 
     PAD_STACK(0x20);
@@ -2912,38 +2929,41 @@ void fn_80181598(void)
         return;
     }
 
-    mode = lbl_80472E48.x0 & 3;
+    mode = base[0] & 3;
 
     if (mode != 0) {
         if (mode == 1) {
             lbAudioAx_800237A8(0xC0, 0x7F, 0x40);
             lbAudioAx_800237A8(0x148, 0x7F, 0x40);
             mode = 2;
-            lbl_80472E48.x0 = (lbl_80472E48.x0 & ~3) | mode;
+            ((x0_2bits*) base)->b10 = mode;
         }
         lbl_804D65D8 += 1;
         if (lbl_804D65D8 >= 0xF0 ||
             (lbl_804D65D8 > 0x3C &&
-             (HSD_PadCopyStatus[lbl_80472E48.x10].trigger & 0x100)))
+             (HSD_PadCopyStatus[base[0x10]].trigger & 0x100)))
         {
             gm_8016B328();
             return;
         }
     }
 
-    if (((lbl_80472E48.x0 >> 2) & 3) != 0 &&
-        ((mode = lbl_80472E48.x0 & 3, mode == 0) || mode == 3))
+    if (((base[0] >> 2) & 3) != 0 &&
+        ((mode = base[0] & 3, mode == 0) || mode == 3))
     {
-        lbl_80472E48.xC += 1;
-        if (lbl_80472E48.xC > 0x3C &&
-            (lbl_80472E48.xC >= 0xF0 ||
-             (HSD_PadCopyStatus[lbl_80472E48.x10].trigger & 0x100)))
+        *(u32*) (base + 0xC) += 1;
+        if (*(u32*) (base + 0xC) > 0x3C &&
+            (*(u32*) (base + 0xC) >= 0xF0 ||
+             (HSD_PadCopyStatus[base[0x10]].trigger & 0x100)))
         {
-            if (lbl_80472E48.x80 >
-                lbl_80472E48.x14[gm_80164024((u8) lbl_80472E48.unk_4)])
+            s32* punk = (s32*) (base + 4);
+            s32 cur;
+            s32* tbl;
+            if ((cur = *(s32*) (base + 0x80)) >
+                (tbl = (s32*) (base + 0x14))[gm_80164024(
+                    (u8) * (s32*) (base + 4))])
             {
-                lbl_80472E48.x14[gm_80164024((u8) lbl_80472E48.unk_4)] =
-                    lbl_80472E48.x80;
+                tbl[gm_80164024((u8) *punk)] = cur;
             }
             gm_8016B328();
         }
@@ -2963,16 +2983,17 @@ void fn_80181708(void)
     HSD_JObj* jobj;
     HSD_GObj* gobj;
 
-    lbl_80472E48.x80 = 0;
-    lbl_80472E48.x84 = 0;
-    lbl_80472E48.x88 = 0;
-    lbl_80472E48.x8C = 0;
-    ((x0_2bits*) &lbl_80472E48.x0)->b76 = 0;
-    ((x0_2bits*) &lbl_80472E48.x0)->b54 = 0;
-    ((x0_2bits*) &lbl_80472E48.x0)->b32 = 0;
-    ((x0_2bits*) &lbl_80472E48.x0)->b10 = 0;
-    lbl_80472E48.xC = 0;
-    lbl_80472E48.x10 = (s8) Player_GetPlayerId(0);
+    u8* base = (u8*) &lbl_80472E48;
+    *(s32*) (base + 0x80) = 0;
+    *(s32*) (base + 0x84) = 0;
+    *(s32*) (base + 0x88) = 0;
+    *(s32*) (base + 0x8C) = 0;
+    ((x0_2bits*) base)->b76 = 0;
+    ((x0_2bits*) base)->b54 = 0;
+    ((x0_2bits*) base)->b32 = 0;
+    ((x0_2bits*) base)->b10 = 0;
+    *(u32*) (base + 0xC) = 0;
+    *(u8*) (base + 0x10) = (s8) Player_GetPlayerId(0);
     lbl_804D65D4 = 0;
     lbl_804D65D8 = 0;
 
@@ -3022,15 +3043,6 @@ void gm_80181A00(s32 arg0, s32 arg1)
     lbl_80472E48.unk_4 = arg0;
     lbl_80472E48.unk_8 = arg1;
 }
-
-struct {
-    u8 x0;
-    u16 x2;
-    int x4;
-    int x8;
-    int xC;
-    int x10;
-} lbl_80473594;
 
 int gm_80181A14(void)
 {
@@ -3154,14 +3166,17 @@ int fn_80181BFC(int* arg0)
 
 s32 fn_80181C80(s32 arg0)
 {
+    struct lbl_80472ED8_t* state = &lbl_80472ED8;
     s32 var_r29;
     s32 var_r30;
     volatile s32 sp38;
+    UNUSED u8 _[4];
     PlayerInitData sp10;
 
+    PAD_STACK(4);
     gm_801A4310();
     var_r30 = 0;
-    sp10 = lbl_80472ED8.xC;
+    sp10 = state->xC;
 
     for (var_r29 = 1; var_r29 < 6; var_r29++) {
         if (Player_GetFalls(var_r29) == 0 &&
@@ -3173,26 +3188,25 @@ s32 fn_80181C80(s32 arg0)
         }
     }
 
-    if ((s32) lbl_80472ED8.x54[arg0].x4 > var_r30 && lbl_80472ED8.x8 > 0x5A) {
+    if ((s32) state->x54[arg0].x4 > var_r30 && state->x8 > 0x5A) {
         if (Player_GetPlayerSlotType(sp38) != Gm_PKind_NA) {
             Player_SetFalls(sp38, 0);
             Player_SetSuicideCount(sp38, 0);
             fn_8016EF98(sp38);
         }
-        lbl_80472ED8.x54[arg0].x0 = -2;
+        state->x54[arg0].x0 = -2;
         sp10.team = !Player_GetTeam(0);
-        sp10.c_kind = lbl_80472ED8.x54[arg0].x5;
-        sp10.cpu_level = lbl_80472ED8.x54[arg0].x6;
-        sp10.xE = lbl_80472ED8.x54[arg0].x7;
-        sp10.x18 = lbl_80472ED8.x54[arg0].x8;
-        sp10.x1C = lbl_80472ED8.x54[arg0].xC;
+        sp10.c_kind = state->x54[arg0].x5;
+        sp10.cpu_level = state->x54[arg0].x6;
+        sp10.xE = state->x54[arg0].x7;
+        sp10.x18 = state->x54[arg0].x8;
+        sp10.x1C = state->x54[arg0].xC;
         gm_8016EDDC(sp38, &sp10);
         Player_SetNametagSlotID(sp38, 0x78);
         un_802FD28C(sp38);
-        lbl_80472ED8.x0 += 1;
+        state->x0 += 1;
     }
-    return lbl_80472ED8.x0;
-    PAD_STACK(8);
+    return state->x0;
 }
 
 void fn_80181E18(void)
@@ -3217,7 +3231,7 @@ void fn_80181E18(void)
                 Player_GetFalls(0);
             }
         } else if (gm_8016AEEC() == 0 && gm_8016AEFC() == 0x3B) {
-            lbl_80472ED8.x6BC = 1;
+            lbl_80473594.x0 = 1;
             gm_8016B33C(7);
             gm_8016B328();
         }
@@ -3233,10 +3247,10 @@ void fn_80181E18(void)
             continue;
         }
 
-        if (lbl_80472ED8.x6C4 < 0x23) {
-            if (lbl_80472ED8.x6C4 < 0x21) {
+        if (lbl_80473594.x8 < 0x23) {
+            if (lbl_80473594.x8 < 0x21) {
             } else {
-                lbl_80472ED8.x6C0 = gm_8016AEDC();
+                lbl_80473594.x4 = gm_8016AEDC();
             }
         }
 
@@ -3244,7 +3258,7 @@ void fn_80181E18(void)
         if (temp < 0) {
             temp = 0;
         }
-        lbl_80472ED8.x6BE = (s16) (temp + lbl_80472ED8.x4);
+        lbl_80473594.x2 = (s16) (temp + lbl_80472ED8.x4);
 
         switch (mode) {
         case 0x21:
@@ -3287,7 +3301,7 @@ void fn_80181E18(void)
                 }
             }
             if (count == 0) {
-                lbl_80472ED8.x6BC = 1;
+                lbl_80473594.x0 = 1;
                 gm_8016B33C(7);
                 gm_8016B328();
             }
@@ -3451,8 +3465,8 @@ void gm_80182174(void)
         break;
     }
 
-    lbl_80472ED8.x6CC = Player_GetPlayerId(0);
-    lbl_80472ED8.x6CD = Player_GetNametagSlotID(0);
+    lbl_80473594.x10 = Player_GetPlayerId(0);
+    lbl_80473594.x11 = Player_GetNametagSlotID(0);
     HSD_GObj_SetupProc(GObj_Create(0xFU, 0x11U, 0U),
                        (HSD_GObjEvent) fn_80181E18, 0x15U);
     gm_80168F88();
@@ -3475,11 +3489,12 @@ bool gm_80182510(void)
 
 void gm_80182554(int arg0, int arg1)
 {
-    lbl_80472ED8.x6C8 = arg0;
-    lbl_80472ED8.x6C4 = arg1;
-    lbl_80472ED8.x6BC = 0;
-    lbl_80472ED8.x6C0 = 0;
-    lbl_80472ED8.x6BE = 0;
+    u8* base = (u8*) &lbl_80472ED8;
+    *(int*) (base + 0x6C8) = arg0;
+    *(int*) (base + 0x6C4) = arg1;
+    *(u8*) (base + 0x6BC) = 0;
+    *(int*) (base + 0x6C0) = 0;
+    *(u16*) (base + 0x6BE) = 0;
 }
 
 typedef struct {
@@ -3490,9 +3505,12 @@ typedef struct {
 
 s32 gm_80182578(void)
 {
+    u8* base = (u8*) &lbl_80472ED8;
+    int* pmode = (int*) (base + 0x6C4);
+    int* pidx = (int*) (base + 0x6C8);
     RecordBlock* blocks = (RecordBlock*) lbl_803D8D08;
-    int idx = lbl_80472ED8.x6C8;
-    s32 mode = lbl_80472ED8.x6C4;
+    int idx = *(int*) (base + 0x6C8);
+    s32 mode = *(s32*) (base + 0x6C4);
     int time_val;
     u32 score_val;
 
@@ -3554,29 +3572,29 @@ s32 gm_80182578(void)
             } else {
                 mode = gmMainLib_8015D710(gm_80164024((u8) idx));
             }
-            if ((u8) lbl_80472ED8.x6BC != 0) {
-                u32 score_store = (u32) lbl_80472ED8.x6C0;
+            if ((u8) *(u8*) (base + 0x6BC) != 0) {
+                u32 score_store = (u32) *(s32*) (base + 0x6C0);
                 if (score_store < score_val) {
-                    int m = lbl_80472ED8.x6C4;
-                    int i = lbl_80472ED8.x6C8;
+                    int m = *pmode;
+                    int i = *pidx;
                     switch (m) {
                     case 33:
-                        blocks[0].icons[i] = (u8) lbl_80472ED8.x6BC;
+                        blocks[0].icons[i] = (u8) *(u8*) (base + 0x6BC);
                         break;
                     case 34:
-                        blocks[1].icons[i] = (u8) lbl_80472ED8.x6BC;
+                        blocks[1].icons[i] = (u8) *(u8*) (base + 0x6BC);
                         break;
                     case 35:
-                        blocks[2].icons[i] = (u8) lbl_80472ED8.x6BC;
+                        blocks[2].icons[i] = (u8) *(u8*) (base + 0x6BC);
                         break;
                     case 36:
-                        blocks[3].icons[i] = (u8) lbl_80472ED8.x6BC;
+                        blocks[3].icons[i] = (u8) *(u8*) (base + 0x6BC);
                         break;
                     case 37:
-                        blocks[4].icons[i] = (u8) lbl_80472ED8.x6BC;
+                        blocks[4].icons[i] = (u8) *(u8*) (base + 0x6BC);
                         break;
                     case 38:
-                        blocks[5].icons[i] = (u8) lbl_80472ED8.x6BC;
+                        blocks[5].icons[i] = (u8) *(u8*) (base + 0x6BC);
                         break;
                     }
                     switch (m) {
@@ -3600,7 +3618,7 @@ s32 gm_80182578(void)
                         break;
                     }
                     {
-                        u16 time_store = lbl_80472ED8.x6BE;
+                        u16 time_store = *(u16*) (base + 0x6BE);
                         switch (m) {
                         case 33:
                             blocks[0].times[i] = time_store;
@@ -3625,53 +3643,53 @@ s32 gm_80182578(void)
                 }
                 return mode;
             }
-            if ((s32) lbl_80472ED8.x6BE > (s32) time_val && mode == 0) {
-                int m = lbl_80472ED8.x6C4;
-                int i = lbl_80472ED8.x6C8;
+            if ((s32) *(u16*) (base + 0x6BE) > (s32) time_val && mode == 0) {
+                int m = *pmode;
+                int i = *pidx;
                 switch (m) {
                 case 33:
-                    blocks[0].times[i] = (u16) lbl_80472ED8.x6BE;
+                    blocks[0].times[i] = (u16) *(u16*) (base + 0x6BE);
                     break;
                 case 34:
-                    blocks[1].times[i] = (u16) lbl_80472ED8.x6BE;
+                    blocks[1].times[i] = (u16) *(u16*) (base + 0x6BE);
                     break;
                 case 35:
-                    blocks[2].times[i] = (u16) lbl_80472ED8.x6BE;
+                    blocks[2].times[i] = (u16) *(u16*) (base + 0x6BE);
                     break;
                 case 36:
-                    blocks[3].times[i] = (u16) lbl_80472ED8.x6BE;
+                    blocks[3].times[i] = (u16) *(u16*) (base + 0x6BE);
                     break;
                 case 37:
-                    blocks[4].times[i] = (u16) lbl_80472ED8.x6BE;
+                    blocks[4].times[i] = (u16) *(u16*) (base + 0x6BE);
                     break;
                 case 38:
-                    blocks[5].times[i] = (u16) lbl_80472ED8.x6BE;
+                    blocks[5].times[i] = (u16) *(u16*) (base + 0x6BE);
                     break;
                 }
             }
             return mode;
         }
-        if ((u8) lbl_80472ED8.x6BC != 0) {
-            u16 time_store = lbl_80472ED8.x6BE;
+        if ((u8) *(u8*) (base + 0x6BC) != 0) {
+            u16 time_store = *(u16*) (base + 0x6BE);
             if ((s32) time_store > (s32) time_val) {
                 switch (mode) {
                 case 33:
-                    blocks[0].icons[idx] = (u8) lbl_80472ED8.x6BC;
+                    blocks[0].icons[idx] = (u8) *(u8*) (base + 0x6BC);
                     break;
                 case 34:
-                    blocks[1].icons[idx] = (u8) lbl_80472ED8.x6BC;
+                    blocks[1].icons[idx] = (u8) *(u8*) (base + 0x6BC);
                     break;
                 case 35:
-                    blocks[2].icons[idx] = (u8) lbl_80472ED8.x6BC;
+                    blocks[2].icons[idx] = (u8) *(u8*) (base + 0x6BC);
                     break;
                 case 36:
-                    blocks[3].icons[idx] = (u8) lbl_80472ED8.x6BC;
+                    blocks[3].icons[idx] = (u8) *(u8*) (base + 0x6BC);
                     break;
                 case 37:
-                    blocks[4].icons[idx] = (u8) lbl_80472ED8.x6BC;
+                    blocks[4].icons[idx] = (u8) *(u8*) (base + 0x6BC);
                     break;
                 case 38:
-                    blocks[5].icons[idx] = (u8) lbl_80472ED8.x6BC;
+                    blocks[5].icons[idx] = (u8) *(u8*) (base + 0x6BC);
                     break;
                 }
                 switch (mode) {
@@ -3698,25 +3716,25 @@ s32 gm_80182578(void)
         }
         return mode;
     } else if (mode < 0x27) {
-        if ((s32) lbl_80472ED8.x6BE > (s32) time_val) {
+        if ((s32) *(u16*) (base + 0x6BE) > (s32) time_val) {
             switch (mode) {
             case 33:
-                blocks[0].times[idx] = (u16) lbl_80472ED8.x6BE;
+                blocks[0].times[idx] = (u16) *(u16*) (base + 0x6BE);
                 break;
             case 34:
-                blocks[1].times[idx] = (u16) lbl_80472ED8.x6BE;
+                blocks[1].times[idx] = (u16) *(u16*) (base + 0x6BE);
                 break;
             case 35:
-                blocks[2].times[idx] = (u16) lbl_80472ED8.x6BE;
+                blocks[2].times[idx] = (u16) *(u16*) (base + 0x6BE);
                 break;
             case 36:
-                blocks[3].times[idx] = (u16) lbl_80472ED8.x6BE;
+                blocks[3].times[idx] = (u16) *(u16*) (base + 0x6BE);
                 break;
             case 37:
-                blocks[4].times[idx] = (u16) lbl_80472ED8.x6BE;
+                blocks[4].times[idx] = (u16) *(u16*) (base + 0x6BE);
                 break;
             case 38:
-                blocks[5].times[idx] = (u16) lbl_80472ED8.x6BE;
+                blocks[5].times[idx] = (u16) *(u16*) (base + 0x6BE);
                 break;
             }
         }
@@ -3729,8 +3747,8 @@ s32 gm_80182578(void)
 void fn_80182B5C(void)
 {
     RecordBlock* blocks = (RecordBlock*) lbl_803D8D08;
-    int mode = lbl_80472ED8.x6C4;
-    int idx = lbl_80472ED8.x6C8;
+    int mode = lbl_80473594.x8;
+    int idx = lbl_80473594.xC;
     int var_r6;
     u32 var_r30;
 
@@ -3789,11 +3807,11 @@ void fn_80182B5C(void)
     case 34:
         gmMainLib_8015D710(gm_80164024((u8) idx));
     func:
-        if (lbl_80472ED8.x6BC != 0) {
-            if ((u32) lbl_80472ED8.x6C0 < var_r30) {
+        if (lbl_80473594.x0 != 0) {
+            if ((u32) lbl_80473594.x4 < var_r30) {
                 gm_8016B350(0x9C40);
                 gm_8016B364(0x144);
-                gm_80167858((s32) lbl_80472ED8.x6CC, (s32) lbl_80472ED8.x6CD,
+                gm_80167858((s32) lbl_80473594.x10, (s32) lbl_80473594.x11,
                             0xD, 0x5A);
                 return;
             }
@@ -3805,19 +3823,19 @@ void fn_80182B5C(void)
         break;
     case 35:
     case 36:
-        if (lbl_80472ED8.x6BC != 0 && (s32) lbl_80472ED8.x6BE > var_r6) {
+        if (lbl_80473594.x0 != 0 && (s32) lbl_80473594.x2 > var_r6) {
             gm_8016B350(0x9C40);
             gm_8016B364(0x144);
-            gm_80167858((s32) lbl_80472ED8.x6CC, (s32) lbl_80472ED8.x6CD, 0xD,
+            gm_80167858((s32) lbl_80473594.x10, (s32) lbl_80473594.x11, 0xD,
                         0x5A);
         }
         break;
     case 37:
     case 38:
-        if ((s32) lbl_80472ED8.x6BE > var_r6) {
+        if ((s32) lbl_80473594.x2 > var_r6) {
             gm_8016B350(0x9C40);
             gm_8016B364(0x144);
-            gm_80167858((s32) lbl_80472ED8.x6CC, (s32) lbl_80472ED8.x6CD, 0xD,
+            gm_80167858((s32) lbl_80473594.x10, (s32) lbl_80473594.x11, 0xD,
                         0x5A);
         }
         break;
