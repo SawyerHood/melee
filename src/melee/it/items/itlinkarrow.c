@@ -257,7 +257,7 @@ void it_802A850C(Item_GObj* gobj, Vec3* arg1, Vec3* arg2, f32 arg3, f32 arg4,
     if ((ip->xDD4_itemVar.linkarrow.xE0 != NULL) &&
         (ip->owner == ip->xDD4_itemVar.linkarrow.xE0))
     {
-        it_802A8C7C(gobj);
+        it_802A8C7C(gobj, ip->xDD4_itemVar.linkarrow.xE0);
         HSD_MtxGetRotation(
             ftLib_80086630(ip->xDD4_itemVar.linkarrow.xE0, ip->xDC4)->mtx,
             &rot);
@@ -396,7 +396,7 @@ bool itLinkarrow_UnkMotion0_Coll(HSD_GObj* gobj)
     return false;
 }
 
-void it_802A8C7C(HSD_GObj* gobj)
+void it_802A8C7C(HSD_GObj* gobj, HSD_GObj* unused)
 {
     Item* item;
     itLinkArrowAttributes* attr;
