@@ -315,14 +315,13 @@ void mn_8022FB88(u8 arg0, void* arg1)
     HSD_JObj* temp_r29;
     HSD_JObj* temp_r29_2;
     HSD_JObj* temp_r29_3;
+    u8* var_r29;
     int new_var;
     HSD_JObj* temp_r31;
     HSD_JObj* temp_r28;
-    s32 var_r27;
     s32 var_r28;
-    u8* var_r29;
-    u8* var_r29_2;
     HSD_JObj** temp_r27_2;
+    s32 var_r27;
 
     sp14 = mn_804DBDFC;
     if (arg0 == 0) {
@@ -340,11 +339,11 @@ void mn_8022FB88(u8 arg0, void* arg1)
         return;
     }
     var_r28 = 0;
-    var_r29_2 = (u8*) &sp14;
+    var_r29 = (u8*) &sp14;
     do {
-        HSD_JObjClearFlagsAll(data->x58[*var_r29_2], 0x10U);
+        HSD_JObjClearFlagsAll(data->x58[*var_r29], 0x10U);
         var_r28 += 1;
-        var_r29_2 += 1;
+        var_r29 += 1;
     } while (var_r28 < 4);
     temp_r28 = data->x58[4];
     HSD_JObjReqAnimAll(temp_r28, mn_804D6BD8);
