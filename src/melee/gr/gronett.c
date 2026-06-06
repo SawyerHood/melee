@@ -421,6 +421,8 @@ void grOnett_801E40E4(Ground* gp, s32 arg1, CollData* cd, s32 arg3,
             }
             gp->gv.onett_building.next_state = 5;
             break;
+        case 4:
+            break;
         }
     }
 }
