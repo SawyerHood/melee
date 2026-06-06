@@ -64,6 +64,7 @@ typedef struct UnkX {
     { NULL, 0, if_802F74D0, 0x9C48U, 0, 0, { 0 }, 0, NULL, NULL, 0, 0 },
     { NULL, 0, if_802F74D0, 0x9C46U, 0, 0, { 0 }, 0, NULL, NULL, 0, 0 },
 };
+/* 3F9768 */ static char ifStatus_ScInfCntStr[] = "ScInfCnt_scene_models";
 /* 4D6D60 */ static u8 ifStatus_804D6D60;
 /* 4D6D61 */ static s8 ifStatus_804D6D61;
 
@@ -1262,7 +1263,7 @@ void ifStatus_802F7134(void)
     }
 
     archive = ifAll_802F3690();
-    lbArchive_LoadSections(*archive, (void**) &models, "ScInfCnt_scene_models",
+    lbArchive_LoadSections(*archive, (void**) &models, ifStatus_ScInfCntStr,
                            0);
 
     for (i = 0; i < 8; i++) {

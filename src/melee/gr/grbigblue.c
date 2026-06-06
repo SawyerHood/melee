@@ -1326,12 +1326,13 @@ void grBigBlue_801E8A1C(int idx)
     }
 }
 
-/// @todo Currently 94.71% match - needs pointer advancement and i variable
+/// @todo 97.92% match - two dead `li r4, 0/1` defs from the original's
+/// unroll machinery are not reproducible from C (see campaign notes).
 f32 grBigBlue_801E8B84(f32 right, f32 left, f32 bottom, f32 top)
 {
     u8* gp = (u8*) GET_GROUND(Ground_801C2BA4(33));
     int i = 0;
-    f32 result = 0.0F;
+    f32 result = grBb_804DB310;
 
     for (i = 0; i < 4; i++) {
         if ((unsigned) (gp[0xD4] >> 2 & 0x3F) != 1U) {
@@ -1366,6 +1367,7 @@ void grBigBlue_801E8D64(Ground_GObj* gobj)
     HSD_JObj* jobj = gobj->hsd_obj;
     Vec3 pos;
     Vec3 scale;
+    u8 _[4];
     Vec3 translate;
     f32 y_pos;
     PAD_STACK(0xC);
@@ -2081,12 +2083,15 @@ bool grBigBlue_801EAB50(Vec3* pos, s32 flag, f32 rangeX, f32 rangeY)
 s32 grBigBlue_801EACE8(HSD_JObj* exclude, Vec3* point, f32* out_y,
                        f32 half_range_x, f32 half_range_y)
 {
-    u8 _padA[32];
+    u8 _padA[8];
     HSD_GObj* gobj;
     Ground* gp;
     HSD_JObj* jobj;
     Vec3 pos;
-    Vec3 hw_left, hw_right;
+    u8 _padB[12];
+    Vec3 hw_left;
+    Vec3 hw_right;
+    u8 _padC[16];
     Vec3 route_pos;
     f32 best_in_range, best_above;
     f32 left_bound, right_bound, top_bound, bottom_bound;
@@ -2104,7 +2109,7 @@ s32 grBigBlue_801EACE8(HSD_JObj* exclude, Vec3* point, f32* out_y,
     bottom_bound = point->y - half_range_y;
 
     best_in_range = F32_MAX;
-    best_above = -F32_MAX;
+    best_above = grBb_804DB310;
 
     gp = gobj->user_data;
     p_left = &hw_left.x;
@@ -2164,7 +2169,7 @@ s32 grBigBlue_801EACE8(HSD_JObj* exclude, Vec3* point, f32* out_y,
         {
             if (route_pos.y > bottom_bound && route_pos.y < top_bound) {
                 dist = point->y - route_pos.y;
-                if (dist < 0.0F) {
+                if (dist < grBb_804DB2F4) {
                     dist = -dist;
                 }
                 if (dist < best_in_range) {
@@ -2180,7 +2185,7 @@ s32 grBigBlue_801EACE8(HSD_JObj* exclude, Vec3* point, f32* out_y,
         *out_y = best_in_range;
         return 1;
     }
-    if (-F32_MAX != best_above) {
+    if (grBb_804DB310 != best_above) {
         *out_y = best_above;
         return 2;
     }
@@ -4850,7 +4855,7 @@ void fn_801EF60C(Ground* gp, s32 joint_id, CollData* coll, s32 time_param,
     if (env != 1) {
         return;
     }
-    table = grBb_803E2D78.x84;
+    table = (s16*) ((char*) grBb_803E2938 + 0x4C4);
 
     for (idx = 0; idx < 30; table++, idx++) {
         if (joint_id == *table) {
@@ -4858,7 +4863,10 @@ void fn_801EF60C(Ground* gp, s32 joint_id, CollData* coll, s32 time_param,
         }
     }
 
-    HSD_ASSERT(0xED9, idx != 30);
+    if (idx == 30) {
+        __assert((char*) grBb_803E2938 + 0x440, 0xED9,
+                 (char*) grBb_803E2938 + 0x758);
+    }
 
     params = grBb_804D69C8;
     p = (u8*) gp;

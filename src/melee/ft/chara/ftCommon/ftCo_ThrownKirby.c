@@ -310,11 +310,12 @@ void ftCo_800BE6AC(Fighter_GObj* gobj)
     Fighter* fp = GET_FIGHTER(gobj);
     HSD_JObj* jobj = GET_JOBJ(gobj);
     Vec3 scale;
+    f32 progress;
+    progress = (fp->mv.co.thrownkirby.x10 - fp->grab_timer) /
+               fp->mv.co.thrownkirby.x10;
+    progress *= fp->mv.co.thrownkirby.xC;
     scale.x = scale.y = scale.z =
-        (1 - fp->mv.co.thrownkirby.xC) +
-        (((fp->mv.co.thrownkirby.x10 - fp->grab_timer) /
-          fp->mv.co.thrownkirby.x10) *
-         fp->mv.co.thrownkirby.xC);
+        (1 - fp->mv.co.thrownkirby.xC) + progress;
     scale.x *= fp->mv.co.thrownkirby.scale.x;
     scale.y *= fp->mv.co.thrownkirby.scale.y;
     scale.z *= fp->mv.co.thrownkirby.scale.z;

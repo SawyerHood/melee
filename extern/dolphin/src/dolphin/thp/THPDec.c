@@ -2340,127 +2340,143 @@ static void __THPHuffDecodeDCTCompY(register THPFileInfo* info,
 static void __THPHuffDecodeDCTCompU(register THPFileInfo* info,
                                     THPCoeff* block)
 {
-    THPCoeff dc;
+    {
+        register s32 t;
+        THPCoeff dc;
+        register THPCoeff diff;
 
-    register s32 v; // r0
+        __dcbz((void*) block, 0);
+        t = __THPHuffDecodeTab(info, Udchuff);
+        __dcbz((void*) block, 32);
+        diff = 0;
+        __dcbz((void*) block, 64);
 
-    register s16 cnt;   // r7
-    register u32 tmp;   // r9
-    register u32 cnt33; // r8
-    register u32 cnt1;  // r10
-    register u32 cb;    // r6
-    register s32 t;     // r5
-
-    register u32 tmp1;
-    register s32 k;
-    register s32 ssss;
-    register s32 rrrr;
-
-    __dcbz((void*) block, 0);
-    t = __THPHuffDecodeTab(info, Udchuff);
-    __dcbz((void*) block, 32);
-    cnt = 0;
-    __dcbz((void*) block, 64);
-
-    if (t) {
+        if (t) {
+            {
+                register s32 v;
+                register u32 cb;
+                register u32 cnt;
+                register u32 code;
+                register u32 tmp;
+                register u32 cnt1;
+                register u32 tmp1;
 #ifdef __MWERKS__ // clang-format off
-        asm {
-            lwz      cnt,info->cnt;
-            subfic   cnt33,cnt,33;
-            lwz      cb,info->currByte;
-            subfc.   tmp, cnt33, t;
-            subi     cnt1,cnt,1;
-            bgt      _notEnoughBitsDIFF;
-            add      v,cnt,t;
-            slw      cnt,cb,cnt1;
-            stw      v,info->cnt;
-            subfic   v,t,32;
-            srw      cnt,cnt,v;
-        }
+                asm {
+                    lwz      cnt,info->cnt;
+                    subfic   code,cnt,33;
+                    lwz      cb,info->currByte;
+
+                    subfc. tmp, code, t;
+                    subi     cnt1,cnt,1;
+
+                    bgt      _notEnoughBitsDIFF;
+                    add      v,cnt,t;
+
+                    slw      cnt,cb,cnt1;
+                    stw      v,info->cnt;
+                    subfic   v,t,32;
+                    srw      diff,cnt,v;
+                }
 #endif // clang-format on
 
 #ifdef __MWERKS__ // clang-format off
-        asm {
-            b _DoneDIFF;
-        _notEnoughBitsDIFF:
-            lwz cnt, info->file;
-            slw v, cb, cnt1;
-            lwzu cb, 4(cnt);
-            addi tmp, tmp, 1;
-            stw cb, info->currByte;
-            srw cb, cb, cnt33;
-            stw cnt, info->file;
-            add v, cb, v;
-            stw tmp, info->cnt;
-            subfic tmp, t, 32;
-            srw cnt, v, tmp;
-        _DoneDIFF:
-        }
+                asm {
+                    b _DoneDIFF;
+                _notEnoughBitsDIFF:
+                    lwz tmp1, info->file;
+                    slw v, cb, cnt1;
+                    lwzu cb, 4(tmp1);
+                    addi tmp, tmp, 1;
+                    stw cb, info->currByte;
+                    srw cb, cb, code;
+                    stw tmp1, info->file;
+                    add v, cb, v;
+                    stw tmp, info->cnt;
+                    subfic tmp, t, 32;
+                    srw diff, v, tmp;
+                _DoneDIFF:
+                }
 #endif // clang-format on
+            }
 
-        if (__cntlzw((u32) cnt) > 32 - t) {
-            cnt += ((0xFFFFFFFF << t) + 1);
-        }
+            if (__cntlzw((u32) diff) > 32 - t) {
+                diff += ((0xFFFFFFFF << t) + 1);
+            }
+        };
+
+        __dcbz((void*) block, 96);
+        dc = (s16) (info->components[1].predDC + diff);
+        block[0] = info->components[1].predDC = dc;
     }
 
-    __dcbz((void*) block, 96);
-    dc = (s16) (info->components[1].predDC + cnt);
-    block[0] = info->components[1].predDC = dc;
+    {
+        register s32 k;
 
-    for (k = 1; k < 64; k++) {
-        ssss = __THPHuffDecodeTab(info, Uachuff);
-        rrrr = ssss >> 4;
-        ssss &= 15;
+        for (k = 1; k < 64; k++) {
+            register s32 ssss;
+            register s32 rrrr;
 
-        if (ssss) {
-            k += rrrr;
+            ssss = __THPHuffDecodeTab(info, Uachuff);
+            rrrr = ssss >> 4;
+            ssss &= 15;
+
+            if (ssss) {
+                k += rrrr;
+                {
+                    register s32 v;
+                    register u32 cb;
+                    register u32 cnt33;
+                    register u32 tmp;
+                    register u32 cnt1;
 #ifdef __MWERKS__ // clang-format off
-            asm {
-                lwz      cnt,info->cnt;
-                subfic   cnt33,cnt,33;
-                lwz      cb,info->currByte;
-                subf. tmp, cnt33, ssss;
-                subi     cnt1,cnt,1;
-                bgt      _notEnoughBits;
-                add      v,cnt,ssss;
-                slw      cnt,cb,cnt1;
-                stw      v,info->cnt;
-                subfic   v,ssss,32;
-                srw      rrrr,cnt,v;
-            }
+                    asm {
+                        lwz      rrrr,info->cnt;
+                        subfic   cnt33,rrrr,33;
+                        lwz      cb,info->currByte;
+                        subf. tmp, cnt33, ssss;
+                        subi     cnt1,rrrr,1;
+                        bgt      _notEnoughBits;
+                        add      v,rrrr,ssss;
+                        slw      rrrr,cb,cnt1;
+                        stw      v,info->cnt;
+                        subfic   v,ssss,32;
+                        srw      rrrr,rrrr,v;
+                    }
 #endif // clang-format on
 
 #ifdef __MWERKS__ // clang-format off
-            asm {
-                b _Done;
-            _notEnoughBits:
-                lwz tmp1, info->file;
-                slw v, cb, cnt1;
-                lwzu cb, 4(tmp1);
-                addi tmp, tmp, 1;
-                stw cb, info->currByte;
-                srw cb, cb, cnt33;
-                stw tmp1, info->file;
-                add v, cb, v;
-                stw tmp, info->cnt;
-                subfic tmp, ssss, 32;
-                srw rrrr, v, tmp;
-            _Done:
-            }
+                    asm {
+                        b _Done;
+                    _notEnoughBits:
+                        lwz rrrr, info->file;
+                        slw v, cb, cnt1;
+                        lwzu cb, 4(rrrr);
+                        addi tmp, tmp, 1;
+                        stw cb, info->currByte;
+                        srw cb, cb, cnt33;
+                        stw rrrr, info->file;
+                        add v, cb, v;
+                        stw tmp, info->cnt;
+                        subfic tmp, ssss, 32;
+                        srw rrrr, v, tmp;
+                    _Done:
+                    }
 #endif // clang-format on
+                }
 
-            if (__cntlzw((u32) rrrr) > 32 - ssss) {
-                rrrr += ((0xFFFFFFFF << ssss) + 1);
+                if (__cntlzw((u32) rrrr) > 32 - ssss) {
+                    rrrr += ((0xFFFFFFFF << ssss) + 1);
+                }
+
+                block[__THPJpegNaturalOrder[k]] = (s16) rrrr;
             }
 
-            block[__THPJpegNaturalOrder[k]] = (s16) rrrr;
-        }
-
-        else {
-            if (rrrr != 15) {
-                break;
+            else {
+                if (rrrr != 15) {
+                    break;
+                }
+                k += 15;
             }
-            k += 15;
         }
     }
 }
@@ -2468,128 +2484,145 @@ static void __THPHuffDecodeDCTCompU(register THPFileInfo* info,
 static void __THPHuffDecodeDCTCompV(register THPFileInfo* info,
                                     THPCoeff* block)
 {
-    register s32 t;
-    register THPCoeff diff;
-    THPCoeff dc;
-    register s32 v;
-    register u32 cb;
-    register u32 cnt;
-    register u32 cnt33;
-    register u32 tmp;
-    register u32 cnt1;
-    register u32 tmp1;
-    register s32 k;
-    register s32 ssss;
-    register s32 rrrr;
+    {
+        register s32 t;
+        THPCoeff dc;
+        register THPCoeff diff;
 
-    __dcbz((void*) block, 0);
-    t = __THPHuffDecodeTab(info, Vdchuff);
-    __dcbz((void*) block, 32);
-    diff = 0;
-    __dcbz((void*) block, 64);
+        __dcbz((void*) block, 0);
+        t = __THPHuffDecodeTab(info, Vdchuff);
+        __dcbz((void*) block, 32);
+        diff = 0;
+        __dcbz((void*) block, 64);
 
-    if (t) {
+        if (t) {
+            {
+                register s32 v;
+                register u32 cb;
+                register u32 cnt;
+                register u32 code;
+                register u32 tmp;
+                register u32 cnt1;
+                register u32 tmp1;
 #ifdef __MWERKS__ // clang-format off
-        asm {
-            lwz      cnt,info->cnt;
-            subfic   cnt33,cnt,33;
-            lwz      cb,info->currByte;
-            subf. tmp, cnt33, t;
-            subi     cnt1,cnt,1;
-            bgt      _notEnoughBitsDIFF;
-            add      v,cnt,t;
-            slw      cnt,cb,cnt1;
-            stw      v,info->cnt;
-            subfic   v,t,32;
-            srw      diff,cnt,v;
-        }
+                asm {
+                    lwz      cnt,info->cnt;
+                    subfic   code,cnt,33;
+                    lwz      cb,info->currByte;
+
+                    subf. tmp, code, t;
+                    subi     cnt1,cnt,1;
+
+                    bgt      _notEnoughBitsDIFF;
+                    add      v,cnt,t;
+
+                    slw      cnt,cb,cnt1;
+                    stw      v,info->cnt;
+                    subfic   v,t,32;
+                    srw      diff,cnt,v;
+                }
 #endif // clang-format on
 
 #ifdef __MWERKS__ // clang-format off
-        asm {
-            b _DoneDIFF;
-        _notEnoughBitsDIFF:
-            lwz tmp1, info->file;
-            slw v, cb, cnt1;
-            lwzu cb, 4(tmp1);
-            addi tmp, tmp, 1;
-            stw cb, info->currByte;
-            srw cb, cb, cnt33;
-            stw tmp1, info->file;
-            add v, cb, v;
-            stw tmp, info->cnt;
-            subfic tmp, t, 32;
-            srw diff, v, tmp;
-        _DoneDIFF:
-        }
+                asm {
+                    b _DoneDIFF;
+                _notEnoughBitsDIFF:
+                    lwz tmp1, info->file;
+                    slw v, cb, cnt1;
+                    lwzu cb, 4(tmp1);
+                    addi tmp, tmp, 1;
+                    stw cb, info->currByte;
+                    srw cb, cb, code;
+                    stw tmp1, info->file;
+                    add v, cb, v;
+                    stw tmp, info->cnt;
+                    subfic tmp, t, 32;
+                    srw diff, v, tmp;
+                _DoneDIFF:
+                }
 #endif // clang-format on
+            }
 
-        if (__cntlzw((u32) diff) > 32 - t) {
-            diff += ((0xFFFFFFFF << t) + 1);
-        }
+            if (__cntlzw((u32) diff) > 32 - t) {
+                diff += ((0xFFFFFFFF << t) + 1);
+            }
+        };
+
+        __dcbz((void*) block, 96);
+
+        dc = (s16) (info->components[2].predDC + diff);
+        block[0] = info->components[2].predDC = dc;
     }
 
-    __dcbz((void*) block, 96);
+    {
+        register s32 k;
 
-    dc = (s16) (info->components[2].predDC + diff);
-    block[0] = info->components[2].predDC = dc;
+        for (k = 1; k < 64; k++) {
+            register s32 ssss;
+            register s32 rrrr;
 
-    for (k = 1; k < 64; k++) {
-        ssss = __THPHuffDecodeTab(info, Vachuff);
-        rrrr = ssss >> 4;
-        ssss &= 15;
+            ssss = __THPHuffDecodeTab(info, Vachuff);
+            rrrr = ssss >> 4;
+            ssss &= 15;
 
-        if (ssss) {
-            k += rrrr;
-
+            if (ssss) {
+                k += rrrr;
+                {
+                    register s32 v;
+                    register u32 cb;
+                    register u32 cnt33;
+                    register u32 tmp;
+                    register u32 cnt1;
 #ifdef __MWERKS__ // clang-format off
-            asm {
-                lwz      cnt,info->cnt;
-                subfic   cnt33,cnt,33;
-                lwz      cb,info->currByte;
+                    asm {
+                        lwz      rrrr,info->cnt;
+                        subfic   cnt33,rrrr,33;
+                        lwz      cb,info->currByte;
 
-                subf. tmp, cnt33, ssss;
-                subi     cnt1,cnt,1;
+                        subf. tmp, cnt33, ssss;
+                        subi     cnt1,rrrr,1;
 
-                bgt      _notEnoughBits;
-                add      v,cnt,ssss;
+                        bgt      _notEnoughBits;
+                        add      v,rrrr,ssss;
 
-                slw      cnt,cb,cnt1;
-                stw      v,info->cnt;
-                subfic   v,ssss,32;
-                srw      rrrr,cnt,v;
-            }
+                        slw      rrrr,cb,cnt1;
+                        stw      v,info->cnt;
+                        subfic   v,ssss,32;
+                        srw      rrrr,rrrr,v;
+                    }
 #endif // clang-format on
 
 #ifdef __MWERKS__ // clang-format off
-            asm {
-                b _Done;
-            _notEnoughBits:
-                lwz tmp1, info->file;
-                slw v, cb, cnt1;
-                lwzu cb, 4(tmp1);
-                addi tmp, tmp, 1;
-                stw cb, info->currByte;
-                srw cb, cb, cnt33;
-                stw tmp1, info->file;
-                add v, cb, v;
-                stw tmp, info->cnt;
-                subfic tmp, ssss, 32;
-                srw rrrr, v, tmp;
-            _Done:
-            }
+                    asm {
+                        b _Done;
+                    _notEnoughBits:
+                        lwz rrrr, info->file;
+                        slw v, cb, cnt1;
+                        lwzu cb, 4(rrrr);
+                        addi tmp, tmp, 1;
+                        stw cb, info->currByte;
+                        srw cb, cb, cnt33;
+                        stw rrrr, info->file;
+                        add v, cb, v;
+                        stw tmp, info->cnt;
+                        subfic tmp, ssss, 32;
+                        srw rrrr, v, tmp;
+                    _Done:
+                    }
 #endif // clang-format on
+                }
 
-            if (__cntlzw((u32) rrrr) > 32 - ssss) {
-                rrrr += ((0xFFFFFFFF << ssss) + 1);
-            }
+                if (__cntlzw((u32) rrrr) > 32 - ssss) {
+                    rrrr += ((0xFFFFFFFF << ssss) + 1);
+                }
 
-            block[__THPJpegNaturalOrder[k]] = (s16) rrrr;
-        } else {
-            if (rrrr != 15) {
-                break;
+                block[__THPJpegNaturalOrder[k]] = (s16) rrrr;
+            } else {
+                if (rrrr != 15) {
+                    break;
+                }
+                k += 15;
             }
-            k += 15;
         }
     }
 }
