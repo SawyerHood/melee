@@ -313,10 +313,8 @@ s32 un_80305058(s32 arg0, s32 arg1, s32 arg2, f32 farg0)
     new_count = 0;
     obtained_count = 0;
     total = 0;
-    trophy = 0;
-    byte_off = 0;
 
-    do {
+    for (trophy = 0, byte_off = 0; trophy < 0x125; trophy++, byte_off += 2) {
         skip_list = un_804D6EB4;
         if (lbLang_IsSettingUS() != 0) {
             s16 val;
@@ -340,8 +338,10 @@ s32 un_80305058(s32 arg0, s32 arg1, s32 arg2, f32 farg0)
                 }
                 if (!(M2C_FIELD(flags, u16*, byte_off) & 0x4000)) {
                     if (arg1 == 0x63) {
-                        if (arg2 != 0) {
-                            goto add_trophy;
+                        if (arg2 == 0) {
+                            continue;
+                        } else {
+                            continue;
                         }
                     } else if ((f32) arg1 == un_803060BC(trophy, 6)) {
                         if (arg2 != 0) {
@@ -377,16 +377,19 @@ s32 un_80305058(s32 arg0, s32 arg1, s32 arg2, f32 farg0)
                         goto add_obtained;
                     }
                 }
-            } else if (arg2 != 0) {
-                if (gm_8016B498() != 0 || (u8) gm_801A4310() == 0xC) {
-                    flags = default_flags;
-                } else {
-                    flags = gmMainLib_8015CC78();
-                }
-                if (M2C_FIELD(flags, u16*, byte_off) & 0x4000) {
-                    goto add_obtained;
-                }
             } else {
+                if (arg2 != 0) {
+                    if (gm_8016B498() != 0 || (u8) gm_801A4310() == 0xC) {
+                        flags = default_flags;
+                    } else {
+                        flags = gmMainLib_8015CC78();
+                    }
+                    if (M2C_FIELD(flags, u16*, byte_off) & 0x4000) {
+                        goto add_obtained;
+                    } else {
+                        continue;
+                    }
+                }
             add_obtained:
                 if (gm_8016B498() != 0 || (u8) gm_801A4310() == 0xC) {
                     flags = default_flags;
@@ -396,15 +399,13 @@ s32 un_80305058(s32 arg0, s32 arg1, s32 arg2, f32 farg0)
                 if ((u8) * (u16*) ((u8*) flags + byte_off) != 0) {
                     obtained_arr[obtained_count++] = trophy;
                 } else {
-                add_trophy:
                     new_arr[new_count++] = trophy;
                 }
                 total++;
             }
         }
-        trophy++;
-        byte_off += 2;
-    } while (trophy < 0x125);
+    next_trophy:;
+    }
 
     if (total != 0) {
         s32 use_new;
@@ -1617,8 +1618,6 @@ HSD_LObj* Toy_LoadLObjList(LightList** list, s32* hasAnim)
         *hasAnim = 0;
     }
 
-    posTable = base + idx * 0xC;
-
     while (*cur != NULL) {
         lobj = HSD_LObjLoadDesc((*cur)->desc);
         if (lobj != NULL) {
@@ -1635,9 +1634,8 @@ HSD_LObj* Toy_LoadLObjList(LightList** list, s32* hasAnim)
                     *animFlag = 1;
                 }
             }
-            HSD_LObjGetPosition(lobj, (Vec3*) (posTable + 0x1C));
-            HSD_LObjGetInterest(lobj, (Vec3*) (posTable + 0x7C));
-            posTable += 0xC;
+            HSD_LObjGetPosition(lobj, (Vec3*) (base + idx * 0xC + 0x1C));
+            HSD_LObjGetInterest(lobj, (Vec3*) (base + idx * 0xC + 0x7C));
             idx += 1;
         }
         if (prev != NULL) {
@@ -5137,16 +5135,15 @@ void un_803102D0(void)
 
 void un_80310324(void)
 {
+    s32 sp[4];
     char* toy;
     char* data;
     ToyGlobalsS_* tg;
-    ToyGlobalsS_* tg2;
     ToyGlobalsS_* tg3;
     ToyGlobalsS_* tg4;
     ToyGlobalsS_* tg5;
     ToyGlobalsS_* tg6;
     ToySubStructS_* sub;
-    s32 sp[4];
     s32 i;
     s32 one;
     s16 idx;
@@ -5157,7 +5154,7 @@ void un_80310324(void)
     u16* flags;
     f32 two;
 
-    PAD_STACK(4);
+    PAD_STACK(8);
 
     data = un_803FDD18;
     toy = (char*) un_804A26B8;
@@ -5182,20 +5179,20 @@ void un_80310324(void)
     un_80306D70(0);
     un_80307018();
 
-    tg2 = un_804D6ED8;
-    if (tg2->x54 == NULL) {
-        tg2->x54 = lbArchive_LoadSymbols(
+    tg = un_804D6ED8;
+    if (tg->x54 == NULL) {
+        tg->x54 = lbArchive_LoadSymbols(
             data + 0x640, &sp[0], *(void**) (data + 0x320), &sp[1],
             *(void**) (data + 0x324), &sp[2], *(void**) (data + 0x328), 0);
 
-        tg2->x8 = GObj_Create(4, 5, 0);
-        GObj_SetupGXLink(tg2->x8, HSD_SObjLib_803A49E0, 0x32, 0);
+        tg->x8 = GObj_Create(4, 5, 0);
+        GObj_SetupGXLink(tg->x8, HSD_SObjLib_803A49E0, 0x32, 0);
 
         i = 0;
         two = un_804DDCF0;
         one = 1;
         do {
-            sobj = HSD_SObjLib_803A477C(tg2->x8, sp[i], 0, 0, 0x80, 0);
+            sobj = HSD_SObjLib_803A477C(tg->x8, sp[i], 0, 0, 0x80, 0);
             *(f32*) ((char*) sobj + 0x1C) = two;
             i += 1;
             *(f32*) ((char*) sobj + 0x20) = two;
