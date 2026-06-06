@@ -72,6 +72,22 @@ reach 100% — check `rows` before assuming a C edit can finish a function.
    registers), it changed IR shape — usually wrong; revert unless the target
    also shows that order.
 
+### Known-hard regalloc patterns (decl-order rule does NOT reach these)
+
+- **Induction-temp pairs**: when the swap is between a user variable and a
+  compiler-created strength-reduction temp (roving pointer), declaration
+  shuffles shift OTHER registers and usually make fuzzy worse. Example:
+  lbDvd_CachePreloadedFile (99.62) — failed: i-first, i-last, init-at-decl,
+  loop-shadowed block-local (98.1-99.4). Matched siblings in the same file
+  use the identical loop shape, so the lever is in this function's pre-loop
+  variable mix. Needs systematic enumeration (wave-3 dedicated agent).
+- **Inline-copy pairs**: under #pragma inline_depth(N), inlined callees
+  instantiate their locals per level; a swap between level-1 and level-2
+  copies is controlled by the CALLEE's body, not the caller's. Editing the
+  callee risks breaking its own (matched) function + other inline sites.
+  Example: lb_80011C18 (99.69) — mismatch entirely inside inlined
+  lb_80011B74 tail. Failed: init-at-decl. Treat as expert tier.
+
 ## Work streams
 
 - **S1 regalloc sweep** (79 fns + regalloc-dominant mixed): declaration-order
