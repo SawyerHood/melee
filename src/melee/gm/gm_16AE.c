@@ -1695,6 +1695,11 @@ static inline void getSpawnPoint(int i, Vec3* v)
     }
 }
 
+static inline bool isTeams(void)
+{
+    return lbl_8046B6A0.x24C8.is_teams == true;
+}
+
 void fn_8016DEEC(void)
 {
     lbl_8046B6A0_t* tmp = &lbl_8046B6A0;
@@ -2103,7 +2108,6 @@ bool gm_8016EDDC(int arg0, PlayerInitData* arg1)
     float var_f1;
     u8 temp_r30;
     u8 temp_r29;
-    bool is_teams;
     PAD_STACK(4);
 
     if (lbl_8046B6A0.is_singleplayer == 0 &&
@@ -2128,10 +2132,9 @@ bool gm_8016EDDC(int arg0, PlayerInitData* arg1)
             }
         }
         Player_80032768(arg0, &sp18);
-        is_teams = lbl_8046B6A0.x24C8.is_teams == true;
         Player_SetUnk45(
             arg0, fn_80160840(gm_80160854(Player_GetPlayerId(arg0),
-                                          Player_GetTeam(arg0), is_teams,
+                                          Player_GetTeam(arg0), isTeams(),
                                           Player_GetPlayerSlotType(arg0))));
         Player_80031AD0(arg0);
         if (lbl_8046B6A0.FighterMatchInfo[arg0].x4_b4) {
