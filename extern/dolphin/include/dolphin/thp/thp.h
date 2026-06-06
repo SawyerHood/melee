@@ -25,11 +25,13 @@ typedef struct _THPHuffmanTab {
 } THPHuffmanTab;
 
 typedef struct _THPComponent {
-    THPCoeff predDC;
-    u8 pad;
+    u8 id;
+    u8 samplingH;
+    u8 samplingV;
     u8 quantizationTableSelector;
     u8 DCTableSelector;
     u8 ACTableSelector;
+    THPCoeff predDC;
     u32 pad2[9];
 } THPComponent;
 
