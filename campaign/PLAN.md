@@ -97,6 +97,22 @@ reach 100% — check `rows` before assuming a C edit can finish a function.
    per-variable and blocked ONLY by a second assignment that READS the
    variable (`x = E op x`); dead re-inits are DCE'd first and don't block.
 
+11. **CHAINED FOR-INIT (won it_80294364)**: 'for (i = count = 0; ...)'
+   defeats MWCC's zero-trip-guard constant fold. Tell: target guard
+   'cmpw rI,rN; bge' vs ours 'cmpwi rN,0; ble'.
+12. **EXTERN ARRAY SIZING (won un_80301964, fn_800F53AC)**: declare externs
+   with their true array size from symbols.txt ('extern char x[8];'), not
+   pointer/unsized — changes addressing shape.
+13. **INLINE-HELPER SUPPRESSES CONST-PROP (won fn_801A94BC)**: var-to-var
+   copy-init folds to 'li' in caller body but survives as 'addi' inside an
+   inline helper expansion. Mirror matched siblings' helper structure.
+14. **LICM-SUNK INVARIANT (won ft_800852B0)**: invariant assignment written
+   INSIDE the loop sinks to preheader with different allocation than
+   written-outside.
+15. **mr-vs-addi singleton (mpLib_80057BC0, codegen-resistant)**: per-site
+   compiler-internal; 10+ idioms tested, none flip a singleton propagatable
+   int arg move. Classify and skip.
+
 ### Experiment results (wave 3)
 
 - **BSS/sbss ordering rule (8-compile evidence)**: statics allocate at their
@@ -190,6 +206,12 @@ reach 100% — check `rows` before assuming a C edit can finish a function.
 
 ## Session log
 
+- **2026-06-06 — Wave 4.** 16 agents, 1.88M tokens, 51min. 13 wins landed:
+  6 camera.c fns (inline s64 bit-test helpers), fn_800F53AC (KIRBY'S FIRST
+  — extern sizing + over-decompiled vararg), ftCo_800978D4, ft_800852B0,
+  fn_801A94BC, if_802F7C30, un_80301964, it_80294364. Naming stream round 1:
+  833 symbol lines renamed, 8 units. 4 new idioms. mplib .data emission-order
+  finding → data-layout stream candidate. Total: 23 fns, 18737/19829 (94.49%).
 - **2026-06-06 — Wave 3 (fruitcake fleet).** 19 agents, 2.46M tokens, 71min.
   7 wins landed: mn_8022FB88, itLinkbomb_UnkMotion3_Anim, grYorster_80202428,
   gm_8016EDDC (inline-helper), fn_8016FFD4 (cast-vs-mask), it_802A850C +
