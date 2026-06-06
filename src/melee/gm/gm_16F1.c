@@ -455,13 +455,13 @@ int fn_8016FFD4(struct lbl_8046B6A0_24C_t* arg0, int arg1, u8 arg2)
     for (i = 0; (u32) i < 0x101U; i++) {
         if ((s16) lbl_803D5A4C[i].kind < 0xD7) {
             flags = fn_8016F180(i);
-            if ((u8) arg1 & flags && pl_80039418((u8) arg2, i) != 0) {
+            if ((arg1 & 0xFF) & flags && pl_80039418((u8) arg2, i) != 0) {
                 count += fn_8016FAD4(arg0, i, arg1, arg2);
             }
         } else {
             flags = fn_8016F180(i);
 
-            if ((u8) arg1 & flags) {
+            if ((arg1 & 0xFF) & flags) {
                 if ((unsigned) fn_801701C0(arg0, (u8) arg2, i) != 0) {
                     count += fn_8016FAD4(arg0, i, arg1, arg2);
                 }
