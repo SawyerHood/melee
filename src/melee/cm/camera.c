@@ -864,11 +864,14 @@ void Camera_8002A0C0(CameraBounds* bounds, CameraTransformState* state)
         var_f6 = (bounds->z_pos - Stage_GetCamZoomRate()) / temp_f29_2;
     }
 
-    Camera_80030DE4(
-        ((var_f6 * (cm_803BCCA0.x5C - cm_803BCCA0.x54)) + cm_803BCCA0.x58) *
-            (var_f31 * temp_f28),
-        ((var_f6 * (cm_803BCCA0.x60 - cm_803BCCA0.x58)) + cm_803BCCA0.x54) *
-            (var_f30 * temp_f27));
+    {
+        f32 a;
+        f32 b;
+
+        a = (var_f6 * (cm_803BCCA0.x5C - cm_803BCCA0.x54)) + cm_803BCCA0.x54;
+        b = (var_f6 * (cm_803BCCA0.x60 - cm_803BCCA0.x58)) + cm_803BCCA0.x58;
+        Camera_80030DE4(b * (var_f31 * temp_f28), a * (var_f30 * temp_f27));
+    }
     cm_80452C68.xA4 = 0.0f;
     cm_80452C68.xA8 = 0.0f;
 }
@@ -4269,10 +4272,37 @@ Vec3* Camera_8003019C(void)
     return &ftLib_80086B74(Player_GetEntity(cm_80453004.ply_slot))->x1C;
 }
 
+static inline s64 inline_cam_gx_b2_8(void)
+{
+    if (cm_80452C68.x398_b2) {
+        return 0;
+    }
+    return 8;
+}
+
+static inline s64 inline_cam_gx_b4_1(void)
+{
+    if (cm_80452C68.x398_b4) {
+        return 0;
+    }
+    return 1;
+}
+
+static inline s64 inline_cam_gx_b3_80(void)
+{
+    if (cm_80452C68.x398_b3) {
+        return 0;
+    }
+    return 0x80;
+}
+
 static void fn_800301D0(HSD_GObj* gobj, int arg1)
 {
     HSD_CObj* cobj;
-    PAD_STACK(56);
+    s64 var_r4;
+    s64 var_r0;
+    s64 var_r3;
+    PAD_STACK(32);
 
     cobj = gobj->hsd_obj;
     lbRefract_8002247C(cobj);
@@ -4291,117 +4321,41 @@ static void fn_800301D0(HSD_GObj* gobj, int arg1)
         HSD_LObjDeleteCurrentAll(NULL);
 
         Camera_800310A0(2);
-        {
-            s64 var_r4;
-            s64 var_r0;
-
-            if (cm_80452C68.x398_b2) {
-                var_r4 = 0;
-            } else {
-                var_r4 = 8;
-            }
-            if (cm_80452C68.x398_b4) {
-                var_r0 = 0;
-            } else {
-                var_r0 = 1;
-            }
-            gobj->gxlink_prios = var_r0 | var_r4;
-            HSD_GObj_80390ED0(gobj, 7);
-        }
+        var_r4 = inline_cam_gx_b2_8();
+        var_r0 = inline_cam_gx_b4_1();
+        gobj->gxlink_prios = var_r0 | var_r4;
+        HSD_GObj_80390ED0(gobj, 7);
 
         Camera_800310A0(1);
-        {
-            s64 var_r3;
-
-            if (cm_80452C68.x398_b2) {
-                var_r3 = 0;
-            } else {
-                var_r3 = 8;
-            }
-            gobj->gxlink_prios = var_r3;
-            HSD_GObj_80390ED0(gobj, 7);
-        }
+        var_r3 = inline_cam_gx_b2_8();
+        gobj->gxlink_prios = var_r3;
+        HSD_GObj_80390ED0(gobj, 7);
 
         Camera_800310A0(0);
-        {
-            s64 var_r3;
-
-            if (cm_80452C68.x398_b2) {
-                var_r3 = 0;
-            } else {
-                var_r3 = 8;
-            }
-            gobj->gxlink_prios = var_r3;
-            HSD_GObj_80390ED0(gobj, 3);
-        }
+        var_r3 = inline_cam_gx_b2_8();
+        gobj->gxlink_prios = var_r3;
+        HSD_GObj_80390ED0(gobj, 3);
 
         lbRefract_80022560();
-        {
-            s64 prios;
-
-            if (cm_80452C68.x398_b4) {
-                prios = 0;
-            } else {
-                prios = 1;
-            }
-            Camera_800311EC(gobj, prios);
-        }
+        Camera_800311EC(gobj, inline_cam_gx_b4_1());
 
         Camera_80031074(0);
-        {
-            s64 var_r4;
-            s64 var_r0;
+        var_r4 = inline_cam_gx_b2_8();
+        var_r0 = inline_cam_gx_b4_1();
+        gobj->gxlink_prios = var_r0 | var_r4;
+        HSD_GObj_80390ED0(gobj, 4);
 
-            if (cm_80452C68.x398_b2) {
-                var_r4 = 0;
-            } else {
-                var_r4 = 8;
-            }
-            if (cm_80452C68.x398_b4) {
-                var_r0 = 0;
-            } else {
-                var_r0 = 1;
-            }
-            gobj->gxlink_prios = var_r0 | var_r4;
-            HSD_GObj_80390ED0(gobj, 4);
-        }
-
-        {
-            s64 arg2;
-
-            if (cm_80452C68.x398_b4) {
-                arg2 = 0;
-            } else {
-                arg2 = 1;
-            }
-            Camera_80031328(gobj, arg2);
-        }
+        Camera_80031328(gobj, inline_cam_gx_b4_1());
 
         HSD_FogSet(NULL);
-        {
-            s64 var_r3;
-
-            if (cm_80452C68.x398_b3) {
-                var_r3 = 0;
-            } else {
-                var_r3 = 0x80;
-            }
-            gobj->gxlink_prios = var_r3;
-            HSD_GObj_80390ED0(gobj, 7);
-        }
+        var_r3 = inline_cam_gx_b3_80();
+        gobj->gxlink_prios = var_r3;
+        HSD_GObj_80390ED0(gobj, 7);
 
         Camera_800310A0(3);
-        {
-            s64 var_r3;
-
-            if (cm_80452C68.x398_b2) {
-                var_r3 = 0;
-            } else {
-                var_r3 = 8;
-            }
-            gobj->gxlink_prios = var_r3;
-            HSD_GObj_80390ED0(gobj, 7);
-        }
+        var_r3 = inline_cam_gx_b2_8();
+        gobj->gxlink_prios = var_r3;
+        HSD_GObj_80390ED0(gobj, 7);
 
         if (Camera_80030AC4() != 0) {
             if (Camera_80030A78() != 0) {
@@ -4425,7 +4379,6 @@ void Camera_800304E0(HSD_GObj* gobj)
     s64 var_r3;
     s64 var_r3_2;
     HSD_CObj* cobj;
-    PAD_STACK(32);
 
     cobj = gobj->hsd_obj;
     if (HSD_CObjSetCurrent(cobj) != 0) {
@@ -4436,34 +4389,18 @@ void Camera_800304E0(HSD_GObj* gobj)
         HSD_LObjDeleteCurrentAll(NULL);
         Camera_800310A0(2);
 
-        if (cm_80452C68.x398_b2) {
-            var_r4 = 0;
-        } else {
-            var_r4 = 8;
-        }
-        if (cm_80452C68.x398_b4) {
-            var_r0 = 0;
-        } else {
-            var_r0 = 1;
-        }
+        var_r4 = inline_cam_gx_b2_8();
+        var_r0 = inline_cam_gx_b4_1();
         gobj->gxlink_prios = var_r0 | var_r4;
         HSD_GObj_80390ED0(gobj, 7);
 
         Camera_800310A0(1);
-        if (cm_80452C68.x398_b2) {
-            var_r3 = 0;
-        } else {
-            var_r3 = 8;
-        }
+        var_r3 = inline_cam_gx_b2_8();
         gobj->gxlink_prios = var_r3;
         HSD_GObj_80390ED0(gobj, 7);
 
         Camera_800310A0(0);
-        if (cm_80452C68.x398_b2) {
-            var_r3_2 = 0;
-        } else {
-            var_r3_2 = 8;
-        }
+        var_r3_2 = inline_cam_gx_b2_8();
         gobj->gxlink_prios = var_r3_2;
         HSD_GObj_80390ED0(gobj, 7);
 
@@ -4719,9 +4656,10 @@ bool Camera_80030CFC(CmSubject* cam_box, f32 tolerance)
     Vec3 eye_pos;
     Vec3 interest;
     Vec3 sp38;
+    Vec3 unused;
     Vec3 sp20;
     f32 range;
-    PAD_STACK(14);
+    PAD_STACK(2);
 
     cobj = GET_COBJ(cm_80452C68.gobj);
     HSD_CObjGetEyePosition(cobj, &eye_pos);
@@ -4916,15 +4854,16 @@ void Camera_800311EC(HSD_GObj* gobj, u64 prios)
     cm_80452C68.x398_b6_b7 = 1;
 
     a = inline_cam_gx_b1();
-    b = inline_cam_gx_b0();
-    gobj->gxlink_prios = prios | b | a;
+    b = prios | inline_cam_gx_b0();
+    gobj->gxlink_prios = b | a;
     HSD_GObj_80390ED0(gobj, 3);
 
     cm_80452C68.x398_b6_b7 = 0;
 
     a = inline_cam_gx_b0();
-    b = inline_cam_gx_b4();
-    gobj->gxlink_prios = inline_cam_gx_b1() | b | a;
+    prios = inline_cam_gx_b4();
+    b = inline_cam_gx_b1();
+    gobj->gxlink_prios = b | (prios | a);
     HSD_GObj_80390ED0(gobj, 3);
 }
 
@@ -4932,12 +4871,16 @@ void Camera_80031328(HSD_GObj* gobj, u64 prios)
 {
     s64 a;
     s64 b;
+    s64 c;
+    u64 t;
 
     cm_80452C68.x398_b6_b7 = 0;
 
     a = inline_cam_gx_b0();
     b = inline_cam_gx_b4();
-    gobj->gxlink_prios = prios | inline_cam_gx_b1() | b | a;
+    c = inline_cam_gx_b1();
+    t = prios | b;
+    gobj->gxlink_prios = c | (t | a);
     HSD_GObj_80390ED0(gobj, 4);
 }
 
@@ -4945,26 +4888,29 @@ void Camera_800313E0(HSD_GObj* gobj, u64 prios)
 {
     s64 a;
     s64 b;
-    PAD_STACK(8);
+    s64 c;
 
     cm_80452C68.x398_b6_b7 = 1;
 
     a = inline_cam_gx_b1();
-    b = inline_cam_gx_b0();
-    gobj->gxlink_prios = prios | b | a;
+    b = prios | inline_cam_gx_b0();
+    gobj->gxlink_prios = b | a;
     HSD_GObj_80390ED0(gobj, 3);
 
     cm_80452C68.x398_b6_b7 = 0;
 
     a = inline_cam_gx_b0();
     b = inline_cam_gx_b4();
-    gobj->gxlink_prios = inline_cam_gx_b1() | b | a;
+    c = inline_cam_gx_b1();
+    gobj->gxlink_prios = c | (b | a);
     HSD_GObj_80390ED0(gobj, 3);
 
     cm_80452C68.x398_b6_b7 = 0;
 
     a = inline_cam_gx_b0();
     b = inline_cam_gx_b4();
-    gobj->gxlink_prios = prios | inline_cam_gx_b1() | b | a;
+    c = inline_cam_gx_b1();
+    b = prios | b;
+    gobj->gxlink_prios = c | (b | a);
     HSD_GObj_80390ED0(gobj, 4);
 }
