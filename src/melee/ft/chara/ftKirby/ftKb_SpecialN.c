@@ -75,7 +75,7 @@ extern f32 ftKb_Init_804D93E8;
 extern f32 ftKb_Init_804D93EC;
 extern char ftKb_Init_803CB510[];
 extern char ftKb_Init_803CB52C[];
-extern char* ftKb_Init_804D3DB0;
+extern char ftKb_Init_804D3DB0[2];
 
 /// Forward declarations
 void fn_800F9260(HSD_GObj*);
@@ -1632,7 +1632,7 @@ void fn_800F53AC(HSD_GObj* gobj)
         fp->cmd_vars[0] = 0;
         if (fp->fv.kb.hat.x0 != NULL) {
             if (fp->death2_cb != NULL && fp->death2_cb != ftKb_Init_800EE74C) {
-                OSReport(ftKb_Init_803CB510, fp->death2_cb, fp->fv.kb.hat.x0);
+                OSReport(ftKb_Init_803CB510, fp->death2_cb);
                 __assert(ftKb_Init_803CB52C, 0x66, ftKb_Init_804D3DB0);
             }
             fp->death2_cb = ftKb_Init_800EE74C;
