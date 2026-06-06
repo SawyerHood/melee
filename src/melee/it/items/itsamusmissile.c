@@ -148,17 +148,16 @@ void it_802B64FC(Item_GObj* gobj)
     ip = GET_ITEM(gobj);
     sa = ip->xC4_article_data->x4_specialAttributes;
     vec3.x = vec3.y = vec3.z = 0.0f;
-    if (it_8026B634(&ip->pos, &vec3, ip->owner, ip->facing_dir) != NULL) {
-        goto block_4;
+    if (it_8026B634(&ip->pos, &vec3, ip->owner, ip->facing_dir) == NULL) {
+        temp_ret = it_8026C258(&ip->pos, ip->facing_dir);
+        // var_f1 = M2C_BITWISE(f32, temp_ret);
+        temp_r3 = temp_ret;
+        if (temp_r3 != NULL) {
+            it_8026BB88(temp_r3, &vec3);
+        } else {
+            return;
+        }
     }
-    temp_ret = it_8026C258(&ip->pos, ip->facing_dir);
-    // var_f1 = M2C_BITWISE(f32, temp_ret);
-    temp_r3 = temp_ret;
-    if (temp_r3 == NULL) {
-        goto block_18;
-    }
-    it_8026BB88(temp_r3, &vec3);
-block_4:
     var_f1 = 0.0f;
     if (vec3.x != 0.0f) {
         goto block_6;
