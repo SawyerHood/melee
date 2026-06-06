@@ -126,6 +126,19 @@ def unit_to_obj_and_src(unit):
     return obj, src
 
 
+def objdiff_paths(unit):
+    """Return (target_path, base_path) for a unit from objdiff.json."""
+    cfg = os.path.join(REPO, "objdiff.json")
+    try:
+        data = json.load(open(cfg))
+        for u in data.get("units", []):
+            if u.get("name") == unit:
+                return u.get("target_path"), u.get("base_path")
+    except (ValueError, OSError):
+        pass
+    return None, None
+
+
 def parse_build_command(obj_rel):
     """Extract the compile command for a given obj from build.ninja.
 
@@ -214,18 +227,27 @@ def parse_build_command(obj_rel):
         prefix = "wine %s %s" % (shlex.quote(sjiswrap), shlex.quote(compiler))
     else:  # mwcc / mwcc_extab
         prefix = "wine %s" % shlex.quote(compiler)
-    cmd = "%s %s -c %s -o %s" % (prefix, cflags, shlex.quote(in_file), shlex.quote(basedir))
-    return cmd
+    # CRITICAL: compile into a SCRATCH dir, never the canonical build path.
+    # Writing build/GALE01/src/...o directly poisons ninja's incremental state
+    # (the .o becomes newer than its source, so ninja skips the rebuild and the
+    # extab-clean post-step never runs -> phantom .data/extab diffs).
+    scratch_dir = os.path.join(REPO, "campaign", "scratch", os.path.dirname(obj_rel))
+    os.makedirs(scratch_dir, exist_ok=True)
+    cmd = "%s %s -c %s -o %s" % (prefix, cflags, shlex.quote(in_file), shlex.quote(scratch_dir))
+    scratch_obj = os.path.join(scratch_dir, os.path.basename(obj_rel))
+    is_extab = rule.endswith("_extab")
+    return cmd, scratch_obj, is_extab
 
 
 def rebuild_direct(obj_rel):
-    cmd = parse_build_command(obj_rel)
-    if cmd is None:
-        return None, "could not parse build command from build.ninja for %s" % obj_rel
+    parsed = parse_build_command(obj_rel)
+    if parsed is None:
+        return None, "could not parse build command from build.ninja for %s" % obj_rel, None, False
+    cmd, scratch_obj, is_extab = parsed
     rc, out, dt = _run_to_tempfile(cmd, shell=True)
     if rc != 0:
-        return dt, "compile failed (rc=%d):\n%s" % (rc, _clean(out)[-2000:])
-    return dt, None
+        return dt, "compile failed (rc=%d):\n%s" % (rc, _clean(out)[-2000:]), None, is_extab
+    return dt, None, scratch_obj, is_extab
 
 
 def rebuild_ninja(obj_rel):
@@ -235,10 +257,17 @@ def rebuild_ninja(obj_rel):
     return dt, None
 
 
-def run_objdiff(unit):
-    p = subprocess.run(
-        [OBJDIFF, "diff", "-p", REPO, "-u", unit, "-o", "-", "--format", "json"],
-        cwd=REPO, stdout=subprocess.PIPE, stderr=subprocess.DEVNULL, env=QUIET_ENV)
+def run_objdiff(unit, base_override=None):
+    if base_override:
+        target, _base = objdiff_paths(unit)
+        if not target:
+            return None, "unit %r not found in objdiff.json" % unit
+        argv = [OBJDIFF, "diff", "-1", target, "-2", base_override,
+                "-o", "-", "--format", "json"]
+    else:
+        argv = [OBJDIFF, "diff", "-p", REPO, "-u", unit, "-o", "-", "--format", "json"]
+    p = subprocess.run(argv, cwd=REPO, stdout=subprocess.PIPE,
+                       stderr=subprocess.DEVNULL, env=QUIET_ENV)
     if p.returncode != 0:
         return None, "objdiff-cli failed (rc=%d)" % p.returncode
     try:
@@ -314,18 +343,22 @@ def main():
     print("source   : %s" % os.path.relpath(src, REPO))
     print("object   : %s" % obj_rel)
 
+    base_override = None
     if not args.no_build:
         if args.ninja:
             dt, err = rebuild_ninja(obj_rel)
             mode = "ninja"
         else:
-            dt, err = rebuild_direct(obj_rel)
-            mode = "direct"
+            dt, err, base_override, is_extab = rebuild_direct(obj_rel)
+            mode = "direct(scratch)"
+            if is_extab and not err:
+                print("note     : extab unit — data/extab sections may show "
+                      "phantom diffs in scratch mode; gate with ninja + land.py")
         if err:
             die("rebuild (%s) %s" % (mode, err), 2)
         print("rebuild  : %s in %.2fs" % (mode, dt))
 
-    data, err = run_objdiff(unit)
+    data, err = run_objdiff(unit, base_override=base_override)
     if err:
         die(err, 2)
     ls = sym("left", data, fn)

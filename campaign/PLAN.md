@@ -47,6 +47,31 @@ Per-function `rows` field counts naming/layout/regalloc/mnemonic/gap diff rows.
 Functions whose mismatches are partly `naming` rows need the S5 config fix to
 reach 100% — check `rows` before assuming a C edit can finish a function.
 
+## Validated playbook (update after every session)
+
+1. **Declaration-order rule (VALIDATED, win #1)**: MWCC assigns callee-saved
+   registers to local variables in pure LEXICAL DECLARATION ORDER, descending
+   from the highest free register (after params/earlier decls consume theirs).
+   Inner-block decls just continue the sequence. To fix a register permutation:
+   read the target's register assignment per variable, derive the declaration
+   order that produces it, reorder/move declarations (hoisting inner-block
+   decls to the outer block is legal and was the original style in win #1).
+   Evidence: fn_803ACD58 (hsd_3AA7.c) — target wanted retries,buf,offset,size
+   = r25,r24,r23,r22; hoisting buf+offset above size matched 100%.
+2. **check_fn scratch mode**: direct compiles go to campaign/scratch/ and diff
+   via explicit -1/-2. NEVER write build/GALE01/src/*.o outside ninja — it
+   poisons incremental state (ninja skips rebuild, extab-clean never runs,
+   phantom .data regressions appear). If canonical objects are suspect:
+   `find build/GALE01/src -name '*.o' -delete && ninja`.
+3. **extab caveat**: units compiled with mwcc_extab rules get a `dtk extab
+   clean` post-step under ninja. Scratch compiles of those units may show
+   phantom extab/data diffs — judge CODE rows only; gate with ninja+land.py.
+4. **Float-rounding artifacts**: backlog stores fuzzy to 2 decimals; a "drop"
+   from 92.26 to 92.25676 is the same value. Only sub-rounding deltas are real.
+5. **Schedule-move tell**: if an edit changes instruction ORDER (not just
+   registers), it changed IR shape — usually wrong; revert unless the target
+   also shows that order.
+
 ## Work streams
 
 - **S1 regalloc sweep** (79 fns + regalloc-dominant mixed): declaration-order
@@ -94,6 +119,15 @@ reach 100% — check `rows` before assuming a C edit can finish a function.
 
 ## Session log
 
+- **2026-06-06 — Session 2 (partial).** First match: fn_803ACD58 → 100%
+  (declaration-order rule discovered + validated). check_fn.py converted to
+  scratch-compile mode after the canonical-path poisoning bug bit us. Full
+  clean rebuild performed. HARNESS CONSTRAINT: subagents (Workflow AND Agent
+  tool) cannot run the session model — the runner sends thinking.type.disabled
+  which adaptive-thinking models reject; MAX_THINKING_TOKENS=10000 added to
+  ~/.claude/settings.json as a restart-time fix hypothesis (untested). Wave-1
+  fan-out (sonnet/opus) was stopped mid-flight per user; all agent edits
+  reverted. Wave 2 to re-launch post-rebuild.
 - **2026-06-06 — Phase 0.** Build verified on macOS (wine-stable 11; note:
   README's wine-crossover cask is dead upstream). Triage v1 → audited by 3
   agents (caught aligned-row-count bug) → v2.1 validated against 12
