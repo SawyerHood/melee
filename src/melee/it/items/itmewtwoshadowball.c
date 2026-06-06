@@ -251,7 +251,7 @@ void it_802C53F0(Item_GObj* gobj, Vec3* pos, float angle, float charge,
     if (ip->xDD4_itemVar.mewtwoshadowball.x2C != NULL &&
         ip->owner == ip->xDD4_itemVar.mewtwoshadowball.x2C)
     {
-        it_802C5B18(gobj);
+        it_802C5B18(gobj, ip->xDD4_itemVar.mewtwoshadowball.x2C);
         HSD_MtxGetRotation(
             ftLib_80086630(ip->xDD4_itemVar.mewtwoshadowball.x2C, ip->xDC4)
                 ->mtx,
@@ -429,7 +429,7 @@ bool itMewtwoshadowball_UnkMotion0_Coll(Item_GObj* gobj)
     return false;
 }
 
-void it_802C5B18(Item_GObj* gobj)
+void it_802C5B18(Item_GObj* gobj, Fighter_GObj* unused)
 {
     Item* ip = gobj->user_data;
     itMewtwoShadowball_DatAttrs* attr =
