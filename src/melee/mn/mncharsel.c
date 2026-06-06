@@ -5162,11 +5162,7 @@ void mnCharSel_80266D70_OnLeave(void* unused)
                 data->data.data.players[mnCharSel_804D6CF1].c_kind);
         }
     } else {
-        if (mnCharSel_804D6CB0->match_type == VS_CAMERA) {
-            num_slots = 3;
-        } else {
-            num_slots = 4;
-        }
+        num_slots = (mnCharSel_804D6CB0->match_type == VS_CAMERA) ? 3 : 4;
         for (i = 0; i < num_slots; i++) {
             data = mnCharSel_804D6CB0;
             type = data->data.data.players[i].slot_type;
