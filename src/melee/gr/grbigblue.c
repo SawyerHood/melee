@@ -396,47 +396,58 @@ void grBigBlue_801E635C(Ground_GObj* arg) {}
 
 void grBigBlue_801E6360(Ground_GObj* arg) {}
 
+/// @todo 98.00% match - residual rows: names-loop IV keeps +0x488 as lha
+/// displacement; GetChild return-value temp (mr) at cur init; result/max_val
+/// coalescing temps; assert string .data offsets (unit .data not yet
+/// byte-matched - target keeps the 3 s16 tables at blob+0x44C..0x4FF).
+/// NOTE: do not change the label/literal count in this function - the
+/// MWCC @NNN counter is file-wide and earlier shifts broke every later
+/// function's literal relocs (sibling gate).
 void grBigBlue_801E6364(Ground_GObj* gobj)
 {
-    Ground* gp = GET_GROUND(gobj);
     HSD_JObj* child;
     HSD_JObj* next;
     HSD_JObj* cur;
     s32 i;
     HSD_JObj* jobj = gobj->hsd_obj;
     HSD_GObj* car_gobj;
+    u8 _[4];
     Vec3 scale;
     f32 trans_x;
     f32 scale_base;
     f32 rot_y;
+    Ground* gp = GET_GROUND(gobj);
 
     Ground_801C2ED0(jobj, gp->map_id);
-    PAD_STACK(8);
+    PAD_STACK(4);
 
     scale.x = scale.y = scale.z = 1.0F;
     HSD_JObjSetScale(jobj, &scale);
 
     gp->gv.bigblue.xC8 = HSD_MemAlloc(120);
-    HSD_ASSERT(774, gp->gv.bigblue.xC8 != NULL);
+    HSD_ASSERTMSG(774, gp->gv.bigblue.xC8 != NULL,
+                  "gp->u.carnull.coll_jobj");
 
     gp->gv.bigblue.xCC = HSD_MemAlloc(30);
-    HSD_ASSERT(776, gp->gv.bigblue.xCC != NULL);
+    HSD_ASSERTMSG(776, gp->gv.bigblue.xCC != NULL, "gp->u.carnull.rank");
 
     for (i = 0; i < 30; i++) {
-        ((HSD_JObj**) gp->gv.bigblue.xC8)[i] =
-            Ground_801C3FA4(gobj, grBb_803E2D78.x48[i]);
+        ((HSD_JObj**) gp->gv.bigblue.xC8)[i] = Ground_801C3FA4(
+            gobj, *(s16*) ((u8*) grBb_803E2938 + 0x488 + i * 2));
     }
 
     car_gobj = grBigBlue_801E59F8(4);
-    HSD_ASSERT(783, car_gobj != NULL);
-    grFZeroCar_801CAFBC(car_gobj, grBb_803E2D78.x48, 30, 1);
+    HSD_ASSERT(783, car_gobj);
+    /* @bug binary passes the xC array (blob+0x44C), not x48 */
+    grFZeroCar_801CAFBC(car_gobj, (u8*) grBb_803E2938 + 0x44C, 30, 1);
 
+    i = 0;
     cur = HSD_JObjGetChild(car_gobj->hsd_obj);
     rot_y = grBb_804DB304;
     scale_base = grBb_804DB2F0;
     trans_x = grBb_804DB308;
 
-    for (i = 0; i < 30; i++) {
+    for (; i < 30; i++) {
         child = HSD_JObjGetChild(cur);
         next = HSD_JObjGetNext(cur);
 
@@ -1273,23 +1284,24 @@ void* grBigBlue_801E89DC(int arg)
     return *(void**) (gp + 0xC8);
 }
 
-/// @todo Currently 79.9% match - platform/store use lwzx/stwx instead of
-/// add+lwz/stw (addressing mode difference), candPtr init missing slwi+add
+/// @todo Currently 86.39% match - inlining HSD_JObjGetTranslation2 (required
+/// for the shared jobj.h assert strings) swaps the r29/r30 coloring of
+/// idx/platform; remaining rows are that swap plus candidate-copy scheduling.
 void grBigBlue_801E8A1C(int idx)
 {
-    u8* gp = (u8*) GET_GROUND(Ground_801C2BA4(32));
-    HSD_JObj* platform = *(HSD_JObj**) (gp + idx * 4 + 0xD4);
+    Ground* gp = GET_GROUND(Ground_801C2BA4(32));
+    HSD_JObj* platform = gp->gv.bigblue.xD4[idx];
     ItemKind* candPtr;
     ItemKind* validPtr;
     int i;
-    int validCount = 0;
+    int validCount;
     BobOmbRain spawn;
     ItemKind candidates[5];
     ItemKind valid[5];
 
     candidates[0] = grBb_803B8120[0];
     candidates[1] = grBb_803B8120[1];
-    i = 0;
+    i = validCount = 0;
     candPtr = candidates + i;
     candidates[2] = grBb_803B8120[2];
     candidates[3] = grBb_803B8120[3];
@@ -1311,9 +1323,7 @@ void grBigBlue_801E8A1C(int idx)
 
     if (validCount != 0) {
         spawn.x14 = valid[HSD_Randi(validCount)];
-        HSD_ASSERT(979, platform != NULL);
-
-        spawn.x8_vec = platform->translate;
+        HSD_JObjGetTranslation2(platform, &spawn.x8_vec);
 
         if (spawn.x14 == 4) {
             spawn.x8_vec.y += 8.0f;
@@ -1322,7 +1332,7 @@ void grBigBlue_801E8A1C(int idx)
         }
 
         spawn.x1C.b0 = 1;
-        *(HSD_GObj**) (gp + idx * 0x54 + 0x134) = it_8026BE84(&spawn);
+        gp->gv.bigblue.data[idx].x50 = (s32) it_8026BE84(&spawn);
     }
 }
 
@@ -2100,6 +2110,7 @@ s32 grBigBlue_801EACE8(HSD_JObj* exclude, Vec3* point, f32* out_y,
     f32* p_left;
     f32* p_right;
     s32 i;
+    f32 zero;
 
     gobj = Ground_801C2BA4(32);
 
@@ -2110,6 +2121,7 @@ s32 grBigBlue_801EACE8(HSD_JObj* exclude, Vec3* point, f32* out_y,
 
     best_in_range = F32_MAX;
     best_above = grBb_804DB310;
+    zero = grBb_804DB2F4;
 
     gp = gobj->user_data;
     p_left = &hw_left.x;
@@ -2141,7 +2153,7 @@ s32 grBigBlue_801EACE8(HSD_JObj* exclude, Vec3* point, f32* out_y,
         {
             if (pos.y > bottom_bound && pos.y < top_bound) {
                 dist = point->y - pos.y;
-                if (dist < 0.0F) {
+                if (dist < zero) {
                     dist = -dist;
                 }
                 if (dist < best_in_range) {
@@ -2161,8 +2173,8 @@ s32 grBigBlue_801EACE8(HSD_JObj* exclude, Vec3* point, f32* out_y,
     if (exclude != jobj && (int) gp->gv.bigblue.x0 == 2) {
         HSD_JObjGetTranslation2(jobj, &route_pos);
 
-        left_x = route_pos.x - 68.0F * Ground_801C0498() * 0.5F;
-        right_x = route_pos.x + 68.0F * Ground_801C0498() * 0.5F;
+        left_x = route_pos.x - 68.0F * Ground_801C0498() / 2.0F;
+        right_x = route_pos.x + 68.0F * Ground_801C0498() / 2.0F;
 
         if ((right_x > left_bound && right_x < right_bound) ||
             (left_x < right_bound && left_x > left_bound))
@@ -4764,25 +4776,27 @@ bool grBigBlue_801EEF00(Ground_GObj* gobj, s32 index)
 }
 #pragma pop
 
-/// @todo Currently 98.03% match - float register allocation off by 1
+/// @todo 99.96% match - single residual row is the 0.0F literal-pool entry
+/// (@205 in our object) vs the named symbol grBb_804DB2F4 in the target;
+/// naming-only, needs splitter/symbols.txt resolution, not a code change.
 void grBigBlue_801EF424(Ground_GObj* gobj)
 {
-    Ground* gp = gobj->user_data;
-    u8* car_i;
     u8* car_j;
-    int i, j, k;
+    u8* car_i;
+    int i;
+    Ground* gp = gobj->user_data;
+    int j, k;
+    int n;
     int changed;
-    f32 zero;
     f32 diff;
     f32 absDiff;
 
     grBigBlue_801ECB50(gobj);
 
-    for (i = 0; i < 4; i++) {
-        grBigBlue_801ED694(gobj, i);
+    for (n = 0; n < 4; n++) {
+        grBigBlue_801ED694(gobj, n);
     }
 
-    zero = 0.0F;
     changed = 1;
     k = 0;
 
@@ -4805,7 +4819,7 @@ void grBigBlue_801EF424(Ground_GObj* gobj)
 
                 diff = *(f32*) (car_i + 0xE0) - *(f32*) (car_j + 0xE0);
 
-                if (diff < zero) {
+                if (diff < 0.0F) {
                     absDiff = -diff;
                 } else {
                     absDiff = diff;
@@ -4813,7 +4827,7 @@ void grBigBlue_801EF424(Ground_GObj* gobj)
 
                 if (absDiff < Ground_801C0498() * (f32) grBb_804D69C8->x20) {
                     f32 adjustment;
-                    if (diff > zero) {
+                    if (diff > 0.0F) {
                         adjustment =
                             Ground_801C0498() * (f32) grBb_804D69C8->x20;
                     } else {
@@ -4823,7 +4837,7 @@ void grBigBlue_801EF424(Ground_GObj* gobj)
 
                     diff -= adjustment;
                     changed = 1;
-                    diff = (f32) (diff * 0.5);
+                    diff *= 0.5;
 
                     *(f32*) (car_i + 0xDC) -= diff;
                     *(f32*) (car_i + 0xE0) -= diff;
