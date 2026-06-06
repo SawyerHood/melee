@@ -2337,6 +2337,8 @@ void gm_801BE638(HSD_GObj* gobj)
     temp_r28 = ftBossLib_8015C7EC();
     temp_r29 = ftBossLib_8015C92C();
     switch (temp_r30->x20) {
+    case 2:
+        break;
     case 0:
         if (Player_GetRemainingHP(1) <= 0 || Player_GetRemainingHP(2) <= 0) {
             temp_r30->x20 = 1;
