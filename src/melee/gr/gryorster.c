@@ -211,9 +211,10 @@ void grYorster_802022A4(HSD_GObj* gobj)
     }
 }
 
-void grYorster_80202428(HSD_GObj* item_gobj, Ground* gp, Vec3* pos,
+void grYorster_80202428(HSD_GObj* item_gobj, Ground* arg1, Vec3* pos,
                         HSD_GObj* fighter_gobj, f32 value)
 {
+    Ground* gp = (void*) arg1;
     int i;
 
     if (ftLib_80086960(fighter_gobj)) {
