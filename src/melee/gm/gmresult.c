@@ -1108,21 +1108,25 @@ void fn_80175D34(void)
     Vec3 pos;
     HSD_Text* ko_count;
     HSD_Text* ko_time;
+    ResultsData* data;
     s32 i;
     PAD_STACK(8); ///< @todo :: why does this have so much stack space
 
-    lb_8000B1CC(lbl_8046DBE8.x24, NULL, &pos);
+    data = &lbl_8046DBE8;
+    lb_8000B1CC(data->x24, NULL, &pos);
 
     for (i = 0; i < 4; i++) {
-        if (lbl_8046DBE8.player_data[i].ko_count != NULL) {
-            HSD_SisLib_803A5CC4(lbl_8046DBE8.player_data[i].ko_count);
-            lbl_8046DBE8.player_data[i].ko_count = NULL;
+        if (data->player_data[0].ko_count != NULL) {
+            HSD_SisLib_803A5CC4(data->player_data[0].ko_count);
+            data->player_data[0].ko_count = NULL;
         }
 
-        ko_time = lbl_8046DBE8.player_data[i].ko_time;
+        ko_time = data->player_data[0].ko_time;
         if (ko_time != NULL) {
             ko_time->pos_y = -pos.y;
         }
+
+        data = (ResultsData*) ((u8*) data + sizeof(struct ResultsPlayerData));
     }
 }
 
