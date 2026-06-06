@@ -227,6 +227,20 @@ reach 100% — check `rows` before assuming a C edit can finish a function.
 
 ## Session log
 
+- **2026-06-06 — Wave 6 (unit campaigns).** 8 agents, 1.87M tokens, 81min.
+  16 fn wins + 2 data symbols: gm_1832 (8, BSS repack + include removal +
+  literal-pool archaeology), gmregclear (5, proven >=4 merged original TUs,
+  bss 0->98.2), ftCo_800AB224, grBigBlue_801EACE8, ftCo_800D0CBC (sibling-
+  safe retry with anti-inline ballast). Naming round 3: 718 renames, ~1963
+  rows, 234 fns to fuzzy-100. THPDec header fix landed (Y/U/V + ifstatus
+  uninit-read + --no-warn-error reconfigure). Two binary-proven game bugs
+  fixed (resetText 15.0, grbigblue blob offset). NOTE: commit 61b1a52a3
+  includes symbols.txt + ftchangeparam.c (land.py stash-pop staged them).
+  Totals: 18761/19829 fns (94.61%), code 71.43%, data 41.71%, backlog 1068.
+  NEW IDIOM CLASS: anchor-by-address-taken (BSS section-fold vs named
+  anchor); extern-float caching trap; @ID realignment via goto early-outs.
+  Orchestrator src-fix queue: camera.static.h(53 rows), ftcoll.c(13),
+  lbcollision consts (needs dedicated sibling-gated agent).
 - **2026-06-06 — Wave 5 + followups.** 14 agents, 1.38M tokens, 62min.
   Landed: 6 src wins (gronett, gm_1BA8, ft_0892, pltrick, itsamusmissile,
   gmresult) + THP Huffman Y/U/V via THPComponent header fix (hard-tail

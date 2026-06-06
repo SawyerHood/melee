@@ -2,42 +2,6 @@
  "triage_version": 2,
  "functions": [
   {
-   "name": "__THPHuffDecodeDCTCompY",
-   "unit": "main/dolphin/thp/THPDec",
-   "vaddr": "0x80334880",
-   "size": 1660,
-   "fuzzy": 100.0,
-   "class": "layout",
-   "rows": {
-    "layout": 2
-   },
-   "severity": "near_miss"
-  },
-  {
-   "name": "__THPHuffDecodeDCTCompU",
-   "unit": "main/dolphin/thp/THPDec",
-   "vaddr": "0x80334F00",
-   "size": 1704,
-   "fuzzy": 100.0,
-   "class": "layout",
-   "rows": {
-    "layout": 2
-   },
-   "severity": "near_miss"
-  },
-  {
-   "name": "__THPHuffDecodeDCTCompV",
-   "unit": "main/dolphin/thp/THPDec",
-   "vaddr": "0x803355B0",
-   "size": 1704,
-   "fuzzy": 100.0,
-   "class": "layout",
-   "rows": {
-    "layout": 2
-   },
-   "severity": "near_miss"
-  },
-  {
    "name": "grGreatBay_801F499C",
    "unit": "main/melee/gr/grgreatbay",
    "vaddr": "0x801F499C",
@@ -70,19 +34,6 @@
    "fuzzy": 99.99,
    "class": "layout",
    "rows": {
-    "naming": 11,
-    "layout": 4
-   },
-   "severity": "near_miss"
-  },
-  {
-   "name": "ftCo_800AB224",
-   "unit": "main/melee/ft/chara/ftCommon/ftCo_0A01",
-   "vaddr": "0x800AB224",
-   "size": 2064,
-   "fuzzy": 99.99,
-   "class": "layout",
-   "rows": {
     "layout": 4
    },
    "severity": "near_miss"
@@ -109,7 +60,6 @@
    "fuzzy": 99.98,
    "class": "layout",
    "rows": {
-    "naming": 4,
     "layout": 2
    },
    "severity": "near_miss"
@@ -172,7 +122,7 @@
    "fuzzy": 99.97,
    "class": "layout",
    "rows": {
-    "naming": 6,
+    "naming": 3,
     "layout": 4
    },
    "severity": "near_miss"
@@ -254,8 +204,7 @@
    "fuzzy": 99.95,
    "class": "layout",
    "rows": {
-    "layout": 8,
-    "naming": 10
+    "layout": 8
    },
    "severity": "near_miss",
    "scratch": {
@@ -274,19 +223,6 @@
    "class": "layout",
    "rows": {
     "layout": 18
-   },
-   "severity": "near_miss"
-  },
-  {
-   "name": "fn_8017FE54",
-   "unit": "main/melee/gm/gmregclear",
-   "vaddr": "0x8017FE54",
-   "size": 200,
-   "fuzzy": 99.94,
-   "class": "layout",
-   "rows": {
-    "naming": 9,
-    "layout": 3
    },
    "severity": "near_miss"
   },
@@ -320,20 +256,6 @@
     "author": "r-burns",
     "n_scratches": 1
    }
-  },
-  {
-   "name": "fn_80185E34",
-   "unit": "main/melee/gm/gm_1832",
-   "vaddr": "0x80185E34",
-   "size": 296,
-   "fuzzy": 99.93,
-   "class": "layout",
-   "rows": {
-    "other_arg": 4,
-    "layout": 5,
-    "naming": 2
-   },
-   "severity": "near_miss"
   },
   {
    "name": "un_802FEBE0_OnEnter",
@@ -392,8 +314,7 @@
    "fuzzy": 99.92,
    "class": "layout",
    "rows": {
-    "layout": 20,
-    "naming": 19
+    "layout": 20
    },
    "severity": "near_miss",
    "scratch": {
@@ -423,7 +344,6 @@
    "fuzzy": 99.91,
    "class": "layout",
    "rows": {
-    "naming": 4,
     "layout": 6
    },
    "severity": "near_miss"
@@ -438,19 +358,6 @@
    "rows": {
     "layout": 8,
     "naming": 2
-   },
-   "severity": "near_miss"
-  },
-  {
-   "name": "fn_80181708",
-   "unit": "main/melee/gm/gmregclear",
-   "vaddr": "0x80181708",
-   "size": 656,
-   "fuzzy": 99.91,
-   "class": "layout",
-   "rows": {
-    "naming": 4,
-    "layout": 14
    },
    "severity": "near_miss"
   },
@@ -476,19 +383,6 @@
    "class": "layout",
    "rows": {
     "layout": 9
-   },
-   "severity": "near_miss"
-  },
-  {
-   "name": "grBigBlue_801EACE8",
-   "unit": "main/melee/gr/grbigblue",
-   "vaddr": "0x801EACE8",
-   "size": 796,
-   "fuzzy": 99.9,
-   "class": "codegen",
-   "rows": {
-    "naming": 1,
-    "other_arg": 2
    },
    "severity": "near_miss"
   },
@@ -577,7 +471,6 @@
    "fuzzy": 99.88,
    "class": "regalloc",
    "rows": {
-    "naming": 1,
     "regalloc": 2
    },
    "severity": "near_miss"
@@ -626,8 +519,7 @@
    "fuzzy": 99.88,
    "class": "layout",
    "rows": {
-    "layout": 21,
-    "naming": 8
+    "layout": 21
    },
    "severity": "near_miss"
   },
@@ -671,19 +563,6 @@
    "severity": "near_miss"
   },
   {
-   "name": "fn_80186EFC",
-   "unit": "main/melee/gm/gm_1832",
-   "vaddr": "0x80186EFC",
-   "size": 112,
-   "fuzzy": 99.86,
-   "class": "layout",
-   "rows": {
-    "naming": 3,
-    "layout": 4
-   },
-   "severity": "near_miss"
-  },
-  {
    "name": "it_80271F78",
    "unit": "main/melee/it/itcoll",
    "vaddr": "0x80271F78",
@@ -691,7 +570,6 @@
    "fuzzy": 99.86,
    "class": "regalloc",
    "rows": {
-    "naming": 7,
     "regalloc": 4
    },
    "severity": "near_miss"
@@ -735,19 +613,6 @@
    "severity": "near_miss"
   },
   {
-   "name": "fn_801884F8",
-   "unit": "main/melee/gm/gm_1832",
-   "vaddr": "0x801884F8",
-   "size": 88,
-   "fuzzy": 99.82,
-   "class": "layout",
-   "rows": {
-    "naming": 2,
-    "layout": 4
-   },
-   "severity": "near_miss"
-  },
-  {
    "name": "fn_80188644",
    "unit": "main/melee/gm/gm_1832",
    "vaddr": "0x80188644",
@@ -755,7 +620,7 @@
    "fuzzy": 99.82,
    "class": "layout",
    "rows": {
-    "naming": 3,
+    "naming": 2,
     "layout": 11
    },
    "severity": "near_miss"
@@ -844,7 +709,6 @@
    "fuzzy": 99.8,
    "class": "layout",
    "rows": {
-    "naming": 8,
     "layout": 28,
     "other_arg": 8
    },
@@ -858,8 +722,7 @@
    "fuzzy": 99.79,
    "class": "layout",
    "rows": {
-    "layout": 15,
-    "naming": 5
+    "layout": 15
    },
    "severity": "near_miss"
   },
@@ -883,8 +746,7 @@
    "fuzzy": 99.79,
    "class": "layout",
    "rows": {
-    "layout": 31,
-    "naming": 10
+    "layout": 31
    },
    "severity": "near_miss"
   },
@@ -972,8 +834,7 @@
    "fuzzy": 99.75,
    "class": "layout",
    "rows": {
-    "layout": 33,
-    "naming": 8
+    "layout": 33
    },
    "severity": "near_miss"
   },
@@ -1023,7 +884,6 @@
    "class": "codegen",
    "rows": {
     "mnemonic": 1,
-    "naming": 17,
     "regalloc": 8
    },
    "severity": "near_miss"
@@ -1063,7 +923,6 @@
    "class": "mixed_arg",
    "rows": {
     "layout": 52,
-    "naming": 4,
     "regalloc": 3,
     "other_arg": 1
    },
@@ -1077,8 +936,7 @@
    "fuzzy": 99.67,
    "class": "regalloc",
    "rows": {
-    "regalloc": 5,
-    "naming": 1
+    "regalloc": 5
    },
    "severity": "near_miss"
   },
@@ -1091,7 +949,6 @@
    "class": "mixed_arg",
    "rows": {
     "layout": 9,
-    "naming": 5,
     "regalloc": 6
    },
    "severity": "near_miss"
@@ -1184,7 +1041,7 @@
    "fuzzy": 99.61,
    "class": "mixed_arg",
    "rows": {
-    "naming": 12,
+    "naming": 4,
     "regalloc": 8,
     "layout": 6
    },
@@ -1199,8 +1056,7 @@
    "class": "regalloc",
    "rows": {
     "regalloc": 15,
-    "other_arg": 11,
-    "naming": 8
+    "other_arg": 11
    },
    "severity": "near_miss"
   },
@@ -1225,7 +1081,6 @@
    "fuzzy": 99.59,
    "class": "regalloc",
    "rows": {
-    "naming": 7,
     "regalloc": 8,
     "other_arg": 2
    },
@@ -1254,7 +1109,6 @@
    "fuzzy": 99.57,
    "class": "codegen",
    "rows": {
-    "naming": 3,
     "layout": 4,
     "mnemonic": 1
    },
@@ -1512,19 +1366,6 @@
    "severity": "near_miss"
   },
   {
-   "name": "gm_80182554",
-   "unit": "main/melee/gm/gmregclear",
-   "vaddr": "0x80182554",
-   "size": 36,
-   "fuzzy": 99.44,
-   "class": "layout",
-   "rows": {
-    "naming": 2,
-    "layout": 5
-   },
-   "severity": "near_miss"
-  },
-  {
    "name": "Camera_800307D0",
    "unit": "main/melee/cm/camera",
    "vaddr": "0x800307D0",
@@ -1569,7 +1410,6 @@
    "fuzzy": 99.42,
    "class": "structural",
    "rows": {
-    "naming": 4,
     "layout": 4,
     "regalloc": 2,
     "gap": 1
@@ -1641,8 +1481,7 @@
    "fuzzy": 99.4,
    "class": "regalloc",
    "rows": {
-    "regalloc": 21,
-    "naming": 3
+    "regalloc": 21
    },
    "severity": "near_miss"
   },
@@ -1681,7 +1520,7 @@
    "rows": {
     "regalloc": 18,
     "gap": 1,
-    "naming": 4
+    "naming": 3
    },
    "severity": "near_miss"
   },
@@ -1693,9 +1532,7 @@
    "fuzzy": 99.37,
    "class": "regalloc",
    "rows": {
-    "regalloc": 10,
-    "other_arg": 4,
-    "naming": 1
+    "regalloc": 10
    },
    "severity": "near_miss"
   },
@@ -1735,8 +1572,7 @@
    "class": "mixed_arg",
    "rows": {
     "regalloc": 30,
-    "mixed": 3,
-    "naming": 9
+    "mixed": 3
    },
    "severity": "near_miss"
   },
@@ -1748,7 +1584,7 @@
    "fuzzy": 99.35,
    "class": "mixed_arg",
    "rows": {
-    "naming": 2,
+    "naming": 6,
     "mixed": 4,
     "layout": 15,
     "regalloc": 6
@@ -1778,8 +1614,8 @@
    "class": "mixed_arg",
    "rows": {
     "layout": 15,
-    "naming": 20,
-    "regalloc": 19
+    "regalloc": 19,
+    "naming": 4
    },
    "severity": "near_miss"
   },
@@ -1812,6 +1648,20 @@
    "severity": "near_miss"
   },
   {
+   "name": "un_80310324",
+   "unit": "main/melee/ty/toy",
+   "vaddr": "0x80310324",
+   "size": 828,
+   "fuzzy": 99.31,
+   "class": "mixed_arg",
+   "rows": {
+    "mixed": 2,
+    "regalloc": 23,
+    "other_arg": 7
+   },
+   "severity": "near_miss"
+  },
+  {
    "name": "grMuteCity_801F290C",
    "unit": "main/melee/gr/grmutecity",
    "vaddr": "0x801F290C",
@@ -1840,36 +1690,6 @@
    "severity": "near_miss"
   },
   {
-   "name": "un_80305058",
-   "unit": "main/melee/ty/toy",
-   "vaddr": "0x80305058",
-   "size": 876,
-   "fuzzy": 99.29,
-   "class": "structural",
-   "rows": {
-    "naming": 2,
-    "layout": 6,
-    "mnemonic": 3,
-    "gap": 1
-   },
-   "severity": "near_miss"
-  },
-  {
-   "name": "un_80310324",
-   "unit": "main/melee/ty/toy",
-   "vaddr": "0x80310324",
-   "size": 828,
-   "fuzzy": 99.28,
-   "class": "mixed_arg",
-   "rows": {
-    "other_arg": 7,
-    "layout": 4,
-    "regalloc": 25,
-    "mixed": 1
-   },
-   "severity": "near_miss"
-  },
-  {
    "name": "mnDataDel_8024EEC0",
    "unit": "main/melee/mn/mndatadel",
    "vaddr": "0x8024EEC0",
@@ -1877,7 +1697,7 @@
    "fuzzy": 99.26,
    "class": "mixed_arg",
    "rows": {
-    "naming": 6,
+    "naming": 2,
     "regalloc": 26,
     "layout": 16
    },
@@ -1891,7 +1711,6 @@
    "fuzzy": 99.26,
    "class": "codegen",
    "rows": {
-    "naming": 16,
     "mixed": 2,
     "regalloc": 7,
     "mnemonic": 3,
@@ -1921,8 +1740,8 @@
    "class": "mixed_arg",
    "rows": {
     "regalloc": 28,
-    "naming": 8,
-    "layout": 8
+    "layout": 8,
+    "naming": 3
    },
    "severity": "near_miss"
   },
@@ -1934,7 +1753,6 @@
    "fuzzy": 99.25,
    "class": "structural",
    "rows": {
-    "naming": 4,
     "other_arg": 3,
     "gap": 1,
     "regalloc": 8
@@ -2030,7 +1848,6 @@
    "class": "mixed_arg",
    "rows": {
     "regalloc": 12,
-    "naming": 5,
     "mixed": 2
    },
    "severity": "near_miss"
@@ -2085,19 +1902,6 @@
     "regalloc": 112,
     "naming": 13,
     "mnemonic": 1,
-    "gap": 1
-   },
-   "severity": "near_miss"
-  },
-  {
-   "name": "ftCo_800D0CBC",
-   "unit": "main/melee/ft/ftchangeparam",
-   "vaddr": "0x800D0CBC",
-   "size": 524,
-   "fuzzy": 99.16,
-   "class": "structural",
-   "rows": {
-    "regalloc": 2,
     "gap": 1
    },
    "severity": "near_miss"
@@ -2192,6 +1996,18 @@
     "mixed": 2,
     "regalloc": 43,
     "layout": 8
+   },
+   "severity": "near_miss"
+  },
+  {
+   "name": "Toy_LoadLObjList",
+   "unit": "main/melee/ty/toy",
+   "vaddr": "0x80306EEC",
+   "size": 300,
+   "fuzzy": 99.07,
+   "class": "regalloc",
+   "rows": {
+    "regalloc": 13
    },
    "severity": "near_miss"
   },
@@ -2382,7 +2198,6 @@
    "fuzzy": 98.96,
    "class": "structural",
    "rows": {
-    "naming": 2,
     "regalloc": 19,
     "gap": 5
    },
@@ -2484,8 +2299,7 @@
    "class": "regalloc",
    "rows": {
     "regalloc": 90,
-    "other_arg": 8,
-    "naming": 4
+    "other_arg": 8
    },
    "severity": "near_miss"
   },
@@ -2512,8 +2326,8 @@
    "rows": {
     "layout": 9,
     "gap": 1,
-    "naming": 6,
-    "mnemonic": 1
+    "mnemonic": 1,
+    "naming": 5
    },
    "severity": "near_miss"
   },
@@ -2556,8 +2370,8 @@
    "rows": {
     "layout": 7,
     "gap": 1,
-    "naming": 6,
-    "mnemonic": 1
+    "mnemonic": 1,
+    "naming": 5
    },
    "severity": "near_miss"
   },
@@ -2695,7 +2509,7 @@
    "class": "structural",
    "rows": {
     "regalloc": 33,
-    "naming": 5,
+    "naming": 3,
     "layout": 2,
     "gap": 1
    },
@@ -2862,7 +2676,6 @@
    "class": "regalloc",
    "rows": {
     "regalloc": 14,
-    "naming": 5,
     "other_arg": 12
    },
    "severity": "near_miss"
@@ -2994,7 +2807,7 @@
    "class": "structural",
    "rows": {
     "regalloc": 20,
-    "naming": 7,
+    "naming": 3,
     "layout": 8,
     "mixed": 2,
     "gap": 1,
@@ -3076,7 +2889,6 @@
    "class": "structural",
    "rows": {
     "regalloc": 6,
-    "naming": 1,
     "gap": 1
    },
    "severity": "near_miss"
@@ -3090,7 +2902,6 @@
    "class": "structural",
    "rows": {
     "regalloc": 92,
-    "naming": 10,
     "gap": 1
    },
    "severity": "near_miss"
@@ -3134,7 +2945,7 @@
    "class": "structural",
    "rows": {
     "mnemonic": 2,
-    "naming": 5,
+    "naming": 7,
     "regalloc": 16,
     "gap": 1,
     "mixed": 1
@@ -3151,7 +2962,6 @@
    "rows": {
     "regalloc": 65,
     "layout": 50,
-    "naming": 6,
     "gap": 2
    },
    "severity": "near_miss"
@@ -3179,7 +2989,6 @@
    "fuzzy": 98.37,
    "class": "structural",
    "rows": {
-    "naming": 17,
     "regalloc": 54,
     "gap": 6,
     "other_arg": 1
@@ -3252,7 +3061,7 @@
     "mixed": 2,
     "other_arg": 9,
     "layout": 6,
-    "naming": 7,
+    "naming": 1,
     "regalloc": 3,
     "gap": 1
    },
@@ -3307,22 +3116,6 @@
    "severity": "near_miss"
   },
   {
-   "name": "fn_80181598",
-   "unit": "main/melee/gm/gmregclear",
-   "vaddr": "0x80181598",
-   "size": 368,
-   "fuzzy": 98.28,
-   "class": "codegen",
-   "rows": {
-    "naming": 2,
-    "layout": 11,
-    "mnemonic": 2,
-    "mixed": 2,
-    "regalloc": 3
-   },
-   "severity": "near_miss"
-  },
-  {
    "name": "fn_80262648",
    "unit": "main/melee/mn/mncharsel",
    "vaddr": "0x80262648",
@@ -3351,18 +3144,6 @@
     "regalloc": 4,
     "gap": 3,
     "mnemonic": 1
-   },
-   "severity": "near_miss"
-  },
-  {
-   "name": "ifStatus_802F66A4",
-   "unit": "main/melee/if/ifstatus",
-   "vaddr": "0x802F66A4",
-   "size": 228,
-   "fuzzy": 98.25,
-   "class": "structural",
-   "rows": {
-    "gap": 1
    },
    "severity": "near_miss"
   },
@@ -3403,7 +3184,6 @@
    "class": "codegen",
    "rows": {
     "regalloc": 138,
-    "naming": 4,
     "mnemonic": 1,
     "mixed": 1,
     "other_arg": 4
@@ -3473,6 +3253,37 @@
    "severity": "near_miss"
   },
   {
+   "name": "grBigBlue_801E6364",
+   "unit": "main/melee/gr/grbigblue",
+   "vaddr": "0x801E6364",
+   "size": 1304,
+   "fuzzy": 98.13,
+   "class": "structural",
+   "rows": {
+    "naming": 1,
+    "layout": 9,
+    "gap": 5,
+    "other_arg": 1,
+    "regalloc": 7,
+    "mnemonic": 1
+   },
+   "severity": "near_miss"
+  },
+  {
+   "name": "fn_80185F5C",
+   "unit": "main/melee/gm/gm_1832",
+   "vaddr": "0x80185F5C",
+   "size": 292,
+   "fuzzy": 98.12,
+   "class": "codegen",
+   "rows": {
+    "regalloc": 12,
+    "mnemonic": 1,
+    "layout": 2
+   },
+   "severity": "near_miss"
+  },
+  {
    "name": "lbRefract_80021CE8",
    "unit": "main/melee/lb/lbrefract",
    "vaddr": "0x80021CE8",
@@ -3488,6 +3299,23 @@
    "severity": "near_miss"
   },
   {
+   "name": "fn_80180C60",
+   "unit": "main/melee/gm/gmregclear",
+   "vaddr": "0x80180C60",
+   "size": 2360,
+   "fuzzy": 98.11,
+   "class": "structural",
+   "rows": {
+    "naming": 7,
+    "gap": 8,
+    "mixed": 6,
+    "regalloc": 41,
+    "mnemonic": 1,
+    "layout": 1
+   },
+   "severity": "near_miss"
+  },
+  {
    "name": "lb_80011E24",
    "unit": "main/melee/lb/lb_00F9",
    "vaddr": "0x80011E24",
@@ -3498,22 +3326,6 @@
     "regalloc": 28,
     "layout": 5,
     "gap": 1
-   },
-   "severity": "near_miss"
-  },
-  {
-   "name": "fn_80185F5C",
-   "unit": "main/melee/gm/gm_1832",
-   "vaddr": "0x80185F5C",
-   "size": 292,
-   "fuzzy": 98.07,
-   "class": "codegen",
-   "rows": {
-    "regalloc": 12,
-    "mnemonic": 1,
-    "layout": 6,
-    "naming": 2,
-    "other_arg": 1
    },
    "severity": "near_miss"
   },
@@ -3563,14 +3375,16 @@
    "severity": "near_miss"
   },
   {
-   "name": "grBigBlue_801EF424",
-   "unit": "main/melee/gr/grbigblue",
-   "vaddr": "0x801EF424",
-   "size": 488,
-   "fuzzy": 98.03,
-   "class": "regalloc",
+   "name": "fn_80181C80",
+   "unit": "main/melee/gm/gmregclear",
+   "vaddr": "0x80181C80",
+   "size": 408,
+   "fuzzy": 97.99,
+   "class": "structural",
    "rows": {
-    "regalloc": 39
+    "regalloc": 12,
+    "mixed": 5,
+    "gap": 1
    },
    "severity": "near_miss"
   },
@@ -3726,7 +3540,6 @@
     "mnemonic": 1,
     "gap": 2,
     "layout": 1,
-    "naming": 3,
     "mixed": 2
    },
    "severity": "near_miss"
@@ -3829,6 +3642,18 @@
    "severity": "near_miss"
   },
   {
+   "name": "fn_80181598",
+   "unit": "main/melee/gm/gmregclear",
+   "vaddr": "0x80181598",
+   "size": 368,
+   "fuzzy": 97.83,
+   "class": "codegen",
+   "rows": {
+    "gap": 2
+   },
+   "severity": "near_miss"
+  },
+  {
    "name": "fn_8018E85C",
    "unit": "main/melee/gm/gm_18A5",
    "vaddr": "0x8018E85C",
@@ -3855,7 +3680,6 @@
    "class": "codegen",
    "rows": {
     "regalloc": 36,
-    "naming": 9,
     "gap": 4,
     "layout": 13
    },
@@ -4085,8 +3909,7 @@
     "other_arg": 1,
     "regalloc": 2,
     "mnemonic": 2,
-    "gap": 1,
-    "naming": 1
+    "gap": 1
    },
    "severity": "near_miss"
   },
@@ -4175,7 +3998,7 @@
     "mixed": 2,
     "gap": 9,
     "regalloc": 47,
-    "naming": 10,
+    "naming": 18,
     "mnemonic": 2,
     "other_arg": 2
    },
@@ -4189,8 +4012,7 @@
    "fuzzy": 97.68,
    "class": "regalloc",
    "rows": {
-    "regalloc": 34,
-    "naming": 2
+    "regalloc": 34
    },
    "severity": "near_miss"
   },
@@ -4215,7 +4037,6 @@
    "fuzzy": 97.67,
    "class": "structural",
    "rows": {
-    "naming": 6,
     "regalloc": 2,
     "mnemonic": 1,
     "gap": 2
@@ -4239,22 +4060,6 @@
    "severity": "near_miss"
   },
   {
-   "name": "fn_80181C80",
-   "unit": "main/melee/gm/gmregclear",
-   "vaddr": "0x80181C80",
-   "size": 408,
-   "fuzzy": 97.65,
-   "class": "structural",
-   "rows": {
-    "naming": 2,
-    "layout": 35,
-    "regalloc": 12,
-    "mixed": 5,
-    "gap": 1
-   },
-   "severity": "near_miss"
-  },
-  {
    "name": "ftCo_800921DC",
    "unit": "main/melee/ft/chara/ftCommon/ftCo_Guard",
    "vaddr": "0x800921DC",
@@ -4264,7 +4069,6 @@
    "rows": {
     "layout": 15,
     "regalloc": 8,
-    "naming": 3,
     "mixed": 2,
     "gap": 1
    },
@@ -4297,6 +4101,21 @@
     "gap": 2,
     "mixed": 2,
     "mnemonic": 1
+   },
+   "severity": "near_miss"
+  },
+  {
+   "name": "fn_80184138",
+   "unit": "main/melee/gm/gm_1832",
+   "vaddr": "0x80184138",
+   "size": 2216,
+   "fuzzy": 97.61,
+   "class": "structural",
+   "rows": {
+    "layout": 23,
+    "regalloc": 43,
+    "mixed": 1,
+    "gap": 10
    },
    "severity": "near_miss"
   },
@@ -4347,24 +4166,6 @@
    "severity": "near_miss"
   },
   {
-   "name": "fn_80180C60",
-   "unit": "main/melee/gm/gmregclear",
-   "vaddr": "0x80180C60",
-   "size": 2360,
-   "fuzzy": 97.58,
-   "class": "structural",
-   "rows": {
-    "naming": 13,
-    "gap": 9,
-    "mnemonic": 2,
-    "regalloc": 38,
-    "mixed": 33,
-    "layout": 6,
-    "other_arg": 1
-   },
-   "severity": "near_miss"
-  },
-  {
    "name": "fn_80234C24",
    "unit": "main/melee/mn/mnitemsw",
    "vaddr": "0x80234C24",
@@ -4375,7 +4176,6 @@
     "regalloc": 58,
     "gap": 2,
     "layout": 2,
-    "naming": 12,
     "mnemonic": 1
    },
    "severity": "near_miss"
@@ -4420,8 +4220,7 @@
    "rows": {
     "layout": 12,
     "gap": 2,
-    "regalloc": 17,
-    "naming": 7
+    "regalloc": 17
    },
    "severity": "near_miss"
   },
@@ -4438,6 +4237,22 @@
     "regalloc": 55,
     "naming": 17,
     "other_arg": 1
+   },
+   "severity": "near_miss"
+  },
+  {
+   "name": "un_80305058",
+   "unit": "main/melee/ty/toy",
+   "vaddr": "0x80305058",
+   "size": 876,
+   "fuzzy": 97.49,
+   "class": "structural",
+   "rows": {
+    "gap": 5,
+    "regalloc": 2,
+    "mixed": 2,
+    "naming": 2,
+    "mnemonic": 1
    },
    "severity": "near_miss"
   },
@@ -4529,7 +4344,7 @@
    "rows": {
     "gap": 2,
     "regalloc": 12,
-    "naming": 8
+    "naming": 1
    },
    "severity": "near_miss"
   },
@@ -4576,7 +4391,6 @@
    "rows": {
     "regalloc": 55,
     "other_arg": 2,
-    "naming": 3,
     "gap": 4,
     "mixed": 1,
     "layout": 1
@@ -4609,23 +4423,6 @@
     "gap": 5,
     "mixed": 1,
     "regalloc": 11
-   },
-   "severity": "near_miss"
-  },
-  {
-   "name": "fn_8018A000",
-   "unit": "main/melee/gm/gm_1832",
-   "vaddr": "0x8018A000",
-   "size": 352,
-   "fuzzy": 97.3,
-   "class": "codegen",
-   "rows": {
-    "other_arg": 5,
-    "gap": 2,
-    "layout": 6,
-    "regalloc": 2,
-    "naming": 3,
-    "mixed": 2
    },
    "severity": "near_miss"
   },
@@ -4713,8 +4510,7 @@
     "mnemonic": 2,
     "gap": 4,
     "regalloc": 2,
-    "layout": 8,
-    "naming": 14
+    "layout": 8
    },
    "severity": "near_miss"
   },
@@ -4776,8 +4572,7 @@
     "regalloc": 19,
     "mnemonic": 1,
     "gap": 3,
-    "mixed": 1,
-    "naming": 10
+    "mixed": 1
    },
    "severity": "near_miss"
   },
@@ -4794,7 +4589,8 @@
     "mixed": 9,
     "mnemonic": 6,
     "layout": 10,
-    "other_arg": 8
+    "other_arg": 8,
+    "naming": 1
    },
    "severity": "near_miss"
   },
@@ -4808,7 +4604,6 @@
    "rows": {
     "layout": 13,
     "regalloc": 28,
-    "naming": 6,
     "other_arg": 2,
     "gap": 3,
     "mnemonic": 1
@@ -5309,7 +5104,6 @@
    "rows": {
     "regalloc": 10,
     "gap": 3,
-    "naming": 4,
     "mnemonic": 1
    },
    "severity": "near_miss"
@@ -5378,24 +5172,6 @@
    "severity": "near_miss"
   },
   {
-   "name": "fn_80184138",
-   "unit": "main/melee/gm/gm_1832",
-   "vaddr": "0x80184138",
-   "size": 2216,
-   "fuzzy": 96.79,
-   "class": "structural",
-   "rows": {
-    "mixed": 4,
-    "regalloc": 58,
-    "layout": 12,
-    "gap": 13,
-    "other_arg": 7,
-    "naming": 4,
-    "mnemonic": 1
-   },
-   "severity": "near_miss"
-  },
-  {
    "name": "grCorneria_801DDAC4",
    "unit": "main/melee/gr/grcorneria",
    "vaddr": "0x801DDAC4",
@@ -5432,7 +5208,7 @@
    "fuzzy": 96.77,
    "class": "structural",
    "rows": {
-    "naming": 6,
+    "naming": 2,
     "layout": 16,
     "gap": 3,
     "mixed": 11,
@@ -5515,20 +5291,6 @@
    "severity": "near_miss"
   },
   {
-   "name": "Toy_LoadLObjList",
-   "unit": "main/melee/ty/toy",
-   "vaddr": "0x80306EEC",
-   "size": 300,
-   "fuzzy": 96.73,
-   "class": "structural",
-   "rows": {
-    "regalloc": 15,
-    "mnemonic": 1,
-    "gap": 1
-   },
-   "severity": "near_miss"
-  },
-  {
    "name": "fn_800D9930",
    "unit": "main/melee/ft/chara/ftCommon/ftCo_Attack100",
    "vaddr": "0x800D9930",
@@ -5602,8 +5364,7 @@
     "layout": 9,
     "mnemonic": 4,
     "mixed": 1,
-    "regalloc": 2,
-    "naming": 1
+    "regalloc": 2
    },
    "severity": "near_miss"
   },
@@ -5679,7 +5440,7 @@
    "class": "structural",
    "rows": {
     "regalloc": 32,
-    "naming": 9,
+    "naming": 8,
     "gap": 6,
     "mnemonic": 1
    },
@@ -5696,6 +5457,20 @@
     "gap": 2,
     "regalloc": 2,
     "naming": 4
+   },
+   "severity": "near_miss"
+  },
+  {
+   "name": "gm_80182578",
+   "unit": "main/melee/gm/gmregclear",
+   "vaddr": "0x80182578",
+   "size": 1508,
+   "fuzzy": 96.59,
+   "class": "structural",
+   "rows": {
+    "regalloc": 118,
+    "layout": 1,
+    "gap": 5
    },
    "severity": "near_miss"
   },
@@ -5743,22 +5518,6 @@
     "mnemonic": 2,
     "gap": 3,
     "layout": 2
-   },
-   "severity": "near_miss"
-  },
-  {
-   "name": "gm_80182578",
-   "unit": "main/melee/gm/gmregclear",
-   "vaddr": "0x80182578",
-   "size": 1508,
-   "fuzzy": 96.56,
-   "class": "structural",
-   "rows": {
-    "naming": 2,
-    "mixed": 7,
-    "layout": 5,
-    "regalloc": 111,
-    "gap": 5
    },
    "severity": "near_miss"
   },
@@ -5817,8 +5576,7 @@
     "regalloc": 10,
     "gap": 4,
     "mixed": 7,
-    "layout": 1,
-    "naming": 4
+    "layout": 1
    },
    "severity": "near_miss"
   },
@@ -6055,7 +5813,6 @@
     "layout": 52,
     "regalloc": 106,
     "mixed": 10,
-    "naming": 5,
     "gap": 6,
     "mnemonic": 2
    },
@@ -6122,6 +5879,21 @@
     "mnemonic": 1,
     "gap": 3,
     "layout": 2
+   },
+   "severity": "near_miss"
+  },
+  {
+   "name": "fn_8018A000",
+   "unit": "main/melee/gm/gm_1832",
+   "vaddr": "0x8018A000",
+   "size": 352,
+   "fuzzy": 96.26,
+   "class": "structural",
+   "rows": {
+    "other_arg": 11,
+    "naming": 11,
+    "gap": 3,
+    "mixed": 4
    },
    "severity": "near_miss"
   },
@@ -6204,10 +5976,10 @@
    "fuzzy": 96.17,
    "class": "structural",
    "rows": {
-    "regalloc": 613,
+    "regalloc": 616,
     "gap": 15,
     "layout": 30,
-    "mixed": 32,
+    "mixed": 29,
     "mnemonic": 4,
     "other_arg": 5
    },
@@ -6332,6 +6104,23 @@
    "severity": "near_miss"
   },
   {
+   "name": "__THPDecompressiMCURow640x480",
+   "unit": "main/dolphin/thp/THPDec",
+   "vaddr": "0x80331470",
+   "size": 6668,
+   "fuzzy": 96.07,
+   "class": "structural",
+   "rows": {
+    "regalloc": 534,
+    "mnemonic": 4,
+    "gap": 24,
+    "mixed": 19,
+    "other_arg": 4,
+    "layout": 19
+   },
+   "severity": "near_miss"
+  },
+  {
    "name": "mnDataDel_8024FE4C",
    "unit": "main/melee/mn/mndatadel",
    "vaddr": "0x8024FE4C",
@@ -6339,7 +6128,7 @@
    "fuzzy": 96.06,
    "class": "structural",
    "rows": {
-    "naming": 10,
+    "naming": 2,
     "layout": 23,
     "regalloc": 36,
     "gap": 4,
@@ -6385,23 +6174,6 @@
    "severity": "near_miss"
   },
   {
-   "name": "__THPDecompressiMCURow640x480",
-   "unit": "main/dolphin/thp/THPDec",
-   "vaddr": "0x80331470",
-   "size": 6668,
-   "fuzzy": 96.06,
-   "class": "structural",
-   "rows": {
-    "regalloc": 531,
-    "mnemonic": 4,
-    "gap": 24,
-    "mixed": 22,
-    "other_arg": 4,
-    "layout": 19
-   },
-   "severity": "near_miss"
-  },
-  {
    "name": "grKinokoRoute_802078F0",
    "unit": "main/melee/gr/grkinokoroute",
    "vaddr": "0x802078F0",
@@ -6441,7 +6213,6 @@
    "class": "structural",
    "rows": {
     "regalloc": 38,
-    "naming": 2,
     "gap": 2
    },
    "severity": "near_miss"
@@ -6455,7 +6226,6 @@
    "class": "structural",
    "rows": {
     "regalloc": 38,
-    "naming": 2,
     "gap": 2
    },
    "severity": "near_miss"
@@ -6469,7 +6239,6 @@
    "class": "structural",
    "rows": {
     "regalloc": 38,
-    "naming": 2,
     "gap": 2
    },
    "severity": "near_miss"
@@ -6483,7 +6252,6 @@
    "class": "structural",
    "rows": {
     "regalloc": 38,
-    "naming": 2,
     "gap": 2
    },
    "severity": "near_miss"
@@ -6497,7 +6265,6 @@
    "class": "structural",
    "rows": {
     "regalloc": 38,
-    "naming": 2,
     "gap": 2
    },
    "severity": "near_miss"
@@ -6511,7 +6278,6 @@
    "class": "structural",
    "rows": {
     "regalloc": 38,
-    "naming": 2,
     "gap": 2
    },
    "severity": "near_miss"
@@ -6525,7 +6291,6 @@
    "class": "structural",
    "rows": {
     "regalloc": 38,
-    "naming": 2,
     "gap": 2
    },
    "severity": "near_miss"
@@ -6539,7 +6304,6 @@
    "class": "structural",
    "rows": {
     "regalloc": 38,
-    "naming": 2,
     "gap": 2
    },
    "severity": "near_miss"
@@ -6632,7 +6396,6 @@
     "regalloc": 9,
     "gap": 10,
     "layout": 4,
-    "naming": 1,
     "mixed": 1
    },
    "severity": "near_miss"
@@ -6662,7 +6425,6 @@
    "class": "structural",
    "rows": {
     "regalloc": 156,
-    "naming": 8,
     "layout": 5,
     "mnemonic": 6,
     "gap": 3,
@@ -6729,7 +6491,7 @@
    "fuzzy": 95.81,
    "class": "codegen",
    "rows": {
-    "naming": 11,
+    "naming": 2,
     "gap": 4,
     "regalloc": 63
    },
@@ -6832,7 +6594,6 @@
    "rows": {
     "layout": 8,
     "regalloc": 15,
-    "naming": 2,
     "gap": 2,
     "mnemonic": 2
    },
@@ -6848,7 +6609,6 @@
    "rows": {
     "layout": 8,
     "regalloc": 15,
-    "naming": 2,
     "gap": 2,
     "mnemonic": 2
    },
@@ -6864,7 +6624,6 @@
    "rows": {
     "layout": 8,
     "regalloc": 15,
-    "naming": 2,
     "gap": 2,
     "mnemonic": 2
    },
@@ -6880,7 +6639,6 @@
    "rows": {
     "layout": 8,
     "regalloc": 15,
-    "naming": 2,
     "gap": 2,
     "mnemonic": 2
    },
@@ -6896,7 +6654,6 @@
    "rows": {
     "layout": 8,
     "regalloc": 15,
-    "naming": 2,
     "gap": 2,
     "mnemonic": 2
    },
@@ -6912,7 +6669,6 @@
    "rows": {
     "layout": 8,
     "regalloc": 15,
-    "naming": 2,
     "gap": 2,
     "mnemonic": 2
    },
@@ -6928,7 +6684,6 @@
    "rows": {
     "layout": 8,
     "regalloc": 15,
-    "naming": 2,
     "gap": 2,
     "mnemonic": 2
    },
@@ -6944,7 +6699,6 @@
    "rows": {
     "layout": 8,
     "regalloc": 15,
-    "naming": 2,
     "gap": 2,
     "mnemonic": 2
    },
@@ -7039,8 +6793,7 @@
    "class": "structural",
    "rows": {
     "gap": 3,
-    "regalloc": 5,
-    "naming": 1
+    "regalloc": 5
    },
    "severity": "near_miss"
   },
@@ -7232,7 +6985,6 @@
     "gap": 29,
     "regalloc": 234,
     "mixed": 3,
-    "naming": 4,
     "mnemonic": 1
    },
    "severity": "near_miss"
@@ -7360,7 +7112,6 @@
     "layout": 5,
     "regalloc": 91,
     "other_arg": 1,
-    "naming": 3,
     "mnemonic": 4,
     "mixed": 6
    },
@@ -7472,7 +7223,6 @@
     "layout": 9,
     "gap": 32,
     "regalloc": 64,
-    "naming": 56,
     "mnemonic": 2
    },
    "severity": "near_miss"
@@ -7554,8 +7304,7 @@
    "rows": {
     "regalloc": 78,
     "mnemonic": 4,
-    "gap": 2,
-    "naming": 4
+    "gap": 2
    },
    "severity": "near_miss"
   },
@@ -7618,7 +7367,6 @@
    "rows": {
     "regalloc": 87,
     "mnemonic": 3,
-    "naming": 18,
     "gap": 10,
     "mixed": 4,
     "layout": 9,
@@ -7715,7 +7463,6 @@
    "rows": {
     "regalloc": 41,
     "other_arg": 4,
-    "naming": 2,
     "gap": 3
    },
    "severity": "near_miss"
@@ -7730,7 +7477,6 @@
    "rows": {
     "regalloc": 41,
     "other_arg": 4,
-    "naming": 2,
     "gap": 3
    },
    "severity": "near_miss"
@@ -7806,7 +7552,7 @@
    "rows": {
     "regalloc": 2,
     "gap": 7,
-    "naming": 4
+    "naming": 2
    },
    "severity": "near_miss"
   },
@@ -7838,8 +7584,7 @@
     "mixed": 4,
     "regalloc": 50,
     "mnemonic": 1,
-    "naming": 8,
-    "other_arg": 6,
+    "other_arg": 5,
     "layout": 2
    },
    "severity": "near_miss"
@@ -7948,7 +7693,7 @@
    "fuzzy": 94.72,
    "class": "structural",
    "rows": {
-    "naming": 10,
+    "naming": 3,
     "gap": 7,
     "mixed": 3,
     "regalloc": 7,
@@ -7970,8 +7715,7 @@
     "gap": 6,
     "mnemonic": 4,
     "mixed": 10,
-    "regalloc": 1,
-    "naming": 1
+    "regalloc": 1
    },
    "severity": "near_miss"
   },
@@ -8063,6 +7807,22 @@
     "mixed": 3,
     "layout": 10,
     "other_arg": 2
+   },
+   "severity": "near_miss"
+  },
+  {
+   "name": "fn_80186634",
+   "unit": "main/melee/gm/gm_1832",
+   "vaddr": "0x80186634",
+   "size": 1992,
+   "fuzzy": 94.66,
+   "class": "structural",
+   "rows": {
+    "gap": 17,
+    "mixed": 7,
+    "layout": 26,
+    "regalloc": 53,
+    "mnemonic": 11
    },
    "severity": "near_miss"
   },
@@ -8406,7 +8166,7 @@
    "fuzzy": 94.22,
    "class": "structural",
    "rows": {
-    "naming": 6,
+    "naming": 4,
     "layout": 30,
     "regalloc": 2,
     "gap": 7
@@ -8485,8 +8245,7 @@
     "gap": 4,
     "regalloc": 6,
     "mnemonic": 2,
-    "other_arg": 6,
-    "naming": 2
+    "other_arg": 6
    },
    "severity": "near_miss"
   },
@@ -8568,24 +8327,6 @@
    "severity": "near_miss"
   },
   {
-   "name": "grBigBlue_801E6364",
-   "unit": "main/melee/gr/grbigblue",
-   "vaddr": "0x801E6364",
-   "size": 1304,
-   "fuzzy": 94.01,
-   "class": "structural",
-   "rows": {
-    "regalloc": 70,
-    "naming": 1,
-    "layout": 26,
-    "mixed": 8,
-    "gap": 13,
-    "mnemonic": 3,
-    "other_arg": 1
-   },
-   "severity": "near_miss"
-  },
-  {
    "name": "fn_802309F0",
    "unit": "main/melee/mn/mnmainrule",
    "vaddr": "0x802309F0",
@@ -8612,7 +8353,7 @@
    "rows": {
     "regalloc": 2,
     "gap": 7,
-    "naming": 4
+    "naming": 2
    },
    "severity": "near_miss"
   },
@@ -8676,7 +8417,6 @@
    "class": "structural",
    "rows": {
     "regalloc": 9,
-    "naming": 7,
     "layout": 3,
     "mixed": 4,
     "gap": 5
@@ -8777,8 +8517,7 @@
     "gap": 39,
     "layout": 112,
     "mnemonic": 7,
-    "mixed": 34,
-    "naming": 8
+    "mixed": 34
    },
    "severity": "near_miss"
   },
@@ -8839,7 +8578,6 @@
    "rows": {
     "gap": 8,
     "regalloc": 44,
-    "naming": 5,
     "layout": 10,
     "mixed": 2
    },
@@ -9079,7 +8817,6 @@
    "class": "structural",
    "rows": {
     "regalloc": 67,
-    "naming": 2,
     "gap": 3,
     "mixed": 2,
     "mnemonic": 1
@@ -9104,24 +8841,6 @@
    "severity": "near_miss"
   },
   {
-   "name": "fn_80186634",
-   "unit": "main/melee/gm/gm_1832",
-   "vaddr": "0x80186634",
-   "size": 1992,
-   "fuzzy": 93.29,
-   "class": "structural",
-   "rows": {
-    "gap": 22,
-    "mixed": 10,
-    "mnemonic": 12,
-    "regalloc": 60,
-    "layout": 18,
-    "other_arg": 5,
-    "naming": 3
-   },
-   "severity": "near_miss"
-  },
-  {
    "name": "ftCo_8008DCE0",
    "unit": "main/melee/ft/chara/ftCommon/ftCo_Damage",
    "vaddr": "0x8008DCE0",
@@ -9131,7 +8850,6 @@
    "rows": {
     "layout": 40,
     "regalloc": 120,
-    "naming": 18,
     "gap": 18,
     "mnemonic": 14,
     "mixed": 4
@@ -9275,8 +8993,7 @@
     "regalloc": 106,
     "gap": 6,
     "mnemonic": 3,
-    "other_arg": 1,
-    "naming": 1
+    "other_arg": 1
    },
    "severity": "near_miss"
   },
@@ -9288,7 +9005,7 @@
    "fuzzy": 92.89,
    "class": "structural",
    "rows": {
-    "naming": 6,
+    "naming": 3,
     "mixed": 32,
     "regalloc": 57,
     "mnemonic": 7,
@@ -9344,7 +9061,6 @@
     "other_arg": 1,
     "mnemonic": 2,
     "gap": 6,
-    "naming": 3,
     "layout": 13
    },
    "severity": "near_miss"
@@ -9397,7 +9113,7 @@
     "gap": 10,
     "mixed": 7,
     "layout": 9,
-    "naming": 6,
+    "naming": 2,
     "mnemonic": 2
    },
    "severity": "near_miss"
@@ -9513,6 +9229,21 @@
    "severity": "near_miss"
   },
   {
+   "name": "fn_80184AB8",
+   "unit": "main/melee/gm/gm_1832",
+   "vaddr": "0x80184AB8",
+   "size": 1428,
+   "fuzzy": 92.68,
+   "class": "structural",
+   "rows": {
+    "layout": 40,
+    "gap": 21,
+    "mnemonic": 5,
+    "regalloc": 27
+   },
+   "severity": "near_miss"
+  },
+  {
    "name": "grBigBlueRoute_8020CD20",
    "unit": "main/melee/gr/grbigblueroute",
    "vaddr": "0x8020CD20",
@@ -9613,7 +9344,6 @@
    "rows": {
     "regalloc": 5,
     "mnemonic": 5,
-    "naming": 10,
     "layout": 6,
     "gap": 5
    },
@@ -9665,8 +9395,7 @@
     "regalloc": 56,
     "mnemonic": 5,
     "mixed": 4,
-    "gap": 8,
-    "naming": 9
+    "gap": 8
    },
    "severity": "near_miss"
   },
@@ -9695,7 +9424,6 @@
    "fuzzy": 92.37,
    "class": "structural",
    "rows": {
-    "naming": 8,
     "gap": 14,
     "mixed": 2,
     "layout": 13,
@@ -9791,8 +9519,7 @@
     "gap": 8,
     "mixed": 31,
     "regalloc": 34,
-    "other_arg": 1,
-    "naming": 4
+    "other_arg": 1
    },
    "severity": "near_miss"
   },
@@ -9853,7 +9580,6 @@
    "fuzzy": 92.23,
    "class": "structural",
    "rows": {
-    "naming": 20,
     "regalloc": 10,
     "gap": 11,
     "mixed": 14,
@@ -9975,7 +9701,6 @@
     "regalloc": 106,
     "mnemonic": 5,
     "gap": 12,
-    "naming": 22,
     "mixed": 3
    },
    "severity": "near_miss"
@@ -9988,7 +9713,6 @@
    "fuzzy": 92.02,
    "class": "structural",
    "rows": {
-    "naming": 14,
     "regalloc": 23,
     "gap": 23,
     "mnemonic": 4,
@@ -10006,12 +9730,12 @@
    "fuzzy": 92.02,
    "class": "structural",
    "rows": {
-    "naming": 30,
+    "naming": 87,
     "regalloc": 124,
     "mnemonic": 18,
-    "layout": 28,
+    "layout": 29,
     "mixed": 17,
-    "other_arg": 25,
+    "other_arg": 24,
     "gap": 144
    },
    "severity": "near_miss"
@@ -10026,8 +9750,7 @@
    "rows": {
     "layout": 20,
     "gap": 41,
-    "other_arg": 20,
-    "naming": 8,
+    "other_arg": 19,
     "mnemonic": 7,
     "regalloc": 74,
     "mixed": 13
@@ -10100,7 +9823,7 @@
    "rows": {
     "regalloc": 10,
     "gap": 16,
-    "naming": 3,
+    "naming": 2,
     "mnemonic": 1
    },
    "severity": "near_miss"
@@ -10179,7 +9902,7 @@
    "fuzzy": 91.84,
    "class": "structural",
    "rows": {
-    "naming": 3,
+    "naming": 1,
     "mnemonic": 2,
     "gap": 7,
     "mixed": 13,
@@ -10218,7 +9941,6 @@
     "regalloc": 15,
     "gap": 11,
     "mixed": 42,
-    "naming": 5,
     "mnemonic": 2,
     "layout": 1
    },
@@ -10252,8 +9974,7 @@
     "gap": 21,
     "mnemonic": 6,
     "mixed": 6,
-    "layout": 9,
-    "naming": 21
+    "layout": 9
    },
    "severity": "near_miss"
   },
@@ -10305,23 +10026,6 @@
    "severity": "near_miss"
   },
   {
-   "name": "fn_80184AB8",
-   "unit": "main/melee/gm/gm_1832",
-   "vaddr": "0x80184AB8",
-   "size": 1428,
-   "fuzzy": 91.7,
-   "class": "codegen",
-   "rows": {
-    "mixed": 8,
-    "regalloc": 80,
-    "layout": 35,
-    "gap": 20,
-    "mnemonic": 5,
-    "naming": 9
-   },
-   "severity": "near_miss"
-  },
-  {
    "name": "ftCo_8008EC90",
    "unit": "main/melee/ft/chara/ftCommon/ftCo_Damage",
    "vaddr": "0x8008EC90",
@@ -10330,7 +10034,6 @@
    "class": "structural",
    "rows": {
     "regalloc": 48,
-    "naming": 10,
     "layout": 7,
     "mnemonic": 9,
     "gap": 50,
@@ -10428,7 +10131,6 @@
    "rows": {
     "mixed": 8,
     "regalloc": 66,
-    "naming": 7,
     "other_arg": 1,
     "mnemonic": 3,
     "gap": 23
@@ -10481,7 +10183,6 @@
     "regalloc": 52,
     "layout": 1,
     "other_arg": 7,
-    "naming": 8,
     "gap": 15,
     "mixed": 4
    },
@@ -10717,7 +10418,7 @@
    "class": "structural",
    "rows": {
     "mixed": 27,
-    "naming": 6,
+    "naming": 1,
     "regalloc": 163,
     "mnemonic": 3,
     "gap": 21,
@@ -10868,8 +10569,7 @@
    "rows": {
     "regalloc": 47,
     "mnemonic": 2,
-    "gap": 6,
-    "naming": 2
+    "gap": 6
    },
    "severity": "near_miss"
   },
@@ -10883,8 +10583,7 @@
    "rows": {
     "regalloc": 47,
     "mnemonic": 2,
-    "gap": 6,
-    "naming": 2
+    "gap": 6
    },
    "severity": "near_miss"
   },
@@ -10965,7 +10664,7 @@
    "rows": {
     "mixed": 18,
     "regalloc": 46,
-    "naming": 8,
+    "naming": 4,
     "layout": 19,
     "gap": 16,
     "mnemonic": 7
@@ -11048,7 +10747,6 @@
    "class": "structural",
    "rows": {
     "regalloc": 59,
-    "naming": 3,
     "gap": 23,
     "mnemonic": 4,
     "layout": 4,
@@ -11205,8 +10903,8 @@
     "regalloc": 159,
     "gap": 41,
     "mnemonic": 3,
-    "naming": 17,
     "layout": 31,
+    "naming": 2,
     "other_arg": 9
    },
    "severity": "near_miss"
@@ -11256,7 +10954,6 @@
     "mixed": 3,
     "gap": 5,
     "regalloc": 26,
-    "naming": 1,
     "other_arg": 5
    },
    "severity": "near_miss"
@@ -11338,9 +11035,9 @@
     "gap": 18,
     "regalloc": 56,
     "mixed": 8,
-    "naming": 18,
     "mnemonic": 5,
-    "other_arg": 1
+    "other_arg": 1,
+    "naming": 1
    },
    "severity": "near_miss"
   },
@@ -11553,7 +11250,6 @@
    "class": "structural",
    "rows": {
     "regalloc": 62,
-    "naming": 18,
     "gap": 22,
     "mnemonic": 7,
     "layout": 3,
@@ -11588,8 +11284,7 @@
     "gap": 7,
     "regalloc": 11,
     "other_arg": 1,
-    "mnemonic": 1,
-    "naming": 1
+    "mnemonic": 1
    },
    "severity": "partial"
   },
@@ -11637,7 +11332,6 @@
     "gap": 19,
     "mnemonic": 9,
     "layout": 10,
-    "naming": 7,
     "other_arg": 2
    },
    "severity": "partial"
@@ -11732,8 +11426,7 @@
     "regalloc": 8,
     "mnemonic": 12,
     "gap": 32,
-    "mixed": 8,
-    "naming": 4
+    "mixed": 8
    },
    "severity": "partial"
   },
@@ -11784,8 +11477,7 @@
     "gap": 46,
     "layout": 7,
     "mnemonic": 8,
-    "other_arg": 7,
-    "naming": 2,
+    "other_arg": 6,
     "mixed": 13
    },
    "severity": "partial"
@@ -11868,7 +11560,7 @@
     "layout": 129,
     "regalloc": 126,
     "mnemonic": 26,
-    "naming": 14,
+    "naming": 2,
     "mixed": 16,
     "other_arg": 2
    },
@@ -12199,8 +11891,7 @@
     "gap": 5,
     "layout": 27,
     "regalloc": 65,
-    "mixed": 3,
-    "naming": 7
+    "mixed": 3
    },
    "severity": "partial"
   },
@@ -12233,7 +11924,7 @@
     "mnemonic": 14,
     "gap": 15,
     "mixed": 5,
-    "naming": 6,
+    "naming": 1,
     "layout": 30
    },
    "severity": "partial"
@@ -12248,7 +11939,6 @@
    "rows": {
     "layout": 60,
     "gap": 50,
-    "naming": 16,
     "regalloc": 48,
     "other_arg": 4,
     "mixed": 10,
@@ -12383,8 +12073,7 @@
     "gap": 29,
     "mixed": 5,
     "mnemonic": 10,
-    "regalloc": 30,
-    "naming": 7
+    "regalloc": 30
    },
    "severity": "partial"
   },
@@ -12605,6 +12294,20 @@
    "severity": "partial"
   },
   {
+   "name": "grBigBlue_801E8A1C",
+   "unit": "main/melee/gr/grbigblue",
+   "vaddr": "0x801E8A1C",
+   "size": 360,
+   "fuzzy": 87.48,
+   "class": "codegen",
+   "rows": {
+    "regalloc": 18,
+    "gap": 10,
+    "mixed": 2
+   },
+   "severity": "partial"
+  },
+  {
    "name": "fn_803168DC",
    "unit": "main/melee/ty/tyfigupon",
    "vaddr": "0x803168DC",
@@ -12763,9 +12466,9 @@
     "gap": 19,
     "regalloc": 47,
     "mixed": 7,
-    "naming": 16,
     "mnemonic": 6,
-    "other_arg": 1
+    "other_arg": 1,
+    "naming": 1
    },
    "severity": "partial"
   },
@@ -12872,7 +12575,7 @@
    "fuzzy": 87.04,
    "class": "structural",
    "rows": {
-    "naming": 91,
+    "naming": 146,
     "regalloc": 134,
     "gap": 308,
     "other_arg": 20,
@@ -13090,7 +12793,7 @@
     "mixed": 31,
     "regalloc": 317,
     "other_arg": 12,
-    "naming": 25,
+    "naming": 65,
     "gap": 184,
     "mnemonic": 20,
     "layout": 38
@@ -13194,7 +12897,6 @@
     "gap": 10,
     "mixed": 5,
     "mnemonic": 9,
-    "naming": 2,
     "layout": 1
    },
    "severity": "partial"
@@ -13212,7 +12914,7 @@
     "mixed": 8,
     "layout": 38,
     "other_arg": 6,
-    "naming": 8,
+    "naming": 5,
     "mnemonic": 6
    },
    "severity": "partial"
@@ -13278,7 +12980,7 @@
    "fuzzy": 86.0,
    "class": "structural",
    "rows": {
-    "naming": 4,
+    "naming": 1,
     "regalloc": 12,
     "gap": 10,
     "mixed": 8,
@@ -13298,8 +13000,7 @@
     "regalloc": 127,
     "mnemonic": 5,
     "mixed": 8,
-    "layout": 11,
-    "naming": 11
+    "layout": 11
    },
    "severity": "partial"
   },
@@ -13448,7 +13149,6 @@
     "mixed": 28,
     "mnemonic": 15,
     "regalloc": 120,
-    "naming": 14,
     "other_arg": 1
    },
    "severity": "partial"
@@ -13498,8 +13198,7 @@
     "regalloc": 37,
     "gap": 13,
     "mnemonic": 2,
-    "layout": 14,
-    "naming": 1
+    "layout": 14
    },
    "severity": "partial"
   },
@@ -13597,8 +13296,7 @@
     "layout": 23,
     "mixed": 15,
     "mnemonic": 16,
-    "regalloc": 233,
-    "naming": 4
+    "regalloc": 233
    },
    "severity": "partial"
   },
@@ -13629,7 +13327,6 @@
     "regalloc": 70,
     "gap": 33,
     "mixed": 5,
-    "naming": 18,
     "mnemonic": 8,
     "layout": 1
    },
@@ -13666,8 +13363,7 @@
     "gap": 28,
     "mnemonic": 5,
     "other_arg": 1,
-    "mixed": 1,
-    "naming": 12
+    "mixed": 1
    },
    "severity": "partial"
   },
@@ -13819,7 +13515,7 @@
     "gap": 20,
     "mnemonic": 5,
     "other_arg": 2,
-    "naming": 1
+    "naming": 3
    },
    "severity": "partial"
   },
@@ -14051,7 +13747,7 @@
    "class": "structural",
    "rows": {
     "layout": 30,
-    "naming": 3,
+    "naming": 2,
     "other_arg": 1,
     "regalloc": 54,
     "mnemonic": 6,
@@ -14142,7 +13838,7 @@
     "mnemonic": 1,
     "gap": 21,
     "other_arg": 1,
-    "naming": 4
+    "naming": 2
    },
    "severity": "partial"
   },
@@ -14286,7 +13982,6 @@
     "layout": 10,
     "regalloc": 33,
     "mixed": 17,
-    "naming": 6,
     "mnemonic": 9,
     "other_arg": 2
    },
@@ -14417,7 +14112,7 @@
     "mnemonic": 7,
     "layout": 21,
     "regalloc": 57,
-    "naming": 9,
+    "naming": 13,
     "mixed": 13
    },
    "severity": "partial"
@@ -14640,7 +14335,6 @@
     "regalloc": 53,
     "mixed": 5,
     "mnemonic": 7,
-    "naming": 10,
     "layout": 5
    },
    "severity": "partial"
@@ -14657,7 +14351,6 @@
     "gap": 45,
     "layout": 16,
     "mixed": 11,
-    "naming": 11,
     "mnemonic": 3
    },
    "severity": "partial"
@@ -14804,7 +14497,6 @@
    "fuzzy": 80.52,
    "class": "structural",
    "rows": {
-    "naming": 5,
     "layout": 6,
     "regalloc": 2,
     "gap": 24,
@@ -14921,7 +14613,7 @@
    "rows": {
     "layout": 7,
     "gap": 63,
-    "naming": 7,
+    "naming": 1,
     "mnemonic": 17,
     "regalloc": 153,
     "mixed": 17,
@@ -14991,21 +14683,6 @@
     "other_arg": 1,
     "gap": 130,
     "mnemonic": 10
-   },
-   "severity": "partial"
-  },
-  {
-   "name": "grBigBlue_801E8A1C",
-   "unit": "main/melee/gr/grbigblue",
-   "vaddr": "0x801E8A1C",
-   "size": 360,
-   "fuzzy": 79.9,
-   "class": "codegen",
-   "rows": {
-    "gap": 14,
-    "mixed": 6,
-    "mnemonic": 5,
-    "regalloc": 8
    },
    "severity": "partial"
   },
@@ -15122,11 +14799,11 @@
    "class": "structural",
    "rows": {
     "regalloc": 198,
-    "naming": 7,
     "mnemonic": 19,
     "layout": 7,
     "gap": 72,
     "other_arg": 4,
+    "naming": 2,
     "mixed": 7
    },
    "severity": "partial"
@@ -15589,7 +15266,7 @@
     "gap": 57,
     "mixed": 8,
     "mnemonic": 10,
-    "naming": 16,
+    "naming": 11,
     "other_arg": 6
    },
    "severity": "partial"
@@ -15606,8 +15283,7 @@
     "gap": 41,
     "regalloc": 12,
     "mnemonic": 4,
-    "mixed": 11,
-    "naming": 2
+    "mixed": 11
    },
    "severity": "partial"
   },
@@ -15805,8 +15481,7 @@
     "other_arg": 1,
     "mnemonic": 40,
     "gap": 95,
-    "mixed": 22,
-    "naming": 7
+    "mixed": 22
    },
    "severity": "partial"
   },
@@ -16642,7 +16317,6 @@
     "gap": 39,
     "mixed": 4,
     "regalloc": 14,
-    "naming": 1,
     "layout": 4,
     "mnemonic": 14
    },
@@ -16675,7 +16349,6 @@
    "rows": {
     "layout": 26,
     "gap": 104,
-    "naming": 7,
     "regalloc": 1,
     "other_arg": 1,
     "mnemonic": 3
