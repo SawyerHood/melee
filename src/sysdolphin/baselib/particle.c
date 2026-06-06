@@ -1115,7 +1115,7 @@ void fn_80392E2C(s32 event_type)
     }
 }
 
-ParticleLogEntry hsd_804CEB40[0x100];
+static ParticleLogEntry hsd_804CEB40[0x100];
 s32 hsd_804CF740[42];
 
 extern s32 hsd_804D78A8;
