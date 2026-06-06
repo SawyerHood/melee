@@ -113,6 +113,27 @@ reach 100% — check `rows` before assuming a C edit can finish a function.
    compiler-internal; 10+ idioms tested, none flip a singleton propagatable
    int arg move. Classify and skip.
 
+16. **SWITCH IDIOMS (won grOnett_801E40E4, gm_801BE638)**: lone dead
+   'b end' between compare tree and first case = empty trailing
+   'case X: break;' (X outside tested values); TWO consecutive 'b end'
+   before first case = empty case just above dispatch range, placed
+   lexically at the dead b. Empty 'default:' is DCE'd — only real case
+   values survive.
+17. **DEAD 'b epilogue' after call = literal 'return;' in else branch**
+   (won it_802B64FC — nested-if shape, not m2c flat gotos).
+18. **SELF-READ MULTI-DEF pointer bump** 'p = (T*)((u8*)p + N);' blocks
+   coalescing, forces temp+mr init (won fn_80175D34).
+19. **ASSIGNMENT-IN-CONDITION** relocates a def site (won ftCo_800D0CBC
+   — but REVERTED: broke the sibling that inlines it. SIBLING GATE is
+   now mandatory: same-TU functions inline each other; check the whole
+   unit after every win).
+20. **Label-ID/@NNN shared counter**: labels and literal-pool names share
+   one file-wide counter; added control flow shifts all later '@N' names
+   (cosmetic naming-row churn — re-verify naming maps after src edits).
+21. **THPComponent-class struct fixes**: when lha/sth offsets are uniformly
+   +N vs ours, the TYPE layout is wrong (predDC at +6, u8 triple first) —
+   fix the header struct, not the code (won Y/U/V decoders).
+
 ### Experiment results (wave 3)
 
 - **BSS/sbss ordering rule (8-compile evidence)**: statics allocate at their
@@ -206,6 +227,14 @@ reach 100% — check `rows` before assuming a C edit can finish a function.
 
 ## Session log
 
+- **2026-06-06 — Wave 5 + followups.** 14 agents, 1.38M tokens, 62min.
+  Landed: 6 src wins (gronett, gm_1BA8, ft_0892, pltrick, itsamusmissile,
+  gmresult) + THP Huffman Y/U/V via THPComponent header fix (hard-tail
+  cluster opened) + naming round 2 (~1429 rows, 663 lines, 14 units) +
+  ifstatus uninit-read fix with --no-warn-error reconfigure (upstream-
+  anticipated). ftCo_800D0CBC win REVERTED by sibling gate (-27.9 on
+  inlining sibling) -> retry queued. Binary-deviation fix: grBb -FLT_MAX.
+  Total: 36 fns, 18750/19829 (94.56%). Switch idioms discovered.
 - **2026-06-06 — Wave 4.** 16 agents, 1.88M tokens, 51min. 13 wins landed:
   6 camera.c fns (inline s64 bit-test helpers), fn_800F53AC (KIRBY'S FIRST
   — extern sizing + over-decompiled vararg), ftCo_800978D4, ft_800852B0,
