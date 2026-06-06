@@ -72,6 +72,47 @@ reach 100% — check `rows` before assuming a C edit can finish a function.
    registers), it changed IR shape — usually wrong; revert unless the target
    also shows that order.
 
+6. **ARG-PRECOLOR rule (won it_802A850C, it_802C53F0)**: when a condition's
+   CSE temp lands one volatile register too high (r4 vs r3), check whether
+   the target shows NO arg-setup before the branch's first `bl` for that
+   slot — the original passed the CSE'd expression as a (possibly unused)
+   extra argument, precoloring the temp. Codebase precedent:
+   it_802B5CBC(gobj, unused) in itsamuschargeshot.c. Needs header edit
+   (orchestrator applies).
+7. **STATIC-INLINE-HELPER demotion (won gm_8016EDDC)**: a named local pinned
+   wrong can be demoted to an anonymous inline-result temp by routing its
+   expression through a `static inline` helper called in argument position
+   — MWCC hoists the call before the enclosing statement (schedule intact)
+   and ranks the anonymous temp differently than a named local.
+8. **CAST-VS-MASK (won fn_8016FFD4)**: `(u8) expr` used 2+ times is
+   front-end CSE'd EARLY (temp gets a high callee-saved reg);
+   `(expr & 0xFF)` defers to loop-invariant hoisting (low reg). Use to
+   demote a clrlwi-of-param temp that sits too high.
+9. **Definition-vs-declaration decoupling (gm_1601 evidence)**: local-copy
+   inits emit in DEFINITION order while registers assign in DECLARATION
+   order — splitting `T x = init;` into decl + assignment decouples them.
+   Also: the first-read order of two params inside the first switch case
+   can globally permute the function's callee-saved assignment.
+10. **Copy-prop blocking (itcoll evidence)**: MWCC copy-propagation is
+   per-variable and blocked ONLY by a second assignment that READS the
+   variable (`x = E op x`); dead re-inits are DCE'd first and don't block.
+
+### Experiment results (wave 3)
+
+- **BSS/sbss ordering rule (8-compile evidence)**: statics allocate at their
+  DECLARATION point; extern .bss (>8B) at FIRST CODE REFERENCE (sub-function
+  granular); unreferenced externs flush at end-of-TU in REVERSE decl order;
+  extern .sbss (<=8B) always flushes reverse-decl regardless of use; size
+  and alignment never matter. Lever for wrong order: make the early-target
+  symbol `static` (if only locally referenced) or reorder first uses.
+- **Naming rows**: objdiff pairs relocs by exact name OR identical
+  section-relative address — so naming rows appear ONLY when offsets drift
+  (e.g. duplicated sqrtf localstatic literals shift .sdata2). Fix: name the
+  target symbols in config/GALE01/symbols.txt (split re-runs via ninja,
+  ~1.2s). Procedure documented in wave-3 report; FRAGILE: '@N' indices
+  shift when src edits change literal pools — re-verify after src changes.
+  Big targets: mnCharSel_802640A0 (154 naming rows), toy.c fns (65-146).
+
 ### Known-hard regalloc patterns (decl-order rule does NOT reach these)
 
 - **Induction-temp pairs**: when the swap is between a user variable and a
@@ -133,8 +174,29 @@ reach 100% — check `rows` before assuming a C edit can finish a function.
 3. Re-validate one S1 win end-to-end (edit → 100% → unit clean → DOL OK →
    commit) to prove the full loop before fanning out.
 
+### Parked (expert-tier, do not re-attempt without new theory)
+
+- **cobj.c cluster (6 fns)**: NOT a PAD_STACK bug — target frames have temp
+  pools +4/+24 bytes higher with dead space at frame BOTTOM, unreachable
+  from user C under this config. ~20 forms tested. Instructions identical.
+- **HSD_TExpSimplify2 (99.97)**: one instruction; ~50 total compiles across
+  two agents; every loop form/pointer style/decl permutation enumerated.
+  Loop-1 roving init derives from homed copy, target derives from raw r3.
+- **gm_1601 pair**: first-read-order vs callee-saved-perm coupling unsolved;
+  see wave-3 report for the empirical law.
+- **itcoll it_80270CD8**: FP attractor analysis complete; likely needs a
+  shared static-inline helper for the stale-damage formula (cf. matched
+  sibling it_80270E30). Worth ONE retry with the helper approach.
+
 ## Session log
 
+- **2026-06-06 — Wave 3 (fruitcake fleet).** 19 agents, 2.46M tokens, 71min.
+  7 wins landed: mn_8022FB88, itLinkbomb_UnkMotion3_Anim, grYorster_80202428,
+  gm_8016EDDC (inline-helper), fn_8016FFD4 (cast-vs-mask), it_802A850C +
+  it_802C53F0 (arg-precolor, orchestrator-applied header edits). Plus
+  symbols.txt naming batch (+104 data bytes) and particle.c static fix.
+  Both experiments SOLVED (BSS rule, naming mechanism). cobj re-diagnosed
+  and parked. Running total: 9 functions matched, 18723/19829 (94.42%).
 - **2026-06-06 — Session 2 (partial).** First match: fn_803ACD58 → 100%
   (declaration-order rule discovered + validated). check_fn.py converted to
   scratch-compile mode after the canonical-path poisoning bug bit us. Full
