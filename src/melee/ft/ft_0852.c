@@ -26,12 +26,12 @@ void ft_8008521C(HSD_GObj* gobj)
     fp->self_vel.z = pos.z - fp->cur_pos.z;
 }
 
-inline void ft_800852B0_Reset_ft_8045993C(int i)
+inline void ft_800852B0_Reset_ft_8045993C(ft_8045993C_t* p)
 {
     // Bitfields seem off but it is what it is
-    ft_8045993C[i].pad_x0 = 0;
-    ft_8045993C[i].x6_b0 = 0;
-    ft_8045993C[i].x6_b1_b2 = 0;
+    p->pad_x0 = 0;
+    p->x6_b0 = 0;
+    p->x6_b1_b2 = 0;
 }
 
 void ft_800852B0(void)
@@ -40,12 +40,14 @@ void ft_800852B0(void)
         (ftData_UnkCountStruct*) &CostumeListsForeachCharacter[FTKIND_MAX];
     ftData_UnkCountStruct* pairs =
         (ftData_UnkCountStruct*) ((u8*) CostumeListsForeachCharacter + 5940);
+    ftData** dl;
     int i;
     int new_var = 0;
 
     for (i = 0; i < FTKIND_MAX; ++i) {
         int costume_idx = new_var;
-        gFtDataList[i] = NULL;
+        dl = gFtDataList;
+        dl[i] = NULL;
         for (costume_idx = new_var;
              costume_idx < (s32) CostumeListsForeachCharacter[i].numCostumes;
              ++costume_idx)
@@ -58,12 +60,13 @@ void ft_800852B0(void)
         unk0[i].data = NULL;
         pairs[i].data = NULL;
     }
-    ft_800852B0_Reset_ft_8045993C(new_var);
-    ft_800852B0_Reset_ft_8045993C(1);
-    ft_800852B0_Reset_ft_8045993C(2);
-    ft_800852B0_Reset_ft_8045993C(3);
-    ft_800852B0_Reset_ft_8045993C(4);
-    ft_800852B0_Reset_ft_8045993C(5);
+    ft_800852B0_Reset_ft_8045993C((ft_8045993C_t*) (dl + FTKIND_MAX) +
+                                  new_var);
+    ft_800852B0_Reset_ft_8045993C((ft_8045993C_t*) (dl + FTKIND_MAX) + 1);
+    ft_800852B0_Reset_ft_8045993C((ft_8045993C_t*) (dl + FTKIND_MAX) + 2);
+    ft_800852B0_Reset_ft_8045993C((ft_8045993C_t*) (dl + FTKIND_MAX) + 3);
+    ft_800852B0_Reset_ft_8045993C((ft_8045993C_t*) (dl + FTKIND_MAX) + 4);
+    ft_800852B0_Reset_ft_8045993C((ft_8045993C_t*) (dl + FTKIND_MAX) + 5);
 }
 
 void ft_8008549C(void)
