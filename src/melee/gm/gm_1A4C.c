@@ -425,21 +425,39 @@ void fn_801A9498(HSD_GObj* gobj)
 
 static s32 gm_804D67C4;
 
-void fn_801A94BC(HSD_GObj* gobj)
+inline s32 fn_801A94BC_inline(void)
 {
-    int i;
-    int var_r31;
-    HSD_CObj* cobj;
-    PAD_STACK(0x10);
-
-    cobj = GET_COBJ(gobj);
-    gm_801A4310();
-    var_r31 = 0;
-    for (i = 0; i < 0x1A; i++) {
+    s32 i;
+    s32 count;
+    count = 0;
+    for (i = count; i < 0x1A; i++) {
         if (un_803048C0(gm_801A659C(i)) ? true : false) {
-            var_r31++;
+            count++;
         }
     }
+    return count;
+}
+
+inline s32 fn_801A94BC_inline2(void)
+{
+    s32 count;
+    s32 i;
+    count = 0;
+    for (i = count; i < 0x1A; i++) {
+        if (un_803048C0(gm_801A659C(i)) ? true : false) {
+            count++;
+        }
+    }
+    return count;
+}
+
+void fn_801A94BC(HSD_GObj* gobj)
+{
+    HSD_CObj* cobj = GET_COBJ(gobj);
+    int var_r31;
+
+    gm_801A4310();
+    var_r31 = fn_801A94BC_inline();
     if (var_r31 <= 5) {
         if (cobj->aobj->curr_frame < 160.0f) {
             HSD_CObjAnim(cobj);
@@ -450,12 +468,7 @@ void fn_801A94BC(HSD_GObj* gobj)
     }
 
     gm_801A4310();
-    var_r31 = 0;
-    for (i = 0; i < 0x1A; i++) {
-        if (un_803048C0(gm_801A659C(i)) ? true : false) {
-            var_r31++;
-        }
-    }
+    var_r31 = fn_801A94BC_inline2();
     if (var_r31 <= 0xD) {
         if (cobj->aobj->curr_frame < 190.0f) {
             HSD_CObjAnim(cobj);
