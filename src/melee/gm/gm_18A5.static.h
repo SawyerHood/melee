@@ -5,12 +5,7 @@
 
 // lbl_804D4190 / lbl_804D4194 moved to gm_1965.c (TU split).
 
-HSD_Archive* lbl_804D6638;
-HSD_Archive* lbl_804D6640;
-HSD_Archive* lbl_804D6644;
-HSD_Archive* lbl_804D6648;
-SceneDesc* lbl_804D664C;
-SceneDesc* lbl_804D6650;
+// lbl_804D6638..lbl_804D6650 sbss definitions moved to gm_190A.c (TU split).
 
 typedef struct BracketSrcEntry {
     /* 0x00 */ u8 x0;
@@ -145,30 +140,22 @@ typedef struct BracketEntry {
     /* 0xDA */ u8 padDA[0xDC - 0xDA];
 } BracketEntry;
 
-struct Lbl804799B8_t {
-    u8 x0;
-    u8 x1;
-    u8 x2;
-    u8 x3;
-    u8 x4;
-    u8 x5;
-    u8 x6;
-    u8 x7;
-    u8 x8;
-    u8 x9;
-    u8 xA;
-    u8 xB;
-    u16 xC_counter;
-    u8 xE;
-    u8 xF;
-    u8 pad2[0x10];
-};
-static struct Lbl804799B8_t lbl_804799B8;
+// struct Lbl804799B8_t + lbl_804799B8 definition moved to gm_190A.c (TU split).
 
 static BracketEntry lbl_80473AB8[0x40];
 
-extern TmData gm_804771C4;
+// Rest of this TU's .bss block (DOL ground truth, symbols.txt):
+// lbl_804771B8 at +0x3700 (0xC), gm_804771C4 at +0x370C (0x574),
+// gm_80477738 at +0x3C80 (0x2280). The binary anchors gm_804771C4
+// accesses at lbl_80473AB8+0x370C (defining-TU section fold), so these
+// objects must be defined HERE, in this order. gm_190A.c/gm_1965.c read
+// them extern (consumer-style named refs, per the DOL shapes).
+static u8 lbl_804771B8[0xC];
+static TmData gm_804771C4;
+static MatchEnd gm_80477738;
 
+// Keep the struct layout in sync with the copy in gm_190A.c (which reads
+// this object extern; TU split).
 static struct lbl_803D9D20_t {
     /*  +0 */ u8 x0[0x59];
     /* +59 */ u8 x59[0x72 - 0x59];
