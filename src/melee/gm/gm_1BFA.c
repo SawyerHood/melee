@@ -9,12 +9,20 @@
 #include "lb/lbcardgame.h"
 #include "lb/lbcardnew.h"
 #include "lb/lbtime.h"
-#include "ty/toy.h"
 #include "ty/tylist.h"
 
 #include <melee/gm/types.h>
 
 /// @remarks this file seems to deal with the challenger approaching functions.
+
+/// @remarks TU-local prototype, deliberately NOT toy.h's (enum_t, bool):
+/// gm_801BFCFC matches only when this callee's first param is subword (s16)
+/// at the extsh'd call sites - the int-class param promotes the loop-1 SR
+/// rover to phase-0 and permutes the whole callee-saved map (rover-demote-w24
+/// qr9 byte-proof; idiom 198). Re-typing toy.h itself regresses toy.c /
+/// tyfigupon.c / gmmain_lib.c (those callers need the int-class proto), so
+/// the subword view is confined to this TU. Same linkage, same REL24 symbol.
+/* 30562C */ void Trophy_SetUnlockState(s16, bool);
 
 extern UNK_T gm_804D6860[];
 extern StartMeleeData gm_80480530;
@@ -161,17 +169,18 @@ s32** gm_801BFC60(int arg0, s32 arg1, int arg2, s32 arg3, void** arg4)
 u8 gm_8049E558[0x170];
 
 /// @remarks the declaration order below is load-bearing for register
-/// allocation (rotation-enum-w20): it produces the target callee-saved web
-/// map except one r27/r28 transposition (anchor vs walker chain, 20B).
-/// Do not alphabetize or regroup these declarations.
+/// allocation, and so is the loop-1/loop-3 direct gm_8049E558[idx] indexing
+/// (the array walkers of the original decomp become SR rovers, reordering the
+/// anchor/walker pair - idiom 173) and the s16 first param of the TU-local
+/// Trophy_SetUnlockState prototype above (rover-demote-w24 qr9; idiom 198).
+/// Do not alphabetize or regroup these declarations, reintroduce walker
+/// pointers, or re-point this TU at toy.h's prototype.
 void gm_801BFCFC(GameScene* arg0)
 {
-    u8* var_r28;
     u32 var_r28_3;
     u32* temp_r29;
     u32* temp_r29_2;
     u8* var_r26;
-    u8* var_r27;
     u8* var_r28_2;
     s32** temp_r3;
     void** var_r31;
@@ -192,17 +201,15 @@ void gm_801BFCFC(GameScene* arg0)
 
     /// @remarks these for loops were converted from the do-whiles with very
     /// little scrutiny... take them with a grain of salt
-    var_r28 = gm_8049E558;
     for (var_r25 = 0; (s32) var_r25 < 0x42; var_r25++) {
         if (gm_8017219C(var_r25) != 0) {
             temp_r3 = gm_801BFC60(var_r25, var_r30, 0,
                                   *gmMainLib_8015D804((s32) var_r25),
                                   var_r31);
-            *var_r28 = 1;
+            gm_8049E558[var_r25] = 1;
             var_r31 = (void**) temp_r3;
             var_r30 += 1;
         }
-        var_r28 += 1;
     }
 
     var_r26 = gm_8049E558;
@@ -214,7 +221,7 @@ void gm_801BFCFC(GameScene* arg0)
                 temp_r29 = gmMainLib_8015D970((s32) var_r25_2);
                 *temp_r29 = lbTime_8000AFBC();
                 gmMainLib_8015DA40(var_r25_2);
-                Trophy_SetUnlockState((s32) (s16) var_r25_2, 1);
+                Trophy_SetUnlockState((s16) var_r25_2, 1);
             }
             *var_r28_2 = un_803048C0((s32) var_r25_2);
             var_r31 = (void**) gm_801BFC60(
@@ -228,15 +235,13 @@ void gm_801BFCFC(GameScene* arg0)
     gm_80173EEC();
     gm_80172898(0xFFFFU);
 
-    var_r27 = gm_8049E558;
     for (var_r28_3 = 0; (s32) var_r28_3 < 0x42; var_r28_3++) {
-        if (((u8) *var_r27 == 0) && (gm_8017219C(var_r28_3) != 0)) {
+        if ((gm_8049E558[var_r28_3] == 0) && (gm_8017219C(var_r28_3) != 0)) {
             var_r31 = (void**) gm_801BFC60(
                 var_r28_3, var_r30, 0,
                 *gmMainLib_8015D804((s32) var_r28_3), var_r31);
             var_r30 += 1;
         }
-        var_r27 += 1;
     }
 
     for (var_r27_2 = 0; var_r27_2 < 0x125; var_r27_2++) {
@@ -248,7 +253,7 @@ void gm_801BFCFC(GameScene* arg0)
                 temp_r29_2 = gmMainLib_8015D970(var_r27_2);
                 *temp_r29_2 = lbTime_8000AFBC();
                 gmMainLib_8015DA40((u32) var_r27_2);
-                Trophy_SetUnlockState((s32) (s16) var_r27_2, 1);
+                Trophy_SetUnlockState((s16) var_r27_2, 1);
             }
             var_r31 = (void**) gm_801BFC60(
                 0x3E, var_r30, var_r27_2,
