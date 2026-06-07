@@ -743,7 +743,7 @@ config.libs = [
             Object(NonMatching, "melee/ft/chara/ftKirby/ftKb_Init.c"),
             Object(NonMatching, "melee/ft/chara/ftKirby/ftKb_SpecialN.c"),
             Object(NonMatching, "melee/ft/chara/ftKirby/ftKb_SpecialNPk.c"),
-            Object(NonMatching, "melee/ft/chara/ftKirby/ftkirbyspecialfox.c"),
+            Object(Matching, "melee/ft/chara/ftKirby/ftkirbyspecialfox.c"),
             Object(NonMatching, "melee/ft/chara/ftKirby/ftKb_SpecialNNs.c"),
             Object(NonMatching, "melee/ft/chara/ftKirby/ftKb_SpecialNZd.c"),
             Object(NonMatching, "melee/ft/chara/ftKirby/ftKb_SpecialNYs.c"),
