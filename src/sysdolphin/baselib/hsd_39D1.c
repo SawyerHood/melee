@@ -50,8 +50,12 @@
 extern u16 hsd_804D78DA;
 extern u16 hsd_804D78E0;
 extern HSD_PSTexGroup** psTexGroupArray[65];
-extern int psNumCmdList_804D0C54[65];
-extern HSD_PSCmdList** psCmdListArray[65];
+/* NOTE: symbols.txt names are historical; binary-proven semantics
+ * (psInitDataBankLoad stores, byte-matched): D0D58 "psCmdListArray"
+ * holds per-bank counts, D0E5C "ptclref_804D0E5C" holds the per-bank
+ * HSD_PSCmdList* tables. */
+extern int psCmdListArray[65];
+extern HSD_PSCmdList** ptclref_804D0E5C[65];
 
 /* .sdata */
 /* 4D6368 */ static u16 lbl_804D6368 = 0x100;
@@ -1234,8 +1238,6 @@ HSD_Generator* hsd_8039EFAC(s32 linkNo, s32 bank, s32 gfx_id, HSD_JObj* jobj)
 // register-allocation cascade (extra saved reg + frame shift)
 HSD_Generator* hsd_8039F05C(s32 linkNo, s32 bank, s32 idx)
 {
-    HSD_PSCmdList** cmdListArr;
-    HSD_PSCmdList* cl;
     HSD_PSTexGroup* tg;
     HSD_Generator* gen;
     s32 ofs;
@@ -1252,40 +1254,37 @@ HSD_Generator* hsd_8039F05C(s32 linkNo, s32 bank, s32 idx)
     if (linkNo >= 8) {
         return NULL;
     }
-    if (idx >= psNumCmdList_804D0C54[bank]) {
+    if (idx >= psCmdListArray[bank]) {
         return NULL;
     }
 
-    cmdListArr = psCmdListArray[bank];
     ofs = idx * 4;
-    if ((u32) * ((s32*) cmdListArr + idx) == 0) {
+    if ((u32) * ((s32*) ptclref_804D0E5C[bank] + idx) == 0) {
         return NULL;
     }
 
     gen = hsd_8039D9C8();
     if (gen != NULL) {
-        cl = ((HSD_PSCmdList**) cmdListArr)[idx];
-
-        gen->type = cl->type;
+        gen->type = ptclref_804D0E5C[bank][idx]->type;
         gen->bank = bank;
         gen->linkNo = linkNo;
-        gen->kind = cl->kind;
-        gen->texGroup = cl->texGroup;
-        gen->life = cl->life;
-        gen->genLife = cl->genLife;
+        gen->kind = ptclref_804D0E5C[bank][idx]->kind;
+        gen->texGroup = ptclref_804D0E5C[bank][idx]->texGroup;
+        gen->life = ptclref_804D0E5C[bank][idx]->life;
+        gen->genLife = ptclref_804D0E5C[bank][idx]->genLife;
         gen->pos.x = 0.0F;
         gen->pos.y = 0.0F;
         gen->pos.z = 0.0F;
-        gen->vel.x = cl->vx;
-        gen->vel.y = cl->vy;
-        gen->vel.z = cl->vz;
-        gen->grav = cl->grav;
-        gen->fric = cl->fric;
-        gen->angle = cl->angle;
-        gen->cmdList = cl->cmdList;
-        gen->radius = cl->radius;
-        gen->size = cl->size;
-        gen->random = cl->random;
+        gen->vel.x = ptclref_804D0E5C[bank][idx]->vx;
+        gen->vel.y = ptclref_804D0E5C[bank][idx]->vy;
+        gen->vel.z = ptclref_804D0E5C[bank][idx]->vz;
+        gen->grav = ptclref_804D0E5C[bank][idx]->grav;
+        gen->fric = ptclref_804D0E5C[bank][idx]->fric;
+        gen->angle = ptclref_804D0E5C[bank][idx]->angle;
+        gen->cmdList = ptclref_804D0E5C[bank][idx]->cmdList;
+        gen->radius = ptclref_804D0E5C[bank][idx]->radius;
+        gen->size = ptclref_804D0E5C[bank][idx]->size;
+        gen->random = ptclref_804D0E5C[bank][idx]->random;
 
         if (gen->kind & 0x100) {
             f1 = gen->random;
@@ -1318,7 +1317,7 @@ HSD_Generator* hsd_8039F05C(s32 linkNo, s32 bank, s32 idx)
         case 0:
         case 3:
         case 4: {
-            HSD_PSCmdList* c = ((HSD_PSCmdList**) cmdListArr)[idx];
+            HSD_PSCmdList* c = ptclref_804D0E5C[bank][idx];
             f32 p1 = c->param1;
             if (p1 == 0.0F && c->param2 == 0.0F) {
                 gen->aux.disc.minAngle = 0.0F;
@@ -1326,18 +1325,18 @@ HSD_Generator* hsd_8039F05C(s32 linkNo, s32 bank, s32 idx)
             } else {
                 gen->aux.disc.minAngle = p1;
                 gen->aux.disc.maxAngle =
-                    ((HSD_PSCmdList**) cmdListArr)[idx]->param2;
+                    ptclref_804D0E5C[bank][idx]->param2;
             }
             break;
         }
         case 1:
-            gen->aux.line.x2 = ((HSD_PSCmdList**) cmdListArr)[idx]->param1;
-            gen->aux.line.y2 = ((HSD_PSCmdList**) cmdListArr)[idx]->param2;
-            gen->aux.line.z2 = ((HSD_PSCmdList**) cmdListArr)[idx]->param3;
+            gen->aux.line.x2 = ptclref_804D0E5C[bank][idx]->param1;
+            gen->aux.line.y2 = ptclref_804D0E5C[bank][idx]->param2;
+            gen->aux.line.z2 = ptclref_804D0E5C[bank][idx]->param3;
             break;
         case 6:
         case 7: {
-            HSD_PSCmdList* c = ((HSD_PSCmdList**) cmdListArr)[idx];
+            HSD_PSCmdList* c = ptclref_804D0E5C[bank][idx];
             f32 p1 = c->param1;
             if (p1 == 0.0F && c->param2 == 0.0F) {
                 gen->aux.cone.minAngle = 0.0F;
@@ -1345,19 +1344,19 @@ HSD_Generator* hsd_8039F05C(s32 linkNo, s32 bank, s32 idx)
             } else {
                 gen->aux.cone.minAngle = p1;
                 gen->aux.cone.maxAngle =
-                    ((HSD_PSCmdList**) cmdListArr)[idx]->param2;
+                    ptclref_804D0E5C[bank][idx]->param2;
             }
-            gen->aux.cone.height = ((HSD_PSCmdList**) cmdListArr)[idx]->param3;
+            gen->aux.cone.height = ptclref_804D0E5C[bank][idx]->param3;
             break;
         }
         case 5: {
-            f0 = ((HSD_PSCmdList**) cmdListArr)[idx]->param1;
+            f0 = ptclref_804D0E5C[bank][idx]->param1;
             gen->aux.rect.x = f0;
             gen->aux.rect.xx = f0;
-            f0 = ((HSD_PSCmdList**) cmdListArr)[idx]->param2;
+            f0 = ptclref_804D0E5C[bank][idx]->param2;
             gen->aux.rect.y = f0;
             gen->aux.rect.zx = f0;
-            f0 = ((HSD_PSCmdList**) cmdListArr)[idx]->param3;
+            f0 = ptclref_804D0E5C[bank][idx]->param3;
             gen->aux.rect.z = f0;
             gen->aux.rect.zy = f0;
             gen->aux.rect.zz = 0.0F;
@@ -1367,13 +1366,13 @@ HSD_Generator* hsd_8039F05C(s32 linkNo, s32 bank, s32 idx)
             gen->aux.rect.xz = 0.0F;
             gen->aux.rect.yx = 0.0F;
             gen->aux.rect.flag = 0;
-            if (((HSD_PSCmdList**) cmdListArr)[idx]->param1 < 0.0F) {
+            if (ptclref_804D0E5C[bank][idx]->param1 < 0.0F) {
                 gen->aux.rect.flag |= 1;
             }
-            if (((HSD_PSCmdList**) cmdListArr)[idx]->param2 < 0.0F) {
+            if (ptclref_804D0E5C[bank][idx]->param2 < 0.0F) {
                 gen->aux.rect.flag |= 2;
             }
-            if (((HSD_PSCmdList**) cmdListArr)[idx]->param3 < 0.0F) {
+            if (ptclref_804D0E5C[bank][idx]->param3 < 0.0F) {
                 gen->aux.rect.flag |= 4;
             }
             break;
@@ -1427,14 +1426,14 @@ HSD_Generator* hsd_8039F05C(s32 linkNo, s32 bank, s32 idx)
                 gen->aux.sphere.lonMid = atan2f(gen->vel.z, gen->vel.x);
             }
             gen->aux.sphere.latRange =
-                ((HSD_PSCmdList**) cmdListArr)[idx]->param1;
+                ptclref_804D0E5C[bank][idx]->param1;
             f1 = gen->aux.sphere.latRange;
             if (f1 < 0.0F) {
                 gen->aux.sphere.latRange = -f1;
                 gen->aux.sphere.speed = -gen->aux.sphere.speed;
             }
             gen->aux.sphere.lonRange =
-                ((HSD_PSCmdList**) cmdListArr)[idx]->param2;
+                ptclref_804D0E5C[bank][idx]->param2;
             break;
         }
         default:
