@@ -64,15 +64,12 @@ STATIC_ASSERT(sizeof(struct ParticleConsoleState) == 0x28);
 
 // .sbss
 
-extern u16 hsd_804D78DC;
 /* 4D7850 */ static HSD_SList* hsd_804D7850;
 
 // .bss
 
-extern int psNumTexGroup[65];
-
-/* 4D0F60 */ struct hsd_804D0F60_t hsd_804D0F60;
-/* hsd_804D0F90 moved to hsd_39D1.c (its original TU) */
+/* hsd_804D0F60 moved to hsd_3983.c, hsd_804D0F90 to hsd_39D1.c
+ * (their original TUs) */
 
 // .data
 
@@ -100,13 +97,7 @@ extern int psNumTexGroup[65];
 /* 4D78C0 */ static int hsd_804D78C0;
 /* 4D78C8 */ static int hsd_804D78C8;
 /* 4D78CC */ static u32 hsd_804D78CC;
-/* 4D78D0 */ static u32 hsd_804D78D0;
-/* 4D78D4 */ static int (**hsd_804D78D4)(HSD_Particle* part);
-/* 4D78D8 */ static u16 hsd_804D78D8;
-/* 4D78DA */ static u16 hsd_804D78DA;
-/* 4D78DE */ static u16 hsd_804D78DE;
-/* 4D78E0 */ static u16 hsd_804D78E0;
-/* 4D78E2 */ static u16 hsd_804D78E2;
-/* 4D78E8..4D7900 moved to hsd_39D1.c (their original TU) */
+/* 4D78D0..4D78E2 moved to hsd_3983.c, 4D78E8..4D7900 to hsd_39D1.c
+ * (their original TUs) */
 
 #endif
