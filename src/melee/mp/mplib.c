@@ -232,7 +232,7 @@ static struct mpLib_803BF248_t_x4* mpLib_803BDCB8[20] = {
     &mpLib_803BD538, &mpLib_803BD590, &mpLib_803BD5E8, &mpLib_803BD640,
     &mpLib_803BD698, &mpLib_803BD6F0, &mpLib_803BD748, &mpLib_803BD8A8,
     &mpLib_803BD900, &mpLib_803BD958, &mpLib_803BD9B0, &mpLib_803BDA60,
-    &mpLib_803BDAB8, &mpLib_803BDB10, &mpLib_803BDB68,
+    &mpLib_803BDAB8, &mpLib_803BDB10, &mpLib_803BDB68, &mpLib_803BDBC0,
 };
 static struct mpLib_803BF248_t_x4* mpLib_803BDD08[20] = {
     &mpLib_803BD3D8, &mpLib_803BD430, &mpLib_803BD488, &mpLib_803BD4E0,
@@ -920,47 +920,52 @@ void mpLibLoad(MapCollData* coll_data)
 
     count = coll_data->floor_count;
     start = coll_data->floor_start;
-    while (count-- > 0) {
+    while (count > 0) {
         groundCollLine[start].flags =
             coll_data->lines[start].hi_flags | LINE_FLAG_ENABLED;
         groundCollLine[start].x0 = &coll_data->lines[start];
         start++;
+        count--;
     }
 
     count = coll_data->ceiling_count;
     start = coll_data->ceiling_start;
-    while (count-- > 0) {
+    while (count > 0) {
         groundCollLine[start].flags =
             coll_data->lines[start].hi_flags | LINE_FLAG_ENABLED;
         groundCollLine[start].x0 = &coll_data->lines[start];
         start++;
+        count--;
     }
 
     count = coll_data->right_wall_count;
     start = coll_data->right_wall_start;
-    while (count-- > 0) {
+    while (count > 0) {
         groundCollLine[start].flags =
             coll_data->lines[start].hi_flags | LINE_FLAG_ENABLED;
         groundCollLine[start].x0 = &coll_data->lines[start];
         start++;
+        count--;
     }
 
     count = coll_data->left_wall_count;
     start = coll_data->left_wall_start;
-    while (count-- > 0) {
+    while (count > 0) {
         groundCollLine[start].flags =
             coll_data->lines[start].hi_flags | LINE_FLAG_ENABLED;
         groundCollLine[start].x0 = &coll_data->lines[start];
         start++;
+        count--;
     }
 
     count = coll_data->dynamic_count;
     start = coll_data->dynamic_start;
-    while (count-- > 0) {
+    while (count > 0) {
         groundCollLine[start].flags =
             coll_data->lines[start].hi_flags | LINE_FLAG_ENABLED;
         groundCollLine[start].x0 = &coll_data->lines[start];
         start++;
+        count--;
     }
 
     i = 0;
@@ -4764,32 +4769,6 @@ bool mpGetSpeed(int line_id, Vec3* pos, Vec3* speed)
     return true;
 }
 
-Vec2 mpLib_803BF718[2] = { { -1.0F, -400.0F }, { 1.0F, -400.0F } };
-MapLine mpLib_803BF728 = { 0, 1, -1, -1, -1, -1, 1, 0 };
-MapJoint mpLib_803BF738 = {
-    1, 0, 0, 0, 0, -9.0F, -408.0F, 9.0F, -392.0F, 2,
-};
-MapCollData mpLib_803BF760 = {
-    /*  +0 */ mpLib_803BF718,
-    /*  +4 */ 2,
-    /*  +8 */ &mpLib_803BF728,
-    /*  +C */ 0x00000001,
-    /* +10 */ 0,
-    /* +12 */ 1,
-    /* +14 */ 0,
-    /* +16 */ 0,
-    /* +18 */ 0,
-    /* +1A */ 0,
-    /* +1C */ 0,
-    /* +1E */ 0,
-    /* +20 */ 0,
-    /* +22 */ 0,
-    /* +24 */ &mpLib_803BF738,
-    /* +28 */ 0x00000001,
-    /* +2C */ 0x00000000,
-};
-
-
 float mpLib_800569EC(u32 unk)
 {
     return (*mpLib_803BF248[stage_info.internal_stage_id].x4)[(u8) unk]->x0;
@@ -5695,6 +5674,8 @@ void mpUncheckBounding(void)
     didCheckBounding = false;
 }
 
+static Vec3 mpLib_803BF528[2] = { { 0, 0, 0 }, { 0, 0, 0 } };
+
 static HSD_Chan mpLib_803BF540 = {
     NULL,
     GX_COLOR0A0,
@@ -5709,6 +5690,8 @@ static HSD_Chan mpLib_803BF540 = {
     GX_AF_NONE,
     NULL,
 };
+
+static char lbl_803BF570[] = "B(%d,%d)-(%d,%d)\n";
 
 void mpLib_SetupDraw(GXColor color)
 {
@@ -5945,8 +5928,7 @@ void mpLib_DrawSnapping(void)
         }
     }
 
-    item_r28 = HSD_GObj_Entities->items;
-    if (item_r28 != NULL) {
+    if ((item_r28 = HSD_GObj_Entities->items) != NULL) {
         if (!var_r31) {
             Mtx sp7C;
             PAD_STACK(0x40);
@@ -6029,6 +6011,12 @@ void mpLib_DrawMatchingLines(int value, int flag, GXColor color)
     }
     GXEnd();
 }
+
+static const GXColor mpLib_804D80F0 = { 0xFF, 0x40, 0x40, 0xFF };
+static const GXColor mpLib_804D80F4 = { 0x40, 0x40, 0xFF, 0xFF };
+static const GXColor mpLib_804D80F8 = { 0xFF, 0x40, 0xFF, 0xFF };
+static const GXColor mpLib_804D80FC = { 0x80, 0x80, 0x80, 0xFF };
+static const GXColor mpLib_804D8100 = { 0x80, 0x80, 0x80, 0xFF };
 
 static const GXColor mpLib_FloorColor = { 0xC0, 0xC0, 0xC0, 0xFF };
 static const GXColor mpLib_CeilingColor = { 0xC0, 0x80, 0x80, 0xFF };
@@ -6381,12 +6369,6 @@ void mpLib_80059554(void)
     }
 }
 
-static const GXColor mpLib_804D80F0 = { 0xFF, 0x40, 0x40, 0xFF };
-static const GXColor mpLib_804D80F4 = { 0x40, 0x40, 0xFF, 0xFF };
-static const GXColor mpLib_804D80F8 = { 0xFF, 0x40, 0xFF, 0xFF };
-static const GXColor mpLib_804D80FC = { 0x80, 0x80, 0x80, 0xFF };
-static const GXColor mpLib_804D8100 = { 0x80, 0x80, 0x80, 0xFF };
-
 void mpLib_80059E60(void)
 {
     Mtx sp104;
@@ -6436,26 +6418,20 @@ void mpLib_DrawCrosses(s16* idx, int len, GXColor arg2)
     Vec3 sp34;
     s16* var_r31;
     Vec3* var_r30;
-    Vec3* temp_r29;
     int i;
-    int j;
     Vec3* vtx;
     int var_r28;
     int len_r27;
 
     var_r28 = 0;
-    vtx = mpLib_80458888;
-    var_r30 = vtx;
-    j = 0;
-    var_r31 = idx;
+    var_r30 = vtx = mpLib_80458888;
     len_r27 = 0;
-    for (var_r28 = 0; var_r28 < len && len_r27 < 0x80; var_r28++) {
-        if (Ground_801C2D24(*var_r31, &sp34)) {
+    for (; var_r28 < len && len_r27 < 0x80; var_r28++) {
+        if (Ground_801C2D24(idx[var_r28], &sp34)) {
             len_r27 += 1;
             *var_r30 = sp34;
             var_r30++;
         }
-        var_r31 += 1;
     }
 
     if (!len_r27) {
@@ -6666,3 +6642,28 @@ void mpLib_DrawZones(void)
     }
     HSD_StateInvalidate(-1);
 }
+
+Vec2 mpLib_803BF718[2] = { { -1.0F, -400.0F }, { 1.0F, -400.0F } };
+MapLine mpLib_803BF728 = { 0, 1, -1, -1, -1, -1, 1, 0 };
+MapJoint mpLib_803BF738 = {
+    0, 1, 0, 0, 0, 0, 0, 0, 0, 0, -9.0F, -408.0F, 9.0F, -392.0F, 0, 2,
+};
+MapCollData mpLib_803BF760 = {
+    /*  +0 */ mpLib_803BF718,
+    /*  +4 */ 2,
+    /*  +8 */ &mpLib_803BF728,
+    /*  +C */ 0x00000001,
+    /* +10 */ 0,
+    /* +12 */ 1,
+    /* +14 */ 0,
+    /* +16 */ 0,
+    /* +18 */ 0,
+    /* +1A */ 0,
+    /* +1C */ 0,
+    /* +1E */ 0,
+    /* +20 */ 0,
+    /* +22 */ 0,
+    /* +24 */ &mpLib_803BF738,
+    /* +28 */ 0x00000001,
+    /* +2C */ 0x00000000,
+};

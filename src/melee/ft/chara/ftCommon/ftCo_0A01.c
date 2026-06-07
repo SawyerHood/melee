@@ -2255,9 +2255,10 @@ static inline f32 ftCo_800A4BEC_inline0(Fighter* fp, Fighter* arg1)
 
 Fighter* ftCo_800A4BEC(Fighter* fp)
 {
-    HSD_GObj* cur;
     Fighter* cur_fp;
     Fighter* closest;
+    HSD_GObj* cur;
+    struct Fighter_x1A88_t* data = &fp->x1A88;
     f32 best;
     f32 dx;
     f32 dy;
@@ -2273,8 +2274,8 @@ Fighter* ftCo_800A4BEC(Fighter* fp)
             if (!inlineD0(fp, cur_fp) && !ftCo_IsAlly_dontinline(fp, cur_fp)) {
                 if (!ftCo_800A4E8C_inline0(cur_fp)) {
                     if (!inlineD1(cur_fp)) {
-                        if (fp->x1A88.xF9_b0) {
-                            if (cur_fp == fp->x1A88.x48) {
+                        if (data->xF9_b0) {
+                            if (cur_fp == data->x48) {
                                 return cur_fp;
                             }
                         } else if (closest == NULL) {
@@ -2294,11 +2295,12 @@ Fighter* ftCo_800A4BEC(Fighter* fp)
         }
     }
     if (closest == NULL) {
-        fp->x1A88.xF9_b0 = false;
+        data->xF9_b0 = false;
     } else {
-        fp->x1A88.xF9_b0 = true;
-        fp->x1A88.x30 = 120.0f * (0.5f * (0.5f * HSD_Randf()));
-        fp->x1A88.x48 = closest;
+        data->xF9_b0 = true;
+        dist = HSD_Randf();
+        data->x30 = dist * 0.5f * 0.5f * 120.0f;
+        data->x48 = closest;
     }
     return closest;
 }
@@ -6358,11 +6360,6 @@ void ftCo_800AE7AC(Fighter* fp, Vec3* arg1, int arg2)
     f32 dy;
     PAD_STACK(8);
 
-    do {
-    } while (0);
-    do {
-    } while (0);
-
     fp->x1A88.xF8_b0 = true;
     fp->x1A88.xF9_b3 = false;
     fp->x1A88.xF9_b5 = false;
@@ -6663,24 +6660,50 @@ void ftCo_800AEFB8(Fighter* fp)
     ftCo_800ADE48(fp);
 }
 
+static inline bool inlineI1_alt(Fighter* fp)
+{
+    struct Fighter_x1A88_t* data = &fp->x1A88;
+    if (data->x18 != data->x20 && data->x18 != data->x1C) {
+        data->x60 = 0;
+    }
+    if (data->x18 == 4) {
+        return false;
+    } else {
+        data->xFA_b2 = false;
+        return true;
+    }
+}
+
+static inline void ftCo_800AF290_tail(Fighter* fp, Fighter** pp)
+{
+    Fighter* other_fp = *pp;
+    if (other_fp != NULL && fp->ground_or_air != GA_Air) {
+        Vec3 vec;
+        f32 dx = fp->cur_pos.x - other_fp->cur_pos.x;
+        f32 dy = fp->cur_pos.y - other_fp->cur_pos.y;
+        f32 dist = sqrtf(dx * dx + dy * dy);
+        if (!(dist > 50.0) &&
+            ftCo_800A6700(fp, &other_fp->cur_pos, &vec) != 0)
+        {
+            ftCo_800A1F3C(fp, vec.x, vec.y, 5.0f);
+        }
+    }
+}
+
 void ftCo_800AF290(Fighter* fp)
 {
-    struct Fighter_x1A88_t* data2;
     Vec3 sp54;
-    Vec3 sp30;
     s32 cmd;
     Fighter* target;
-    int tmp;
     s32 do_act;
     s32 is_food;
     s32 redirect;
     Item_GObj* item_gobj;
     ItemKind kind;
-    f32 dx;
-    f32 dy;
-    f32 dist;
+    Fighter** p;
+    struct Fighter_x1A88_t* data2;
     struct Fighter_x1A88_t* data = &fp->x1A88;
-    PAD_STACK(0x30);
+    PAD_STACK(0x20);
 
     cmd = ftCo_800A229C(fp, &sp54);
     if (cmd != 0) {
@@ -6734,7 +6757,10 @@ void ftCo_800AF290(Fighter* fp)
     data->xF9_b6 = true;
     data->xF9_b7 = true;
     data->xF9_b1 = false;
-    data->x44 = ftCo_800A4BEC(fp);
+
+    *(p = &fp->x1A88.x44) = ftCo_800A4BEC(fp);
+
+    data2 = &fp->x1A88;
     item_gobj = fp->item_gobj;
     if (item_gobj != NULL) {
         kind = GET_ITEM(item_gobj)->kind;
@@ -6748,96 +6774,54 @@ void ftCo_800AF290(Fighter* fp)
             is_food = 0;
         }
         if (is_food == 0) {
-            data->x4C = NULL;
-        } else {
+            data2->x4C = NULL;
             goto block_30;
         }
-    } else {
-        tmp = fp->x2168;
-    block_30:
-        if (tmp != 0) {
-            data->x4C = NULL;
-        } else {
-            data->x4C = ftCo_800A5F4C(fp, It_Kind_L_Gun_Ray);
-        }
     }
+    if (fp->x2168 != 0) {
+        data2->x4C = NULL;
+    } else {
+        data2->x4C = ftCo_800A5F4C(fp, It_Kind_L_Gun_Ray);
+    }
+block_30:
     fp->x1A88.x50 = ftCo_800A648C(fp);
+
     data2 = &fp->x1A88;
     if (ftCo_800A1C44_dontinline(fp)) {
         data2->xF8_b6 = false;
     } else {
-        target = data->x44;
-        if (target != NULL && fp->ground_or_air == GA_Ground) {
-            dy = fp->cur_pos.y - target->cur_pos.y;
-            dx = fp->cur_pos.x - target->cur_pos.x;
-            if (sqrtf__Ff(dx * dx + dy * dy) <
+        if (data2->x44 != NULL && fp->ground_or_air == GA_Ground) {
+            if (ftCo_800A1AB4(fp, data2->x44) <
                 Fighter_804D64FC->x20[fp->kind])
             {
-                data->xF8_b6 = true;
+                data2->xF8_b6 = true;
             } else {
-                data->xF8_b6 = false;
+                data2->xF8_b6 = false;
             }
         } else {
-            data->xF8_b6 = false;
+            data2->xF8_b6 = false;
         }
     }
-    target = data->x44;
-    if (target != NULL) {
-        dy = fp->cur_pos.y - target->cur_pos.y;
-        dx = fp->cur_pos.x - target->cur_pos.x;
-        if (sqrtf__Ff(dx * dx + dy * dy) > data->x40) {
+    if (data2->x44 != NULL) {
+        if (ftCo_800A1AB4(fp, data2->x44) > data2->x40) {
             ftCo_800AEA8C(fp);
             return;
         }
     }
-    data2 = &fp->x1A88;
-    if (data2->x18 != data2->x20 && data2->x18 != data2->x1C) {
-        data2->x60 = 0;
-    }
-    if (data->x18 == 4) {
-        do_act = 0;
-    } else {
-        data->xFA_b2 = false;
-        do_act = 1;
-    }
-    if (do_act != 0) {
-        if (data->x4C != NULL) {
+    if (inlineI1_alt(fp)) {
+        if (data2->x4C != NULL) {
             ftCo_800A866C(fp);
         } else {
-            target = data->x44;
-            if (target != NULL && fp->ground_or_air != GA_Air) {
-                dy = fp->cur_pos.y - target->cur_pos.y;
-                dx = fp->cur_pos.x - target->cur_pos.x;
-                dist = sqrtf(dx * dx + dy * dy);
-                if (!(dist > 50.0) &&
-                    ftCo_800A6700(fp, &target->cur_pos, &sp30) != 0 &&
-                    data->x60 == 0)
-                {
-                    data->x54.x = sp30.x;
-                    data->x54.y = sp30.y;
-                    data->x38 = 5.0f;
-                    ftCo_800A1CC4(
-                        fp, ftCo_803C6594[stage_info.internal_stage_id]);
-                }
-            }
+            ftCo_800AF290_tail(fp, p);
         }
     }
     ftCo_800ADE48(fp);
 }
 
 
-static inline bool inlineI1_alt(Fighter* fp)
+static inline float ftCo_800AF78C_sqrtf(float x)
 {
-    struct Fighter_x1A88_t* data = &fp->x1A88;
-    if (data->x18 != data->x20 && data->x18 != data->x1C) {
-        data->x60 = 0;
-    }
-    if (data->x18 == 4) {
-        return false;
-    } else {
-        data->xFA_b2 = false;
-        return true;
-    }
+    return sqrtf(x);
 }
 
 static inline void ftCo_800AF78C_inline0(Fighter* fp)
@@ -6848,7 +6832,7 @@ static inline void ftCo_800AF78C_inline0(Fighter* fp)
     } else {
         if ((data->x44 != NULL) && (fp->ground_or_air == GA_Ground)) {
             if (ftCo_800A1AB4(fp, data->x44) <
-                M2C_FIELD(Fighter_804D64FC, float**, 0x20)[fp->kind])
+                Fighter_804D64FC->x20[fp->kind])
             {
                 data->xF8_b6 = true;
             } else {
@@ -6879,13 +6863,9 @@ void ftCo_800AF78C(Fighter* fp)
     s32 var_r0_2;
     s32 var_r0_3;
 
-    PAD_STACK(4);
-
     if (0) {
     }
 
-    goto entry;
-entry:
     temp_r30 = &fp->x1A88;
     temp_r3 = ftCo_800A229C(fp, &sp4C);
     if (temp_r3 != 0) {
@@ -6952,8 +6932,8 @@ entry:
             if (temp_r4_2 != NULL && fp->ground_or_air != GA_Air) {
                 temp_f2_2 = fp->cur_pos.x - temp_r4_2->cur_pos.x;
                 temp_f3 = fp->cur_pos.y - temp_r4_2->cur_pos.y;
-                if (!(sqrtf(temp_f2_2 * temp_f2_2 + temp_f3 * temp_f3) >
-                      50.0) &&
+                if (!(ftCo_800AF78C_sqrtf(temp_f2_2 * temp_f2_2 +
+                                          temp_f3 * temp_f3) > 50.0) &&
                     ftCo_800A6700(fp, &temp_r4_2->cur_pos, &vec))
                 {
                     ftCo_800A1F3C(fp, vec.x, vec.y, 5.0F);
