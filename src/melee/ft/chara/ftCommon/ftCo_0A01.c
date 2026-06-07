@@ -2880,17 +2880,19 @@ static inline f32 ftCo_800A648C_inline0(Fighter* fp, Item* ip)
 
 Item* ftCo_800A61D8(Fighter* fp)
 {
-    HSD_GObj* cur;
     Item* ip;
     Item* closest;
+    HSD_GObj* cur;
     f32 best;
     f32 dist;
     s32 relevant;
     s32 prio;
+    struct Fighter_x1A88_t* data;
 
     if (fp == NULL) {
         return NULL;
     }
+    data = &fp->x1A88;
     closest = NULL;
     for (cur = HSD_GObj_Entities->items; cur != NULL; cur = cur->next) {
         ip = GET_ITEM(cur);
@@ -2908,7 +2910,7 @@ Item* ftCo_800A61D8(Fighter* fp)
                 if (!inlineD0_it(fp, ip)) {
                     if (ip->kind < 0x23) {
                         prio = ftCo_803C5A68[ip->kind];
-                        if (prio >= fp->x1A88.x2C) {
+                        if (prio >= data->x2C) {
                             if (closest == NULL) {
                                 closest = ip;
                                 best = ftCo_800A648C_inline0(fp, ip);
@@ -6310,28 +6312,62 @@ void ftCo_800ADE48(Fighter* fp)
     }
 }
 
+static inline bool inlineI1(struct Fighter_x1A88_t* data)
+{
+    if (data->x18 != data->x20 && data->x18 != data->x1C) {
+        data->x60 = 0;
+    }
+    if (data->x18 == 4) {
+        return false;
+    } else {
+        data->xFA_b2 = false;
+        return true;
+    }
+}
+
+static inline void ftCo_800AFC40_inline0(Fighter* fp)
+{
+    struct Fighter_x1A88_t* data;
+
+    data = &fp->x1A88;
+    if (fp->item_gobj != NULL && !ftCo_800A5908(GET_ITEM(fp->item_gobj))) {
+        data->x4C = NULL;
+    } else {
+        if (fp->x2168 != 0) {
+            data->x4C = NULL;
+        } else {
+            data->x4C = ftCo_800A5F4C(fp, It_Kind_L_Gun_Ray);
+        }
+    }
+    fp->x1A88.x50 = ftCo_800A648C(fp);
+}
+
 void ftCo_800AE7AC(Fighter* fp, Vec3* arg1, int arg2)
 {
     struct Fighter_x1A88_t* data = &fp->x1A88;
-    Item_GObj* item_gobj;
-    ItemKind kind;
-    s32 is_food;
-    s32 do_act;
-    Vec3 out;
+    struct Fighter_x1A88_t* temp_r4;
+    f32 ox;
+    f32 oy;
     Vec3 dir;
+    Vec3 out;
     f32 left;
     f32 cx;
     f32 bottom;
     f32 sum_y;
     f32 cy;
     f32 dy;
-    PAD_STACK(0x10);
+    PAD_STACK(8);
 
-    data->xF8_b0 = true;
-    data->xF9_b3 = false;
-    data->xF9_b5 = false;
-    data->xF9_b7 = false;
-    data->xF9_b1 = false;
+    do {
+    } while (0);
+    do {
+    } while (0);
+
+    fp->x1A88.xF8_b0 = true;
+    fp->x1A88.xF9_b3 = false;
+    fp->x1A88.xF9_b5 = false;
+    fp->x1A88.xF9_b7 = false;
+    fp->x1A88.xF9_b1 = false;
     if (arg2 > 1) {
         data->xF9_b2 = false;
         data->xF9_b4 = false;
@@ -6341,65 +6377,35 @@ void ftCo_800AE7AC(Fighter* fp, Vec3* arg1, int arg2)
         data->xF9_b4 = true;
         data->xF9_b6 = true;
     }
-    data->x44 = ftCo_800A4BEC(fp);
-    item_gobj = fp->item_gobj;
-    if (item_gobj != NULL) {
-        kind = GET_ITEM(item_gobj)->kind;
-        if (kind == It_Kind_Heart) {
-            is_food = 1;
-        } else if (kind == It_Kind_Tomato) {
-            is_food = 1;
-        } else if (kind == It_Kind_Foods) {
-            is_food = 1;
-        } else {
-            is_food = 0;
-        }
-        if (is_food == 0) {
-            data->x4C = NULL;
-        } else {
-            goto block_13;
-        }
-    } else {
-    block_13:
-        if (fp->x2168 != 0) {
-            data->x4C = NULL;
-        } else {
-            data->x4C = ftCo_800A5F4C(fp, It_Kind_L_Gun_Ray);
-        }
-    }
-    data->x50 = ftCo_800A648C(fp);
-    if (data->x18 != data->x20 && data->x18 != data->x1C) {
-        data->x60 = 0;
-    }
-    if (data->x18 == 4) {
-        do_act = 0;
-    } else {
-        data->xFA_b2 = false;
-        do_act = 1;
-    }
-    if (do_act != 0) {
+    fp->x1A88.x44 = ftCo_800A4BEC(fp);
+    ftCo_800AFC40_inline0(fp);
+    temp_r4 = &fp->x1A88;
+    if (inlineI1(temp_r4)) {
         if (arg2 >= 0) {
             ftCo_800A8210(fp, arg1);
         } else if (fp->ground_or_air != GA_Air) {
+            struct Fighter_x1A88_t* d = &fp->x1A88;
             left = Stage_GetBlastZoneLeftOffset();
-            cx = 0.5f * (Stage_GetBlastZoneRightOffset() + left);
+            cx = 0.5f * (left + Stage_GetBlastZoneRightOffset());
             bottom = Stage_GetBlastZoneBottomOffset();
-            sum_y = Stage_GetBlastZoneTopOffset() + bottom;
-            cy = 0.5f * sum_y;
+            sum_y = bottom + Stage_GetBlastZoneTopOffset();
             dir.x = cx - fp->cur_pos.x;
+            cy = 0.5f * sum_y;
             dy = cy - fp->cur_pos.y;
             dir.y = dy;
             dir.z = 0.0f;
             if (ftCo_800A6FC4(fp, &out, &dir) != 0) {
-                if (data->x60 == 0) {
-                    data->x54.x = out.x;
-                    data->x54.y = out.y;
-                    data->x38 = 5.0f;
+                oy = out.y;
+                ox = out.x;
+                if (fp->x1A88.x60 == 0) {
+                    d->x54.x = ox;
+                    d->x54.y = oy;
+                    d->x38 = 5.0f;
                     ftCo_800A1CC4(
                         fp, ftCo_803C6594[stage_info.internal_stage_id]);
                 }
             } else {
-                ftCo_800A75DC(fp, data->x44);
+                ftCo_800A75DC(fp, d->x44);
             }
         }
     }
@@ -6409,18 +6415,15 @@ void ftCo_800AE7AC(Fighter* fp, Vec3* arg1, int arg2)
 void ftCo_800AEA8C(Fighter* fp)
 {
     struct Fighter_x1A88_t* data = &fp->x1A88;
-    Item_GObj* item_gobj;
-    s32 is_food;
-    s32 do_floor;
+    struct Fighter_x1A88_t* temp_r4;
     s32 found;
-    Vec3 floor_pos;
-    Vec3 floor_normal;
     int line_id;
     u32 flags;
+    Vec3 floor_normal;
+    Vec3 floor_pos;
     f32 x;
     f32 y;
 
-    is_food = 1;
     data->xF8_b0 = false;
     data->xF9_b2 = true;
     data->xF9_b4 = true;
@@ -6429,44 +6432,10 @@ void ftCo_800AEA8C(Fighter* fp)
     data->xF9_b6 = true;
     data->xF9_b7 = true;
     data->xF9_b1 = false;
-    data->x44 = ftCo_800A4BEC(fp);
-    item_gobj = fp->item_gobj;
-    if (item_gobj != NULL) {
-        switch (GET_ITEM(item_gobj)->kind) {
-        case It_Kind_Heart:
-            break;
-        case It_Kind_Tomato:
-            break;
-        case It_Kind_Foods:
-            break;
-        default:
-            is_food = 0;
-            break;
-        }
-        if (is_food == 0) {
-            data->x4C = NULL;
-        } else {
-            goto block_10;
-        }
-    } else {
-    block_10:
-        if (fp->x2168 != 0) {
-            data->x4C = NULL;
-        } else {
-            data->x4C = ftCo_800A5F4C(fp, It_Kind_L_Gun_Ray);
-        }
-    }
-    data->x50 = ftCo_800A648C(fp);
-    if (data->x18 != data->x20 && data->x18 != data->x1C) {
-        data->x60 = 0;
-    }
-    if (data->x18 == 4) {
-        do_floor = 0;
-    } else {
-        data->xFA_b2 = false;
-        do_floor = 1;
-    }
-    if (do_floor != 0) {
+    fp->x1A88.x44 = ftCo_800A4BEC(fp);
+    ftCo_800AFC40_inline0(fp);
+    temp_r4 = &fp->x1A88;
+    if (inlineI1(temp_r4)) {
         s32 result;
         x = fp->cur_pos.x;
         y = fp->cur_pos.y;
@@ -6479,7 +6448,7 @@ void ftCo_800AEA8C(Fighter* fp)
         } else {
             found = result;
         }
-        if (found != 0 && data->x60 == 0) {
+        if (found != 0 && fp->x1A88.x60 == 0) {
             data->x54.x = floor_pos.x;
             data->x54.y = floor_pos.y;
             data->x38 = 5.0f;
@@ -6856,18 +6825,6 @@ void ftCo_800AF290(Fighter* fp)
     ftCo_800ADE48(fp);
 }
 
-static inline bool inlineI1(struct Fighter_x1A88_t* data)
-{
-    if (data->x18 != data->x20 && data->x18 != data->x1C) {
-        data->x60 = 0;
-    }
-    if (data->x18 == 4) {
-        return false;
-    } else {
-        data->xFA_b2 = false;
-        return true;
-    }
-}
 
 static inline bool inlineI1_alt(Fighter* fp)
 {
@@ -6906,14 +6863,15 @@ static inline void ftCo_800AF78C_inline0(Fighter* fp)
 void ftCo_800AF78C(Fighter* fp)
 {
     Vec3 sp4C;
+    UNUSED u8 pad[0x14];
 
     Fighter** temp_r31;
     struct Fighter_x1A88_t* temp_r30;
-    struct Fighter_x1A88_t* temp_r27;
 
     Fighter* temp_r3_2;
     Fighter* temp_r4_2;
     f32 temp_f2_2;
+    Vec3 vec;
     f32 temp_f3;
     f32 var_f4;
     s32 temp_r3;
@@ -6921,8 +6879,13 @@ void ftCo_800AF78C(Fighter* fp)
     s32 var_r0_2;
     s32 var_r0_3;
 
-    PAD_STACK(8);
+    PAD_STACK(4);
 
+    if (0) {
+    }
+
+    goto entry;
+entry:
     temp_r30 = &fp->x1A88;
     temp_r3 = ftCo_800A229C(fp, &sp4C);
     if (temp_r3 != 0) {
@@ -6976,46 +6939,31 @@ void ftCo_800AF78C(Fighter* fp)
     temp_r30->xF9_b7 = true;
     temp_r30->xF9_b1 = false;
 
-    fp->x1A88.x44 = ftCo_800A4BEC(fp);
-    temp_r31 = &fp->x1A88.x44;
+    *(temp_r31 = &fp->x1A88.x44) = ftCo_800A4BEC(fp);
 
-    temp_r27 = &fp->x1A88;
-    if (fp->item_gobj != NULL && !ftCo_800A5908(GET_ITEM(fp->item_gobj))) {
-        temp_r27->x4C = NULL;
-    } else if (fp->x2168 != 0) {
-        temp_r27->x4C = NULL;
-    } else {
-        temp_r27->x4C = ftCo_800A5F4C(fp, It_Kind_L_Gun_Ray);
-    }
-    fp->x1A88.x50 = ftCo_800A648C(fp);
+    ftCo_800AFC40_inline0(fp);
 
     ftCo_800AF78C_inline0(fp);
     if (inlineI1_alt(fp)) {
         if (temp_r30->x4C != NULL) {
             ftCo_800A866C(fp);
         } else {
-            ftCo_800A80E4(fp);
+            temp_r4_2 = *temp_r31;
+            if (temp_r4_2 != NULL && fp->ground_or_air != GA_Air) {
+                temp_f2_2 = fp->cur_pos.x - temp_r4_2->cur_pos.x;
+                temp_f3 = fp->cur_pos.y - temp_r4_2->cur_pos.y;
+                if (!(sqrtf(temp_f2_2 * temp_f2_2 + temp_f3 * temp_f3) >
+                      50.0) &&
+                    ftCo_800A6700(fp, &temp_r4_2->cur_pos, &vec))
+                {
+                    ftCo_800A1F3C(fp, vec.x, vec.y, 5.0F);
+                }
+            }
         }
     }
     ftCo_800ADE48(fp);
 }
 
-static inline void ftCo_800AFC40_inline0(Fighter* fp)
-{
-    struct Fighter_x1A88_t* data;
-
-    data = &fp->x1A88;
-    if (fp->item_gobj != NULL && !ftCo_800A5908(GET_ITEM(fp->item_gobj))) {
-        data->x4C = NULL;
-    } else {
-        if (fp->x2168 != 0) {
-            data->x4C = NULL;
-        } else {
-            data->x4C = ftCo_800A5F4C(fp, It_Kind_L_Gun_Ray);
-        }
-    }
-    fp->x1A88.x50 = ftCo_800A648C(fp);
-}
 void ftCo_800AFC40(Fighter* fp)
 {
     struct Fighter_x1A88_t* temp_r31;
@@ -7747,18 +7695,13 @@ void ftCo_800B1478(Fighter* fp)
 {
     struct Fighter_x1A88_t* temp_r31;
     Fighter** temp_r27;
-    Fighter* temp_r3;
     Fighter* var_r4;
 
     PAD_STACK(0x18);
 
     temp_r31 = &fp->x1A88;
-    temp_r3 = ftCo_800A5CE0(fp);
-    temp_r27 = &fp->x1A88.x44;
 
-    fp->x1A88.x44 = temp_r3;
-
-    if (temp_r3 != NULL) {
+    if ((*(temp_r27 = &fp->x1A88.x44) = ftCo_800A5CE0(fp)) != NULL) {
         temp_r31->xF8_b0 = true;
         temp_r31->xF9_b2 = false;
         temp_r31->xF9_b4 = false;
