@@ -107,7 +107,7 @@ struct sislib_UnkAlloc3 {
 extern char HSD_SisLib_804D6390[8];
 extern SIS* HSD_SisLib_804D1124[5];
 extern u32 lbl_8040C8C0[144];
-extern u32 HSD_SisLib_8040C680[144];
+extern u64 HSD_SisLib_8040C680[72];
 
 extern sislib_UnkAllocData* HSD_SisLib_804D7970;
 extern sislib_UnkAllocData* HSD_SisLib_804D7974;

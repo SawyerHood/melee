@@ -30,14 +30,152 @@
 #include <melee/lb/lblanguage.h>
 #include <melee/pl/player.h>
 
-extern s8 flags_arr_803BB800[0x62];
+
+/* Dead string and table data of the original translation unit,
+ * reconstructed from the DOL (referenced by other units' name tables). */
+static char str_main_ssm[9] = "main.ssm";
+static char str_pokemon_ssm[12] = "pokemon.ssm";
+static char str_nr_title_ssm[13] = "nr_title.ssm";
+static char str_nr_select_ssm[14] = "nr_select.ssm";
+static char str_nr_1p_ssm[10] = "nr_1p.ssm";
+static char str_nr_vs_ssm[10] = "nr_vs.ssm";
+static char str_captain_ssm[12] = "captain.ssm";
+static char str_clink_ssm[10] = "clink.ssm";
+static char str_drmario_ssm[12] = "drmario.ssm";
+static char str_falco_ssm[10] = "falco.ssm";
+static char str_gkoopa_ssm[11] = "gkoopa.ssm";
+static char str_kirby_ssm[10] = "kirby.ssm";
+static char str_koopa_ssm[10] = "koopa.ssm";
+static char str_link_ssm[9] = "link.ssm";
+static char str_luigi_ssm[10] = "luigi.ssm";
+static char str_mario_ssm[10] = "mario.ssm";
+static char str_mars_ssm[9] = "mars.ssm";
+static char str_mewtwo_ssm[11] = "mewtwo.ssm";
+static char str_ness_ssm[9] = "ness.ssm";
+static char str_peach_ssm[10] = "peach.ssm";
+static char str_pichu_ssm[10] = "pichu.ssm";
+static char str_pikachu_ssm[12] = "pikachu.ssm";
+static char str_purin_ssm[10] = "purin.ssm";
+static char str_samus_ssm[10] = "samus.ssm";
+static char str_yoshi_ssm[10] = "yoshi.ssm";
+static char str_ganon_ssm[10] = "ganon.ssm";
+static char str_emblem_ssm[11] = "emblem.ssm";
+static char str_mhands_ssm[11] = "mhands.ssm";
+static char str_kirbytm_ssm[12] = "kirbytm.ssm";
+static char str_castle_ssm[11] = "castle.ssm";
+static char str_corneria_ssm[13] = "corneria.ssm";
+static char str_greatbay_ssm[13] = "greatbay.ssm";
+static char str_kongo_ssm[10] = "kongo.ssm";
+static char str_mutecity_ssm[13] = "mutecity.ssm";
+static char str_onett_ssm[10] = "onett.ssm";
+static char str_zebes_ssm[10] = "zebes.ssm";
+static char str_garden_ssm[11] = "garden.ssm";
+static char str_klaid_ssm[10] = "klaid.ssm";
+static char str_greens_ssm[11] = "greens.ssm";
+static char str_venom_ssm[10] = "venom.ssm";
+static char str_bigblue_ssm[12] = "bigblue.ssm";
+static char str_fourside_ssm[13] = "fourside.ssm";
+static char str_pupupu_ssm[11] = "pupupu.ssm";
+static char str_pstadium_ssm[13] = "pstadium.ssm";
+static char str_onepadv_ssm[10] = "1padv.ssm";
+static char str_ending_ssm[11] = "ending.ssm";
+static char str_nr_name_ssm[12] = "nr_name.ssm";
+static char str_onepend_ssm[10] = "1pend.ssm";
+static char str_last_ssm[236] = "last.ssm";
+
+char* lbl_803BC314[] = {
+    "1p_qk.hps",      "akaneia.hps",    "baloon.hps",     "bigblue.hps",
+    "castle.hps",     "continue.hps",   "corneria.hps",   "docmari.hps",
+    "ending.hps",     "famidemo.hps",   "ff_1p01.hps",    "ff_1p02.hps",
+    "ff_bad.hps",     "ff_dk.hps",      "ff_emb.hps",     "ff_flat.hps",
+    "ff_fox.hps",     "ff_fzero.hps",   "ff_good.hps",    "ff_ice.hps",
+    "ff_kirby.hps",   "ff_link.hps",    "ff_mario.hps",   "ff_nes.hps",
+    "ff_poke.hps",    "ff_samus.hps",   "ff_step1.hps",   "ff_step2.hps",
+    "ff_step3.hps",   "ff_yoshi.hps",   "flatzone.hps",   "fourside.hps",
+    "gameover.hps",   "garden.hps",     "greatbay.hps",   "greens.hps",
+    "howto.hps",      "howto_s.hps",    "hyaku.hps",      "hyaku2.hps",
+    "icemt.hps",      "inis1_01.hps",   "inis1_02.hps",   "inis2_01.hps",
+    "inis2_02.hps",   "intro_es.hps",   "intro_nm.hps",   "item_h.hps",
+    "item_s.hps",     "izumi.hps",      "kongo.hps",      "kraid.hps",
+    "menu01.hps",     "menu02.hps",     "menu3.hps",      "mrider.hps",
+    "mutecity.hps",   "old_dk.hps",     "old_kb.hps",     "old_ys.hps",
+    "onetto.hps",     "onetto2.hps",    "opening.hps",    "pokesta.hps",
+    "pstadium.hps",   "pura.hps",       "rcruise.hps",    "s_info1.hps",
+    "s_info2.hps",    "s_info3.hps",    "s_new1.hps",     "s_new2.hps",
+    "s_newcom.hps",   "s_select.hps",   "saria.hps",      "shrine.hps",
+    "siren.hps",      "smari3.hps",     "sp_end.hps",     "sp_giga.hps",
+    "sp_metal.hps",   "sp_zako.hps",    "swm_15min.hps",  "target.hps",
+    "venom.hps",      "vl_battle.hps",  "vl_castle.hps",  "vl_corneria.hps",
+    "vl_cosmos.hps",  "vl_figure1.hps", "vl_figure2.hps", "vl_fzero.hps",
+    "vl_last_v2.hps", "vs_hyou1.hps",   "vs_hyou2.hps",   "yorster.hps",
+    "ystory.hps",     "zebes.hps",      "testnz.hps",
+};
+
+u8 unk_arr_803BC4A0[0x21][2] = {
+    { 0x38, 0x03 }, { 0x32, 0x21 }, { 0x06, 0x54 }, { 0x1E, 0x1E },
+    { 0x23, 0x31 }, { 0x04, 0x04 }, { 0x22, 0x4B }, { 0x2B, 0x2B },
+    { 0x4D, 0x4D }, { 0x01, 0x01 }, { 0x41, 0x41 }, { 0x3C, 0x1F },
+    { 0x42, 0x42 }, { 0x40, 0x41 }, { 0x28, 0x02 }, { 0x40, 0x40 },
+    { 0x61, 0x33 }, { 0x60, 0x5F }, { 0x22, 0x4A }, { 0x22, 0x4A },
+    { 0x54, 0x06 }, { 0x4A, 0x4A }, { 0x07, 0x07 }, { 0x01, 0x01 },
+    { 0x3F, 0x3F }, { 0x22, 0x22 }, { 0x62, 0x62 }, { 0x62, 0x62 },
+    { 0x62, 0x62 }, { 0x62, 0x62 }, { 0x62, 0x62 }, { 0x62, 0x62 },
+};
+
+static int offsets_arr_803BC4E4[0x38][2] = {
+    { 0x1F3780, 0 }, { 0x89260, 0x1 }, { 0x255C0, 0 },
+    { 0x3A6A0, 0x1 }, { 0x1DC20, 0 }, { 0xD3A0, 0 },
+    { 0x6C3C0, 0x1 }, { 0x48DA0, 0 }, { 0x32620, 0 },
+    { 0x691E0, 0x1 }, { 0x926A0, 0x1 }, { 0x8BF20, 0x1 },
+    { 0x77200, 0 }, { 0x749A0, 0x1 }, { 0x8F1E0, 0x1 },
+    { 0x809A0, 0x1 }, { 0x503E0, 0x1 }, { 0x5B100, 0x1 },
+    { 0x5B000, 0 }, { 0x7D440, 0x1 }, { 0x896E0, 0x1 },
+    { 0x7C460, 0 }, { 0x65BE0, 0x1 }, { 0x8DA20, 0x1 },
+    { 0x95AE0, 0x1 }, { 0x51AC0, 0x1 }, { 0x4DE40, 0x1 },
+    { 0x90160, 0x1 }, { 0x4E7C0, 0x1 }, { 0x285E0, 0x1 },
+    { 0x68760, 0x1 }, { 0x78FA0, 0x1 }, { 0x89A00, 0 },
+    { 0x8BDA0, 0 }, { 0x2B060, 0 }, { 0x6BDA0, 0x1 },
+    { 0x77B00, 0 }, { 0x57E80, 0 }, { 0x24A80, 0 },
+    { 0xD3C0, 0 }, { 0x5EB20, 0 }, { 0x68B60, 0 },
+    { 0x4A3E0, 0 }, { 0x23460, 0 }, { 0x5D540, 0x1 },
+    { 0x8840, 0 }, { 0x13300, 0 }, { 0x1E0E0, 0 },
+    { 0x18C80, 0 }, { 0x27340, 0 }, { 0x11D5E0, 0 },
+    { 0x55000, 0x1 }, { 0x58DA0, 0 }, { 0xA1E60, 0 },
+    { 0x600, 0 }, { 0, 0 },
+};
+
+static int sfx_remap_803BC6A4[0x4B][2] = {
+    { 0x24A22, 0x50910 }, { 0x24A25, 0x50913 }, { 0x24A28, 0x50916 },
+    { 0x24A2B, 0x50919 }, { 0x3F7A6, 0x5091C }, { 0x3F7A9, 0x5091F },
+    { 0x3F7AC, 0x50922 }, { 0x3F7AF, 0x50925 }, { 0x3F7B2, 0x50928 },
+    { 0x3F7B5, 0x5092B }, { 0x13887, 0x5092E }, { 0x1388A, 0x50931 },
+    { 0x33495, 0x50934 }, { 0x33498, 0x50937 }, { 0x334A4, 0x5093A },
+    { 0x3A9CC, 0x5093D }, { 0x3A9CF, 0x50940 }, { 0xEAAF, 0x50943 },
+    { 0x1AE14, 0x50946 }, { 0x1AE17, 0x50949 }, { 0x1AE1A, 0x5094C },
+    { 0x1AE1D, 0x5094F }, { 0x1AE05, 0x50952 }, { 0x2BF39, 0x50955 },
+    { 0x2BF27, 0x50958 }, { 0x27152, 0x5095B }, { 0x2713D, 0x5095E },
+    { 0x27140, 0x50961 }, { 0x35B9D, 0x50964 }, { 0x1FBE5, 0x50967 },
+    { 0x1FBE8, 0x5096A }, { 0x44609, 0x5096D }, { 0x4460C, 0x50970 },
+    { 0x44618, 0x50973 }, { 0x15FAE, 0x50976 }, { 0x15F9C, 0x50979 },
+    { 0x18700, 0x5097C }, { 0x18703, 0x5097F }, { 0x18706, 0x50982 },
+    { 0x18709, 0x50985 }, { 0x186F1, 0x50988 }, { 0x49435, 0x5098B },
+    { 0x46D0F, 0x5098E }, { 0x4BB56, 0x50991 }, { 0x4BB59, 0x50994 },
+    { 0x4BB5C, 0x50997 }, { 0x3D0D0, 0x5099A }, { 0x3D0D3, 0x5099D },
+    { 0x3D0D6, 0x509A0 }, { 0x3D0D9, 0x509A3 }, { 0x111C2, 0x509A6 },
+    { 0x111AD, 0x509A9 }, { 0x111B0, 0x509AC }, { 0x2982A, 0x509AF },
+    { 0x29818, 0x509B2 }, { 0x2E697, 0x509B5 }, { 0x2E69A, 0x509B8 },
+    { 0x2E69D, 0x509BB }, { 0x30DAA, 0x509BE }, { 0x30DAD, 0x509C1 },
+    { 0x30DB0, 0x509C4 }, { 0x30DB3, 0x509C7 }, { 0x30DB6, 0x509CA },
+    { 0x30DB9, 0x509CD }, { 0x30DBC, 0x509D0 }, { 0x30DBF, 0x509D3 },
+    { 0x30DC2, 0x509D6 }, { 0x41F36, 0x509D9 }, { 0x41F39, 0x509DC },
+    { 0x41F3C, 0x509DF }, { 0x41F6F, 0x509E2 }, { 0x41F75, 0x509E5 },
+    { 0x382B3, 0x509E8 }, { 0x382B6, 0x509EB },
+    { 0x83D60, 0x83D60 },
+};
 
 typedef bool (*lbl_803BCA24_fn)(HSD_GObj*);
 
-lbl_803BCA24_fn lbl_803BCA24[] = {
-    fn_800251EC, fn_800253D8, fn_800256BC, fn_800259A0, fn_800259EC,
-    fn_80025A98, fn_80025B44, fn_80025CBC, fn_80025E38, fn_80025E38,
-};
+extern lbl_803BCA24_fn lbl_803BCA24[10];
 
 int lbAudioAx_8002305C(int arg0, int arg1)
 {
@@ -178,10 +316,11 @@ outer:
 
 static inline s32 lbAudioAx_FindSlot(s32 arg0)
 {
+    int(*ranges)[2];
     s32 slot;
 
     if (arg0 >= 0 && arg0 < 0x83D60) {
-        int(*ranges)[2] = (int(*)[2]) (lbl_803BB300 + 0x5D4);
+        ranges = (int(*)[2]) (lbl_803BB300 + 0x5D4);
         for (slot = 0; slot < 0x37; ranges++, slot++) {
             if ((*ranges)[0] > arg0 || arg0 > (*ranges)[1]) {
                 continue;
@@ -216,6 +355,7 @@ static inline void lbAudioAx_BusyWait(void)
 s32 lbAudioAx_800233EC(s32 arg0)
 {
     char* base = lbl_803BB300;
+    int* p;
     int i;
     int slot;
 
@@ -238,13 +378,13 @@ s32 lbAudioAx_800233EC(s32 arg0)
             if (slot >= 0xF) {
                 goto scan;
             }
-            goto ret;
+            return arg0;
         }
 
     scan:
         {
-            int* p = (int*) (base + 0x13A4);
-            for (i = 0; i < 0x4A; i++, p += 2) {
+            p = (int*) (base + 0x13A4);
+            for (i = 0; i < 0x4A; p += 2, i++) {
                 if (arg0 == *p) {
                     return ((int(*)[2]) (base + 0x13A8))[i][0];
                 }
@@ -255,20 +395,19 @@ s32 lbAudioAx_800233EC(s32 arg0)
 
     slot = lbAudioAx_FindSlot(arg0);
 
-    if (slot != 0x21) {
-        goto ret;
+    if (slot == 0x21) {
+        goto scan2;
     }
+    return arg0;
 
+scan2:
     {
-        int* p = (int*) (base + 0x13A4);
-        for (i = 0; i < 0x4A; i++, p += 2) {
+        p = (int*) (base + 0x13A4);
+        for (i = 0; i < 0x4A; p += 2, i++) {
             if (arg0 == p[1]) {
                 return ((int(*)[2]) (base + 0x13A4))[i][0];
             }
         }
-    }
-
-    if (0) {
     }
 
 ret:
@@ -469,34 +608,6 @@ bool fn_80023ED4(const char* arg0, int arg1, int arg2)
     return AXDriver_8038E8EC(arg0, var_r0, arg2);
 }
 
-u8 data_pad_0[0x144] = { 0 };
-char* lbl_803BC314[] = {
-    "1p_qk.hps",      "akaneia.hps",    "baloon.hps",     "bigblue.hps",
-    "castle.hps",     "continue.hps",   "corneria.hps",   "docmari.hps",
-    "ending.hps",     "famidemo.hps",   "ff_1p01.hps",    "ff_1p02.hps",
-    "ff_bad.hps",     "ff_dk.hps",      "ff_emb.hps",     "ff_flat.hps",
-    "ff_fox.hps",     "ff_fzero.hps",   "ff_good.hps",    "ff_ice.hps",
-    "ff_kirby.hps",   "ff_link.hps",    "ff_mario.hps",   "ff_nes.hps",
-    "ff_poke.hps",    "ff_samus.hps",   "ff_step1.hps",   "ff_step2.hps",
-    "ff_step3.hps",   "ff_yoshi.hps",   "flatzone.hps",   "fourside.hps",
-    "gameover.hps",   "garden.hps",     "greatbay.hps",   "greens.hps",
-    "howto.hps",      "howto_s.hps",    "hyaku.hps",      "hyaku2.hps",
-    "icemt.hps",      "inis1_01.hps",   "inis1_02.hps",   "inis2_01.hps",
-    "inis2_02.hps",   "intro_es.hps",   "intro_nm.hps",   "item_h.hps",
-    "item_s.hps",     "izumi.hps",      "kongo.hps",      "kraid.hps",
-    "menu01.hps",     "menu02.hps",     "menu3.hps",      "mrider.hps",
-    "mutecity.hps",   "old_dk.hps",     "old_kb.hps",     "old_ys.hps",
-    "onetto.hps",     "onetto2.hps",    "opening.hps",    "pokesta.hps",
-    "pstadium.hps",   "pura.hps",       "rcruise.hps",    "s_info1.hps",
-    "s_info2.hps",    "s_info3.hps",    "s_new1.hps",     "s_new2.hps",
-    "s_newcom.hps",   "s_select.hps",   "saria.hps",      "shrine.hps",
-    "siren.hps",      "smari3.hps",     "sp_end.hps",     "sp_giga.hps",
-    "sp_metal.hps",   "sp_zako.hps",    "swm_15min.hps",  "target.hps",
-    "venom.hps",      "vl_battle.hps",  "vl_castle.hps",  "vl_corneria.hps",
-    "vl_cosmos.hps",  "vl_figure1.hps", "vl_figure2.hps", "vl_fzero.hps",
-    "vl_last_v2.hps", "vs_hyou1.hps",   "vs_hyou2.hps",   "yorster.hps",
-    "ystory.hps",     "zebes.hps",      "testnz.hps",
-};
 
 static inline const char* lbAudioAx_80023F28_inline0(int arg0)
 {
@@ -539,7 +650,6 @@ bool lbAudioAx_80023F28(s32 arg0)
     return lbAudioAx_80023F28_inline1(var_r3);
 }
 
-u8 data_pad[0x478] = { 0 };
 static struct lbl_803BC918_t {
     int x0;
     int x4;
@@ -1704,6 +1814,11 @@ void fn_80025FAC(HSD_GObj* gobj, void* userdata, void* params)
     }
 }
 
+lbl_803BCA24_fn lbl_803BCA24[10] = {
+    fn_800251EC, fn_800253D8, fn_800256BC, fn_800259A0, fn_800259EC,
+    fn_80025A98, fn_80025B44, fn_80025CBC, fn_80025E38, fn_80025E38,
+};
+
 void fn_800262A0(HSD_GObj* gobj)
 {
     lbAudioAx_UserData* ud;
@@ -2243,7 +2358,6 @@ void lbAudioAx_80027168(void)
     lbAudioAx_PoolAlloc* st = &lbl_80433710;
     s32 count;
     int i;
-    static int dead[10] = { 0 };
 
     {
         s8(*arr5d0)[4] = s32_arr_803BB5D0;

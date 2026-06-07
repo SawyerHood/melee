@@ -36,7 +36,9 @@
 
 /* .bss (declaration order fixes the section layout) */
 /* 4D08E8 */ static HSD_JObj* hsd_804D08E8[8];
-/* 4D0908 */ static void* hsd_804D0908[146];
+/* 4D0908 */ static void* hsd_804D0908[16];
+/* 4D0948 */ static u32* hsd_804D0948[65];
+/* 4D0A4C */ static s32 hsd_804D0A4C[65];
 /* 4D0B50 */ static HSD_PSTexGroup** psTexGroupArray[65];
 /* NOTE: symbols.txt names are historical; binary-proven semantics
  * (psInitDataBankLoad stores, byte-matched): D0C54 holds the per-bank
@@ -145,45 +147,39 @@ void psInitDataBankLoad(int bank, int* cmdBank, int* texBank, u32* ref,
     }
 }
 
-// @TODO: Currently 75.74% match - register allocation and branch structure
-// differences
+/* 91.11%: residual = named-web rotation (version/num/num2/base map; decl/
+ * source-order probes no-op) + case-0 num=0 placement + mr-vs-addi copies. */
 void psInitDataBankLocate(HSD_Archive* cmdBank, HSD_Archive* texBank,
                           int* formBank)
 {
     s32 version;
-    s32 num;
     s32 num2;
-    s32* ptr;
     s32* base;
+    s32 num;
     s32 i;
     s32 j;
 
     version = *(u16*) cmdBank;
-    if (version < 0x40) {
-        if (version != 0) {
-            goto done_cmd;
-        }
+    switch (version) {
+    case 0:
         /* Version 0: relocate pointer table at cmdBank+8 */
         num = ((s32*) cmdBank)[1];
-        base = (s32*) ((u8*) cmdBank + 8);
         num2 = num;
-        i = 0;
-        if (num <= 0) {
-            goto done_cmd;
-        }
+        base = (s32*) ((u8*) cmdBank + 8);
         for (i = 0; i < num2; i++) {
             ((s32*) cmdBank)[i + 2] += (s32) cmdBank;
         }
-    } else if (version >= 0x44) {
-        goto done_cmd;
-    } else {
+        num = 0;
+        break;
+    case 0x40:
+    case 0x41:
+    case 0x42:
+    case 0x43: {
         /* Version 0x40-0x43 */
-        s32 offset_count = ((s32*) cmdBank)[1];
-        s32 num_entries = ((s32*) cmdBank)[2];
-        s32* entry = (s32*) ((u8*) cmdBank + 12);
         s32* cursor = (s32*) cmdBank;
-        num2 = num_entries + offset_count;
-        base = entry - offset_count;
+        num = ((s32*) cmdBank)[1];
+        base = (s32*) ((u8*) cmdBank + 12) - num;
+        num2 = ((s32*) cmdBank)[2] + num;
         i = 0;
 
         while (i < ((s32*) cmdBank)[2]) {
@@ -193,23 +189,23 @@ void psInitDataBankLocate(HSD_Archive* cmdBank, HSD_Archive* texBank,
             cursor++;
             i++;
         }
-        num = offset_count;
+        break;
+    }
+    default:
+        break;
     }
 
-done_cmd:
     /* Phase 2: Fix cmdList kind bits */
     {
-        s32 count = num2 - num;
         s32* p = base + num;
-        if (num < num2) {
-            for (j = 0; j < count; j++) {
-                s32* cmd = (s32*) p[j];
-                if (cmd != NULL) {
-                    cmd[2] = cmd[2] & 0xF000000F;
-                    cmd = (s32*) p[j];
-                    cmd[2] = cmd[2] | 0x08000000;
-                }
+        for (j = num; j < num2; j++) {
+            s32* cmd = (s32*) *p;
+            if (cmd != NULL) {
+                cmd[2] = cmd[2] & 0xF1FFFFFF;
+                cmd = (s32*) *p;
+                cmd[2] = cmd[2] | 0x08000000;
             }
+            p++;
         }
     }
 
@@ -217,23 +213,22 @@ done_cmd:
     {
         s32 num_groups = ((s32*) texBank)[0];
         s32* groups = (s32*) texBank + 1;
-        s32* cur = groups;
+        s32* cur;
         s32 k;
 
-        if (num_groups >= 1) {
-            for (k = 0; k < num_groups; k++) {
-                if (cur[0] != 0) {
-                    cur[0] += (s32) texBank;
-                }
-                cur++;
+        cur = groups;
+
+        for (k = 1; k <= num_groups; k++) {
+            if (cur[0] != 0) {
+                cur[0] += (s32) texBank;
             }
+            cur++;
         }
 
         cur = groups;
-        if (num_groups > 0) {
+        {
             for (k = 0; k < num_groups; k++) {
-                HSD_PSTexGroup* tg = (HSD_PSTexGroup*) cur[0];
-                if (tg == NULL) {
+                if ((HSD_PSTexGroup*) cur[0] == NULL) {
                     goto next_group;
                 }
 
@@ -241,55 +236,66 @@ done_cmd:
                 {
                     s32 ti;
                     s32 ofs;
-                    for (ti = 0, ofs = 0; (u32) ti < tg->num; ti++, ofs += 4) {
-                        s32* entry_ptr = (s32*) ((u8*) tg + 24 + ofs);
+                    for (ti = 0, ofs = 0;
+                         (u32) ti < ((HSD_PSTexGroup*) cur[0])->num;
+                         ti++, ofs += 4)
+                    {
+                        u32* entry_ptr =
+                            (u32*) ((u8*) ((HSD_PSTexGroup*) cur[0]) + 24 +
+                                    ofs);
                         if (*entry_ptr != 0) {
-                            *entry_ptr += (s32) texBank;
+                            *entry_ptr += (u32) texBank;
                         }
                     }
                 }
 
                 /* Check format for palette relocation */
                 {
-                    u32 fmt = tg->fmt;
+                    u32 fmt = ((HSD_PSTexGroup*) cur[0])->fmt;
                     if (fmt != 8 && (fmt - 9) > 1) {
                         goto next_group;
                     }
                 }
 
-                /* Palette relocation */
-                if (tg->palflag & 1) {
+                if (((HSD_PSTexGroup*) cur[0])->palflag & 1) {
                     /* Single palette pointer */
-                    s32 ofs = tg->num * 4 + 24;
-                    s32* pal_ptr = (s32*) ((u8*) tg + ofs);
-                    if (*pal_ptr == 0) {
+                    HSD_PSTexGroup* tg = (HSD_PSTexGroup*) cur[0];
+                    s32 idx = (s32) tg->num * 4 + 24;
+                    if (*(u32*) ((u8*) tg + idx) == 0) {
                         goto next_group;
                     }
-                    *pal_ptr += (s32) texBank;
-                } else if (tg->palnum != 0) {
+                    *(u32*) ((u8*) tg + idx) += (u32) texBank;
+                } else if (((HSD_PSTexGroup*) cur[0])->palnum != 0) {
                     /* Multiple palette pointers (palnum > 0) */
                     s32 ti;
                     s32 ofs;
-                    ti = (s32) tg->num;
+                    ti = (s32) ((HSD_PSTexGroup*) cur[0])->num;
                     ofs = ti * 4;
-                    for (; (u32) ti < tg->num + tg->palnum; ti++, ofs += 4) {
-                        HSD_PSTexGroup* tg2 = (HSD_PSTexGroup*) cur[0];
-                        s32* entry_ptr = (s32*) ((u8*) tg2 + 24 + ofs);
+                    for (; (u32) ti < ((HSD_PSTexGroup*) cur[0])->num +
+                                          ((HSD_PSTexGroup*) cur[0])->palnum;
+                         ti++, ofs += 4)
+                    {
+                        u32* entry_ptr =
+                            (u32*) ((u8*) ((HSD_PSTexGroup*) cur[0]) + 24 +
+                                    ofs);
                         if (*entry_ptr != 0) {
-                            *entry_ptr += (s32) texBank;
+                            *entry_ptr += (u32) texBank;
                         }
                     }
                 } else {
                     /* palnum == 0: relocate double the num entries */
                     s32 ti;
                     s32 ofs;
-                    ti = (s32) tg->num;
+                    ti = (s32) ((HSD_PSTexGroup*) cur[0])->num;
                     ofs = ti * 4;
-                    for (; (u32) ti < tg->num * 2; ti++, ofs += 4) {
-                        HSD_PSTexGroup* tg2 = (HSD_PSTexGroup*) cur[0];
-                        s32* entry_ptr = (s32*) ((u8*) tg2 + 24 + ofs);
+                    for (; (u32) ti < ((HSD_PSTexGroup*) cur[0])->num * 2;
+                         ti++, ofs += 4)
+                    {
+                        u32* entry_ptr =
+                            (u32*) ((u8*) ((HSD_PSTexGroup*) cur[0]) + 24 +
+                                    ofs);
                         if (*entry_ptr != 0) {
-                            *entry_ptr += (s32) texBank;
+                            *entry_ptr += (u32) texBank;
                         }
                     }
                 }
@@ -301,29 +307,26 @@ done_cmd:
     }
 
     /* Phase 4: formBank relocation */
-    if (formBank == NULL) {
-        return;
-    }
     {
         s32 num_groups = formBank[0];
         s32* groups = (s32*) formBank + 1;
 
-        if (num_groups < 1) {
+        if (formBank == NULL) {
             return;
         }
 
-        for (i = 0; i < num_groups; i++) {
+        for (i = 1; i <= num_groups; i++) {
             if (groups[0] == 0) {
                 goto next_form;
             }
             groups[0] += (s32) formBank;
             {
                 HSD_PSFormGroup* fg = (HSD_PSFormGroup*) groups[0];
-                s32* p2 = (s32*) fg;
+                u32* p2 = (u32*) fg;
                 s32 fi;
                 for (fi = 0; (u32) fi < fg->num; fi++) {
                     if (p2[1] != 0) {
-                        p2[1] += (s32) formBank;
+                        p2[1] += (u32) formBank;
                     }
                     p2++;
                 }
@@ -344,125 +347,53 @@ void psInitDataBank(int bank, int* cmdBank, int* texBank, u32* ref,
     }
 }
 
-// @TODO: Currently 62.67% match - ASM bytes identical, relocation differences
+/* 97.52%: residual = field-zero web r3-vs-r10 (zero-web partition park) +
+ * reloc-name rows pending the hsd_804D0908 symbols.txt 3-way subdivision
+ * (see campaign/scratch/hsd3983-s1-w16/REPORT.md). */
 void hsd_80398A08(u32 unused)
 {
-    s32* base = (s32*) hsd_804D08E8;
-    s32* r4;
-    s32* r5;
-    s32* r6;
-    s32* r7;
-    s32* r8;
-    s32* r9;
     s32 i;
 
-    HSD_ObjAllocInit((HSD_ObjAllocData*) ((u8*) base + 0x678), 0x98, 4);
+    HSD_ObjAllocInit(&hsd_804D0F60.alloc_data, 0x98, 4);
     PAD_STACK(24);
 
-    r4 = base + 0x470 / 4;
-    r5 = base + 0x164 / 4;
-    r6 = base + 0x574 / 4;
-    r7 = base + 0x268 / 4;
-    r8 = base + 0x36C / 4;
-    r9 = base + 0x60 / 4;
-    base[0x20 / 4] = 0;
-    base[0x24 / 4] = 0;
-    base[0x28 / 4] = 0;
-    base[0x2C / 4] = 0;
-    base[0x30 / 4] = 0;
-    base[0x34 / 4] = 0;
-    base[0x38 / 4] = 0;
-    base[0x3C / 4] = 0;
-    base[0x40 / 4] = 0;
-    base[0x44 / 4] = 0;
-    base[0x48 / 4] = 0;
-    base[0x4C / 4] = 0;
-    base[0x50 / 4] = 0;
-    base[0x54 / 4] = 0;
-    base[0x58 / 4] = 0;
-    base[0x5C / 4] = 0;
+    hsd_804D0908[0] = NULL;
+    hsd_804D0908[1] = NULL;
+    hsd_804D0908[2] = NULL;
+    hsd_804D0908[3] = NULL;
+    hsd_804D0908[4] = NULL;
+    hsd_804D0908[5] = NULL;
+    hsd_804D0908[6] = NULL;
+    hsd_804D0908[7] = NULL;
+    hsd_804D0908[8] = NULL;
+    hsd_804D0908[9] = NULL;
+    hsd_804D0908[10] = NULL;
+    hsd_804D0908[11] = NULL;
+    hsd_804D0908[12] = NULL;
+    hsd_804D0908[13] = NULL;
+    hsd_804D0908[14] = NULL;
+    hsd_804D0908[15] = NULL;
     hsd_804D78E2 = 0;
     hsd_804D78DC = 0;
-    for (i = 0; i < 64; i += 8) {
-        r4[0] = 0;
-        r5[0] = 0;
-        r6[0] = 0;
-        r7[0] = 0;
-        r8[0] = 0;
-        r9[0] = 0;
-        r4[1] = 0;
-        r5[1] = 0;
-        r6[1] = 0;
-        r7[1] = 0;
-        r8[1] = 0;
-        r9[1] = 0;
-        r4[2] = 0;
-        r5[2] = 0;
-        r6[2] = 0;
-        r7[2] = 0;
-        r8[2] = 0;
-        r9[2] = 0;
-        r4[3] = 0;
-        r5[3] = 0;
-        r6[3] = 0;
-        r7[3] = 0;
-        r8[3] = 0;
-        r9[3] = 0;
-        r4[4] = 0;
-        r5[4] = 0;
-        r6[4] = 0;
-        r7[4] = 0;
-        r8[4] = 0;
-        r9[4] = 0;
-        r4[5] = 0;
-        r5[5] = 0;
-        r6[5] = 0;
-        r7[5] = 0;
-        r8[5] = 0;
-        r9[5] = 0;
-        r4[6] = 0;
-        r5[6] = 0;
-        r6[6] = 0;
-        r7[6] = 0;
-        r8[6] = 0;
-        r9[6] = 0;
-        r4[7] = 0;
-        r4 += 8;
-        r5[7] = 0;
-        r5 += 8;
-        r6[7] = 0;
-        r6 += 8;
-        r7[7] = 0;
-        r7 += 8;
-        r8[7] = 0;
-        r8 += 8;
-        r9[7] = 0;
-        r9 += 8;
-    }
-    r7 = base + i + 0x60 / 4;
-    {
-        s32 count = 0x41 - i;
-        if (i < 0x41) {
-            do {
-                r7[0x410 / 4] = 0;
-                r7[0x104 / 4] = 0;
-                r7[0x514 / 4] = 0;
-                r7[0x208 / 4] = 0;
-                r7[0x30C / 4] = 0;
-                r7[0] = 0;
-                r7++;
-            } while (--count != 0);
-        }
+    i = 0;
+    while (0x41 > i) {
+        psCmdListArray[i] = 0;
+        hsd_804D0A4C[i] = 0;
+        ptclref_804D0E5C[i] = NULL;
+        psTexGroupArray[i] = NULL;
+        psNumCmdList_804D0C54[i] = NULL;
+        hsd_804D0948[i] = NULL;
+        i++;
     }
     hsd_804D78D4 = NULL;
-    base[0] = 0;
-    base[1] = 0;
-    base[2] = 0;
-    base[3] = 0;
-    base[4] = 0;
-    base[5] = 0;
-    base[6] = 0;
-    base[7] = 0;
+    hsd_804D08E8[0] = NULL;
+    hsd_804D08E8[1] = NULL;
+    hsd_804D08E8[2] = NULL;
+    hsd_804D08E8[3] = NULL;
+    hsd_804D08E8[4] = NULL;
+    hsd_804D08E8[5] = NULL;
+    hsd_804D08E8[6] = NULL;
+    hsd_804D08E8[7] = NULL;
 }
 
 HSD_Particle* hsd_80398C04(HSD_Particle** head, int linkNo, int bank, u32 kind,
@@ -719,7 +650,7 @@ void* hsd_8039930C(void* pp_arg, void* prev_arg)
     HSD_Generator* gchild;
     HSD_PSCmdList* cl;
     HSD_PSTexGroup* tg;
-    PAD_STACK(464);
+    PAD_STACK(456);
 
 #define fval (*(f32*) &hsd_804D78D0)
 
@@ -2023,7 +1954,7 @@ void* hsd_8039930C(void* pp_arg, void* prev_arg)
                     mag = pp->vel.x * pp->vel.x + pp->vel.y * pp->vel.y +
                           pp->vel.z * pp->vel.z;
                     mag = sqrtf(mag);
-                    if (mag > 0.0F) {
+                    if (mag > 1e-10F) {
                         target_speed /= mag;
                         pp->vel.x *= target_speed;
                         pp->vel.y *= target_speed;

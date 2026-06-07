@@ -99,9 +99,6 @@
 /* 4D7E10 */ extern f32 const cm_804D7E0C; // far clip
 /* 4D7E10 */ extern f32 const cm_804D7E10;
 /* 4D7E14 */ extern f32 const cm_804D7E14;
-/* 4D7E18 */ extern f64 const cm_804D7E18;
-/* 4D7E20 */ extern f64 const cm_804D7E20;
-/* 4D7E28 */ extern f32 const cm_804D7E28;
 /* 4D7E2C */ extern f32 const cm_804D7E2C;
 /* 4D7E30 */ extern f32 const cm_804D7E30;
 /* 4D7E34 */ extern f32 const cm_804D7E34;

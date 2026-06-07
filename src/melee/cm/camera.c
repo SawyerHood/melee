@@ -3979,7 +3979,7 @@ void Camera_8002F7AC(s8 slot)
                 offset_dir = cm_804D7E10;
             } else {
                 if (HSD_Randi(2) != 0) {
-                    rand_dir = cm_804D7E18;
+                    rand_dir = 1.0;
                 } else {
                     rand_dir = cm_804D7EB8;
                 }
@@ -4953,9 +4953,6 @@ f32 const cm_804D7E08 = 0.1f;
 f32 const cm_804D7E0C = 16384.0f;
 f32 const cm_804D7E10 = -1.0f;
 f32 const cm_804D7E14 = 0.0f;
-f64 const cm_804D7E18 = 1.0f;
-f64 const cm_804D7E20 = 4503601774854144.0f;
-f32 const cm_804D7E28 = 0.64999998f;
 f32 const cm_804D7E2C = 0.34999999f;
 f32 const cm_804D7E30 = 0.5f;
 f32 const cm_804D7E34 = -0.5f;
