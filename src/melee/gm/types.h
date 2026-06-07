@@ -800,8 +800,7 @@ struct TmData {
         u8 x7;
         u8 x8;
         u16 x9;
-        u8 xB;
-        u8 xC;
+        u16 xB;
         u8 xD;
         u8 xE;
         u8 xF;

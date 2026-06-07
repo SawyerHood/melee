@@ -2453,127 +2453,128 @@ bool gm_80164ABC(void)
     return true;
 }
 
+static inline bool fn_80164B48_check_bit(u8 n, u16* mask)
+{
+    if ((n == 0xB) || (*mask & 1LL << n)) {
+        return true;
+    }
+    return false;
+}
+
 bool fn_80164B48(void)
 {
     const u8* base = (const u8*) lbl_803B75F8;
-    const u8* es;
+    const u8* tbl;
     u16* ptr;
+    const u8* es2;
     s32 i;
-    u8 idx;
-    u8 t;
-    s32 ok;
+    const u8* es;
+    s32 t;
+    const u8* es1;
+    s32 raw;
+    s64 v;
+    s64 v2;
 
     ptr = gmMainLib_8015ED8C();
+    i = 0;
+    tbl = base + 0x2D0;
     t = base[0x2C2];
-    idx = 0xB;
-    es = base + 0x2D0;
-    for (i = 0; i < 0xB; i++) {
-        if (t == es[1]) {
-            idx = (base + i * 6)[0x2D0];
-            break;
+    es1 = tbl;
+    for (; i < 0xB; i++) {
+        if (t == es1[1]) {
+            raw = (base + i * 6)[0x2D0];
+            goto found0;
         }
-        es += 6;
+        es1 += 6;
     }
-    ok = 0;
-    if (idx == 0xB || (*ptr & (1LL << idx))) {
-        ok = 1;
-    }
-    if (ok == 0) {
+    raw = 0xB;
+found0:
+    if (fn_80164B48_check_bit(raw, ptr) == 0) {
         return 0;
     }
 
     ptr = gmMainLib_8015ED8C();
+    i = 0;
     t = base[0x2C5];
-    idx = 0xB;
-    es = base + 0x2D0;
-    for (i = 0; i < 0xB; i++) {
+    es = tbl;
+    for (; i < 0xB; i++) {
         if (t == es[1]) {
-            idx = (base + i * 6)[0x2D0];
-            break;
+            raw = (base + i * 6)[0x2D0];
+            goto found1;
         }
         es += 6;
     }
-    ok = 0;
-    if (idx == 0xB || (*ptr & (1LL << idx))) {
-        ok = 1;
-    }
-    if (ok == 0) {
+    raw = 0xB;
+found1:
+    if (fn_80164B48_check_bit(raw, ptr) == 0) {
         return 0;
     }
 
     ptr = gmMainLib_8015ED8C();
+    i = 0;
     t = base[0x2C1];
-    idx = 0xB;
-    es = base + 0x2D0;
-    for (i = 0; i < 0xB; i++) {
+    es = tbl;
+    for (; i < 0xB; i++) {
         if (t == es[1]) {
-            idx = (base + i * 6)[0x2D0];
-            break;
+            raw = (base + i * 6)[0x2D0];
+            goto found2;
         }
         es += 6;
     }
-    ok = 0;
-    if (idx == 0xB || (*ptr & (1LL << idx))) {
-        ok = 1;
-    }
-    if (ok == 0) {
+    raw = 0xB;
+found2:
+    if (fn_80164B48_check_bit(raw, ptr) == 0) {
         return 0;
     }
 
     ptr = gmMainLib_8015ED8C();
+    i = 0;
     t = base[0x2C0];
-    idx = 0xB;
-    es = base + 0x2D0;
-    for (i = 0; i < 0xB; i++) {
+    es = tbl;
+    for (; i < 0xB; i++) {
         if (t == es[1]) {
-            idx = (base + i * 6)[0x2D0];
-            break;
+            raw = (base + i * 6)[0x2D0];
+            goto found3;
         }
         es += 6;
     }
-    ok = 0;
-    if (idx == 0xB || (*ptr & (1LL << idx))) {
-        ok = 1;
-    }
-    if (ok == 0) {
+    raw = 0xB;
+found3:
+    if (fn_80164B48_check_bit(raw, ptr) == 0) {
         return 0;
     }
 
     ptr = gmMainLib_8015ED8C();
+    i = 0;
     t = base[0x2C4];
-    idx = 0xB;
-    es = base + 0x2D0;
-    for (i = 0; i < 0xB; i++) {
+    es = tbl;
+    for (; i < 0xB; i++) {
         if (t == es[1]) {
-            idx = (base + i * 6)[0x2D0];
-            break;
+            raw = (base + i * 6)[0x2D0];
+            goto found4;
         }
         es += 6;
     }
-    ok = 0;
-    if (idx == 0xB || (*ptr & (1LL << idx))) {
-        ok = 1;
-    }
-    if (ok == 0) {
+    raw = 0xB;
+found4:
+    if (fn_80164B48_check_bit(raw, ptr) == 0) {
         return 0;
     }
 
     ptr = gmMainLib_8015ED8C();
+    i = 0;
     t = base[0x2C3];
-    idx = 0xB;
-    es = base + 0x2D0;
-    for (i = 0; i < 0xB; i++) {
-        if (t == es[1]) {
-            idx = (base + i * 6)[0x2D0];
-            break;
+    es2 = tbl;
+    for (; i < 0xB; i++) {
+        if (t == es2[1]) {
+            raw = (base + i * 6)[0x2D0];
+            goto found5;
         }
-        es += 6;
+        es2 += 6;
     }
-    ok = 0;
-    if (idx == 0xB || (*ptr & (1LL << idx))) {
-        ok = 1;
-    }
-    if (ok == 0) {
+    raw = 0xB;
+found5:
+    if (fn_80164B48_check_bit(raw, ptr) == 0) {
         return 0;
     }
 
@@ -3229,10 +3230,11 @@ s32 gm_80166A98(MatchEnd* arg0, s32 arg1, s8 arg2, u8 arg3, s8 arg4, u8 arg5,
                 s8 arg6, u8 arg7, u8 arg_sp8, u8 arg_spC)
 {
     struct HSD_PadStatus* pad_status;
+    struct HSD_PadStatus* cur_pad;
+    u32 idx;
     u32 i;
 
     memzero(arg0, 0x227C);
-    pad_status = &HSD_PadMasterStatus[0];
 
     arg0->result = 1;
     arg0->x5 = 0;
@@ -3243,9 +3245,9 @@ s32 gm_80166A98(MatchEnd* arg0, s32 arg1, s8 arg2, u8 arg3, s8 arg4, u8 arg5,
     arg0->player_standings[2].character_kind = arg6;
     arg0->player_standings[3].character_kind = arg_sp8;
 
-    // Apply player color to all 4 players?
+    // Apply player costume to all 4 players?
     for (i = 0; i < 4; i++) {
-        arg0->player_standings[i].character_kind |= (arg1 << 2) & 0xFC;
+        arg0->player_standings[i].x3 = arg1;
     }
 
     arg0->player_standings[0].score = 0xA - arg3;
@@ -3257,14 +3259,20 @@ s32 gm_80166A98(MatchEnd* arg0, s32 arg1, s8 arg2, u8 arg3, s8 arg4, u8 arg5,
     arg0->player_standings[2].x30 = 0xA - arg7;
     arg0->player_standings[3].x30 = 0xA - arg_spC;
 
+    pad_status = &HSD_PadMasterStatus[0];
     for (i = 0; i < 4; i++) {
         arg0->player_standings[i].x30 += 6 - i;
         if (arg0->player_standings[i].character_kind == 0x21) {
             arg0->player_standings[i].slot_type = 3;
-        } else if (pad_status[i].err != 0) {
-            arg0->player_standings[i].slot_type = 1;
         } else {
-            arg0->player_standings[i].slot_type = 0;
+            idx = (u8) i;
+            cur_pad = pad_status + idx;
+            cur_pad = (struct HSD_PadStatus*) (u8*) cur_pad;
+            if (cur_pad->err == 0) {
+                arg0->player_standings[i].slot_type = 0;
+            } else {
+                arg0->player_standings[i].slot_type = 1;
+            }
         }
 
         if (arg0->player_standings[i].character_kind == 0x13) {
@@ -4227,37 +4235,37 @@ void gm_80168FC4(void)
 
 s32 fn_80169000(void* arg0, void* arg1)
 {
+    UNUSED u8 padA[8];
     u8 handicaps[4];
     u8 positions[4];
-    u8* p = (u8*) arg0;
-    u8* hp = handicaps;
-    u8* sp = (u8*) arg1;
+    UNUSED u8 padB[0x10];
     u8* hb = (u8*) arg1;
     s32 count;
     s32 i;
+    u8* p;
     u8* cur;
+    u8* q;
+    u8* q2;
     u8 v;
-    u8 t;
+    s32 t;
 
     count = 0;
+    p = (u8*) arg0;
     for (i = 0; i < 4; i++) {
         if (p[0x58] != 3) {
             count += 1;
             positions[p[0x5E]] = i;
         }
-        *hp = *sp;
-        hp += 1;
-        sp += 1;
-        p += 0xA8;
+        handicaps[i] = ((u8*) arg1)[i];
+        p = p + 0xA8;
     }
 
     cur = &handicaps[positions[0]];
     v = *cur;
-    t = 0;
-    if (v >= 2 && handicaps[positions[count - 1]] <= 8) {
+    if (v >= 2 && (q = &handicaps[positions[count - 1]], *q <= 8)) {
         *cur = v - 1;
-        t = handicaps[positions[count - 1]];
-        handicaps[positions[count - 1]] = t + 1;
+        t = *q;
+        *q = t + 1;
     } else if (v == 1 && handicaps[positions[count - 1]] <= 7) {
         handicaps[positions[count - 1]] += 2;
     } else if (v >= 3 && handicaps[positions[count - 1]] == 9) {
@@ -4265,15 +4273,17 @@ s32 fn_80169000(void* arg0, void* arg1)
     } else if (count >= 3) {
         if (v == 1 && handicaps[positions[count - 1]] == 8) {
             handicaps[positions[count - 1]] += 1;
-            t = handicaps[positions[1]];
+            q2 = &handicaps[positions[1]];
+            t = *q2;
             if (t >= 2) {
-                handicaps[positions[1]] = t - 1;
+                *q2 = t - 1;
             }
         } else if (v == 2 && handicaps[positions[count - 1]] == 9) {
             *cur -= 1;
-            t = handicaps[positions[1]];
+            q2 = &handicaps[positions[1]];
+            t = *q2;
             if (t >= 2) {
-                handicaps[positions[1]] = t - 1;
+                *q2 = t - 1;
             }
         }
     }
@@ -4281,7 +4291,7 @@ s32 fn_80169000(void* arg0, void* arg1)
     hb[1] = handicaps[1];
     hb[2] = handicaps[2];
     hb[3] = handicaps[3];
-    return (s32) t;
+    return t;
 }
 
 /// #fn_80169000 done
@@ -4762,19 +4772,22 @@ long fn_80169A84(u8 arg0, s8* arg1, s8* arg2)
 void fn_80169C54(s8 arg0, s8 arg1)
 {
     s32 buf[7];
+    UNUSED u8 padB[8];
     struct lbl_8046B488_t* st;
     s8* pc;
     s8* cp;
+    s32* bp;
     s32 n;
     s32 count;
     s32 j;
     s32 k;
     s8 p;
     u8 ch;
+    s8 c;
 
     n = 0;
-    st = fn_8016AE60();
-    pc = (s8*) st;
+    pc = (s8*) fn_8016AE60();
+    st = (struct lbl_8046B488_t*) ((u8*) pc + 0);
     buf[0] = -1;
     buf[1] = -1;
     buf[2] = -1;
@@ -4782,13 +4795,13 @@ void fn_80169C54(s8 arg0, s8 arg1)
     buf[4] = -1;
     buf[5] = -1;
     buf[6] = -1;
-    j = 3;
-    do {
+    bp = buf;
+    for (j = 3; j != 0; j--) {
         if ((s32) *pc == 4) {
             if (st->xB == 0) {
                 count = gm_80169238_noinline(4U);
                 for (k = 0; k < count; k++) {
-                    buf[k] = k;
+                    bp[k] = k;
                     n += 1;
                 }
             } else {
@@ -4798,26 +4811,26 @@ void fn_80169C54(s8 arg0, s8 arg1)
             break;
         }
         pc += 1;
-        j -= 1;
-    } while (j != 0);
+    }
 
     if (arg0 == 4) {
         buf[n] = arg1;
         n += 1;
     }
     if (n > 0) {
-        cp = (s8*) st;
         j = 0;
+        cp = (s8*) st;
         do {
             ch = *cp;
+            c = (s8) ch;
             if (((s8) ch != 0x21) && ((s8) ch != 4)) {
-                p = Player_800325C8((CharacterKind) (s8) ch, 0);
+                p = Player_800325C8((CharacterKind) c, 0);
                 if ((p != -1) && (p != 4)) {
                     for (k = 0; k < n; k++) {
                         Player_80031DA8((s32) p, buf[k]);
                     }
                 }
-                p = Player_800325C8((CharacterKind) (s8) ch, 1);
+                p = Player_800325C8((CharacterKind) c, 1);
                 if ((p != -1) && (p != 4)) {
                     for (k = 0; k < n; k++) {
                         Player_80031DA8((s32) p, buf[k]);

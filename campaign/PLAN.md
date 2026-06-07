@@ -119,9 +119,42 @@ byte-IDENTICAL; @-pin renumber map (address-keyed) in
 (@847/@849/@294/@295/@550 dup-literal evidence) — anchors already match
 via offset-0 shadow/hoist idioms; new cuts would move named-anchor
 statics to offset 0 (idiom-46 shadow) and REGRESS 100% fns; interior
-boundaries underdetermined. NEXT: gm_1601 (≥2 cuts, +0x110 family),
-particle (CE3F8 AND D08E8 both demand section offset 0), gm_18A5
-(triad CONFIRMED wave 12, proposed cuts incl. fallbacks in
+boundaries underdetermined. ✅ **particle LANDED + COMMITTED (wave
+13)** — 2 splits / 3 TUs, TU identity proven by DOL strings (head =
+debugconsole_main.c TU 89 fns; hsd_3983.c = original particle.c TU 15
+fns; hsd_39D1.c = generator.c TU 15 fns); commits 11be7f00c
+(hsd_39D1) + 2e522ed29 (hsd_3983) + 572614b9c/b701858cc
+(binary-proven reader-slot/literal/assert fixes: hsd_8039F05C
+78.41→**96.33**, psInitDataBankLoad 96.04→**99.86**, 9930C slot fixes
+×5 + 100.0F conditional-kill, DAD4 eps 0.001F, generator.c/psCamera
+assert strings via idiom 27); ALL gates PASS at EVERY step (DOL OK +
+dtk shasum + deps#3 + no-op idempotence; 119 fns preserved 89+15+15),
+project matched 72.062→**72.100** / fuzzy 97.537; check_cuts.py 682
+ok + 22 dup-ok / 0 violations; cuts: A|B .text 0x803983A4 / .bss
+0x804D08E8 (the demanded offset-0 base; head gets NO extab), B|C
+.text 0x8039D1EC / .bss 0x804D0F90 (full 8-section tables in
+tu-split-particle scratch). End-to-end gate 12 UP / 7 DOWN / 0
+GONE/NEW — every DOWN = @-pin renumber drift; address-keyed,
+value-verified maps in `campaign/scratch/tu-split-particle/
+progress.txt` → naming-10 queue (@2723 + lbl_804DE98C BLOCKED; head
+dup copies keep pins per idiom 54). NOTE: required a 5-symbol
+scope:local→global flip in symbols.txt — dtk-shasum byte-PROVEN safe
+(narrows idiom-75's negative; see idiom 80). The wave-9 CE3F8/D08E8
+both-demand-offset-0 paradox is RESOLVED: D08E8 got its own TU base;
+13-symbol bss block + CF7E8 extern siblings verified intact.
+NEXT: gm_1601 — spec READY (wave-13 diagnosis, report-only:
+`campaign/scratch/gm1601_w13/cuts_gm1601.txt`): 2 cuts / 3 TUs
+(+0x110 family root cause byte-confirmed: gm_8016A164 target lis/addi
+lbl_8046B488 vs our ...bss.0, delta 0x110). SPLIT 1 (A|B): .text
+0x80169364 (fallback 0x801692E8) / .bss 0x8046B488 / .data 0x803D5620
+/ .rodata prefer section end 0x803B7A60 (TU-B likely empty) / .sbss
+0x804D65A0 / .sdata 0x804D3F67 / .sdata2 0x804DA288. SPLIT 2 (B|C):
+.text 0x8016A92C / .bss 0x8046B668 / .sdata2 0x804DA294. Land in
+reverse address order; keep check_bit clones with their TUs; expected
+recoveries fn_801695BC 70.2 / fn_80169A84 74.2 / gm_8016A164 99.5 /
+gm_8016A22C 74.1 / fn_8016A4C8 88.1 / gm_8016AC44 66.4. Then gm_18A5
+(triad CONFIRMED wave 12 + SECFOLD 6 re-confirmed by the inversion
+sweep, proposed cuts incl. fallbacks in
 gm18a5_w12/LOG.txt: .text fn_80190ABC | fn_80196510; .bss lbl_804771B8
 | lbl_804799B8; .data lbl_803D9F80 | lbl_803DA0D0; .sdata ~0x804D4150 |
 0x804D4170; .sdata2 0x804DA6E8 | 0x804DA7E0 — each pends object-boundary
@@ -632,6 +665,25 @@ the rest of the queue):**
    (multi-BB webs = 0 — not fully modeled, ALWAYS canary); for→while =
    −1 (j-loop) yet 0 (i-loop) — idiom-41 context-dependence reconfirmed;
    literal→extern where the value dies = −1 at the old creation site.
+   **⭐ WAVE-13 CODEBASE SWEEP (analysis-only, top-20 units)**: tool
+   `campaign/scratch/inversion-sweep/analyze.py <unit>` (ELF32-BE
+   .rela.text on both objects, symbol-INDEX resolution, dup-@ safe) +
+   per-unit worklists `campaign/scratch/inversion-sweep/
+   <unit>.worklist.txt` (post-naming-9 baseline). High-conf totals:
+   **LIT2EXT 361 (355 actionable) vs EXT2LIT 4 (~90:1)** + AT_RENUM 15 +
+   SHADOW ~190 (park) + NAMEPAIR ~20 — the naming-8 SRC-FIRST direction
+   is conclusively dead. Wave-14 src-fix owner order (idiom 24-B/25
+   conversions, canary @-pins): ftcoll 85 rows/9 syms → camera 79/~15
+   (cm_804D7E14 ×39; idiom-25 LICM caution on loop sites) → toy 60 (+
+   the ONLY EXT2LIT 4: un_804D6E80/84/88/8C, idiom-24 Fix-A) →
+   tydisplay 49 → grvenom 30 (ours order-swapped) → grbigblue 20 →
+   sislib 11 (our @264 serves TWO targets — dup-literal split) →
+   lb_00F9 8 (keep @328 alive for its @176 rows) → gmresult 5 →
+   gm_1832 3 NEW (@-budget). Jumptable rows (ftCo jtbl_803C5C70/BE8,
+   grmutecity) excluded as naming park. camera cm_80452C68 ×74 SHADOW
+   = the old camera.static.h extern-flip package; gm_18A5 SECFOLD 6
+   re-confirms its TU split. Re-run analyze.py on main/melee/lb/
+   lbaudio_ax after the lbaudio .data package lands.
 73. **PRAGMA-AT-CALLEE (ftCo A2718 →100)**: `#pragma dont_inline on`
    wrapped around a CALLEE's definition suppresses its auto-inline at
    all call sites while leaving the caller free to expand its own static
@@ -662,6 +714,62 @@ the rest of the queue):**
    config-unreachable PERMANENT accepted drops (fn_80188EE8 ×8);
    renaming a target lbl_* that our src still extern-references breaks
    every paired row through it — convert src first (Grand Inversion).
+76. **SDA21 RELOC-OFFSET CONVENTION SPLIT (inversion sweep)**: dtk
+   records r_offset at the insn START, MWCC at +2 — any reloc tooling
+   comparing the two sides must normalize `off & ~3`.
+77. **`...sec.N` = NAMED MWCC ANCHOR OBJECT (inversion sweep)**: our-side
+   `...sec.N` relocs are named anchor objects, NOT section symbols —
+   discriminate SHADOW (resolved-equal ⇒ offset-0 park) vs SECFOLD
+   (unequal ⇒ real fold/TU-split evidence) by resolved offset.
+78. **POOL-ORDER SWAP (inversion sweep; mncharsel 62648, gm_18A5
+   90ABC)**: two adjacent-site literals created in REVERSED order = a
+   src statement-ordering fix, not a renumber.
+79. **dtk RE-SPLIT AUTO-RENUMBER (header-tmunk w13)**: a config.yml-
+   triggered re-split can AUTO-APPLY queued @-renumbers by rewriting
+   symbols.txt (one-time, address-keyed, DOL-neutral — it byte-derived
+   the exact gmregclear naming-9 map unprompted). Gate `git status` on
+   symbols.txt after EVERY re-splitting ninja; the saved diff doubles
+   as a machine-derived renumber map
+   (`campaign/scratch/header-tmunk-w13/symbols_txt_dtk_rewrite.diff`).
+80. **PARTICLE-SPLIT PACK (wave 13)**: (a) `-Cpp_exceptions` is a large
+   @-id consumer — dropping it renumbered the head TU's whole pool
+   (−8 early..−108 late); compiler-flag changes = TU-wide renumber;
+   (b) scope:local→global flips on WHOLE-OBJECT addend-0 symbols are
+   byte-safe (dtk shasum-proven ×5) — idiom-75's negative is narrower
+   than stated (split-RANGE entries only); dtk renders local data names
+   with an address suffix (psTexGroupArray_804D0B50), so flips change
+   target-side names and src must rename to match; (c) the address-
+   materialization attractor extends to const-array base+const-elem
+   reads (`(base+bank)[0x18]` → lwzx; direct/local-base/+0 all no-op).
+81. **ARG0-LOAD HOIST + FRAME QUANTIFICATION (extends 9/40/53/56;
+   lbaudio w13, both won)**: named block-local + idiom-34 self-read
+   (`s32 id = ext; id = id + 0;`) relocates an arg-position sda load
+   ABOVE intervening clamp branches and still coalesces into the arg
+   reg (without the blocker, load-prop folds it back). Idiom-56
+   escalation: the `i=0; z=i;` copy-init `addi rZ,rI,0` is reachable
+   ONLY via inline expansion — the identical caller-body form RESHAPES
+   the web. Idiom-40 quantified: 4-pointer guarded-indexed loop =
+   exactly +0x10 phantom frame; bump form = 0; `UNUSED u8 pad[8]`
+   ballast tunes between (28690 frame 0x28 EXACT).
+82. **u8-PARAM RANK LAW (extends 39; gm_80166A98, measured)**: a
+   u8-typed param's home ranks at the TOP of the callee-saved map,
+   above ALL s32 param homes (which run [p1, p10..p2] from r31 down);
+   s32→u8 on one param rotated a 10-param map exactly into place. A
+   named u8 local copy gets the same rank but costs clrlwi + 4B frame;
+   an s32 copy coalesces (rank lost) — param TYPE is the only
+   zero-cost lever found.
+83. **gm_1601 WAVE-13 PACK**: CTR/bdnz conversion requires the counted-
+   `for` form (`for (j=3; j!=0; j--)`) — do-while-with-decrement stays
+   subic./bne even when legal; loop-bearing `static inline` NEVER
+   inlines (bl emitted; extends 73) — per-TU duplicate helper clones
+   (check_bit) are the mechanism behind r0-diamond regions;
+   UNINITIALIZED-RETURN TELL: no li-0 anywhere + return-var sharing a
+   dead pointer's r3 per-path = the decomp's `t = 0;` is an invented
+   init (delete it; u8 t blocks coalescing, s32 required); UNUSED s64
+   decl = 8B frame each, used = 0x10 (confirms 28/48); CAVEAT: three
+   idiom-48 cost entries (cast-copy +1, assignment-in-condition −1,
+   goto-label +1) measured ZERO @-drift here — always canary, never
+   precompute from the table.
 
 ### Experiment results (wave 3)
 
@@ -853,12 +961,25 @@ the rest of the queue):**
   80055E9C loop-invariant FPR pair tie; 56C54 sqrtf instance-band;
   RespawnVtxIds 80% + 804D8150 66.7% are dtk pad-fold size rows —
   diff-policy, unreachable from C (like gap_07/gap_09 rows).
-- **particle wave-9 parks**: TU-SPLIT-BLOCKED residual class (CE3F8 AND
-  D08E8 both demand section offset 0 — see verdict section); @3751 dup
-  0.5f .sdata2 per-original-TU copies (conversion-magic class); .data is
-  ~0x2BA4 bytes short of target (dead string blobs of the original TUs) —
-  queued for a dedicated reconstruction agent (idiom-24/51 style, with
-  @id-shim accounting).
+- **particle wave-9 parks (updated wave 13)**: ~~TU-SPLIT-BLOCKED
+  residual class~~ **RESOLVED by the landed split** (D08E8 now its own TU
+  base at offset 0; 9F05C/9930C/extab rows healed); @3751 dup 0.5f
+  .sdata2 per-original-TU copies now naming-10 renumber rows; .data
+  shortfall localized to HEAD's debugconsole dead strings (~0x2BA4) +
+  hsd_3983's extra @1491/@1492 object.h pool pair — still queued for the
+  reconstruction agent (idiom-24/51 style, with @id-shim accounting).
+  Post-split S1 residuals: hsd_3983 psInitDataBankLocate 75.74 / 98A08
+  62.63 / 9930C 93.87 (+ un-located 1e-10 guard, remap-shape attractor);
+  hsd_39D1 DAD4 86.18 (missing f64 2.0/π÷2 literals + FPR rotation) +
+  9F05C store-order pairs.
+- **gm_1601 wave-13 park — ROVER-INTO-BASE COPY COALESCE family** (3
+  sites: fn_80164B48 block-6, fn_80169C54 bp, fn_80169000 p-rover):
+  target folds the final walker copy into the dead base var's
+  callee-saved reg; ours always emits `addi rX,rBase,0`; mutation form
+  flips base ranks; fresh-var/recompute/decl-position all no-ops.
+  lbaudio 28690's leftover-rover + zero-web-return fork (3 fresh failed
+  forms, wave 13) strengthens the same family and the gm_1832
+  fn_80189B88 park.
 - **gm_18A5 wave-11 parks**: fn_801949B4 (95.00) / fn_80194BC4 (94.11)
   ptr-reassoc attractor (idiom 62, 8 forms enumerated); **fn_80195AF0
   98.07 ACHIEVABLE but reverted to 94.79** — winning package costs +3
@@ -906,10 +1027,104 @@ the rest of the queue):**
   unsolved; fn_800268B4 rover r0+mr; 269AC rotation / 27488 u64-coalesce
   / 2785C — probes reverted; pooled-string offset rows now resolved by
   the wave-12 .data package (land `lbaudio_w12/full_tree_with_pkg.patch`
-  WHOLE — flags_arr alone is net-negative).
+  WHOLE — flags_arr alone is net-negative). WAVE-13 UPDATES: 27DF8
+  →98.70 / 28690 →97.84 frame-EXACT (both won, idiom 81); parks
+  CONFIRMED with fresh probes — 233EC r3/r4 rotation + 2 dead-b sites,
+  27648 {i,ptrA,ptrB} rotation (2 probes), 27DF8 preheader two-3-cycle
+  rotation, 2785C u64 mr (fn-scope vs block-scope of a call-consumed
+  local = byte-identical); B24 98.79 = SRC-COMPLETE — final 1.2% pends
+  (a) the w12 package, (b) the symbols.txt bss 6-sym merge (objdiff
+  resolves synthetic relocs against each object's own layout); re-run
+  the B24 tail-web coloring AFTER those land (analysis in
+  lbaudio_w13/progress.txt). NEGATIVES: idiom-34 +0 does NOT block
+  const-prop (ret=0 fork) nor arg-position int-grouping reassoc.
 
 ## Session log
 
+- **2026-06-07 — Wave 13 (particle TU-split + naming round 9 +
+  grand-inversion sweep + types.h header land + 2 unit campaigns) —
+  five commits landed, HEAD b701858cc.** ⭐ **TU-SPLIT particle LANDED
+  + COMMITTED** (2 splits / 3 TUs: 11be7f00c hsd_39D1.c/generator.c +
+  2e522ed29 hsd_3983.c/particle.c + 572614b9c/b701858cc binary-proven
+  fixes; verdict section updated): all gates PASS at every step, 119
+  fns preserved (89+15+15), project matched 72.062→**72.100** / fuzzy
+  97.537; 9F05C 78.41→96.33, psInitDataBankLoad→99.86, extab/extabindex
+  rows →99+; 5 binary-proven deviations fixed (reader-slot count/table,
+  spawn-remap +0x60, 100.0F kill, 0.001F eps, assert strings); required
+  5 byte-safe scope:local→global flips (idiom 80 narrows idiom-75);
+  gate 12 UP / 7 DOWN all = @-drift with address-keyed maps →
+  naming-10; ~55 compiles. **Naming-9 COMMITTED 1f9458ec3**
+  (symbols.txt only, 43 address-keyed renames): 35 syms UP / 0 DOWN,
+  24 fns→100 (fn_80182F40, fn_80181708, ftCo 34-pin @N→@N+4 recovering
+  all 22 dropped 100s incl. canaries B0918/B101C), project matched
+  72.06→72.09 pre-particle; DOL+shasum+deps#3 at every checkpoint;
+  skips honored (gm_18A5 inversion cancels, @2089 bulk, lbaudio str_*,
+  fn_80188EE8 permanent). ⭐ **GRAND-INVERSION SWEEP (analysis-only,
+  zero edits)**: analyze.py + 27 worklists in
+  `campaign/scratch/inversion-sweep/` — **LIT2EXT 361 vs EXT2LIT 4
+  (~90:1), SRC-FIRST conclusively dead**; wave-14 src owner order
+  ftcoll→camera→toy→tydisplay→grvenom→grbigblue→sislib→lb_00F9→
+  gmresult→gm_1832 (details in idiom 72); naming-9 queue AUDITED
+  (gmregclear + ftCo healed-verified; 4 missed ftCo .data pins →
+  naming-10; gm_18A5 cancels confirmed; mechanics: idioms 76–78).
+  ✅ **HEADER LANDED: gm/types.h:802 TmUnkMenuData → `u16 x9; u16
+  xB;`** (uncommitted src): fn_80194F30 99.76→**99.97** (beats the
+  99.90 prediction; sth/stb row gone), 3 unit gates PASS
+  zero-regression, DOL ×3; →100 now pends ONLY the gm_18A5 TU split
+  (lbl_804799B8 anchor pair). INCIDENT: post-edit dtk re-split
+  AUTO-REWROTE symbols.txt with the queued gmregclear renumber —
+  reverted, did not recur (idiom 79; saved diff = machine-derived map).
+  Unit wins (UNCOMMITTED src, one file per agent): **lbaudio_ax** —
+  27DF8 96.81→**98.70** (single-use inline expansion + arg0-load hoist
+  ×2) + 28690 97.81→**97.84** with frame 0x28 EXACT (idiom-40
+  quantified); gate 2 UP / 0 DOWN / 266 SAME, only free-territory
+  @-churn; ~45 compiles; B24 declared SRC-COMPLETE. **gm_1601** — 4
+  fns up, gate 4 UP / 0 DOWN, pins byte-stable through ~85 compiles:
+  gm_80166A98 80.04→83.55 via binary-proven x3-bitfield fix (= **100.00
+  EXACT** verified under gm_1601.h:168 arg1 s32→u8 — NEW header item,
+  also lifts caller gm_801B0DD0 72.73→78.76 with zero other changes),
+  fn_80164B48 85.46→**99.28**, fn_80169000 89.03→**95.80**
+  (uninitialized-return tell — invented `t = 0` deleted), fn_80169C54
+  92.88→**96.10**; + gm_1601 TU-SPLIT SPEC DERIVED report-only (2 cuts
+  / 3 TUs, verdict section; gm1601_w13/cuts_gm1601.txt) — front of
+  split queue. **HEADER QUEUE**: ✅ TmUnkMenuData LANDED; NEW
+  gm_1601.h:168 s32→u8 (verified-then-reverted, →100 + caller +6);
+  carry-overs unchanged: gm_1601.h:53, gm_1601.h:157-159,
+  TrainingModeState +0x114, lbaudio full_tree_with_pkg.patch WHOLE.
+  **NAMING-10 QUEUE**: particle renumber maps (address-keyed,
+  value-verified, tu-split-particle/progress.txt; hsd_3983 +
+  hsd_39D1; @2723 + lbl_804DE98C/9E8 BLOCKED; head dups keep pins;
+  re-verify ids against then-current objects) + subdivide lbl_8040BFB0
+  → @236/@237/@238 (psInitDataBankLoad last 2 rows →100); ftCo 4
+  missed .data pins (@1929→@1933 @0x803C5B5C, @3040→@3044, @5861→@5865,
+  @6168→@6172); lb_00F9 @176→@328; grgreens @1017→@828; lbaudio
+  @721→@722 + @848→@849 + recompute the unit map AFTER this wave's src
+  (+11 ids past line 2503, @1877→@1888); gm_1601 gm_80166378 idiom-54
+  dup-literal pins AFTER its split (they then separate naturally);
+  optional jtbl→@ rename probe (ftCo ×2 — settles jumptable-park
+  config-recoverability). **SRC/RETRY QUEUE**: wave-14 inversion
+  conversions (order in idiom 72, one owner per unit); particle S1
+  agents (hsd_3983 + hsd_39D1 residual lists in parks); gm_1601 next:
+  gm_80166378 (+0-copy struct var, r30 web) + fn_8016588C
+  (binary-proven x74 lwz/s32 vs our lbz/u8 + switch→if-else-chain);
+  .data reconstruction agent (head debugconsole strings + hsd_3983
+  @1491/@1492 + lbaudio package); gm_18A5 95AF0 package still blocked
+  pending its renumber. **WARNINGS**: (1) **naming/split-vs-src MUTEX
+  violated a THIRD time** — naming-9 committed mid-wave under 5 live
+  agents AND its first application was clobbered by a concurrent
+  agent's git-restore of symbols.txt (recovered by atomic idempotent
+  re-apply with cmp-verification); types.h also landed under running
+  src agents (verified harmless via snapshots). Agents must NEVER
+  git-restore shared config for "clean baselines"; the orchestrator
+  must serialize naming/split/header lands at wave boundaries. (2) dtk
+  re-split can rewrite symbols.txt unprompted — `git status`
+  symbols.txt after every re-splitting ninja (idiom 79). (3) REPORT.md
+  remains harness-blocked for several agents — progress.txt is the
+  durable record (naming-7 precedent, 4 agents this wave). Idioms
+  76–83 added; idiom-48 cost table flagged context-dependent (3
+  zero-measurements); idiom-75 narrowed. ~230 compiles total.
+  Uncommitted src: gm/types.h, gm_1601.c, lbaudio_ax.c (+ stale
+  backlog.json — regenerate via triage.py before wave 14).
 - **2026-06-06/07 — Wave 12 (gmregclear TU-split + 4 unit campaigns +
   naming round 8) — first wave with TWO config commits landed
   mid-flight.** ⭐ **TU-SPLIT gmregclear LANDED + COMMITTED** (3 splits /

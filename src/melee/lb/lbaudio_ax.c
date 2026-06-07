@@ -2500,6 +2500,27 @@ void lbAudioAx_80027DBC(void)
     fn_800269AC();
 }
 
+static inline void lbAudioAx_80027DF8_inline(void)
+{
+    s32 i;
+    s32* sl;
+    s32* t;
+    s32 z;
+    t = lbl_80433710.x70;
+    sl = lbl_80433710.x2C;
+    i = 0;
+    z = i;
+    for (; i < 16; i++) {
+        if (t[i] > 0) {
+            (t[i])--;
+        }
+        if (t[i] <= 0) {
+            sl[i] = 0x83D60;
+            t[i] = z;
+        }
+    }
+}
+
 void lbAudioAx_80027DF8(void)
 {
     PAD_STACK(16);
@@ -2522,13 +2543,15 @@ void lbAudioAx_80027DF8(void)
                 lbl_804D38F0 = fn_80023750(0x84, lbl_804D6428, 0x40, 5, 4);
             } else {
                 s32 vol = lbl_804D6428;
+                s32 id = lbl_804D38F0;
+                id = id + 0;
                 if (vol < 0) {
                     vol = 0;
                 }
                 if (vol > 0x7F) {
                     vol = 0x7F;
                 }
-                AXDriver_8038D3B8(lbl_804D38F0, (vol * 2) & 0xFE);
+                AXDriver_8038D3B8(id, (vol * 2) & 0xFE);
             }
         } else {
             lbl_804D6428 = 0x7F;
@@ -2548,13 +2571,15 @@ void lbAudioAx_80027DF8(void)
                 lbl_804D38F4 = fn_80023750(0x85, lbl_804D642C, 0x40, 6, 4);
             } else {
                 s32 vol = lbl_804D642C;
+                s32 id = lbl_804D38F4;
+                id = id + 0;
                 if (vol < 0) {
                     vol = 0;
                 }
                 if (vol > 0x7F) {
                     vol = 0x7F;
                 }
-                AXDriver_8038D3B8(lbl_804D38F4, (vol * 2) & 0xFE);
+                AXDriver_8038D3B8(id, (vol * 2) & 0xFE);
             }
         } else {
             lbl_804D642C = 0x7F;
@@ -2593,18 +2618,7 @@ void lbAudioAx_80027DF8(void)
     }
 
     if (lbl_804D640C == 0) {
-        s32 i;
-        s32* t = lbl_80433710.x70;
-        s32* sl = lbl_80433710.x2C;
-        for (i = 0; i < 16; i++) {
-            if (t[i] > 0) {
-                (t[i])--;
-            }
-            if (t[i] <= 0) {
-                sl[i] = 0x83D60;
-                t[i] = 0;
-            }
-        }
+        lbAudioAx_80027DF8_inline();
     }
 }
 
@@ -2719,6 +2733,7 @@ s32 lbAudioAx_80028690(void)
 {
     lbAudioAx_PoolAlloc* st = &lbl_80433710;
     s32 var_r29;
+    UNUSED u8 pad[8];
 
     lbl_804D3874 = HSD_SynthGetSoundMode();
     fn_800244F4();
@@ -2750,11 +2765,11 @@ s32 lbAudioAx_80028690(void)
     }
 
     if (lbl_804D3878 != var_r29) {
-        int idx;
         int* a;
         int* b;
         int* c;
         int* d;
+        int idx;
 
         lbl_804D3878 = var_r29;
         AXDriver_8038DCFC();
@@ -2767,11 +2782,15 @@ s32 lbAudioAx_80028690(void)
         d = st->x274;
         for (idx = 0; idx < 55; idx++) {
             if (idx != 0) {
-                a[idx] = -1;
-                b[idx] = -1;
-                c[idx] = -1;
-                d[idx] = -1;
+                *a = -1;
+                *b = -1;
+                *c = -1;
+                *d = -1;
             }
+            a++;
+            b++;
+            c++;
+            d++;
         }
 
         HSD_SynthSFXUnloadBank(1);
