@@ -194,11 +194,17 @@ fn_8018F888 +1.8 (the parked "+0x20 artifact" family HEALED),
 fn_8019A158 +3.0, fn_8019AF50 +1.4, fn_80194F30 →99.98, [.sdata-0]
 64→96, dup-pins @354/@355/@357/@785/@991/@1620 →100. Project
 72.103% matched (sibling flux in-flight; per-symbol gates
-authoritative). ~25-30 ex-100 fns at 99.7-99.98 recover via the
-naming-13 renumber maps (address-keyed + value-verified in
-tu-split-gm18a5/progress.txt). Type-size deviations surfaced →
+authoritative). ✅ **naming-13 COMMITTED d17be7f73 (wave 17,
++61/−61): 26 fns→100** (16 TU-B + 10 TU-C) + 19 partial UPs —
+the 25-30 prediction CONFIRMED; the queued TU-C magic pair was
+VALUE-CROSSED (positional transcription) — applied corrected
+@357→@416 / @1620→@320, inverse of the queue (idiom 103). TU-C
+extras @3554/@3555 deferred to naming-14 (sibling recon was
+mid-flight). Type-size deviations surfaced →
 header queue: gm/types.h TmData 0x56C→0x574 (+8) / MatchEnd
-0x227C→0x2280 (+4) tail fields. **SPLIT QUEUE now**: lb_00F9
+0x227C→0x2280 (+4) tail fields — **wave-17 adjudication: TmData
+APPLIED (gm_804771C4 →100); MatchEnd +4 REFUTED** (dtk
+gap-inclusive pad, idiom 101). **SPLIT QUEUE now**: lb_00F9
 low-prio (fn_80013614 SECFOLD evidence) is the only remaining
 candidate — no verified front; serialize any split vs naming-13
 AND the dirty wave-16 trees at the wave boundary.
@@ -239,7 +245,7 @@ the rest of the queue):**
    unit's address ranges (wave 11 was safe only because naming-7's edits
    were all mplib-range).
 
-## ⭐ DATA-RECON VERDICT (wave-16 pilot — PROVEN; the .data stream is open at scale)
+## ⭐ DATA-RECON VERDICT (wave-16 pilot — PROVEN; wave-17 SCALED ×2 TUs)
 
 Dead/placeholder .data IS reconstructable from target bytes at near-zero
 @-id cost: numeric brace-init arrays consume **0 @-ids at any position**
@@ -281,14 +287,63 @@ proven by pool order — land as ONE unit) → dead cluster AB00..ADC4
 BAF0/BC3C .bss→initialized-.data structs → BF70 content + BF48/BF5C
 (u64-align trick) → @901-3 order swap + USB-loader strings + invented
 texts @1181/83/@1198/@1794/@1931/32/@1991 (A540-cluster +4 alignment
-PARK; fn_80397814 VIGetRetraceCount ×22 ours-only → S1); gm_18A5 TU
-packages (gm_190A lbl_803D9F80 0x58 init + Fix-B defs
-lbl_804DA6FC..70C + 734-760 family + 0.0f pool-head order; gm_1965
-lbl_803DA0D0 0x184 init + jumptable region + ~25 named-const Fix-B
-defs — unblocks @3554); gmresult idiom-69 package (ours 0x198 vs tgt
+PARK; fn_80397814 VIGetRetraceCount ×22 ours-only → S1); ✅ **gm_18A5
+TU packages EXECUTED wave 17 (both UNCOMMITTED)** — gm_190A [.data-0]
+54.24→**94.84** (content == target; 5B dtk gap_07 tail park) +
+[.sdata2-0] →86.18 + lbl_803D9F80 + 14 positioned const defs →100 +
+**gm_801963B4_OnEnter →100.00 MATCH**; gm_1965 [.data-0]
+3.72→**99.91 byte-IDENTICAL** + 39 syms→100 (lbl_803DA0D0 0x184 +
+6 dead strings + 32 const f32 EOF defs) + @697 10000.0f pool →100
+— **@3554 UNBLOCKED**; binary-proven f32 truths flagged in-source
+(738=12.800008f/414cccd5 NOT 12.8f, 73C=2.6200008f, 754=7.1899995f,
+78C=0x46DC46FF s32); scale law: Fix-B const scalar defs are 0-id at
+any position but must emit AFTER all uses (idiom 104), and some
+target stream heads are C-UNREACHABLE — dead/deleted early pool
+creators (0.0f pool-head, both TUs; idiom 105) — park, don't fight;
+gmresult idiom-69 package (ours 0x198 vs tgt
 0x580 + positioned .sdata pass); ✅ lbaudio package LANDED wave 16;
 tydisplay B1FC/B328/B460 idiom-69 map (tydisplay-w14/REPORT.md);
 ftcoll [.sdata-0] dtk-tail park stands.
+
+## ⭐ FLIP CANDIDATES (NEW wave 17 — first Object(NonMatching→Matching) targets)
+
+Flip = configure.py `Object(Matching, ...)`: ninja then links OUR compiled
+object instead of the extracted one — requires the whole TU byte-exact
+(every fn AND every data section content-exact; dtk tail-pad/gap display
+rows are score artifacts but the linked bytes must still come out
+identical — gate a flip ONLY with full ninja + `main.dol: OK` + dtk
+shasum). This finally settles the long-open S5 question / pre-session-2
+experiment #2 ("are naming-only functions already byte-correct in a
+linked Matching unit?"). Ranked by measured gap:
+
+1. **gm_182F.c** (gmregclear split TU, wave 12) — unit fuzzy 100.0 since
+   landing. CHEAPEST PROBE: zero src work needed if clean; but fuzzy is
+   reloc-name-BLIND (idiom 88) — run inversion-sweep analyze.py +
+   per-symbol objdiff match_percent first, then attempt the flip. If it
+   links, the flip recipe is proven for the whole campaign.
+2. **hsd_39D1.c** (generator.c TU, 15 fns) — after the wave-17 S1 run:
+   only 2 fns below 100 (DAD4 99.34 FPR-rotation park; 9F05C 99.54
+   frame +8 + fmr copy-survival singleton); [.sdata2-0] **100.00**,
+   extab 100, [.data-0] 97.91, extabindex 99.64; naming-14 hygiene
+   renames address-keyed and ready (incl. unblocked @2723/π-2 pins).
+   Gap to flip: crack 2 parked S1 rotations (gmregclear family — needs
+   the dedicated rotation-enumeration agent) + .data residual.
+3. **gm_190A.c** (TU-B, 41 fns) — naming-13 (16 fns→100) + recon +
+   OnEnter→100 leave an enumerated sub-100 set: fn_801935B8 98.59
+   (single r28-r30 decl rotation, S1), fn_80192E6C 99.96 (byte-load-
+   bearing park), fn_80190ABC/fn_80191240 (re-routed S1) + a few 99.x
+   partials; [.data-0] 94.84 / [.sdata2-0] 86.18 are content-exact
+   with dtk gap-tail parks (5B/4B) — verify gap bytes survive a
+   Matching link before counting them as blockers.
+4. **gm_1965.c** (TU-C, 39 fns) — [.data-0] 99.91 byte-identical and
+   39 data syms at 100, but 5 S1 bodies + 5 structural tails
+   (985D4/98824/98EBC/99AF0/9B458 91-99) + .sdata2 interleave
+   permutation park — a wave or two behind gm_190A.
+   Far tier: mplib (all 38 <100 = parked classes), tydisplay/ftcoll/
+   sislib (structural + park residuals). Action for wave 18: run the
+   gm_182F analyze.py probe + flip experiment FIRST (information is
+   nearly free), and route S1 rotation work at hsd_39D1/gm_190A — the
+   two units where every remaining row is enumerated.
 
 ## Validated playbook (update after every session)
 
@@ -1064,6 +1119,84 @@ ftcoll [.sdata-0] dtk-tail park stands.
    iff num is live past it; NEGATIVES: +0 never blocks const-prop of
    0-stores; `store i` always folds (A08 zero-web partition = new
    park family); idiom-48 block-local cost measured 0 here.
+101. **dtk OBJECT SIZES ARE GAP-INCLUSIVE (header-gmtypes-w17,
+   refuted MatchEnd +4)**: a symbols.txt size delta at a TU boundary
+   whose next .bss base is 8-aligned is ALIGNMENT, not content —
+   cross-check EVERY struct-size claim against adjacent-symbol caps
+   on EMBEDDINGS before growing (MatchEnd had 3 embedding caps at
+   0x227C; the live +4 experiment rewrote instruction bytes in 5
+   matched fns).
+102. **HEADER SIZE-FIX VERIFICATION RECIPE (w17)**: embedding-span
+   caps → access-pattern scan for tail typing → live grow-experiment
+   under masked-reloc bytegate. TmData +8 passed all three (the +8
+   IS content: next obj 4-aligned at an already-8-aligned address,
+   no target accesses in the tail).
+103. **SHARED-TREE GATE PACK (naming-13, live-incident-proven)**:
+   (a) per-rename DOL gates on a shared tree need a sibling-churn
+   md5 canary + my-edit-revert attribution — a DOL FAIL isn't yours
+   until proven on a settled tree (one spurious FAIL was a sibling's
+   live size probe); (b) sibling-isolated controlled gate = HEAD
+   worktree dtk split (target objects depend only on DOL+config) +
+   direct mwcc of the units (~25s, no full build); (c) same-valued
+   dup-pin magics must map by BYTE VALUE, never listing order
+   (extends 91/99 — the queued gm_1965 pair was value-crossed).
+104. **f32/s32 CONST-PROP LAW + Fix-B PLACEMENT WINDOW (datarecon
+   gm_190A, hardens 87/98)**: a const def BEFORE a use const-props
+   it into a duplicate pool literal (+1 id, rows break; probe broke
+   7 fns); def-after-all-uses = byte-identical named lfs — Fix-B
+   slots are reachable only in the [last-use, next-pool-creation]
+   window. Companions: pool/def namespaces are DISJOINT (literals
+   never dedupe onto equal-valued named defs); const scalar defs =
+   0 @-ids at ANY position (extends 98 beyond brace-init arrays).
+105. **MWCC CONST-DEF/EXTERN CONFLICT + UNREACHABLE STREAM HEADS
+   (recon gm_1965)**: extern-f32 vs const-f32 redecl ERRORS, and a
+   def followed by a conflicting extern is SILENTLY DISCARDED;
+   idiom-24's fold is visibility-only — an extern-const decl does
+   not protect a later def. Since Fix-B defs can never emit before
+   later users' pool creations, a target .sdata2 stream whose HEAD
+   precedes first-use order had a dead/deleted early creator and is
+   C-UNREACHABLE (gm_1965 +0x00..0x14 group + magic order; 0.0f
+   pool-head both recon TUs) — park with evidence.
+106. **OFFSET-0 .DATA DEF FLIPS FN-NAMING AND AUTO-INLINE (recon
+   gm_1965)**: an offset-0 .data def can flip a multi-symbol fn to
+   `...data.0` AND flip auto-inline of an UNROLLED constant-loop
+   callee (loop-unroll defeats "loop-bearing never inlines",
+   refines 73/83) — pragma-at-callee cures both. Companions:
+   extern-f32 in an inline store-arg = 0 ids (narrows idiom-92's
+   +1 to the GCSE class); goto-shim id binding at fn entry
+   re-confirmed (took @696 exactly).
+107. **BOOL-OF-CALL-IN-INDEX (gm_18A5 S1, ECA8 →100)**:
+   `a[!!f()][k] = rhs;` — MWCC evaluates the store RHS BEFORE the
+   index call; div/sub temps become anonymous CS-reg temps with
+   ZERO frame homes. Decomp-invented staging locals (`is_us`,
+   `c7/c8`) rotate the whole web map and cost +4 frame each;
+   deleting them freed exactly 11 @-ids (cross-checks the 41/48
+   shim table: 5×if(0) + 1×goto = 11).
+108. **CS-CHOICE LAW FOR CALL-FREE HIGH-PRESSURE FNS (gm_18A5 S1,
+   5 measured probes)**: with ≥3 named webs the LAST three in decl
+   order take r31,r30,r29 in decl order — idiom-1's
+   first-decl-highest holds only for call-BEARING fns; with 2 named
+   webs both get CS + one invariant is promoted (promoted
+   clrlwi-LICM webs rank ABOVE named, promoted addi-anchor webs
+   rank BELOW first-named). Idiom-66 negative extended: empty-then
+   `if(c){}else` folds back to inverted branch and costs +1 id.
+109. **hsd_39D1 S1 PACK (wave 17, byte-proven)**: (a) named f64
+   local = 8-12B phantom home at decl position — "lfd const / stfd
+   / lfd-in-loop" means a compiler-hoisted CONSTANT, not a
+   variable; (b) volatile-y inside an inline lands in a separate
+   inline-temp zone (+8-12B/site) — fn-scope user decls pack like
+   the DOL; fabsf_bitwise costs +12B/site vs raw `*(s32*)&` masks;
+   (c) `if ((v = expr) > k)` lands expr in v's web (kills the
+   post-compare fmr); (d) `v = c ? v : k` keeps the ble/b
+   empty-then shape that `if(c){}else` folds away; (e) beq-median/
+   bge compare trees = source `switch` (if-chains emit
+   subi/cmplwi collapses); (f) ⭐ OFFSET-PAIRING BEATS RENUMBERING —
+   removing .sdata2 ballast (math_ppc.h weak sqrtf localstatics,
+   +0x10/TU) let objdiff pair pool relocs positionally with ZERO
+   symbols.txt edits; (g) a jumptable entry past the default block
+   = explicit empty `case N: break;`. LAW: never sed shared tokens
+   TU-wide (a sibling's `sed PAD_STACK(8)→(4)` clobbered a matched
+   fn's pad — self-caught by the unit gate).
 
 ### Experiment results (wave 3)
 
@@ -1225,7 +1358,9 @@ ftcoll [.sdata-0] dtk-tail park stands.
   vs add-operand-order are MUTUALLY EXCLUSIVE from C (fn_801913BC, 5
   forms: array-index fuses but orders (idx,base); ptr-arith orders
   (base,idx) but unfuses); fn_80191240 jobj2-copy reconstruction (cast-copy
-  coalesces, plain copy over-splits; 98.09 stands).
+  coalesces, plain copy over-splits; 98.09 stands — wave-17 NOTE: both
+  91240 and the 90ABC reg-web/pool-order item live in gm_190A.c (TU-B)
+  post-split, NOT gm_18A5.c — routed to the gm_190A.c owner).
 - **gm_1601 wave-9 parks**: gm_80164A0C/gm_80164910 pair ROOT-CAUSED —
   allocator never gives a fresh scratch web the just-freed r3 where target
   does (15 probes; auto-inline reconstruction moves i r6→r4 not r3;
@@ -1277,8 +1412,10 @@ ftcoll [.sdata-0] dtk-tail park stands.
   9930C broad regalloc + remap attractor, 98F8C FPR rotation, D0A0
   lwzu-fusion; gate DOWNs (hsd_804D0908 100→50, psInitDataBankLoad
   →99.86, [extabindex-0] −0.39) heal via the queued hsd_804D0908
-  subdivision. hsd_39D1 DAD4 86.18 (missing f64 2.0/π÷2 literals +
-  FPR rotation) + 9F05C store-order pairs still pend.
+  subdivision. ~~hsd_39D1 DAD4 86.18 + 9F05C~~ **RESOLVED wave 17**
+  (S1 run: DAD4 →99.34, 9F05C →99.54, [.sdata2-0]→100, the f64
+  2.0/π÷2 pins UNBLOCKED — residuals = DAD4 FPR 7-web rotation park
+  + 9F05C frame-slack/fmr singleton; see wave-17 log + idiom 109).
 - **gm_1601 wave-13 park — ROVER-INTO-BASE COPY COALESCE family** (3
   sites: fn_80164B48 block-6, fn_80169C54 bp, fn_80169000 p-rover):
   target folds the final walker copy into the dead base var's
@@ -1290,18 +1427,18 @@ ftcoll [.sdata-0] dtk-tail park stands.
 - **gm_18A5 wave-11 parks**: fn_801949B4 (95.00) / fn_80194BC4 (94.11)
   ptr-reassoc attractor (idiom 62, 8 forms enumerated); **fn_80195AF0
   98.07 ACHIEVABLE but reverted to 94.79** — winning package costs +3
-  @ids breaking 9 landed pins (@3025/@3027/@3028/@3554-6/@3652…) —
-  RE-APPLY AFTER the next naming renumber (naming-8 renumbered NOTHING
-  at @3025+; **wave-16 split LANDED — now post-renumber-ELIGIBLE once
-  the naming-13 maps land**: @3025/@3027→@1679/@1681 TU-B,
-  @3556/@3652→@699/@795 TU-C; @3554 pends the gm_1965 .data-recon
-  package); exact text preserved in
-  `campaign/scratch/gm18a5_w11/my_gm_18A5.c` + LOG; NEW wave-12 park:
-  fn_80192E6C 99.96 residual = lbl_804DA738/75C rows — extern-swap
-  blocked (i-loop LICM temp steals pinned @2114-slot; while-form
-  doesn't pay it); cures for a dedicated agent: PAD_STACK↔unused-decl
-  rebalance, idiom-24 Fix-B EOF defs (untested, risks named-paired
-  100s), or the TU split (post-split both styles natural); fn_8019175C residual
+  @ids breaking 9 landed pins — **wave-17: blocker CLEARED**
+  (naming-13 landed @3025/@3027→@1679/@1681 + the gm_1965 recon
+  unblocked @3554) — re-apply is FRONT of the gm_190A.c S1 queue
+  (the fn now lives in TU-B gm_190A.c, NOT gm_18A5.c); exact text
+  preserved in
+  `campaign/scratch/gm18a5_w11/my_gm_18A5.c` + LOG; wave-12 park:
+  fn_80192E6C residual = lbl_804DA738/75C rows — extern-swap
+  blocked; **wave-17 re-probed post-split: STILL regresses (97.71)
+  — loop LICM/CSE shape change, not just ids; the park is
+  byte-load-bearing** (naming-13 also cost it lucky offset-pairing,
+  99.979→99.96 — accepted; @768/@773 DO-NOT-RENAME stands,
+  idiom 75); fn_8019175C residual
   jobjs 0x10-vs-0xc dead-word placement (instance-band hole family);
   gm_801905F0 residual inlined fn_8018F410 addi emission order
   (inline-copy class); fn_80192758/fn_8019249C post-call lwz/mr schedule
@@ -1408,6 +1545,149 @@ ftcoll [.sdata-0] dtk-tail park stands.
 
 ## Session log
 
+- **2026-06-07 — Wave 17 (naming round 13 + data-recon SCALE ×2 TUs +
+  types.h tails adjudicated + gm_18A5 S1 + hsd_39D1 S1) — 1 commit
+  (naming-13 d17be7f73), HEAD d17be7f73; 2 NEW exact matches + 26
+  naming recoveries + 1 data sym→100; ~230 compiles + 2 full ninjas;
+  flip-candidates section opened.** ⭐ **NAMING-13 COMMITTED
+  d17be7f73** (symbols.txt only, +61/−61): TU-B gm_190A .sdata2
+  43-pin renumber + .sdata @354/@355/@3025/@3027→@742/@743/@1679/
+  @1681 + .data @1582→@230 + 7 Fix-A strings (lbl_803DA040 family →
+  @1680..@1687, all grep-clean); TU-C gm_1965 6 pins with
+  binary-proven VALUE CORRECTION — the queued magic pair was
+  VALUE-CROSSED, applied @357→@416 / @1620→@320 (inverse of queue);
+  **26 fns→100** (16 TU-B incl. fn_80193308/gm_80190EA4 + 10 TU-C
+  incl. fn_80196DBC/973F8) + 19 partial UPs; ALL gates PASS
+  (per-rename DOL ×61 sha 08e0bf20 EXACT, value-verify 61/61 ×2 vs
+  sibling-isolated HEAD-worktree objects, controlled 471 SAME / 90 UP
+  / 0 DOWN with GONE=NEW=61 exactly 1:1, byte-gate identical,
+  idempotence 61/61, idiom-79 clean); SKIPPED: TU-C extras
+  @3554/@3555 (sibling recon mid-flight → naming-14 re-derive),
+  sislib @264 (paired src deletion still live, sislib.c:2362);
+  DO-NOT-RENAME @768/@773 respected; lbl_804DA808→@697 candidate
+  REJECTED (src-referenced, idiom 75); idiom 103 (sibling-churn
+  canary + sibling-isolated gate + value-keyed dup-pin maps).
+  ⭐ **DATA-RECON SCALED ×2** (gm_190A.c + gm_1965.c, both
+  UNCOMMITTED, src-only, ~28 compiles; verdict section updated):
+  **gm_190A** — [.data-0] 54.24→**94.84** + [.sdata2-0] →86.18 (both
+  content == target, 5B/4B dtk gap-tail parks), lbl_803D9F80 +
+  14 positioned const defs →100, **gm_801963B4_OnEnter →100.00 NEW
+  MATCH**, fn_801935B8 →98.59 (residual = r28-r30 decl rotation →
+  S1); gate 135 SAME / 19 UP / 1 DOWN (E6C −0.02 lucky-pairing loss,
+  accepted park); binary-proven values flagged in-source
+  (738=12.800008f, 73C=2.6200008f, 754=7.1899995f, 78C=0x46DC46FF
+  s32); mid-session naming-13 rebase handled clean (103/140 at 100
+  vs fresh target). **gm_1965** — [.data-0] 3.72→**99.91
+  byte-IDENTICAL** + [.sdata2-0] 26.14→85.33, 39 syms→100
+  (lbl_803DA0D0 0x184 + 6 dead strings + 32 const f32 EOF defs),
+  @697 10000.0f →100 — **@3554 UNBLOCKED**; fn_8019B458 →91.43
+  (pragma dont_inline, idiom-73 bonus); gate 33 SAME / 59 UP /
+  0 DOWN / 1 GONE-by-design; analyzer OK 343→380, AT_RENUM 37→1,
+  every residual enumerated. Idioms 104-106 (Fix-B placement
+  window, C-unreachable stream heads, offset-0 auto-inline flip).
+  ⭐ **HEADER types.h TAILS ADJUDICATED** (types.h +16 lines
+  UNCOMMITTED): **TmData 0x56C→0x574 APPLIED** (idiom-102 recipe
+  passed; **gm_804771C4 50→100**, fn_8018FA24 →98.99, [.bss]→81.84;
+  gate 234 SAME / 6 UP / 0 DOWN over 28 units; full ninja DOL OK);
+  **MatchEnd +4 REFUTED + RETIRED** (3 embedding caps + live
+  grow-experiment broke 5 matched fns — dtk gap-inclusive pad,
+  idiom 101; guard comment + 0x227C assert left in types.h);
+  TrainingModeState +0x114 REAL but ownership-BLOCKED → reassigned
+  (see header queue); TmUnkMenuData confirmed landed. **gm_18A5 S1**
+  (TU-A head, ~60 compiles, UNCOMMITTED +47/−35): **fn_8018ECA8
+  →100.00 MATCH** (invented `is_us` staging deleted →
+  bool-of-call-in-index form, idiom 107; exact −11 id repayment);
+  fn_8018FBE0 →93.64 (+12.6, u32 IV zero-trip fold); 2 binary-proven
+  stale "+0xC" fixes (FA24 tmdata anchor base+0xC→base; F888
+  .x37->x8→.x33); gate 113 SAME / 5 UP / 0 DOWN, 32/32 @-pins
+  byte-identical, DOL sha EXACT; idiom 108 (CS-choice law); QUEUE
+  CONFLICT corrected: 90ABC + 91240 live in gm_190A.c → re-routed.
+  **hsd_39D1 S1** (generator.c TU, ~116 compiles, UNCOMMITTED):
+  hsd_8039DAD4 86.29→**99.34**, hsd_8039F05C →**99.54**,
+  **[.sdata2-0]→100.00**, [.data-0]→97.91, extab→100; **30
+  binary-proven deviations fixed** (headliners: entry guard
+  `count < 1.0F`, default case calls GLOBAL hsd_804D78E8 not
+  gen->callback, case-8 sphere branch SWAP, M_TAU→`2.0*(M_PI*rnd)`
+  + cone math on M_PI_2 — **naming-10 blocked pins @2723 f64 2.0 +
+  π/2 BOTH UNBLOCKED**, open-coded Newton sqrt ×8, math_ppc.h
+  removal = the offset-pairing win, idiom 109f); gate 10 UP /
+  0 DOWN, DOL sha unchanged; parks: DAD4 FPR 7-web rotation
+  (gmregclear family), 9F05C frame +8 + fmr copy-survival singleton
+  (@859 caps 94.44).
+  **NAMING-14 QUEUE** (STALE-ID POLICY: re-derive ALL ids
+  value+address-keyed at land time — the gm_1965 recon land WILL
+  renumber TU-C ids, in-flight ours-pool already moved +5):
+  gm_1965 extras **0x804DA828 (@3554)→@697 + 0x803DA254
+  (@3555)→@698** (pairs 12 rows; in-flight ours-ids @701/@703 —
+  re-derive, do NOT pre-apply); re-check TU-B ids against the
+  land-time map; hsd_39D1 hygiene 20 renames (address-keyed, names
+  collide pairwise — apply by address): .sdata2 0x804DE9A8→@250,
+  9AC→@671, 9B0→@672, 9B8→@673, 9C0→@674, 9C4→@675, 9C8→@676,
+  9CC→@677, **9D0 @2723→@678 (2.0, UNBLOCKED)**, 9D8→@679,
+  9E0→@680, **9E8 lbl_804DE9E8→@681 (π/2, UNBLOCKED)**, 9F0→@682,
+  9F8→@683, A00→@686, A08→@849, A0C→@850; .data 0x8040C260→@688,
+  C280→@687, C2D8→@852; carryovers unworked from the wave-16 queue:
+  hsd_3983 map (lbl_804DE98C→@1496 family + 0x8040C044) +
+  hsd_804D0908 0x248→0x40/0x104/0x104 subdivision (paired-edit),
+  lbaudio unit-map recompute + B24 bss 6-sym merge + 28690
+  @722→@721, sislib C564 retire + @69↔@70 decision + @264
+  paired-edit, particle lbl_8040A93C subdivision, naming-12
+  remainder (gm_1693 Fix-A trio, gmresult lbl_804DA560→@697,
+  lb_00F9 lbl_803BA1C0→@1084 + @176→@328), toy/tydisplay/gm_1601
+  maps, camera NAMEPAIR cm_803B73B8→cm_WorldForward (pends
+  idiom-91 pairing emulation), optional jtbl→@ probe.
+  **HEADER QUEUE**: ✅ TmData 0x574 LANDED (uncommitted types.h);
+  MatchEnd +4 RETIRED (refuted, guard in place); TrainingModeState
+  +0x114 → REASSIGN to a gm_1884.c owner with NEW constraint: the
+  split css part must fit ≤0x204 span (0x80473814+0x20C would
+  overlap gm_80473A18, a real gmallstar-shared object —
+  CssSubStruct pad200 must shrink) + needs gm_1884.c variable split
+  + `.css` rewrite (types.h-only breaks compile); OPTIONAL
+  gm_18A5.static.h trailing 4B pad object after gm_80477738
+  (cosmetic [.bss]→100); carryovers: sislib.h 84BC `int pass`→u32,
+  gm_1601.h:53/:157-159/:168, grvenom 80204F20 s32-field verify.
+  **SRC/RETRY QUEUE**: **gm_190A.c owner package** (one owner; tree
+  already dirty with the recon work): 95AF0 re-apply FRONT (blocker
+  CLEARED; text in gm18a5_w11/my_gm_18A5.c, re-fit to TU-B), 935B8
+  r28-r30 rotation (only gap to 100), 90ABC reg-web + pool-order,
+  91240 jobj2-copy, E6C park stands (byte-load-bearing); gm_1965 S1
+  queue: 967E0/96FFC/9A86C/9A158/9AF50 (+ lbl_80473AB8 consumer
+  materializations) + structural tails 985D4/98824/98EBC/99AF0/
+  9B458; hsd_3983.c owner: try the same math_ppc.h removal
+  ([.sdata2-0] 92.31, identical weak ballast); gm_18A5.c FA24/FBE0
+  residuals (FBE0 4-cycle rotation s32-args theory — re-probe ONLY
+  with header ownership + caller byte-gate; FA24 [bge .+8; b]
+  fold-back family); dedicated rotation-family session (hsd DAD4
+  7-web + gmregclear family parks); data-recon scale queue
+  (particle E80 string package front); **NEW: gm_182F flip probe**
+  (flip-candidates section — analyze.py + Matching-flip experiment,
+  near-free information). **SPLIT QUEUE**: unchanged (lb_00F9
+  low-prio only). **WAVE BOUNDARY**: full configure + ninja + dtk
+  shasum over ALL dirty trees before ANY commit (5 files dirty:
+  gm_18A5.c, gm_190A.c, gm_1965.c, types.h, hsd_39D1.c + stale
+  backlog.json — triage.py before wave 18).
+  **WARNINGS**: (1) **mutex violated #6 AND #7** — 5 agents live on
+  shared trees again: types-tails final snapshots contaminated by
+  S1+naming siblings (disentangled via mtimes + bytegates);
+  naming-13 took 1 spurious pin DOL FAIL from a sibling's live
+  MatchEnd size probe (attributed + re-gated — a DOL FAIL isn't
+  yours until proven on a settled tree, idiom 103); a sibling
+  full-ninja OVERWROTE gm_1965's canonical .o mid-session (gate
+  ONLY via -1/-2 scratch objects); hsd_39D1's unit gate self-caught
+  a sibling TU-wide `sed PAD_STACK` clobber — **law: never sed
+  shared tokens TU-wide**; (2) stale-id hazard ESCALATED to live
+  collisions: queued TU-C ids were value-crossed AND the w16 map
+  "@357→@320" was value-wrong — value+address keying at land time
+  is the only safe protocol; (3) REPORT.md harness-block ×3 more
+  (gm18a5-s1 3rd occurrence — progress.txt is the durable record:
+  naming13-gm18a5/REPORT.md, datarecon-gm190A/, recon-gm1965/,
+  header-gmtypes-w17/, gm18a5-s1-w17/, hsd39d1-s1/); (4) failed
+  compile leaves a stale scratch .o — require the fuzzy line before
+  reading any diff; (5) em-dash sjiswrap gotcha re-hit + scrubbed
+  (ASCII-only comments, again); (6) recon DOL gates deferred BY
+  DESIGN (NonMatching units are DOL-neutral; full gate at the wave
+  boundary). Idioms 101-109 added; flip-candidates section opened
+  (gm_182F → hsd_39D1 → gm_190A → gm_1965).
 - **2026-06-07 — Wave 16 (gm_18A5 TU-split EXECUTED + camera
   PAIRED-EDIT Fix-A + data-recon PILOT + lbaudio w12-package land +
   hsd_3983 S1) — 3 commits landed, HEAD daedf29c7; data-recon

@@ -153,7 +153,56 @@ struct lbl_803DA0D0_t {
 }; /* size = 0x184 */
 STATIC_ASSERT(sizeof(struct lbl_803DA0D0_t) == 0x184);
 
-extern struct lbl_803DA0D0_t lbl_803DA0D0;
+/// .data reconstruction (idiom 69/98): table content recovered from the
+/// target binary (lbl_803DA0D0, .data+0x0, 0x184 bytes, no relocs).
+struct lbl_803DA0D0_t lbl_803DA0D0 = {
+    /* icon_model_map */
+    {
+        0x00, 0x01, 0x02, 0x03, 0x05, 0x06, 0x0C, 0x06, 0x06, 0x07, 0x09, 0x08,
+        0x06, 0x09, 0x04, 0x09, 0x0A, 0x0B, 0x0C, 0x02, 0x0C, 0x06, 0x07, 0x09
+    },
+    /* pad_0x18 */
+    { 0x0C, 0x00, 0x00, 0x00, 0x00, 0x00 },
+    /* rank_thresholds */
+    {
+        { 0x02, 0x00, 0x00, 0x00, 0x00, 0x03 },
+        { 0x03, 0x00, 0x00, 0x00, 0x05, 0x06 },
+        { 0x04, 0x00, 0x00, 0x00, 0x06, 0x07 },
+        { 0x06, 0x0A, 0x00, 0x00, 0x0C, 0x0D },
+        { 0x08, 0x0C, 0x00, 0x00, 0x0E, 0x0F },
+        { 0x0C, 0x12, 0x15, 0x00, 0x17, 0x18 },
+        { 0x10, 0x18, 0x1C, 0x00, 0x1E, 0x1F },
+        { 0x18, 0x24, 0x2A, 0x2E, 0x30, 0x31 },
+        { 0x20, 0x30, 0x38, 0x3C, 0x3E, 0x3F },
+        { 0x02, 0x00, 0x00, 0x00, 0x00, 0x03 },
+        { 0x03, 0x00, 0x00, 0x00, 0x00, 0x04 },
+        { 0x04, 0x00, 0x00, 0x00, 0x06, 0x07 },
+        { 0x06, 0x00, 0x00, 0x00, 0x08, 0x09 },
+        { 0x09, 0x00, 0x00, 0x00, 0x0C, 0x0D },
+        { 0x02, 0x00, 0x00, 0x00, 0x00, 0x03 },
+        { 0x03, 0x00, 0x00, 0x00, 0x00, 0x04 },
+        { 0x04, 0x00, 0x00, 0x00, 0x00, 0x05 },
+        { 0x04, 0x00, 0x00, 0x00, 0x06, 0x07 },
+        { 0x05, 0x00, 0x00, 0x00, 0x07, 0x08 },
+        { 0x06, 0x00, 0x00, 0x00, 0x08, 0x09 },
+        { 0x07, 0x00, 0x00, 0x00, 0x09, 0x0A },
+        { 0x08, 0x00, 0x00, 0x00, 0x0A, 0x0B },
+        { 0x08, 0x0C, 0x00, 0x00, 0x0E, 0x0F },
+        { 0x09, 0x00, 0x00, 0x00, 0x0C, 0x0D },
+        { 0x0A, 0x00, 0x00, 0x00, 0x0E, 0x0F },
+        { 0x0B, 0x00, 0x00, 0x00, 0x0F, 0x10 },
+        { 0x0C, 0x00, 0x00, 0x00, 0x10, 0x11 },
+        { 0x0D, 0x00, 0x00, 0x00, 0x11, 0x12 },
+        { 0x0E, 0x00, 0x00, 0x00, 0x12, 0x13 },
+        { 0x0F, 0x00, 0x00, 0x00, 0x13, 0x14 },
+        { 0x10, 0x00, 0x00, 0x00, 0x14, 0x15 },
+        { 0x10, 0x14, 0x00, 0x00, 0x16, 0x17 },
+    },
+    /* pad_0xDE */
+    { 0x00, 0x00 },
+    /* bounce_y */
+    { 0.0F },
+};
 
 extern HSD_GObj* lbl_804D663C;
 
@@ -442,6 +491,10 @@ void fn_801967E0(s32 arg0)
     return;
 }
 
+/// With lbl_803DA0D0 defined in-TU (data reconstruction), MWCC unrolls the
+/// constant-bound loop and then auto-inlines this function into
+/// fn_8019B458; the target keeps the bl (idiom 73 pragma-at-callee).
+#pragma dont_inline on
 s32 fn_80196CF8(void)
 {
     TmData* tmdata;
@@ -467,6 +520,7 @@ s32 fn_80196CF8(void)
 
     return result;
 }
+#pragma dont_inline off
 
 static struct Lbl804799D8_t {
     u32 x0;       // 0x00 counter
@@ -589,13 +643,13 @@ void fn_80196EEC(HSD_GObj* gobj)
 
 extern s32 lbl_803B7CE0[9];
 
-extern f32 lbl_804DA7E0; // -19.5f
-extern f32 lbl_804DA7E4; // 13.0f
-extern f32 lbl_804DA7E8; // 6.5f
-extern f32 lbl_804DA7EC; // 19.5f
-extern f32 lbl_804DA7F0; // 2.0f
-extern f32 lbl_804DA808; // 0.0f
-extern f32 lbl_804DA80C; // 1.0f
+extern const f32 lbl_804DA7E0; // -19.5f
+extern const f32 lbl_804DA7E4; // 13.0f
+extern const f32 lbl_804DA7E8; // 6.5f
+extern const f32 lbl_804DA7EC; // 19.5f
+extern const f32 lbl_804DA7F0; // 2.0f
+extern const f32 lbl_804DA808; // 0.0f
+extern const f32 lbl_804DA80C; // 1.0f
 
 void fn_80196FFC(HSD_GObj* gobj)
 {
@@ -706,16 +760,16 @@ void fn_80196FFC(HSD_GObj* gobj)
     fn_8019044C(jobj, (f32) d8->x2A[pnum].cur);
 }
 
-extern f32 lbl_804DA7E0; // -19.5f
-extern f32 lbl_804DA7E4; // 13.0f
-extern f32 lbl_804DA7E8; // 6.5f
-extern f32 lbl_804DA7EC; // 19.5f
-extern f32 lbl_804DA7F0; // 2.0f
-extern f32 lbl_804DA810; // 4.5f
-extern f32 lbl_804DA814; // 5.5f
-extern f32 lbl_804DA818; // 666.0f
-extern f32 lbl_804DA81C; // 0.3f
-extern f32 lbl_804DA820; // 12.6f
+extern const f32 lbl_804DA7E0; // -19.5f
+extern const f32 lbl_804DA7E4; // 13.0f
+extern const f32 lbl_804DA7E8; // 6.5f
+extern const f32 lbl_804DA7EC; // 19.5f
+extern const f32 lbl_804DA7F0; // 2.0f
+extern const f32 lbl_804DA810; // 4.5f
+extern const f32 lbl_804DA814; // 5.5f
+extern const f32 lbl_804DA818; // 666.0f
+extern const f32 lbl_804DA81C; // 0.3f
+extern const f32 lbl_804DA820; // 12.6f
 
 /// Updates visibility and position of a tournament menu JObj.
 
@@ -1106,7 +1160,7 @@ void fn_80197FD8(HSD_GObj* gobj)
     }
 }
 
-extern f32 lbl_804DA824; // 0.01f
+extern const f32 lbl_804DA824; // 0.01f
 
 /// @todo Down to linking
 /// Updates player cursor animation and position.
@@ -1244,6 +1298,11 @@ void fn_801985D4(HSD_GObj* gobj)
     HSD_JObj* child;
     s32 in_range;
 
+    /* @-pin shim (+1): repays the pool id freed by the 0.0f -> lbl_804DA808
+     * conversions so the landed @698/@699/@795 symbols.txt pins hold
+     * (idioms 41/90: label ids bind at function entry). */
+    goto body;
+body:
     gm_8018F634();
     jobj = gobj->hsd_obj;
 
@@ -1258,7 +1317,7 @@ void fn_801985D4(HSD_GObj* gobj)
     if (in_range == 0) {
         HSD_JObjSetTranslateZ(jobj, 10000.0f);
     } else {
-        HSD_JObjSetTranslateZ(jobj, 0.0f);
+        HSD_JObjSetTranslateZ(jobj, lbl_804DA808);
 
         if (lbl_804799D8.x0 < 0xAU) {
             lbl_804D667C = 1;
@@ -1301,7 +1360,7 @@ void fn_80198824(HSD_GObj* gobj)
     if (in_range == 0) {
         HSD_JObjSetTranslateZ(jobj, 10000.0f);
     } else {
-        HSD_JObjSetTranslateZ(jobj, 0.0f);
+        HSD_JObjSetTranslateZ(jobj, lbl_804DA808);
 
         if (lbl_804D667C == 0) {
             HSD_JObjSetTranslateZ(jobj, 10000.0f);
@@ -1382,12 +1441,12 @@ void fn_80198BA0(void)
 /// @todo Currently 99.63% match - permuter couldn't improve (instruction
 /// scheduling)
 /// Initializes tournament mode text displays.
-extern f32 lbl_804DA82C; // 0.054945f
-extern f32 lbl_804DA830; // 0.08f
-extern f32 lbl_804DA834; // 320.0f
-extern f32 lbl_804DA838; // 250.0f
-extern f32 lbl_804DA83C; // 1.5f
-extern f32 lbl_804DA840; // 80.0f
+extern const f32 lbl_804DA82C; // 0.054945f
+extern const f32 lbl_804DA830; // 0.08f
+extern const f32 lbl_804DA834; // 320.0f
+extern const f32 lbl_804DA838; // 250.0f
+extern const f32 lbl_804DA83C; // 1.5f
+extern const f32 lbl_804DA840; // 80.0f
 
 #pragma push
 #pragma auto_inline off
@@ -1419,7 +1478,7 @@ pad_label_b:;
 #pragma pop
 
 extern SceneDesc* lbl_804D666C;
-extern f32 lbl_804DA808; // 0.0f
+extern const f32 lbl_804DA808; // 0.0f
 
 /// Initializes the scene rendering components for the gm_18A5 game mode.
 void fn_80198D18(void)
@@ -1461,20 +1520,19 @@ void fn_80198D18(void)
 }
 
 extern SceneDesc* lbl_804D6674;
-extern f32 lbl_804DA828;
-extern f32 lbl_804DA844;
-extern f32 lbl_804DA848;
-extern f32 lbl_804DA84C;
-extern f32 lbl_804DA850;
-extern f32 lbl_804DA854;
-extern f32 lbl_804DA858;
-extern f32 lbl_804DA85C;
-extern f32 lbl_804DA860;
-extern f32 lbl_804DA864;
-extern f32 lbl_804DA868;
-extern f32 lbl_804DA86C;
-extern f32 lbl_804DA870;
-extern f32 lbl_804DA874;
+extern const f32 lbl_804DA844;
+extern const f32 lbl_804DA848;
+extern const f32 lbl_804DA84C;
+extern const f32 lbl_804DA850;
+extern const f32 lbl_804DA854;
+extern const f32 lbl_804DA858;
+extern const f32 lbl_804DA85C;
+extern const f32 lbl_804DA860;
+extern const f32 lbl_804DA864;
+extern const f32 lbl_804DA868;
+extern const f32 lbl_804DA86C;
+extern const f32 lbl_804DA870;
+extern const f32 lbl_804DA874;
 
 void fn_80198EBC(void)
 {
@@ -1514,7 +1572,7 @@ void fn_80198EBC(void)
     GObj_SetupGXLink(gobj, HSD_GObj_FogCallback, 0, 0);
     fn_80198BA0();
 
-    hide_z = lbl_804DA828;
+    hide_z = 10000.0f;
     f_848 = lbl_804DA848;
     f_850 = lbl_804DA850;
     f_84C = lbl_804DA84C;
@@ -1754,7 +1812,7 @@ void fn_80199AF0(void)
     fn_801901F8(lbl_804D666C->cameras->desc);
     fn_801902F0((int) gobj);
     fn_8019027C(lbl_804D666C->lights);
-    fn_8019035C(0, lbl_804D666C->models[5], 0, 0x1A, 2, 1, fn_80196DBC, 0.0f);
+    fn_8019035C(0, lbl_804D666C->models[5], 0, 0x1A, 2, 1, fn_80196DBC, lbl_804DA808);
     fn_8019035C(0, lbl_804D666C->models[4], 0, 0x1A, 2, 1, fn_80196E30,
                 lbl_804DA840);
 
@@ -1777,9 +1835,9 @@ void fn_80199AF0(void)
     }
 
     fn_8019035C(0, lbl_804D6670->models[0], mode, 0x1A, 3, 1, fn_801985D4,
-                0.0f);
+                lbl_804DA808);
     gobj = fn_8019035C(0, lbl_804D6670->models[2], 0, 0x1A, 3, 1, fn_80198824,
-                       0.0f);
+                       lbl_804DA808);
 
     if (gobj->hsd_obj == NULL) {
         jobj = NULL;
@@ -1797,7 +1855,7 @@ void fn_80199AF0(void)
     HSD_JObjSetTranslateZ(jobj, 10000.0f);
 
     if (lbl_803DA0D0.icon_model_map[td1->x4B8[slot].x1] == 0) {
-        HSD_JObjSetTranslateZ(jobj, 0.0f);
+        HSD_JObjSetTranslateZ(jobj, lbl_804DA808);
         for (i = 1; i <= 12; i++) {
             if (jobj == NULL) {
                 next = NULL;
@@ -1818,7 +1876,7 @@ void fn_80199AF0(void)
             HSD_JObjSetTranslateZ(next, 10000.0f);
 
             if ((s32) lbl_803DA0D0.icon_model_map[td1->x4B8[slot].x1] == i) {
-                HSD_JObjSetTranslateZ(next, 0.0f);
+                HSD_JObjSetTranslateZ(next, lbl_804DA808);
                 for (slot = i + 1; slot <= 12; slot++) {
                     if (jobj == NULL) {
                         next = NULL;
@@ -2691,7 +2749,7 @@ void fn_8019B458(s32* arg0)
 
         {
             HSD_GObj* gobj = fn_8019035C(0, lbl_804D6670->models[3], match,
-                                         0x1A, 3, 1, fn_80196EEC, 0.0f);
+                                         0x1A, 3, 1, fn_80196EEC, lbl_804DA808);
 
             if ((s32) td2->pad_x34[0] == match) {
                 HSD_JObjSetFlagsAll(gobj->hsd_obj, 0x10U);
@@ -2831,3 +2889,53 @@ void fn_8019B860(TmData* tm)
     fn_8018E85C(lbl_804D6670->models[4], tm->x2C);
     tm->cur_option = 0x20;
 }
+
+/// .sdata2 reconstruction: Fix-B positioned defs (idioms 24/87/99) for the
+/// named float constants this TU references through extern decls. Defined
+/// at EOF, after every use, so all reference sites keep their named relocs
+/// (a visible initializer would fold them to anonymous pool literals);
+/// EOF defs emit after all pool creations (idiom 99: pool-offset-free).
+/// Values are bit-exact recoveries from the target binary.
+const f32 lbl_804DA7E0 = -19.5F;
+const f32 lbl_804DA7E4 = 13.0F;
+const f32 lbl_804DA7E8 = 6.5F;
+const f32 lbl_804DA7EC = 19.5F;
+const f32 lbl_804DA7F0 = 2.0F;
+const f32 lbl_804DA808 = 0.0F;
+const f32 lbl_804DA80C = 1.0F;
+const f32 lbl_804DA810 = 4.5F;
+const f32 lbl_804DA814 = 5.5F;
+const f32 lbl_804DA818 = 666.0F;
+const f32 lbl_804DA81C = 0.3F;
+const f32 lbl_804DA820 = 12.6F;
+const f32 lbl_804DA824 = 0.01F;
+const f32 lbl_804DA82C = 0.054945F;
+const f32 lbl_804DA830 = 0.08F;
+const f32 lbl_804DA834 = 320.0F;
+const f32 lbl_804DA838 = 250.0F;
+const f32 lbl_804DA83C = 1.5F;
+const f32 lbl_804DA840 = 80.0F;
+const f32 lbl_804DA844 = 4.0F;
+const f32 lbl_804DA848 = 73.0F;
+const f32 lbl_804DA84C = 152.0F;
+const f32 lbl_804DA850 = 240.0F;
+const f32 lbl_804DA854 = 270.0F;
+const f32 lbl_804DA858 = 0.99F;
+const f32 lbl_804DA85C = 261.0F;
+const f32 lbl_804DA860 = -42.0F;
+const f32 lbl_804DA864 = 2.799999F;
+const f32 lbl_804DA868 = 6.8F;
+const f32 lbl_804DA86C = 0.001F;
+const f32 lbl_804DA870 = -2.5F;
+const f32 lbl_804DA874 = 0.02F;
+
+/// Dead .data strings recovered from the target binary (idiom 51:
+/// unreferenced non-const statics with initializers survive and emit at
+/// decl point; EOF position keeps them after the "translate" pool string
+/// at .data+0x184).
+static char lbl_803DA260[] = "ScGamTour_scene_data";
+static char lbl_803DA278[] = "TmBox.dat";
+static char lbl_803DA284[] = "tournament_box2_array";
+static char lbl_803DA29C[] = "tournament_box3_array";
+static char lbl_803DA2B4[] = "tournament_box4_array";
+static char lbl_803DA2CC[] = "SIS_TournamentData";

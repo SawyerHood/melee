@@ -1573,7 +1573,6 @@ void fn_8018ECA8(s32 char_id, s32 name_type, s32 jobj_idx1, f32 pos_x,
     char* hmn_texts[2];
     char* cpu_texts[2];
     TmData* tm;
-    s32 is_us;
     s32 num;
 
     tm = gm_8018F634();
@@ -1593,21 +1592,18 @@ void fn_8018ECA8(s32 char_id, s32 name_type, s32 jobj_idx1, f32 pos_x,
         if (char_id < 0x384) {
             num = char_id - 0x320;
             if (num >= 10) {
-                is_us = !!lbLang_IsSavedLanguageUS();
-                hmn_texts[is_us][7] = (s8) (num / 10 + 0x30);
-                is_us = !!lbLang_IsSavedLanguageUS();
-                hmn_texts[is_us][8] = (s8) (num % 10 + 0x30);
-                is_us = !!lbLang_IsSavedLanguageUS();
-                hmn_texts[is_us][9] = 0;
+                hmn_texts[!!lbLang_IsSavedLanguageUS()][7] =
+                    (s8) (num / 10 + 0x30);
+                hmn_texts[!!lbLang_IsSavedLanguageUS()][8] =
+                    (s8) (num % 10 + 0x30);
+                hmn_texts[!!lbLang_IsSavedLanguageUS()][9] = 0;
             } else {
-                is_us = !!lbLang_IsSavedLanguageUS();
-                hmn_texts[is_us][7] = (s8) (char_id - 0x2F0);
-                is_us = !!lbLang_IsSavedLanguageUS();
-                hmn_texts[is_us][8] = 0;
+                hmn_texts[!!lbLang_IsSavedLanguageUS()][7] =
+                    (s8) (char_id - 0x2F0);
+                hmn_texts[!!lbLang_IsSavedLanguageUS()][8] = 0;
             }
-            is_us = !!lbLang_IsSavedLanguageUS();
             HSD_SisLib_803A6B98(tm->x518[jobj_idx1], pos_x, pos_y,
-                                hmn_texts[is_us]);
+                                hmn_texts[!!lbLang_IsSavedLanguageUS()]);
             return;
         }
         if (char_id >= 0x3E7) {
@@ -1615,21 +1611,18 @@ void fn_8018ECA8(s32 char_id, s32 name_type, s32 jobj_idx1, f32 pos_x,
         }
         num = char_id - 0x384;
         if (num >= 10) {
-            is_us = !!lbLang_IsSavedLanguageUS();
-            cpu_texts[is_us][7] = (s8) (num / 10 + 0x30);
-            is_us = !!lbLang_IsSavedLanguageUS();
-            cpu_texts[is_us][8] = (s8) (num % 10 + 0x30);
-            is_us = !!lbLang_IsSavedLanguageUS();
-            cpu_texts[is_us][9] = 0;
+            cpu_texts[!!lbLang_IsSavedLanguageUS()][7] =
+                (s8) (num / 10 + 0x30);
+            cpu_texts[!!lbLang_IsSavedLanguageUS()][8] =
+                (s8) (num % 10 + 0x30);
+            cpu_texts[!!lbLang_IsSavedLanguageUS()][9] = 0;
         } else {
-            is_us = !!lbLang_IsSavedLanguageUS();
-            cpu_texts[is_us][7] = (s8) (char_id - 0x354);
-            is_us = !!lbLang_IsSavedLanguageUS();
-            cpu_texts[is_us][8] = 0;
+            cpu_texts[!!lbLang_IsSavedLanguageUS()][7] =
+                (s8) (char_id - 0x354);
+            cpu_texts[!!lbLang_IsSavedLanguageUS()][8] = 0;
         }
-        is_us = !!lbLang_IsSavedLanguageUS();
         HSD_SisLib_803A6B98(tm->x518[jobj_idx2], pos_x, pos_y,
-                            cpu_texts[is_us]);
+                            cpu_texts[!!lbLang_IsSavedLanguageUS()]);
         return;
     }
 
@@ -1640,6 +1633,19 @@ void fn_8018ECA8(s32 char_id, s32 name_type, s32 jobj_idx1, f32 pos_x,
         HSD_SisLib_803A6B98(tm->x518[jobj_idx2], pos_x, pos_y,
                             GetNameText((u8) char_id));
     }
+    // @-pin shims (id ledger: the !!call()-in-index rewrite freed 11 ids)
+    if (0) {
+    }
+    if (0) {
+    }
+    if (0) {
+    }
+    if (0) {
+    }
+    if (0) {
+    }
+    goto pinshim;
+pinshim:;
 }
 
 /// Formats a tournament slot display name into a destination buffer.
@@ -1999,7 +2005,7 @@ void fn_8018F888(void)
 
     lbl_80473AB8[i].x20.g = 0;
 
-    if (gm_804771C4.x37->x8 != 5) {
+    if (gm_804771C4.x33 != 5) {
         return;
     }
 
@@ -2018,23 +2024,29 @@ void fn_8018F888(void)
 
 void fn_8018FA24(void)
 {
-    s32 player_count;
-    s32 player_idx;
-    u8* tmdata;
-    u8* dst;
-    u8* ptr;
     s32 i;
+    BracketEntry* p;
+    u8* ptr;
+    u8* dst;
+    u8* tmdata;
+    s32 player_idx;
+    s32 player_count;
     s32 char_kind;
 
     PAD_STACK(8);
 
-    tmdata = (u8*) &gm_804771C4 + 0xc;
+    tmdata = (u8*) &gm_804771C4;
 
-    for (i = 0; i < 64; i++) {
-        if (lbl_80473AB8[i].x1 != 0) {
+    p = lbl_80473AB8;
+    for (i = 0; i < 64; p++, i++) {
+        if (p->x1 != 0) {
             break;
         }
     }
+
+    // @-pin shim (id ledger: 1 SR-rover removal from the explicit-p walk)
+    goto skip;
+skip:
 
     dst = tmdata;
     ptr = (u8*) lbl_80473AB8 + i * (s32) 0xDC;
@@ -2083,7 +2095,7 @@ void fn_8018FBD8(void* arg0, s32 arg1)
 void fn_8018FBE0(s32 arg0, s32 arg1, s32 arg2, s8 arg3, s8 arg4, s16 arg5,
                  s8 arg6)
 {
-    s32 i;
+    u32 i;
 
     PAD_STACK(8);
 

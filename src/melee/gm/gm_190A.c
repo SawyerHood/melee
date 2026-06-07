@@ -80,6 +80,21 @@ SceneDesc* lbl_804D664C;
 SceneDesc* lbl_804D6650;
 HSD_GObj* lbl_804D663C;
 
+// This TU's .data base (DOL 0x803D9F80, 0x58 bytes, no relocs;
+// initializer read back from the target object). Head 0x40 bytes are
+// u16 pairs (read via the *(u16*)/(s16*) casts below); tail 0x18 bytes
+// are byte-indexed (lbl_803D9F80[0x40 + i * 2]).
+u8 lbl_803D9F80[0x58] = {
+    0x00, 0x4A, 0x00, 0x4A, 0x00, 0x4D, 0x00, 0x4B, 0x00, 0x4B, 0x00,
+    0x4D, 0x00, 0x50, 0x00, 0x4E, 0x00, 0x4F, 0x00, 0x4F, 0x00, 0x51,
+    0x00, 0x00, 0x00, 0x52, 0x00, 0x52, 0x00, 0x5C, 0x00, 0x5C, 0x00,
+    0x60, 0x00, 0x5D, 0x00, 0x5D, 0x00, 0x60, 0x00, 0x5F, 0x00, 0x61,
+    0x00, 0x62, 0x00, 0x62, 0x00, 0x64, 0x00, 0x00, 0x00, 0x53, 0x00,
+    0x6F, 0x00, 0x6F, 0x00, 0x6F, 0x00, 0x58, 0x00, 0x65, 0x00, 0x00,
+    0x02, 0x03, 0x00, 0x02, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x02,
+    0x02, 0x04, 0x10, 0x1F, 0x03, 0x3F, 0x03, 0x03, 0x03, 0x09, 0x00,
+};
+
 typedef void (*lbl_803D9FD8_fn)(s32*, u32, u32);
 
 lbl_803D9FD8_fn lbl_803D9FD8[] = {
@@ -89,12 +104,11 @@ lbl_803D9FD8_fn lbl_803D9FD8[] = {
     fn_80195CCC, fn_80194F30, fn_8019610C, fn_8019610C,
 };
 
-extern u8 lbl_803D9F80[];
-extern f32 lbl_804DA6FC; // 143.0f
-extern f32 lbl_804DA700; // 183.0f
-extern f32 lbl_804DA704; // 48.6f
-extern f32 lbl_804DA708; // 514.0f
-extern f32 lbl_804DA70C; // 87.0f
+extern const f32 lbl_804DA6FC; // 143.0f
+extern const f32 lbl_804DA700; // 183.0f
+extern const f32 lbl_804DA704; // 48.6f
+extern const f32 lbl_804DA708; // 514.0f
+extern const f32 lbl_804DA70C; // 87.0f
 
 void fn_80190ABC(int mode)
 {
@@ -213,6 +227,15 @@ void fn_80190ABC(int mode)
     }
     }
 }
+
+// Positioned defs (idiom 87): these five named consts emit between
+// fn_80190ABC's pool literals and gm_80190EA4's 0.0f in the original
+// .sdata2 stream (DOL 0x804DA6FC..0x804DA70C).
+const f32 lbl_804DA6FC = 143.0f;
+const f32 lbl_804DA700 = 183.0f;
+const f32 lbl_804DA704 = 48.6f;
+const f32 lbl_804DA708 = 514.0f;
+const f32 lbl_804DA70C = 87.0f;
 
 #pragma push
 #pragma dont_inline on
@@ -734,11 +757,11 @@ void fn_80191CA4(HSD_GObj* gobj)
     fn_8019044C(jobj, (f32) lbl_804D6658);
 }
 
-extern f32 lbl_804DA738; // 12.8f
-extern f32 lbl_804DA734; // 666.0f
-extern f32 lbl_804DA73C; // 2.62f
-extern f32 lbl_804DA740; // 0.1f
-extern f32 lbl_804DA744; // 201.0f
+extern f32 lbl_804DA738;       // 12.800008f (DOL 414cccd5, NOT 12.8f)
+extern const f32 lbl_804DA734; // 666.0f
+extern const f32 lbl_804DA73C; // 2.6200008f (DOL 4027ae18, NOT 2.62f)
+extern const f32 lbl_804DA740; // 0.1f
+extern const f32 lbl_804DA744; // 201.0f
 
 /// GObj callback for tournament bracket slot UI elements.
 void fn_80191D38(HSD_GObj* gobj)
@@ -820,6 +843,15 @@ void fn_80191E9C(HSD_GObj* gobj)
         lbl_804DA740);
     fn_8019044C(jobj, (f32) tm->x37[idx].x2);
 }
+
+// Positioned defs (idiom 87): after the last use (f32 const defs that
+// precede a use CONST-PROP into duplicate pool literals -- measured in
+// this TU). Original slots 0x804DA73C/40 sit before fn_80191FD4's
+// 200.0f/0.9f pool pair; ours land 8 bytes earlier (the 734/738 slots
+// are use-locked, see below). 2.6200008f encodes DOL 4027ae18, NOT
+// 2.62f.
+const f32 lbl_804DA73C = 2.6200008f;
+const f32 lbl_804DA740 = 0.1f;
 
 void fn_80191FD4(HSD_GObj* gobj)
 {
@@ -944,10 +976,14 @@ pad_label:;
     HSD_JObjSetFlagsAll(sibling, 0x10U);
 }
 
-extern f32 lbl_804DA750; // -1.8f
-extern f32 lbl_804DA754; // 7.19f
-extern f32 lbl_804DA758; // 2.7f
-extern f32 lbl_804DA75C; // 2.3f
+// Positioned def (idiom 87): original slot 0x804DA744 sits right after
+// fn_80191FD4's 200.0f/0.9f pool pair -- ours lands exactly there.
+const f32 lbl_804DA744 = 201.0f;
+
+extern const f32 lbl_804DA750; // -1.8f
+extern const f32 lbl_804DA754; // 7.1899995f (DOL 40e6147a, NOT 7.19f)
+extern const f32 lbl_804DA758; // 2.7f
+extern f32 lbl_804DA75C;       // 2.3f
 
 /// Updates tournament menu cursor JObj visibility and position.
 void fn_8019237C(HSD_GObj* gobj)
@@ -976,6 +1012,13 @@ void fn_8019237C(HSD_GObj* gobj)
         -((lbl_804DA75C * (f32) ((s32) lbl_804799B8.x5 / 4)) - lbl_804DA758),
         lbl_804DA734);
 }
+
+// Positioned defs (idiom 87): original slots 0x804DA750/54/58 directly
+// follow fn_80191FD4's pool pair; ours emit after their one user
+// (fn_8019237C, const-prop law). 7.1899995f encodes DOL 40e6147a.
+const f32 lbl_804DA750 = -1.8f;
+const f32 lbl_804DA754 = 7.1899995f;
+const f32 lbl_804DA758 = 2.7f;
 
 /// @todo Currently 92.46% match - permuter couldn't improve
 void fn_8019249C(HSD_GObj* gobj)
@@ -1024,7 +1067,7 @@ void fn_8019249C(HSD_GObj* gobj)
     }
 }
 
-extern f32 lbl_804DA760; // 0.3f
+extern const f32 lbl_804DA760; // 0.3f
 
 #pragma push
 #pragma dont_inline on
@@ -1046,6 +1089,10 @@ void fn_80192690(HSD_GObj* gobj)
     fn_8019044C(jobj, tmdata->cur_option - 0x11);
 }
 #pragma pop
+
+// Positioned def (idiom 87): original slot 0x804DA760 sits between the
+// lbl_804DA750..58 trio and fn_80192BB0's 11.5f/3.5f pool pair.
+const f32 lbl_804DA760 = 0.3f;
 
 /// @todo Currently 96.8% match - permuter couldn't improve
 void fn_80192758(HSD_GObj* gobj)
@@ -1301,6 +1348,15 @@ void fn_80192E6C(void)
     fn_8019035C(1, lbl_804D6650->models[1], 0, 0x1A, 2, 1, fn_80192690, 0.0f);
 }
 
+// Positioned def (idiom 87): the original slot 0x804DA734 sits between
+// fn_80191B5C's 25.0f and fn_80191D38's pool range; ours must follow
+// its last user (fn_80192E6C, const-prop law).
+// lbl_804DA738/lbl_804DA75C stay UNDEFINED here by design: their pool
+// slots are fn_80192E6C's kept 12.800008f/2.3f literals (@-entries).
+// The extern-swap of those two sites was re-probed this wave and still
+// regresses E6C (97.71, loop LICM shape) -- w12 park stands.
+const f32 lbl_804DA734 = 666.0f;
+
 #pragma push
 #pragma dont_inline on
 void fn_80193230(void)
@@ -1321,7 +1377,7 @@ void fn_80193230(void)
 #pragma pop
 
 /// .sdata2
-/* 4DA78C */ extern s32 lbl_804DA78C;
+/* 4DA78C */ extern const s32 lbl_804DA78C;
 
 void fn_80193308(void)
 {
@@ -1419,7 +1475,10 @@ void fn_80193308(void)
     PAD_STACK(0x28);
 }
 
-extern u8 lbl_803D9F80[];
+// Positioned def (idiom 87): original slot 0x804DA78C sits just before
+// fn_80193308's pool cluster; ours emits after its one user (const-prop
+// law). 0x46DC46FF = the DOL word (an RGBA color, not a float).
+const s32 lbl_804DA78C = 0x46DC46FF;
 
 #pragma push
 #pragma dont_inline on

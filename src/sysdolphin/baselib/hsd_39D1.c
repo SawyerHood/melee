@@ -22,8 +22,11 @@
 #include <baselib/state.h>
 #include <baselib/video.h>
 #include <MetroTRK/ppc_reg.h>
-#include <MSL/math_ppc.h>
 #include <MSL/trigf.h>
+
+/* The original generator.c TU has no MSL sqrtf weak statics in .sdata2;
+ * declare the intrinsic directly instead of pulling in math_ppc.h. */
+extern f64 __frsqrte(f64);
 
 /* This file restores an original translation unit of HSD's particle
  * library that had been merged into particle.c ("generator.c" per the
@@ -408,8 +411,6 @@ HSD_Generator* hsd_8039D9C8(void)
     return gen;
 }
 
-// @TODO: Currently 86.32% match - register allocation, shape/velocity
-// switch case logic, Newton-Raphson sqrt inlining, trig matrix layout
 static char lbl_8040C248[] = "generator.c";
 static char lbl_8040C254[] = "psCamera";
 
@@ -419,37 +420,48 @@ static char lbl_8040C254[] = "psCamera";
 
 f32 hsd_8039DAD4(HSD_Generator* gen)
 {
-    Mtx rot_mtx;
-    Vec3 vel_out;
-    Vec3 vel_temp;
-    Vec3 tmpvec;
-    Vec3 emit_pos;
     Vec3 vel_copy;
+    u8 _pad[4];
+    Vec3 emit_pos;
+    Vec3 vel_temp;
+    Vec3 vel_out;
+    Mtx rot_mtx;
     Mtx jobj_mtx;
     Vec3 look_dir;
     Vec3 cam_up;
     Vec3 cross1;
     Vec3 vel_norm;
     Mtx trig_mtx;
-    f64 eps;
     f32 vel_mag_sq;
     f32 angle1;
     f32 sin_az;
     f32 cos_az;
     f32 sin_el;
+    f32 elevation;
+    f32 min_a;
     f32 angle_step;
     f32 cur_angle;
     f32 radius;
     f32 cone_angle;
-    f32 elevation;
-    f32 tmp;
     f32 angle3;
-    PAD_STACK(16);
+    volatile f32 y1;
+    f32 abs_z;
+    f32 abs_comb;
+    f32 abs_r22;
+    f32 abs_comb2;
+    volatile f32 y2;
+    f32 abs_sa;
+    f32 abs_sa2;
+    volatile f32 y3;
+    volatile f32 y4;
+    volatile f32 y5;
+    volatile f32 y6;
+    PAD_STACK(4);
 
-    angle3 = 0.0F;
-    vel_mag_sq = angle3;
+    angle1 = 0.0F;
+    angle3 = angle1;
 
-    if (gen->count < 0.0F) {
+    if (gen->count < 1.0F) {
         return gen->count;
     }
 
@@ -459,14 +471,15 @@ f32 hsd_8039DAD4(HSD_Generator* gen)
     vel_copy.z = gen->vel.z;
 
     /* Compute velocity magnitude */
-    vel_mag_sq = vel_copy.x * vel_copy.x + vel_copy.y * vel_copy.y +
-                 vel_copy.z * vel_copy.z;
-    if (vel_mag_sq > 0.0F) {
-        f64 e = __frsqrte(vel_mag_sq);
-        e = 0.5 * e * -(vel_mag_sq * (e * e) - 3.0);
-        e = 0.5 * e * -(vel_mag_sq * (e * e) - 3.0);
-        e = 0.5 * e * -(vel_mag_sq * (e * e) - 3.0);
-        vel_mag_sq = (f32) (vel_mag_sq * e);
+    if ((vel_mag_sq = vel_copy.x * vel_copy.x + vel_copy.y * vel_copy.y +
+                      vel_copy.z * vel_copy.z) > 0.0F)
+    {
+        f64 guess = __frsqrte(vel_mag_sq);
+        guess = 0.5 * guess * (3.0 - vel_mag_sq * (guess * guess));
+        guess = 0.5 * guess * (3.0 - vel_mag_sq * (guess * guess));
+        guess = 0.5 * guess * (3.0 - vel_mag_sq * (guess * guess));
+        y1 = (f32) (vel_mag_sq * guess);
+        vel_mag_sq = y1;
     }
 
     /* Initialize rotation matrix */
@@ -480,33 +493,33 @@ f32 hsd_8039DAD4(HSD_Generator* gen)
         PSMTXCopy((void*) ((u8*) gen->jobj + 0x44), jobj_mtx);
 
         /* Extract and normalize each column of the 3x3 rotation */
-        tmpvec.x = jobj_mtx[0][0];
-        tmpvec.y = jobj_mtx[1][0];
-        tmpvec.z = jobj_mtx[2][0];
-        PSVECNormalize(&tmpvec, &tmpvec);
-        rot_mtx[0][0] = tmpvec.x;
-        rot_mtx[1][0] = tmpvec.y;
-        rot_mtx[2][0] = tmpvec.z;
+        vel_out.x = jobj_mtx[0][0];
+        vel_out.y = jobj_mtx[1][0];
+        vel_out.z = jobj_mtx[2][0];
+        PSVECNormalize(&vel_out, &vel_out);
+        rot_mtx[0][0] = vel_out.x;
+        rot_mtx[1][0] = vel_out.y;
+        rot_mtx[2][0] = vel_out.z;
 
-        tmpvec.x = jobj_mtx[0][1];
-        tmpvec.y = jobj_mtx[1][1];
-        tmpvec.z = jobj_mtx[2][1];
-        PSVECNormalize(&tmpvec, &tmpvec);
-        rot_mtx[0][1] = tmpvec.x;
-        rot_mtx[1][1] = tmpvec.y;
-        rot_mtx[2][1] = tmpvec.z;
+        vel_out.x = jobj_mtx[0][1];
+        vel_out.y = jobj_mtx[1][1];
+        vel_out.z = jobj_mtx[2][1];
+        PSVECNormalize(&vel_out, &vel_out);
+        rot_mtx[0][1] = vel_out.x;
+        rot_mtx[1][1] = vel_out.y;
+        rot_mtx[2][1] = vel_out.z;
 
-        tmpvec.x = jobj_mtx[0][2];
-        tmpvec.y = jobj_mtx[1][2];
-        tmpvec.z = jobj_mtx[2][2];
-        PSVECNormalize(&tmpvec, &tmpvec);
-        rot_mtx[0][2] = tmpvec.x;
-        rot_mtx[1][2] = tmpvec.y;
-        rot_mtx[2][2] = tmpvec.z;
+        vel_out.x = jobj_mtx[0][2];
+        vel_out.y = jobj_mtx[1][2];
+        vel_out.z = jobj_mtx[2][2];
+        PSVECNormalize(&vel_out, &vel_out);
+        rot_mtx[0][2] = vel_out.x;
+        rot_mtx[1][2] = vel_out.y;
+        rot_mtx[2][2] = vel_out.z;
 
-        rot_mtx[0][3] = 0.0F;
-        rot_mtx[1][3] = 0.0F;
         rot_mtx[2][3] = 0.0F;
+        rot_mtx[1][3] = 0.0F;
+        rot_mtx[0][3] = 0.0F;
     }
 
     /* Billboard orientation: kind & 0x10000 */
@@ -541,118 +554,133 @@ f32 hsd_8039DAD4(HSD_Generator* gen)
     }
 
     /* Velocity-based rotation */
-    if ((gen->type & 0xF) != 1 && vel_mag_sq > 0.0F) {
+    if ((gen->type & 0xF) != 1 && vel_mag_sq > 1.1920929e-7F) {
         vel_norm.x = gen->vel.x;
         vel_norm.y = gen->vel.y;
         vel_norm.z = gen->vel.z;
         PSVECNormalize(&vel_norm, &vel_norm);
 
-        tmp = vel_norm.z;
-        *(s32*) &tmp &= 0x7FFFFFFF;
-        if (tmp < 1.1754944e-38F) {
-            if (vel_norm.y >= 0.0F) {
-                sin_az = 1.5707964F;
+        {
+            abs_z = vel_norm.z;
+            *(s32*) &abs_z &= 0x7FFFFFFF;
+            if (abs_z < 1.1754944e-38F) {
+                if (vel_norm.y >= 0.0F) {
+                    sin_az = 1.5707964F;
+                } else {
+                    sin_az = -1.5707964F;
+                }
             } else {
-                sin_az = -1.5707964F;
+                sin_az = atan2f(vel_norm.y, vel_norm.z);
             }
-        } else {
-            sin_az = atan2f(vel_norm.y, vel_norm.z);
         }
         cos_az = sinf(sin_az);
         sin_az = cosf(sin_az);
 
-        tmp = vel_norm.z * sin_az + vel_norm.y * cos_az;
-        *(s32*) &tmp &= 0x7FFFFFFF;
-        if (tmp < 1.1754944e-38F) {
-            if (vel_norm.x >= 0.0F) {
-                elevation = 1.5707964F;
-            } else {
-                elevation = -1.5707964F;
-            }
-        } else {
-            elevation =
-                atan2f(vel_norm.x, vel_norm.z * sin_az + vel_norm.y * cos_az);
-        }
-        sin_el = sinf(elevation);
         {
-            f32 cos_el = cosf(elevation);
-            f32 neg_cos_az = -cos_az;
-            f32 neg_sin_az_s = -sin_az;
+            f32 comb = vel_norm.y * cos_az + vel_norm.z * sin_az;
+            abs_comb = comb;
+            *(s32*) &abs_comb &= 0x7FFFFFFF;
+            if (abs_comb < 1.1754944e-38F) {
+                if (vel_norm.x >= 0.0F) {
+                    elevation = 1.5707964F;
+                } else {
+                    elevation = -1.5707964F;
+                }
+            } else {
+                elevation = atan2f(vel_norm.x, comb);
+            }
+            sin_el = sinf(elevation);
+            {
+                f32 cos_el = cosf(elevation);
+                f32 neg_cos_az = -cos_az;
+                f32 neg_sin_az_s = -sin_az;
 
-            trig_mtx[0][0] = cos_el;
-            trig_mtx[0][1] = 0.0F;
-            trig_mtx[0][2] = sin_el;
-            trig_mtx[0][3] = 0.0F;
-            trig_mtx[1][0] = neg_cos_az * sin_el;
-            trig_mtx[1][1] = sin_az;
-            trig_mtx[1][2] = cos_az * cos_el;
-            trig_mtx[1][3] = 0.0F;
-            trig_mtx[2][0] = neg_sin_az_s * sin_el;
-            trig_mtx[2][1] = neg_cos_az;
-            trig_mtx[2][2] = sin_az * cos_el;
-            trig_mtx[2][3] = 0.0F;
+                trig_mtx[0][0] = cos_el;
+                trig_mtx[0][1] = 0.0F;
+                trig_mtx[0][2] = sin_el;
+                trig_mtx[0][3] = 0.0F;
+                trig_mtx[1][0] = neg_cos_az * sin_el;
+                trig_mtx[1][1] = sin_az;
+                trig_mtx[1][2] = cos_az * cos_el;
+                trig_mtx[1][3] = 0.0F;
+                trig_mtx[2][0] = neg_sin_az_s * sin_el;
+                trig_mtx[2][1] = neg_cos_az;
+                trig_mtx[2][2] = sin_az * cos_el;
+                trig_mtx[2][3] = 0.0F;
+            }
         }
         PSMTXConcat(rot_mtx, trig_mtx, rot_mtx);
     }
 
     /* Type 2: extract Euler angles from rotation matrix */
     if ((gen->type & 0xF) == 2) {
-        tmp = rot_mtx[2][2];
-        *(s32*) &tmp &= 0x7FFFFFFF;
-        if (tmp < 1.1754944e-38F) {
-            if (rot_mtx[1][2] >= 0.0F) {
-                angle1 = 1.5707964F;
-            } else {
-                angle1 = -1.5707964F;
-            }
-        } else {
-            angle1 = atan2f(rot_mtx[1][2], rot_mtx[2][2]);
-        }
         {
-            f32 c1 = cosf(angle1);
-            f32 s1 = sinf(angle1);
-            f32 comb = rot_mtx[2][2] * c1 + rot_mtx[1][2] * s1;
-            *(s32*) &comb &= 0x7FFFFFFF;
-            if (comb < 1.1754944e-38F) {
-                if (rot_mtx[0][2] >= 0.0F) {
-                    elevation = 1.5707964F;
+            abs_r22 = rot_mtx[2][2];
+            *(s32*) &abs_r22 &= 0x7FFFFFFF;
+            if (abs_r22 < 1.1754944e-38F) {
+                if (rot_mtx[1][2] >= 0.0F) {
+                    angle1 = 1.5707964F;
                 } else {
-                    elevation = -1.5707964F;
+                    angle1 = -1.5707964F;
                 }
             } else {
-                elevation = atan2f(rot_mtx[0][2],
-                                   rot_mtx[2][2] * c1 + rot_mtx[1][2] * s1);
+                angle1 = atan2f(rot_mtx[1][2], rot_mtx[2][2]);
             }
-            angle3 = elevation;
+        }
+        {
+            f32 comb =
+                rot_mtx[1][2] * sinf(angle1) + rot_mtx[2][2] * cosf(angle1);
+            abs_comb2 = comb;
+            *(s32*) &abs_comb2 &= 0x7FFFFFFF;
+            if (abs_comb2 < 1.1754944e-38F) {
+                if (rot_mtx[0][2] >= 0.0F) {
+                    angle3 = 1.5707964F;
+                } else {
+                    angle3 = -1.5707964F;
+                }
+            } else {
+                angle3 = atan2f(rot_mtx[0][2], comb);
+            }
         }
     }
 
     /* Angle step computation (pre-loop) */
     if (gen->angle < 0.0F) {
-        u32 shape = gen->type & 0xF;
-        if (shape == 0 || shape == 3 || shape == 4) {
-            f32 min_a = gen->aux.disc.minAngle;
-            f32 rnd = HSD_Randf();
-            f32 range = gen->aux.disc.maxAngle - min_a;
+        switch (gen->type & 0xF) {
+        case 0:
+        case 3:
+        case 4: {
+            f32 rnd;
+            f32 range;
+            min_a = gen->aux.disc.minAngle;
+            rnd = HSD_Randf();
+            range = gen->aux.disc.maxAngle - min_a;
             angle_step = range / (f32) (s32) gen->count;
             cur_angle = angle_step * rnd + min_a;
-        } else if (shape == 6 || shape == 7) {
-            f32 min_a = gen->aux.cone.minAngle;
-            f32 rnd = HSD_Randf();
-            f32 range = gen->aux.cone.maxAngle - min_a;
+            break;
+        }
+        case 6:
+        case 7: {
+            f32 rnd;
+            f32 range;
+            min_a = gen->aux.cone.minAngle;
+            rnd = HSD_Randf();
+            range = gen->aux.cone.maxAngle - min_a;
             angle_step = range / (f32) (s32) gen->count;
             cur_angle = angle_step * rnd + min_a;
-        } else {
+            break;
+        }
+        default: {
             f32 rnd = HSD_Randf();
-            cur_angle = (f32) ((f64) 6.2831855F * (f64) rnd);
-            angle_step =
-                (f32) ((f64) 6.2831855F / (f64) (f32) (s32) gen->count);
+            cur_angle = (f32) (2.0 * (M_PI * rnd));
+            angle_step = (f32) (M_TAU / (s32) gen->count);
+            break;
+        }
         }
     }
 
     /* Main particle emission loop */
     /* binary-proven: the DOL's epsilon is (f64)(f32)0.001 (lbl_804DE9F8) */
-    eps = 0.001F;
     while (gen->count >= 1.0F) {
         switch (gen->type & 0xF) {
         case 0: /* point, disc, cone, sphere, etc. */
@@ -663,78 +691,85 @@ f32 hsd_8039DAD4(HSD_Generator* gen)
             /* Compute radius */
             if (gen->radius < 0.0F) {
                 sin_az = -gen->radius;
-                radius = 0.0F;
+                radius = 1.0F;
             } else {
                 radius = HSD_Randf();
                 if ((gen->type & 0xF) == 3 || (gen->type & 0xF) == 4) {
+                    f32 t;
                     if (radius > 0.0F) {
-                        f64 e = __frsqrte(radius);
-                        e = 0.5 * e * -(radius * (e * e) - 3.0);
-                        e = 0.5 * e * -(radius * (e * e) - 3.0);
-                        e = 0.5 * e * -(radius * (e * e) - 3.0);
-                        radius = (f32) (radius * e);
+                        f64 guess = __frsqrte(radius);
+                        guess = 0.5 * guess * (3.0 - radius * (guess * guess));
+                        guess = 0.5 * guess * (3.0 - radius * (guess * guess));
+                        guess = 0.5 * guess * (3.0 - radius * (guess * guess));
+                        y2 = (f32) (radius * guess);
+                        t = y2;
+                    } else {
+                        t = radius;
                     }
+                    radius = t;
                 }
                 sin_az = radius * gen->radius;
             }
 
             /* Compute emission angle per shape */
-            if ((gen->type & 0xF) == 6) {
+            switch (gen->type & 0xF) {
+            case 6:
                 /* Cone/sphere shape 6 */
                 if (gen->angle < 0.0F) {
-                    emit_pos.z = sin_az;
+                    abs_sa = sin_az;
                     cur_angle += angle_step;
-                    tmp = sin_az;
-                    *(s32*) &tmp &= 0x7FFFFFFF;
-                    if (tmp < 1.1754944e-38F) {
+                    *(s32*) &abs_sa &= 0x7FFFFFFF;
+                    if (abs_sa < 1.1754944e-38F) {
                         if (gen->aux.cone.height >= 0.0F) {
                             cone_angle = -gen->angle;
                         } else {
                             cone_angle = (f32) (M_PI - gen->angle);
                         }
                     } else {
-                        cone_angle = (f32) (M_PI - atan2f(gen->aux.cone.height,
-                                                          sin_az)) -
-                                     gen->angle;
+                        cone_angle =
+                            (f32) (M_PI_2 -
+                                   atan2f(gen->aux.cone.height, sin_az) -
+                                   gen->angle);
                     }
                 } else {
                     cur_angle = gen->aux.cone.minAngle;
                     {
                         f32 rnd = HSD_Randf();
                         f32 range = gen->aux.cone.maxAngle - cur_angle;
-                        cone_angle = radius * gen->angle;
                         cur_angle = range * rnd + cur_angle;
                     }
-                    emit_pos.z = sin_az;
-                    tmp = sin_az;
-                    *(s32*) &tmp &= 0x7FFFFFFF;
-                    if (tmp < 1.1754944e-38F) {
+                    abs_sa2 = sin_az;
+                    *(s32*) &abs_sa2 &= 0x7FFFFFFF;
+                    if (abs_sa2 < 1.1754944e-38F) {
                         if (gen->aux.cone.height >= 0.0F) {
                             cone_angle = gen->angle;
                         } else {
                             cone_angle = (f32) (M_PI + gen->angle);
                         }
                     } else {
-                        cone_angle = gen->angle +
-                                     (f32) (M_PI - atan2f(gen->aux.cone.height,
-                                                          sin_az));
+                        cone_angle =
+                            (f32) (gen->angle +
+                                   (M_PI_2 -
+                                    atan2f(gen->aux.cone.height, sin_az)));
                     }
                 }
-            } else if ((gen->type & 0xF) == 7) {
+                break;
+            case 7:
                 /* Shape 7 */
                 if (gen->angle < 0.0F) {
-                    cone_angle = (f32) (M_PI - gen->angle);
+                    cone_angle = (f32) (M_PI_2 - gen->angle);
                     cur_angle += angle_step;
                 } else {
                     cur_angle = gen->aux.disc.minAngle;
                     {
                         f32 rnd = HSD_Randf();
                         f32 range = gen->aux.disc.maxAngle - cur_angle;
-                        cone_angle = (f32) (M_PI + gen->angle);
                         cur_angle = range * rnd + cur_angle;
+                        cone_angle = (f32) (M_PI_2 + gen->angle);
                     }
                 }
-            } else {
+                break;
+            default:
                 /* Shapes 0, 3, 4 */
                 if (gen->angle < 0.0F) {
                     cone_angle = -gen->angle;
@@ -749,36 +784,30 @@ f32 hsd_8039DAD4(HSD_Generator* gen)
                         cur_angle = range * rnd + cur_angle;
                     }
                 }
+                break;
             }
 
-            /* Compute emission position and velocity from angle */
-            {
-                f32 cos_a = cosf(cur_angle);
-                f32 sin_a = sinf(cur_angle);
-                emit_pos.x = sin_az * cos_a;
-                emit_pos.y = sin_az * sin_a;
-            }
+            /* Compute emission position from angle */
+            emit_pos.x = sin_az * cosf(cur_angle);
+            emit_pos.y = sin_az * sinf(cur_angle);
 
             /* Shape 6,7: z from random, scale by height */
             if ((gen->type & 0xF) == 6 || (gen->type & 0xF) == 7) {
-                f32 rnd = HSD_Randf();
-                emit_pos.z = rnd;
+                emit_pos.z = HSD_Randf();
                 if ((gen->type & 0xF) == 6) {
-                    emit_pos.x *= (1.0F - rnd);
-                    emit_pos.y *= (1.0F - rnd);
+                    emit_pos.x = emit_pos.x * (1.0F - emit_pos.z);
+                    emit_pos.y = emit_pos.y * (1.0F - emit_pos.z);
                 }
-                emit_pos.z *= gen->aux.cone.height;
+                emit_pos.z = emit_pos.z * gen->aux.cone.height;
             } else {
                 emit_pos.z = 0.0F;
             }
 
             /* Compute velocity direction from cone angle */
-            {
-                f32 sin_ca = vel_mag_sq * sinf(cone_angle);
-                vel_out.x = sin_ca * cosf(cur_angle);
-                vel_out.y = sin_ca * sinf(cur_angle);
-                vel_out.z = vel_mag_sq * cosf(cone_angle);
-            }
+            sin_az = vel_mag_sq * sinf(cone_angle);
+            vel_out.x = sin_az * cosf(cur_angle);
+            vel_out.y = sin_az * sinf(cur_angle);
+            vel_out.z = vel_mag_sq * cosf(cone_angle);
 
             /* Shape 3: scale velocity by radius factor */
             if ((gen->type & 0xF) == 3) {
@@ -830,7 +859,7 @@ f32 hsd_8039DAD4(HSD_Generator* gen)
         case 2: /* tornado */
         {
             if (gen->radius < 0.0F) {
-                sin_az = 0.0F;
+                sin_az = 1.0F;
             } else {
                 sin_az = HSD_Randf();
             }
@@ -838,7 +867,7 @@ f32 hsd_8039DAD4(HSD_Generator* gen)
                 cur_angle += angle_step;
             } else {
                 f32 rnd = HSD_Randf();
-                cur_angle = (f32) (M_TAU * (f64) rnd);
+                cur_angle = (f32) (2.0 * (M_PI * rnd));
             }
             gen->aux.line.x2 = vel_mag_sq;
             hsd_80398F0C(gen->linkNo, gen->bank, gen->kind | 4, gen->texGroup,
@@ -850,74 +879,43 @@ f32 hsd_8039DAD4(HSD_Generator* gen)
 
         case 5: /* rect */
         {
-            f32 rx = HSD_Randf();
-            f32 ry = HSD_Randf();
-            f32 rz = HSD_Randf();
-            emit_pos.x = rx;
-            emit_pos.y = ry;
-            emit_pos.z = rz;
+            emit_pos.x = HSD_Randf();
+            emit_pos.y = HSD_Randf();
+            emit_pos.z = HSD_Randf();
 
             switch (gen->aux.rect.flag) {
             case 0: /* default: no modification */
                 break;
             case 1: /* +x */
-                if (emit_pos.x > 0.5F) {
-                    emit_pos.x = 1.0F;
-                } else {
-                    emit_pos.x = 0.0F;
-                }
+                emit_pos.x = emit_pos.x > 0.5F ? 1.0F : 0.0F;
                 break;
             case 2: /* +y */
-                if (emit_pos.y > 0.5F) {
-                    emit_pos.y = 1.0F;
-                } else {
-                    emit_pos.y = 0.0F;
-                }
+                emit_pos.y = emit_pos.y > 0.5F ? 1.0F : 0.0F;
                 break;
             case 3: /* xy split */
             {
                 f32 rnd = HSD_Randf();
                 f32 a2 = gen->aux.rect.x;
                 f32 b2 = gen->aux.rect.y;
-                if (rnd < a2 / (a2 + b2)) {
-                    if (emit_pos.y > 0.5F) {
-                        emit_pos.y = 1.0F;
-                    } else {
-                        emit_pos.y = 0.0F;
-                    }
+                if (rnd > a2 / (a2 + b2)) {
+                    emit_pos.y = emit_pos.y > 0.5F ? 1.0F : 0.0F;
                 } else {
-                    if (emit_pos.x > 0.5F) {
-                        emit_pos.x = 1.0F;
-                    } else {
-                        emit_pos.x = 0.0F;
-                    }
+                    emit_pos.x = emit_pos.x > 0.5F ? 1.0F : 0.0F;
                 }
                 break;
             }
             case 4: /* +z */
-                if (emit_pos.z > 0.5F) {
-                    emit_pos.z = 1.0F;
-                } else {
-                    emit_pos.z = 0.0F;
-                }
+                emit_pos.z = emit_pos.z > 0.5F ? 1.0F : 0.0F;
                 break;
             case 5: /* xz split */
             {
                 f32 rnd = HSD_Randf();
                 f32 a2 = gen->aux.rect.x;
                 f32 b2 = gen->aux.rect.z;
-                if (rnd < a2 / (a2 + b2)) {
-                    if (emit_pos.z > 0.5F) {
-                        emit_pos.z = 1.0F;
-                    } else {
-                        emit_pos.z = 0.0F;
-                    }
+                if (rnd > a2 / (a2 + b2)) {
+                    emit_pos.z = emit_pos.z > 0.5F ? 1.0F : 0.0F;
                 } else {
-                    if (emit_pos.x > 0.5F) {
-                        emit_pos.x = 1.0F;
-                    } else {
-                        emit_pos.x = 0.0F;
-                    }
+                    emit_pos.x = emit_pos.x > 0.5F ? 1.0F : 0.0F;
                 }
                 break;
             }
@@ -926,18 +924,10 @@ f32 hsd_8039DAD4(HSD_Generator* gen)
                 f32 rnd = HSD_Randf();
                 f32 a2 = gen->aux.rect.y;
                 f32 b2 = gen->aux.rect.z;
-                if (rnd < a2 / (a2 + b2)) {
-                    if (emit_pos.z > 0.5F) {
-                        emit_pos.z = 1.0F;
-                    } else {
-                        emit_pos.z = 0.0F;
-                    }
+                if (rnd > a2 / (a2 + b2)) {
+                    emit_pos.z = emit_pos.z > 0.5F ? 1.0F : 0.0F;
                 } else {
-                    if (emit_pos.y > 0.5F) {
-                        emit_pos.y = 1.0F;
-                    } else {
-                        emit_pos.y = 0.0F;
-                    }
+                    emit_pos.y = emit_pos.y > 0.5F ? 1.0F : 0.0F;
                 }
                 break;
             }
@@ -953,27 +943,11 @@ f32 hsd_8039DAD4(HSD_Generator* gen)
                 f32 r0 = 1.0F / total;
                 f32 t1 = r0 * ca;
                 if (rnd < t1) {
-                    if (emit_pos.z > 0.5F) {
-                        emit_pos.z = 1.0F;
-                    } else {
-                        emit_pos.z = 0.0F;
-                    }
+                    emit_pos.z = emit_pos.z > 0.5F ? 1.0F : 0.0F;
+                } else if (rnd > 1.0F - r0 * (c2 * a2)) {
+                    emit_pos.y = emit_pos.y > 0.5F ? 1.0F : 0.0F;
                 } else {
-                    f32 t2 = r0 * c2 * a2;
-                    t2 = 1.0F - t2;
-                    if (rnd < t2) {
-                        if (emit_pos.y > 0.5F) {
-                            emit_pos.y = 1.0F;
-                        } else {
-                            emit_pos.y = 0.0F;
-                        }
-                    } else {
-                        if (emit_pos.x > 0.5F) {
-                            emit_pos.x = 1.0F;
-                        } else {
-                            emit_pos.x = 0.0F;
-                        }
-                    }
+                    emit_pos.x = emit_pos.x > 0.5F ? 1.0F : 0.0F;
                 }
                 break;
             }
@@ -982,22 +956,20 @@ f32 hsd_8039DAD4(HSD_Generator* gen)
             }
 
             /* Common rect post-processing */
-            {
-                f32 px = emit_pos.x - 0.5F;
-                f32 py = emit_pos.y - 0.5F;
-                f32 pz = emit_pos.z - 0.5F;
-                emit_pos.x = px;
-                emit_pos.y = py;
-                emit_pos.z = pz;
+            emit_pos.x = emit_pos.x - 0.5F;
+            emit_pos.y = emit_pos.y - 0.5F;
+            emit_pos.z = emit_pos.z - 0.5F;
 
-                /* Multiply by rect's 3x3 matrix */
-                vel_temp.x = gen->aux.rect.yx * py + gen->aux.rect.xx * px +
-                             gen->aux.rect.zx * pz;
-                vel_temp.y = gen->aux.rect.yy * py + gen->aux.rect.xy * px +
-                             gen->aux.rect.zy * pz;
-                vel_temp.z = gen->aux.rect.yz * py + gen->aux.rect.xz * px +
-                             gen->aux.rect.zz * pz;
-            }
+            /* Multiply by rect's 3x3 matrix */
+            vel_temp.x = gen->aux.rect.xx * emit_pos.x +
+                         gen->aux.rect.yx * emit_pos.y +
+                         gen->aux.rect.zx * emit_pos.z;
+            vel_temp.y = gen->aux.rect.xy * emit_pos.x +
+                         gen->aux.rect.yy * emit_pos.y +
+                         gen->aux.rect.zy * emit_pos.z;
+            vel_temp.z = gen->aux.rect.xz * emit_pos.x +
+                         gen->aux.rect.yz * emit_pos.y +
+                         gen->aux.rect.zz * emit_pos.z;
 
             PSMTXMultVec(rot_mtx, &vel_temp, &emit_pos);
             emit_pos.x += gen->pos.x;
@@ -1006,23 +978,22 @@ f32 hsd_8039DAD4(HSD_Generator* gen)
 
             /* Compute velocity from rect axes */
             {
-                f32 zx = gen->aux.rect.zx;
-                f32 zy = gen->aux.rect.zy;
-                f32 zz = gen->aux.rect.zz;
-                f32 mag = zx * zx + zy * zy + zz * zz;
+                f32 scale;
+                f32 mag = gen->aux.rect.zz * gen->aux.rect.zz +
+                          (gen->aux.rect.zx * gen->aux.rect.zx +
+                           gen->aux.rect.zy * gen->aux.rect.zy);
                 if (mag > 0.0F) {
-                    f64 e = __frsqrte(mag);
-                    e = 0.5 * e * -(mag * (e * e) - 3.0);
-                    e = 0.5 * e * -(mag * (e * e) - 3.0);
-                    e = 0.5 * e * -(mag * (e * e) - 3.0);
-                    mag = (f32) (mag * e);
+                    f64 guess = __frsqrte(mag);
+                    guess = 0.5 * guess * (3.0 - mag * (guess * guess));
+                    guess = 0.5 * guess * (3.0 - mag * (guess * guess));
+                    guess = 0.5 * guess * (3.0 - mag * (guess * guess));
+                    y3 = (f32) (mag * guess);
+                    mag = y3;
                 }
-                {
-                    f32 scale = vel_mag_sq / mag;
-                    vel_out.x = zx * scale;
-                    vel_out.y = zy * scale;
-                    vel_out.z = zz * scale;
-                }
+                scale = vel_mag_sq / mag;
+                vel_out.x = gen->aux.rect.zx * scale;
+                vel_out.y = gen->aux.rect.zy * scale;
+                vel_out.z = gen->aux.rect.zz * scale;
             }
 
             PSMTXMultVec(rot_mtx, &vel_out, &vel_out);
@@ -1037,78 +1008,58 @@ f32 hsd_8039DAD4(HSD_Generator* gen)
 
         case 8: /* sphere emission */
         {
-            f32 r0 = gen->aux.cone.height;
-            if (0.0F == r0) {
-                goto sphere_random;
-            }
+            if (0.0F == gen->aux.cone.height ||
+                __fabs(gen->aux.cone.height - M_PI) < 0.001F)
             {
-                f32 diff = r0 - (f32) M_PI;
-                f32 absdiff = __fabsf(diff);
-                if (absdiff < (f32) eps) {
-                    goto sphere_random;
-                }
-            }
-            /* Non-random sphere emission */
-            {
+                /* Uniform sphere emission */
                 f32 rnd = HSD_Randf();
                 if (rnd > 0.0F) {
-                    f64 e = __frsqrte(rnd);
-                    e = 0.5 * e * -(rnd * (e * e) - 3.0);
-                    e = 0.5 * e * -(rnd * (e * e) - 3.0);
-                    e = 0.5 * e * -(rnd * (e * e) - 3.0);
-                    rnd = (f32) (rnd * e);
+                    f64 guess = __frsqrte(rnd);
+                    guess = 0.5 * guess * (3.0 - rnd * (guess * guess));
+                    guess = 0.5 * guess * (3.0 - rnd * (guess * guess));
+                    guess = 0.5 * guess * (3.0 - rnd * (guess * guess));
+                    y4 = (f32) (rnd * guess);
+                    rnd = y4;
                 }
-                radius = (f32) (M_PI * rnd);
-                {
-                    f32 rnd2 = HSD_Randf();
-                    if (rnd2 < 0.5F) {
-                        radius = (f32) (M_PI - radius);
-                    }
+                radius = (f32) (M_PI_2 * rnd);
+                if (HSD_Randf() < 0.5F) {
+                    radius = (f32) (M_PI - radius);
                 }
-                goto sphere_common;
-            }
-        sphere_random: {
-            f32 rnd = HSD_Randf();
-            if (rnd > 0.0F) {
-                f64 e = __frsqrte(rnd);
-                e = 0.5 * e * -(rnd * (e * e) - 3.0);
-                e = 0.5 * e * -(rnd * (e * e) - 3.0);
-                e = 0.5 * e * -(rnd * (e * e) - 3.0);
-                rnd = (f32) (rnd * e);
-            }
-            radius = gen->aux.cone.height * rnd;
-        }
-        sphere_common: {
-            f32 rnd = HSD_Randf();
-            f32 az_angle;
-            f32 r2 = gen->radius;
-            az_angle = (f32) ((f64) M_TAU * (f64) rnd);
-            cone_angle = (f32) ((f64) M_TAU * az_angle);
-
-            if (r2 < 0.0F) {
-                sin_az = -r2;
             } else {
+                f32 rnd = HSD_Randf();
                 if (rnd > 0.0F) {
-                    f64 e = __frsqrte(rnd);
-                    e = 0.5 * e * -(rnd * (e * e) - 3.0);
-                    e = 0.5 * e * -(rnd * (e * e) - 3.0);
-                    e = 0.5 * e * -(rnd * (e * e) - 3.0);
-                    rnd = (f32) (rnd * e);
+                    f64 guess = __frsqrte(rnd);
+                    guess = 0.5 * guess * (3.0 - rnd * (guess * guess));
+                    guess = 0.5 * guess * (3.0 - rnd * (guess * guess));
+                    guess = 0.5 * guess * (3.0 - rnd * (guess * guess));
+                    y5 = (f32) (rnd * guess);
+                    rnd = y5;
                 }
-                sin_az = r2 * rnd;
+                radius = gen->aux.cone.height * rnd;
             }
-        }
             {
-                f32 cos_r;
-                f32 sin_r;
-                cos_r = cosf(cone_angle);
-                cos_az = sinf(radius);
-                vel_out.x = cos_az * cos_r;
-                sin_el = cosf(cone_angle);
-                sin_r = sinf(radius);
-                vel_out.y = cos_az * sin_r;
-                vel_out.z = cosf(radius);
+                f32 rnd = HSD_Randf();
+                cone_angle = (f32) (2.0 * (M_PI * rnd));
+                sin_az = gen->radius;
+                if (sin_az < 0.0F) {
+                    sin_az = -sin_az;
+                } else {
+                    f32 rnd2 = HSD_Randf();
+                    if (rnd2 > 0.0F) {
+                        f64 guess = __frsqrte(rnd2);
+                        guess = 0.5 * guess * (3.0 - rnd2 * (guess * guess));
+                        guess = 0.5 * guess * (3.0 - rnd2 * (guess * guess));
+                        guess = 0.5 * guess * (3.0 - rnd2 * (guess * guess));
+                        y6 = (f32) (rnd2 * guess);
+                        rnd2 = y6;
+                    }
+                    sin_az = sin_az * rnd2;
+                }
             }
+
+            vel_out.x = sinf(radius) * cosf(cone_angle);
+            vel_out.y = sinf(radius) * sinf(cone_angle);
+            vel_out.z = cosf(radius);
 
             PSMTXMultVec(rot_mtx, &vel_out, &emit_pos);
 
@@ -1139,10 +1090,8 @@ f32 hsd_8039DAD4(HSD_Generator* gen)
 
         default: /* shape > 8 */
         {
-            void (*callback)(HSD_Generator*, Mtx);
-            callback = (void (*)(HSD_Generator*, Mtx)) gen->callback;
-            if (callback != NULL) {
-                callback(gen, rot_mtx);
+            if (hsd_804D78E8 != 0) {
+                ((void (*)(HSD_Generator*, Mtx)) hsd_804D78E8)(gen, rot_mtx);
             }
             break;
         }
@@ -1251,12 +1200,13 @@ HSD_Generator* hsd_8039F05C(s32 linkNo, s32 bank, s32 idx)
     HSD_PSTexGroup* tg;
     HSD_Generator* gen;
     s32 ofs;
-    f32 vel_mag;
-    f32 horiz_mag;
+    u32 shape;
+    volatile f32 y1;
+    volatile f32 y2;
     f32 abs_vx;
     f32 mag;
     f32 f0, f1, f3;
-    u32 shape;
+    u8 _pad2[4];
 
     if (bank >= 0x41) {
         return NULL;
@@ -1282,28 +1232,25 @@ HSD_Generator* hsd_8039F05C(s32 linkNo, s32 bank, s32 idx)
         gen->texGroup = ptclref_804D0E5C[bank][idx]->texGroup;
         gen->life = ptclref_804D0E5C[bank][idx]->life;
         gen->genLife = ptclref_804D0E5C[bank][idx]->genLife;
-        gen->pos.x = 0.0F;
-        gen->pos.y = 0.0F;
         gen->pos.z = 0.0F;
+        gen->pos.y = 0.0F;
+        gen->pos.x = 0.0F;
         gen->vel.x = ptclref_804D0E5C[bank][idx]->vx;
         gen->vel.y = ptclref_804D0E5C[bank][idx]->vy;
         gen->vel.z = ptclref_804D0E5C[bank][idx]->vz;
         gen->grav = ptclref_804D0E5C[bank][idx]->grav;
         gen->fric = ptclref_804D0E5C[bank][idx]->fric;
-        gen->angle = ptclref_804D0E5C[bank][idx]->angle;
+        gen->size = ptclref_804D0E5C[bank][idx]->size;
         gen->cmdList = ptclref_804D0E5C[bank][idx]->cmdList;
         gen->radius = ptclref_804D0E5C[bank][idx]->radius;
-        gen->size = ptclref_804D0E5C[bank][idx]->size;
+        gen->angle = ptclref_804D0E5C[bank][idx]->angle;
         gen->random = ptclref_804D0E5C[bank][idx]->random;
 
         if (gen->kind & 0x100) {
             f1 = gen->random;
             if (f1 < 0.0F) {
                 f3 = 1.0F;
-                if ((1.0F + f1) > 1.1920929e-7F) {
-                } else {
-                    f3 = 0.0F;
-                }
+                f3 = f3 + f1 > 1.1920929e-7F ? f3 : 0.0F;
                 gen->count = f3;
             } else {
                 gen->count = 0.9999999F;
@@ -1315,7 +1262,7 @@ HSD_Generator* hsd_8039F05C(s32 linkNo, s32 bank, s32 idx)
         }
 
         tg = psTexGroupArray[bank][gen->texGroup];
-        if (tg != NULL && tg->palnum != 0) {
+        if (tg != NULL && tg->palflag != 0) {
             gen->kind |= 0x10;
         }
 
@@ -1344,6 +1291,8 @@ HSD_Generator* hsd_8039F05C(s32 linkNo, s32 bank, s32 idx)
             gen->aux.line.y2 = ptclref_804D0E5C[bank][idx]->param2;
             gen->aux.line.z2 = ptclref_804D0E5C[bank][idx]->param3;
             break;
+        case 2:
+            break;
         case 6:
         case 7: {
             HSD_PSCmdList* c = ptclref_804D0E5C[bank][idx];
@@ -1365,16 +1314,16 @@ HSD_Generator* hsd_8039F05C(s32 linkNo, s32 bank, s32 idx)
             gen->aux.rect.xx = f0;
             f0 = ptclref_804D0E5C[bank][idx]->param2;
             gen->aux.rect.y = f0;
-            gen->aux.rect.zx = f0;
+            gen->aux.rect.yy = f0;
             f0 = ptclref_804D0E5C[bank][idx]->param3;
             gen->aux.rect.z = f0;
-            gen->aux.rect.zy = f0;
-            gen->aux.rect.zz = 0.0F;
+            gen->aux.rect.zz = f0;
+            gen->aux.rect.zy = 0.0F;
+            gen->aux.rect.zx = 0.0F;
             gen->aux.rect.yz = 0.0F;
-            gen->aux.rect.yy = 0.0F;
-            gen->aux.rect.xy = 0.0F;
-            gen->aux.rect.xz = 0.0F;
             gen->aux.rect.yx = 0.0F;
+            gen->aux.rect.xz = 0.0F;
+            gen->aux.rect.xy = 0.0F;
             gen->aux.rect.flag = 0;
             if (ptclref_804D0E5C[bank][idx]->param1 < 0.0F) {
                 gen->aux.rect.flag |= 1;
@@ -1388,30 +1337,28 @@ HSD_Generator* hsd_8039F05C(s32 linkNo, s32 bank, s32 idx)
             break;
         }
         case 8: {
-            f32 vx = gen->vel.x;
-            f32 vy = gen->vel.y;
-            f32 vz = gen->vel.z;
-            mag = (vz * vz) + (vx * vx + vy * vy);
-            if (mag > 0.0F) {
-                f64 x = __frsqrte((f64) mag);
-                x = 0.5 * x * -(((f64) mag * (x * x)) - 3.0);
-                x = 0.5 * x * -(((f64) mag * (x * x)) - 3.0);
-                x = 0.5 * x * -(((f64) mag * (x * x)) - 3.0);
-                vel_mag = (f32) ((f64) mag * x);
-                mag = vel_mag;
+            if ((mag = gen->vel.z * gen->vel.z +
+                       (gen->vel.x * gen->vel.x + gen->vel.y * gen->vel.y)) >
+                0.0F)
+            {
+                f64 guess = __frsqrte(mag);
+                guess = 0.5 * guess * (3.0 - mag * (guess * guess));
+                guess = 0.5 * guess * (3.0 - mag * (guess * guess));
+                guess = 0.5 * guess * (3.0 - mag * (guess * guess));
+                y1 = (f32) (mag * guess);
+                mag = y1;
             }
             gen->aux.sphere.speed = mag;
 
-            f0 = gen->vel.x;
-            f1 = gen->vel.z;
-            mag = (f0 * f0) + (f1 * f1);
-            if (mag > 0.0F) {
-                f64 x = __frsqrte((f64) mag);
-                x = 0.5 * x * -(((f64) mag * (x * x)) - 3.0);
-                x = 0.5 * x * -(((f64) mag * (x * x)) - 3.0);
-                x = 0.5 * x * -(((f64) mag * (x * x)) - 3.0);
-                horiz_mag = (f32) ((f64) mag * x);
-                mag = horiz_mag;
+            if ((mag = gen->vel.x * gen->vel.x + gen->vel.z * gen->vel.z) >
+                0.0F)
+            {
+                f64 guess = __frsqrte(mag);
+                guess = 0.5 * guess * (3.0 - mag * (guess * guess));
+                guess = 0.5 * guess * (3.0 - mag * (guess * guess));
+                guess = 0.5 * guess * (3.0 - mag * (guess * guess));
+                y2 = (f32) (mag * guess);
+                mag = y2;
             }
 
             if (mag < 1.1754944e-38F) {

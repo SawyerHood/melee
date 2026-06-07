@@ -669,6 +669,14 @@ struct MatchEnd {
     } x44C[4]; // 0x508 * 4 = 0x1420
     /* 0x186C */ u8 pad_x186C[0x227C - 0x186C];
 };
+/// @remark sizeof MUST stay 0x227C: embeddings prove it (gmvsmelee
+/// gm_80479D98 span 0x2288 = 0xC + 0x227C; gmvsdata gm_8047C020 span
+/// 0x2284 = 0x8 + 0x227C; gmresultplayer ResultsData scissor_x at
+/// 0x28 + 0x227C = 0x22A4 in matched code). The standalone gm_80477738
+/// object's symbols.txt span of 0x2280 is the dtk gap-inclusive
+/// 8-align pad before the next TU's .bss base (lbl_804799B8), NOT
+/// struct content. Verified live (wave 17): growing this to 0x2280
+/// rewrites instruction bytes in 5 matched gmresultplayer functions.
 STATIC_ASSERT(sizeof(struct MatchEnd) == 0x227C);
 
 struct MatchExitInfo {
@@ -826,7 +834,15 @@ struct TmData {
     HSD_Text* x524[4];
     HSD_Text* x534[3];
     u8 pad_x540[0x56B - 0x540];
+    /* +56B */ u8 x56B[0x574 - 0x56B]; ///< binary-proven tail (DOL: the
+                                       ///< gm_804771C4 object spans 0x574;
+                                       ///< next object gm_80477738 is
+                                       ///< 4-aligned at +0x3C80, so the +8
+                                       ///< is content, not alignment). No
+                                       ///< target accesses in this range,
+                                       ///< hence untyped u8 tail.
 };
+STATIC_ASSERT(sizeof(struct TmData) == 0x574);
 
 struct NameData {
     // a lot of this is shared with a struct for character stats as well

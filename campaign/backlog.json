@@ -269,25 +269,27 @@
   },
   {
    "name": "fn_8019175C",
-   "unit": "main/melee/gm/gm_18A5",
+   "unit": "main/melee/gm/gm_190A",
    "vaddr": "0x8019175C",
    "size": 404,
    "fuzzy": 99.94,
    "class": "layout",
    "rows": {
-    "layout": 6
+    "layout": 6,
+    "naming": 2
    },
    "severity": "near_miss"
   },
   {
    "name": "fn_801913BC",
-   "unit": "main/melee/gm/gm_18A5",
+   "unit": "main/melee/gm/gm_190A",
    "vaddr": "0x801913BC",
    "size": 700,
    "fuzzy": 99.94,
    "class": "codegen",
    "rows": {
-    "other_arg": 2
+    "other_arg": 2,
+    "naming": 2
    },
    "severity": "near_miss"
   },
@@ -544,13 +546,12 @@
   },
   {
    "name": "gm_801963B4_OnEnter",
-   "unit": "main/melee/gm/gm_18A5",
+   "unit": "main/melee/gm/gm_190A",
    "vaddr": "0x801963B4",
    "size": 240,
    "fuzzy": 99.87,
    "class": "layout",
    "rows": {
-    "naming": 2,
     "layout": 8
    },
    "severity": "near_miss"
@@ -576,7 +577,7 @@
    "fuzzy": 99.87,
    "class": "regalloc",
    "rows": {
-    "other_arg": 50,
+    "other_arg": 46,
     "regalloc": 5
    },
    "severity": "near_miss"
@@ -1370,7 +1371,7 @@
    "class": "regalloc",
    "rows": {
     "regalloc": 13,
-    "naming": 2
+    "naming": 1
    },
    "severity": "near_miss"
   },
@@ -1638,6 +1639,21 @@
     "mnemonic": 1,
     "gap": 1,
     "regalloc": 2
+   },
+   "severity": "near_miss"
+  },
+  {
+   "name": "lbAudioAx_8002838C",
+   "unit": "main/melee/lb/lbaudio_ax",
+   "vaddr": "0x8002838C",
+   "size": 772,
+   "fuzzy": 99.26,
+   "class": "structural",
+   "rows": {
+    "other_arg": 53,
+    "gap": 1,
+    "mixed": 2,
+    "regalloc": 5
    },
    "severity": "near_miss"
   },
@@ -1996,7 +2012,7 @@
    "fuzzy": 99.08,
    "class": "codegen",
    "rows": {
-    "other_arg": 73,
+    "other_arg": 68,
     "regalloc": 14,
     "layout": 2,
     "gap": 2
@@ -2107,7 +2123,7 @@
     "mixed": 2,
     "layout": 16,
     "other_arg": 4,
-    "naming": 2,
+    "naming": 1,
     "gap": 1,
     "regalloc": 4
    },
@@ -2115,13 +2131,14 @@
   },
   {
    "name": "fn_801977AC",
-   "unit": "main/melee/gm/gm_18A5",
+   "unit": "main/melee/gm/gm_1965",
    "vaddr": "0x801977AC",
    "size": 836,
    "fuzzy": 99.04,
    "class": "codegen",
    "rows": {
-    "gap": 2
+    "gap": 2,
+    "naming": 6
    },
    "severity": "near_miss"
   },
@@ -2486,6 +2503,20 @@
    "class": "regalloc",
    "rows": {
     "regalloc": 23
+   },
+   "severity": "near_miss"
+  },
+  {
+   "name": "lbAudioAx_800233EC",
+   "unit": "main/melee/lb/lbaudio_ax",
+   "vaddr": "0x800233EC",
+   "size": 680,
+   "fuzzy": 98.76,
+   "class": "structural",
+   "rows": {
+    "gap": 2,
+    "layout": 2,
+    "other_arg": 8
    },
    "severity": "near_miss"
   },
@@ -2884,6 +2915,20 @@
    "severity": "near_miss"
   },
   {
+   "name": "hsd_80398A08",
+   "unit": "main/sysdolphin/baselib/hsd_3983",
+   "vaddr": "0x80398A08",
+   "size": 508,
+   "fuzzy": 98.46,
+   "class": "structural",
+   "rows": {
+    "regalloc": 19,
+    "other_arg": 24,
+    "gap": 1
+   },
+   "severity": "near_miss"
+  },
+  {
    "name": "mnDataDel_8024EA6C",
    "unit": "main/melee/mn/mndatadel",
    "vaddr": "0x8024EA6C",
@@ -3000,7 +3045,7 @@
   },
   {
    "name": "fn_80191240",
-   "unit": "main/melee/gm/gm_18A5",
+   "unit": "main/melee/gm/gm_190A",
    "vaddr": "0x80191240",
    "size": 380,
    "fuzzy": 98.36,
@@ -3008,7 +3053,8 @@
    "rows": {
     "layout": 11,
     "gap": 1,
-    "regalloc": 9
+    "regalloc": 9,
+    "naming": 5
    },
    "severity": "near_miss"
   },
@@ -3027,13 +3073,14 @@
   },
   {
    "name": "fn_80192758",
-   "unit": "main/melee/gm/gm_18A5",
+   "unit": "main/melee/gm/gm_190A",
    "vaddr": "0x80192758",
    "size": 480,
    "fuzzy": 98.33,
    "class": "codegen",
    "rows": {
-    "gap": 2
+    "gap": 2,
+    "naming": 1
    },
    "severity": "near_miss"
   },
@@ -3425,7 +3472,7 @@
   },
   {
    "name": "fn_80198EBC",
-   "unit": "main/melee/gm/gm_18A5",
+   "unit": "main/melee/gm/gm_1965",
    "vaddr": "0x80198EBC",
    "size": 3124,
    "fuzzy": 97.97,
@@ -3435,7 +3482,8 @@
     "layout": 74,
     "mnemonic": 10,
     "regalloc": 123,
-    "other_arg": 1
+    "other_arg": 1,
+    "naming": 1
    },
    "severity": "near_miss"
   },
@@ -3608,6 +3656,23 @@
    "severity": "near_miss"
   },
   {
+   "name": "fn_80198824",
+   "unit": "main/melee/gm/gm_1965",
+   "vaddr": "0x80198824",
+   "size": 892,
+   "fuzzy": 97.83,
+   "class": "structural",
+   "rows": {
+    "layout": 7,
+    "gap": 4,
+    "regalloc": 5,
+    "naming": 6,
+    "mnemonic": 1,
+    "mixed": 7
+   },
+   "severity": "near_miss"
+  },
+  {
    "name": "fn_8018E85C",
    "unit": "main/melee/gm/gm_18A5",
    "vaddr": "0x8018E85C",
@@ -3648,23 +3713,6 @@
    "rows": {
     "gap": 1,
     "mnemonic": 1
-   },
-   "severity": "near_miss"
-  },
-  {
-   "name": "fn_80198824",
-   "unit": "main/melee/gm/gm_18A5",
-   "vaddr": "0x80198824",
-   "size": 892,
-   "fuzzy": 97.81,
-   "class": "structural",
-   "rows": {
-    "naming": 3,
-    "layout": 10,
-    "gap": 4,
-    "regalloc": 3,
-    "mnemonic": 1,
-    "mixed": 9
    },
    "severity": "near_miss"
   },
@@ -3963,6 +4011,22 @@
    "severity": "near_miss"
   },
   {
+   "name": "fn_801985D4",
+   "unit": "main/melee/gm/gm_1965",
+   "vaddr": "0x801985D4",
+   "size": 592,
+   "fuzzy": 97.68,
+   "class": "structural",
+   "rows": {
+    "layout": 7,
+    "gap": 2,
+    "regalloc": 19,
+    "naming": 4,
+    "mixed": 6
+   },
+   "severity": "near_miss"
+  },
+  {
    "name": "fn_803AC6B8",
    "unit": "main/sysdolphin/baselib/hsd_3AA7",
    "vaddr": "0x803AC6B8",
@@ -3990,30 +4054,13 @@
    "severity": "near_miss"
   },
   {
-   "name": "fn_801985D4",
-   "unit": "main/melee/gm/gm_18A5",
-   "vaddr": "0x801985D4",
-   "size": 592,
-   "fuzzy": 97.66,
-   "class": "structural",
-   "rows": {
-    "naming": 3,
-    "layout": 8,
-    "gap": 2,
-    "regalloc": 17,
-    "mixed": 8
-   },
-   "severity": "near_miss"
-  },
-  {
    "name": "fn_80192938",
-   "unit": "main/melee/gm/gm_18A5",
+   "unit": "main/melee/gm/gm_190A",
    "vaddr": "0x80192938",
    "size": 632,
    "fuzzy": 97.66,
    "class": "structural",
    "rows": {
-    "naming": 2,
     "regalloc": 13,
     "gap": 3
    },
@@ -4151,6 +4198,20 @@
    "severity": "near_miss"
   },
   {
+   "name": "fn_8018F888",
+   "unit": "main/melee/gm/gm_18A5",
+   "vaddr": "0x8018F888",
+   "size": 412,
+   "fuzzy": 97.56,
+   "class": "mixed_arg",
+   "rows": {
+    "regalloc": 31,
+    "other_arg": 1,
+    "mixed": 1
+   },
+   "severity": "near_miss"
+  },
+  {
    "name": "un_80316420",
    "unit": "main/melee/ty/tyfigupon",
    "vaddr": "0x80316420",
@@ -4227,7 +4288,7 @@
   },
   {
    "name": "fn_8019249C",
-   "unit": "main/melee/gm/gm_18A5",
+   "unit": "main/melee/gm/gm_190A",
    "vaddr": "0x8019249C",
    "size": 500,
    "fuzzy": 97.46,
@@ -4236,7 +4297,8 @@
     "gap": 2,
     "mixed": 2,
     "regalloc": 7,
-    "mnemonic": 1
+    "mnemonic": 1,
+    "naming": 4
    },
    "severity": "near_miss"
   },
@@ -4662,22 +4724,6 @@
    "severity": "near_miss"
   },
   {
-   "name": "lbAudioAx_8002838C",
-   "unit": "main/melee/lb/lbaudio_ax",
-   "vaddr": "0x8002838C",
-   "size": 772,
-   "fuzzy": 97.11,
-   "class": "structural",
-   "rows": {
-    "gap": 4,
-    "regalloc": 24,
-    "mixed": 4,
-    "layout": 9,
-    "other_arg": 44
-   },
-   "severity": "near_miss"
-  },
-  {
    "name": "fn_801891F4",
    "unit": "main/melee/gm/gm_1884",
    "vaddr": "0x801891F4",
@@ -5065,22 +5111,6 @@
     "regalloc": 22,
     "mnemonic": 1,
     "gap": 1
-   },
-   "severity": "near_miss"
-  },
-  {
-   "name": "lbAudioAx_800233EC",
-   "unit": "main/melee/lb/lbaudio_ax",
-   "vaddr": "0x800233EC",
-   "size": 680,
-   "fuzzy": 96.8,
-   "class": "structural",
-   "rows": {
-    "regalloc": 52,
-    "mnemonic": 2,
-    "gap": 2,
-    "other_arg": 2,
-    "layout": 4
    },
    "severity": "near_miss"
   },
@@ -6347,8 +6377,25 @@
    "severity": "near_miss"
   },
   {
+   "name": "fn_80199AF0",
+   "unit": "main/melee/gm/gm_1965",
+   "vaddr": "0x80199AF0",
+   "size": 1640,
+   "fuzzy": 95.92,
+   "class": "structural",
+   "rows": {
+    "gap": 12,
+    "mixed": 3,
+    "regalloc": 61,
+    "layout": 9,
+    "naming": 9,
+    "mnemonic": 2
+   },
+   "severity": "near_miss"
+  },
+  {
    "name": "fn_801949B4",
-   "unit": "main/melee/gm/gm_18A5",
+   "unit": "main/melee/gm/gm_190A",
    "vaddr": "0x801949B4",
    "size": 528,
    "fuzzy": 95.91,
@@ -6490,22 +6537,6 @@
    "severity": "near_miss"
   },
   {
-   "name": "fn_8018F888",
-   "unit": "main/melee/gm/gm_18A5",
-   "vaddr": "0x8018F888",
-   "size": 412,
-   "fuzzy": 95.78,
-   "class": "structural",
-   "rows": {
-    "mnemonic": 2,
-    "layout": 3,
-    "regalloc": 11,
-    "gap": 2,
-    "mixed": 2
-   },
-   "severity": "near_miss"
-  },
-  {
    "name": "un_8031D288_OnEnter",
    "unit": "main/melee/vi/vi0401",
    "vaddr": "0x8031D288",
@@ -6517,23 +6548,6 @@
     "mixed": 2,
     "regalloc": 70,
     "layout": 1
-   },
-   "severity": "near_miss"
-  },
-  {
-   "name": "fn_80199AF0",
-   "unit": "main/melee/gm/gm_18A5",
-   "vaddr": "0x80199AF0",
-   "size": 1640,
-   "fuzzy": 95.77,
-   "class": "structural",
-   "rows": {
-    "gap": 12,
-    "mixed": 4,
-    "regalloc": 60,
-    "layout": 10,
-    "naming": 5,
-    "mnemonic": 3
    },
    "severity": "near_miss"
   },
@@ -6619,8 +6633,7 @@
     "mixed": 30,
     "gap": 9,
     "layout": 31,
-    "other_arg": 3,
-    "naming": 1
+    "other_arg": 3
    },
    "severity": "near_miss"
   },
@@ -7042,6 +7055,22 @@
    "severity": "near_miss"
   },
   {
+   "name": "fn_8018FA24",
+   "unit": "main/melee/gm/gm_18A5",
+   "vaddr": "0x8018FA24",
+   "size": 436,
+   "fuzzy": 95.27,
+   "class": "structural",
+   "rows": {
+    "regalloc": 61,
+    "layout": 1,
+    "other_arg": 1,
+    "mnemonic": 1,
+    "gap": 1
+   },
+   "severity": "near_miss"
+  },
+  {
    "name": "grOnett_801E43E0",
    "unit": "main/melee/gr/gronett",
    "vaddr": "0x801E43E0",
@@ -7156,7 +7185,7 @@
   },
   {
    "name": "fn_80194BC4",
-   "unit": "main/melee/gm/gm_18A5",
+   "unit": "main/melee/gm/gm_190A",
    "vaddr": "0x80194BC4",
    "size": 448,
    "fuzzy": 95.18,
@@ -7327,14 +7356,13 @@
   },
   {
    "name": "fn_80195AF0",
-   "unit": "main/melee/gm/gm_18A5",
+   "unit": "main/melee/gm/gm_190A",
    "vaddr": "0x80195AF0",
    "size": 476,
    "fuzzy": 94.87,
    "class": "structural",
    "rows": {
     "layout": 5,
-    "naming": 2,
     "regalloc": 9,
     "gap": 5,
     "mnemonic": 1
@@ -7359,7 +7387,7 @@
   },
   {
    "name": "fn_801935B8",
-   "unit": "main/melee/gm/gm_18A5",
+   "unit": "main/melee/gm/gm_190A",
    "vaddr": "0x801935B8",
    "size": 524,
    "fuzzy": 94.85,
@@ -7367,7 +7395,7 @@
    "rows": {
     "regalloc": 36,
     "gap": 4,
-    "naming": 1
+    "naming": 3
    },
    "severity": "near_miss"
   },
@@ -7383,23 +7411,6 @@
     "mnemonic": 1,
     "regalloc": 38,
     "mixed": 1
-   },
-   "severity": "near_miss"
-  },
-  {
-   "name": "HSD_SisLib_803A8134",
-   "unit": "main/sysdolphin/baselib/sislib",
-   "vaddr": "0x803A8134",
-   "size": 904,
-   "fuzzy": 94.84,
-   "class": "structural",
-   "rows": {
-    "gap": 7,
-    "mixed": 4,
-    "regalloc": 50,
-    "mnemonic": 1,
-    "other_arg": 5,
-    "layout": 2
    },
    "severity": "near_miss"
   },
@@ -7889,6 +7900,24 @@
    "severity": "near_miss"
   },
   {
+   "name": "hsd_8039930C",
+   "unit": "main/sysdolphin/baselib/hsd_3983",
+   "vaddr": "0x8039930C",
+   "size": 15264,
+   "fuzzy": 94.23,
+   "class": "structural",
+   "rows": {
+    "naming": 8,
+    "mixed": 57,
+    "regalloc": 493,
+    "layout": 24,
+    "mnemonic": 35,
+    "gap": 158,
+    "other_arg": 14
+   },
+   "severity": "near_miss"
+  },
+  {
    "name": "gm_801BFCFC",
    "unit": "main/melee/gm/gm_1BFA",
    "vaddr": "0x801BFCFC",
@@ -8092,24 +8121,6 @@
    "severity": "near_miss"
   },
   {
-   "name": "hsd_8039930C",
-   "unit": "main/sysdolphin/baselib/hsd_3983",
-   "vaddr": "0x8039930C",
-   "size": 15264,
-   "fuzzy": 93.9,
-   "class": "structural",
-   "rows": {
-    "naming": 2,
-    "mixed": 58,
-    "regalloc": 495,
-    "layout": 48,
-    "gap": 169,
-    "mnemonic": 37,
-    "other_arg": 14
-   },
-   "severity": "near_miss"
-  },
-  {
    "name": "it_8026CD50",
    "unit": "main/melee/it/itspawn",
    "vaddr": "0x8026CD50",
@@ -8154,6 +8165,23 @@
     "mnemonic": 3,
     "other_arg": 4,
     "mixed": 2
+   },
+   "severity": "near_miss"
+  },
+  {
+   "name": "fn_80026C04",
+   "unit": "main/melee/lb/lbaudio_ax",
+   "vaddr": "0x80026C04",
+   "size": 596,
+   "fuzzy": 93.83,
+   "class": "structural",
+   "rows": {
+    "naming": 2,
+    "other_arg": 6,
+    "layout": 9,
+    "regalloc": 49,
+    "mnemonic": 5,
+    "gap": 5
    },
    "severity": "near_miss"
   },
@@ -8300,6 +8328,22 @@
    "severity": "near_miss"
   },
   {
+   "name": "HSD_SisLib_803A8134",
+   "unit": "main/sysdolphin/baselib/sislib",
+   "vaddr": "0x803A8134",
+   "size": 904,
+   "fuzzy": 93.65,
+   "class": "codegen",
+   "rows": {
+    "gap": 8,
+    "regalloc": 84,
+    "mixed": 3,
+    "other_arg": 5,
+    "layout": 2
+   },
+   "severity": "near_miss"
+  },
+  {
    "name": "ftCo_800B5AB0",
    "unit": "main/melee/ft/ftcpuattack",
    "vaddr": "0x800B5AB0",
@@ -8348,7 +8392,7 @@
   },
   {
    "name": "fn_80194658",
-   "unit": "main/melee/gm/gm_18A5",
+   "unit": "main/melee/gm/gm_190A",
    "vaddr": "0x80194658",
    "size": 860,
    "fuzzy": 93.44,
@@ -8430,14 +8474,15 @@
   },
   {
    "name": "fn_80190ABC",
-   "unit": "main/melee/gm/gm_18A5",
+   "unit": "main/melee/gm/gm_190A",
    "vaddr": "0x80190ABC",
    "size": 1000,
    "fuzzy": 93.33,
    "class": "codegen",
    "rows": {
-    "naming": 2,
     "layout": 24,
+    "naming": 5,
+    "other_arg": 1,
     "regalloc": 36,
     "gap": 12,
     "mnemonic": 3,
@@ -8477,7 +8522,7 @@
   },
   {
    "name": "fn_801967E0",
-   "unit": "main/melee/gm/gm_18A5",
+   "unit": "main/melee/gm/gm_1965",
    "vaddr": "0x801967E0",
    "size": 1304,
    "fuzzy": 93.29,
@@ -8814,6 +8859,22 @@
     "gap": 21,
     "mnemonic": 5,
     "regalloc": 27
+   },
+   "severity": "near_miss"
+  },
+  {
+   "name": "fn_801953C8",
+   "unit": "main/melee/gm/gm_190A",
+   "vaddr": "0x801953C8",
+   "size": 1832,
+   "fuzzy": 92.66,
+   "class": "structural",
+   "rows": {
+    "regalloc": 77,
+    "layout": 7,
+    "gap": 28,
+    "mixed": 1,
+    "mnemonic": 1
    },
    "severity": "near_miss"
   },
@@ -9630,24 +9691,6 @@
    "severity": "near_miss"
   },
   {
-   "name": "fn_80026C04",
-   "unit": "main/melee/lb/lbaudio_ax",
-   "vaddr": "0x80026C04",
-   "size": 596,
-   "fuzzy": 91.55,
-   "class": "structural",
-   "rows": {
-    "naming": 2,
-    "other_arg": 6,
-    "layout": 9,
-    "regalloc": 51,
-    "gap": 7,
-    "mixed": 2,
-    "mnemonic": 5
-   },
-   "severity": "near_miss"
-  },
-  {
    "name": "Camera_8002D318",
    "unit": "main/melee/cm/camera",
    "vaddr": "0x8002D318",
@@ -9660,8 +9703,7 @@
     "gap": 22,
     "mnemonic": 1,
     "other_arg": 3,
-    "layout": 17,
-    "naming": 1
+    "layout": 17
    },
    "severity": "near_miss"
   },
@@ -9726,22 +9768,6 @@
     "mixed": 24,
     "gap": 28,
     "mnemonic": 3
-   },
-   "severity": "near_miss"
-  },
-  {
-   "name": "fn_8018FA24",
-   "unit": "main/melee/gm/gm_18A5",
-   "vaddr": "0x8018FA24",
-   "size": 436,
-   "fuzzy": 91.41,
-   "class": "structural",
-   "rows": {
-    "regalloc": 50,
-    "mnemonic": 4,
-    "mixed": 3,
-    "gap": 4,
-    "other_arg": 1
    },
    "severity": "near_miss"
   },
@@ -9903,6 +9929,24 @@
    "severity": "near_miss"
   },
   {
+   "name": "HSD_SisLib_803A84BC",
+   "unit": "main/sysdolphin/baselib/sislib",
+   "vaddr": "0x803A84BC",
+   "size": 4000,
+   "fuzzy": 91.28,
+   "class": "structural",
+   "rows": {
+    "gap": 63,
+    "layout": 130,
+    "regalloc": 107,
+    "other_arg": 3,
+    "naming": 1,
+    "mnemonic": 20,
+    "mixed": 17
+   },
+   "severity": "near_miss"
+  },
+  {
    "name": "mnCount_Create",
    "unit": "main/melee/mn/mncount",
    "vaddr": "0x8025186C",
@@ -9915,6 +9959,23 @@
     "regalloc": 15,
     "mixed": 3,
     "layout": 4
+   },
+   "severity": "near_miss"
+  },
+  {
+   "name": "fn_80191FD4",
+   "unit": "main/melee/gm/gm_190A",
+   "vaddr": "0x80191FD4",
+   "size": 936,
+   "fuzzy": 91.24,
+   "class": "structural",
+   "rows": {
+    "regalloc": 57,
+    "gap": 16,
+    "mixed": 4,
+    "naming": 8,
+    "mnemonic": 1,
+    "layout": 5
    },
    "severity": "near_miss"
   },
@@ -9983,6 +10044,23 @@
    "severity": "near_miss"
   },
   {
+   "name": "psInitDataBankLocate",
+   "unit": "main/sysdolphin/baselib/hsd_3983",
+   "vaddr": "0x80398614",
+   "size": 908,
+   "fuzzy": 91.11,
+   "class": "structural",
+   "rows": {
+    "regalloc": 89,
+    "gap": 11,
+    "layout": 5,
+    "mixed": 6,
+    "mnemonic": 2,
+    "other_arg": 2
+   },
+   "severity": "near_miss"
+  },
+  {
    "name": "grOldKongo_8020F888",
    "unit": "main/melee/gr/groldkongo",
    "vaddr": "0x8020F888",
@@ -10047,8 +10125,7 @@
     "regalloc": 43,
     "mixed": 13,
     "other_arg": 1,
-    "layout": 17,
-    "naming": 1
+    "layout": 17
    },
    "severity": "near_miss"
   },
@@ -10070,7 +10147,7 @@
   },
   {
    "name": "fn_8019A86C",
-   "unit": "main/melee/gm/gm_18A5",
+   "unit": "main/melee/gm/gm_1965",
    "vaddr": "0x8019A86C",
    "size": 1764,
    "fuzzy": 90.91,
@@ -10171,7 +10248,7 @@
   },
   {
    "name": "fn_80196FFC",
-   "unit": "main/melee/gm/gm_18A5",
+   "unit": "main/melee/gm/gm_1965",
    "vaddr": "0x80196FFC",
    "size": 1020,
    "fuzzy": 90.66,
@@ -10179,27 +10256,10 @@
    "rows": {
     "regalloc": 44,
     "layout": 11,
+    "naming": 4,
     "mixed": 3,
     "mnemonic": 6,
     "gap": 17
-   },
-   "severity": "near_miss"
-  },
-  {
-   "name": "DrawASCII",
-   "unit": "main/sysdolphin/baselib/particle",
-   "vaddr": "0x80391664",
-   "size": 928,
-   "fuzzy": 90.65,
-   "class": "structural",
-   "rows": {
-    "regalloc": 63,
-    "other_arg": 1,
-    "naming": 1,
-    "gap": 13,
-    "mnemonic": 5,
-    "mixed": 11,
-    "layout": 3
    },
    "severity": "near_miss"
   },
@@ -10271,18 +10331,18 @@
   },
   {
    "name": "fn_80193FCC",
-   "unit": "main/melee/gm/gm_18A5",
+   "unit": "main/melee/gm/gm_190A",
    "vaddr": "0x80193FCC",
    "size": 1676,
    "fuzzy": 90.57,
    "class": "structural",
    "rows": {
-    "naming": 2,
     "regalloc": 48,
     "gap": 32,
     "mnemonic": 6,
     "mixed": 3,
     "other_arg": 1,
+    "naming": 2,
     "layout": 2
    },
    "severity": "near_miss"
@@ -10337,6 +10397,24 @@
     "mnemonic": 2,
     "gap": 6,
     "layout": 2
+   },
+   "severity": "near_miss"
+  },
+  {
+   "name": "DrawASCII",
+   "unit": "main/sysdolphin/baselib/particle",
+   "vaddr": "0x80391664",
+   "size": 928,
+   "fuzzy": 90.36,
+   "class": "structural",
+   "rows": {
+    "regalloc": 62,
+    "other_arg": 1,
+    "naming": 1,
+    "mnemonic": 5,
+    "gap": 14,
+    "layout": 3,
+    "mixed": 8
    },
    "severity": "near_miss"
   },
@@ -10949,23 +11027,6 @@
    "severity": "partial"
   },
   {
-   "name": "HSD_SisLib_803A84BC",
-   "unit": "main/sysdolphin/baselib/sislib",
-   "vaddr": "0x803A84BC",
-   "size": 4000,
-   "fuzzy": 89.15,
-   "class": "structural",
-   "rows": {
-    "gap": 79,
-    "layout": 129,
-    "regalloc": 126,
-    "mnemonic": 26,
-    "mixed": 16,
-    "other_arg": 2
-   },
-   "severity": "partial"
-  },
-  {
    "name": "fn_801F8E58",
    "unit": "main/melee/gr/gricemt",
    "vaddr": "0x801F8E58",
@@ -11090,7 +11151,7 @@
    "rows": {
     "mnemonic": 1,
     "gap": 6,
-    "other_arg": 8,
+    "other_arg": 2,
     "regalloc": 2,
     "mixed": 1
    },
@@ -11261,6 +11322,22 @@
    "severity": "partial"
   },
   {
+   "name": "fn_8019AF50",
+   "unit": "main/melee/gm/gm_1965",
+   "vaddr": "0x8019AF50",
+   "size": 908,
+   "fuzzy": 88.3,
+   "class": "structural",
+   "rows": {
+    "layout": 11,
+    "regalloc": 57,
+    "mnemonic": 8,
+    "gap": 21,
+    "mixed": 1
+   },
+   "severity": "partial"
+  },
+  {
    "name": "fn_80020AEC",
    "unit": "main/melee/lb/lbbgflash",
    "vaddr": "0x80020AEC",
@@ -11390,22 +11467,6 @@
     "mixed": 5,
     "mnemonic": 10,
     "regalloc": 30
-   },
-   "severity": "partial"
-  },
-  {
-   "name": "fn_801953C8",
-   "unit": "main/melee/gm/gm_18A5",
-   "vaddr": "0x801953C8",
-   "size": 1832,
-   "fuzzy": 88.04,
-   "class": "structural",
-   "rows": {
-    "gap": 40,
-    "regalloc": 114,
-    "mnemonic": 13,
-    "layout": 7,
-    "mixed": 1
    },
    "severity": "partial"
   },
@@ -11786,23 +11847,6 @@
    "severity": "partial"
   },
   {
-   "name": "fn_8019AF50",
-   "unit": "main/melee/gm/gm_18A5",
-   "vaddr": "0x8019AF50",
-   "size": 908,
-   "fuzzy": 87.18,
-   "class": "structural",
-   "rows": {
-    "naming": 1,
-    "layout": 13,
-    "mixed": 6,
-    "gap": 23,
-    "regalloc": 69,
-    "mnemonic": 7
-   },
-   "severity": "partial"
-  },
-  {
    "name": "ftCo_800C4C60",
    "unit": "main/melee/ft/chara/ftCommon/ftCo_WarpStar",
    "vaddr": "0x800C4C60",
@@ -11931,21 +11975,6 @@
    "severity": "partial"
   },
   {
-   "name": "fn_80191FD4",
-   "unit": "main/melee/gm/gm_18A5",
-   "vaddr": "0x80191FD4",
-   "size": 936,
-   "fuzzy": 86.85,
-   "class": "structural",
-   "rows": {
-    "regalloc": 58,
-    "gap": 27,
-    "layout": 8,
-    "mixed": 5
-   },
-   "severity": "partial"
-  },
-  {
    "name": "grYorster_8020266C",
    "unit": "main/melee/gr/gryorster",
    "vaddr": "0x8020266C",
@@ -11972,6 +12001,24 @@
     "gap": 15,
     "mnemonic": 2,
     "regalloc": 17
+   },
+   "severity": "partial"
+  },
+  {
+   "name": "fn_8018B090",
+   "unit": "main/melee/gm/gm_18A5",
+   "vaddr": "0x8018B090",
+   "size": 6212,
+   "fuzzy": 86.71,
+   "class": "structural",
+   "rows": {
+    "naming": 2,
+    "mixed": 123,
+    "regalloc": 301,
+    "mnemonic": 40,
+    "gap": 154,
+    "layout": 26,
+    "other_arg": 1
    },
    "severity": "partial"
   },
@@ -12006,24 +12053,6 @@
     "naming": 1,
     "mixed": 1,
     "other_arg": 2
-   },
-   "severity": "partial"
-  },
-  {
-   "name": "fn_8018B090",
-   "unit": "main/melee/gm/gm_18A5",
-   "vaddr": "0x8018B090",
-   "size": 6212,
-   "fuzzy": 86.45,
-   "class": "structural",
-   "rows": {
-    "naming": 2,
-    "mixed": 139,
-    "regalloc": 303,
-    "mnemonic": 23,
-    "gap": 166,
-    "layout": 28,
-    "other_arg": 1
    },
    "severity": "partial"
   },
@@ -12348,19 +12377,19 @@
   },
   {
    "name": "fn_80193B58",
-   "unit": "main/melee/gm/gm_18A5",
+   "unit": "main/melee/gm/gm_190A",
    "vaddr": "0x80193B58",
    "size": 1140,
    "fuzzy": 85.33,
    "class": "structural",
    "rows": {
-    "naming": 2,
     "regalloc": 39,
     "gap": 36,
     "mnemonic": 4,
     "mixed": 3,
     "other_arg": 2,
-    "layout": 1
+    "layout": 1,
+    "naming": 1
    },
    "severity": "partial"
   },
@@ -12376,7 +12405,6 @@
     "mixed": 4,
     "gap": 10,
     "mnemonic": 2,
-    "other_arg": 3,
     "layout": 1
    },
    "severity": "partial"
@@ -12878,6 +12906,23 @@
    "severity": "partial"
   },
   {
+   "name": "fn_8019A158",
+   "unit": "main/melee/gm/gm_1965",
+   "vaddr": "0x8019A158",
+   "size": 1476,
+   "fuzzy": 83.51,
+   "class": "structural",
+   "rows": {
+    "mixed": 17,
+    "regalloc": 115,
+    "gap": 46,
+    "layout": 15,
+    "mnemonic": 9,
+    "other_arg": 1
+   },
+   "severity": "partial"
+  },
+  {
    "name": "grGreens_802166C4",
    "unit": "main/melee/gr/grgreens",
    "vaddr": "0x802166C4",
@@ -12895,13 +12940,12 @@
   },
   {
    "name": "fn_80195CCC",
-   "unit": "main/melee/gm/gm_18A5",
+   "unit": "main/melee/gm/gm_190A",
    "vaddr": "0x80195CCC",
    "size": 1088,
    "fuzzy": 83.44,
    "class": "structural",
    "rows": {
-    "naming": 1,
     "mnemonic": 15,
     "mixed": 30,
     "gap": 32,
@@ -12942,23 +12986,6 @@
     "layout": 6,
     "other_arg": 1,
     "mnemonic": 3
-   },
-   "severity": "partial"
-  },
-  {
-   "name": "fn_80397814",
-   "unit": "main/sysdolphin/baselib/particle",
-   "vaddr": "0x80397814",
-   "size": 1424,
-   "fuzzy": 83.22,
-   "class": "structural",
-   "rows": {
-    "regalloc": 103,
-    "gap": 49,
-    "mixed": 8,
-    "other_arg": 3,
-    "layout": 1,
-    "mnemonic": 8
    },
    "severity": "partial"
   },
@@ -13093,6 +13120,23 @@
     "mixed": 4,
     "mnemonic": 18,
     "regalloc": 3
+   },
+   "severity": "partial"
+  },
+  {
+   "name": "fn_80397814",
+   "unit": "main/sysdolphin/baselib/particle",
+   "vaddr": "0x80397814",
+   "size": 1424,
+   "fuzzy": 82.61,
+   "class": "structural",
+   "rows": {
+    "regalloc": 97,
+    "gap": 49,
+    "mixed": 18,
+    "other_arg": 3,
+    "layout": 1,
+    "mnemonic": 11
    },
    "severity": "partial"
   },
@@ -13385,13 +13429,11 @@
    "unit": "main/melee/gm/gm_18A5",
    "vaddr": "0x8018FBE0",
    "size": 484,
-   "fuzzy": 81.1,
+   "fuzzy": 81.07,
    "class": "structural",
    "rows": {
-    "other_arg": 1,
-    "gap": 19,
-    "mixed": 2,
-    "mnemonic": 1,
+    "mnemonic": 3,
+    "gap": 18,
     "regalloc": 62
    },
    "severity": "partial"
@@ -13476,24 +13518,6 @@
     "mnemonic": 15,
     "regalloc": 63,
     "mixed": 22
-   },
-   "severity": "partial"
-  },
-  {
-   "name": "fn_8019A158",
-   "unit": "main/melee/gm/gm_18A5",
-   "vaddr": "0x8019A158",
-   "size": 1476,
-   "fuzzy": 80.8,
-   "class": "structural",
-   "rows": {
-    "naming": 1,
-    "mixed": 45,
-    "regalloc": 89,
-    "gap": 54,
-    "layout": 16,
-    "mnemonic": 11,
-    "other_arg": 2
    },
    "severity": "partial"
   },
@@ -14007,6 +14031,24 @@
    "severity": "partial"
   },
   {
+   "name": "fn_8019B458",
+   "unit": "main/melee/gm/gm_1965",
+   "vaddr": "0x8019B458",
+   "size": 964,
+   "fuzzy": 78.79,
+   "class": "structural",
+   "rows": {
+    "gap": 45,
+    "regalloc": 13,
+    "layout": 16,
+    "mnemonic": 7,
+    "mixed": 21,
+    "other_arg": 3,
+    "naming": 1
+   },
+   "severity": "partial"
+  },
+  {
    "name": "HSD_SisLib_803A70A0",
    "unit": "main/sysdolphin/baselib/sislib",
    "vaddr": "0x803A70A0",
@@ -14019,24 +14061,6 @@
     "regalloc": 91,
     "gap": 41,
     "mnemonic": 13
-   },
-   "severity": "partial"
-  },
-  {
-   "name": "fn_8019B458",
-   "unit": "main/melee/gm/gm_18A5",
-   "vaddr": "0x8019B458",
-   "size": 964,
-   "fuzzy": 78.78,
-   "class": "structural",
-   "rows": {
-    "naming": 3,
-    "gap": 45,
-    "mixed": 22,
-    "regalloc": 12,
-    "layout": 19,
-    "mnemonic": 7,
-    "other_arg": 3
    },
    "severity": "partial"
   },
@@ -14094,7 +14118,7 @@
   },
   {
    "name": "fn_801937C4",
-   "unit": "main/melee/gm/gm_18A5",
+   "unit": "main/melee/gm/gm_190A",
    "vaddr": "0x801937C4",
    "size": 916,
    "fuzzy": 77.84,
@@ -14388,23 +14412,6 @@
    "severity": "partial"
   },
   {
-   "name": "psInitDataBankLocate",
-   "unit": "main/sysdolphin/baselib/hsd_3983",
-   "vaddr": "0x80398614",
-   "size": 908,
-   "fuzzy": 75.74,
-   "class": "structural",
-   "rows": {
-    "regalloc": 80,
-    "layout": 8,
-    "mnemonic": 17,
-    "gap": 39,
-    "other_arg": 6,
-    "mixed": 11
-   },
-   "severity": "partial"
-  },
-  {
    "name": "fn_80169A84",
    "unit": "main/melee/gm/gm_1693",
    "vaddr": "0x80169A84",
@@ -14657,8 +14664,9 @@
     "gap": 17,
     "regalloc": 42,
     "mnemonic": 3,
-    "layout": 2,
-    "mixed": 1
+    "layout": 1,
+    "mixed": 1,
+    "other_arg": 1
    },
    "severity": "partial"
   },
@@ -15004,21 +15012,6 @@
     "mnemonic": 18,
     "other_arg": 7,
     "regalloc": 24
-   },
-   "severity": "partial"
-  },
-  {
-   "name": "hsd_80398A08",
-   "unit": "main/sysdolphin/baselib/hsd_3983",
-   "vaddr": "0x80398A08",
-   "size": 508,
-   "fuzzy": 62.67,
-   "class": "structural",
-   "rows": {
-    "regalloc": 69,
-    "gap": 42,
-    "mnemonic": 3,
-    "mixed": 1
    },
    "severity": "partial"
   },
