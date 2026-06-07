@@ -72,7 +72,7 @@ extern u16 hsd_804D78DC;
 extern int psNumTexGroup[65];
 
 /* 4D0F60 */ struct hsd_804D0F60_t hsd_804D0F60;
-/* 4D0F90 */ struct hsd_804D0F60_t hsd_804D0F90;
+/* hsd_804D0F90 moved to hsd_39D1.c (its original TU) */
 
 // .data
 
@@ -107,12 +107,6 @@ extern int psNumTexGroup[65];
 /* 4D78DE */ static u16 hsd_804D78DE;
 /* 4D78E0 */ static u16 hsd_804D78E0;
 /* 4D78E2 */ static u16 hsd_804D78E2;
-/* 4D78E8 */ static u32 hsd_804D78E8;
-/* 4D78EC */ static u32 hsd_804D78EC;
-/* 4D78F0 */ static u32 hsd_804D78F0;
-/* 4D78F4 */ static u32 hsd_804D78F4;
-/* 4D78F8 */ static u32 hsd_804D78F8;
-/* 4D78FC */ static HSD_Generator* hsd_804D78FC;
-/* 4D7900 */ static u32 hsd_804D7900;
+/* 4D78E8..4D7900 moved to hsd_39D1.c (their original TU) */
 
 #endif
