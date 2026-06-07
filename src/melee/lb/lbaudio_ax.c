@@ -1269,74 +1269,13 @@ bool fn_800253D8(HSD_GObj* gobj)
     if (gobj != NULL) {
         ud = gobj->user_data;
         if (ud != NULL) {
-            if (ud->x3C == 1.0f) {
-                int end_frame = ud->end_frame;
-                int cur_frame = ud->current_frame;
-                int pan_right = ud->pan_right;
-                int pan_left = ud->pan_left;
-                int result;
-                float val;
-
-                if (cur_frame > end_frame) {
-                    cur_frame = end_frame;
-                }
-                if (pan_left != pan_right) {
-                    if (pan_left <= pan_right) {
-                        val = (float) pan_left +
-                              ((float) cur_frame *
-                               ((float) pan_right - (float) pan_left)) /
-                                  (float) end_frame;
-                    } else {
-                        val = (float) pan_right +
-                              ((float) cur_frame *
-                               ((float) pan_left - (float) pan_right)) /
-                                  (float) end_frame;
-                    }
-                    if (val < 0.0f) {
-                        val = 0.0f;
-                    }
-                    if (val > 127.0f) {
-                        val = 127.0f;
-                    }
-                    result = (int) val;
-                } else {
-                    result = 0x40;
-                }
-                ud->x2C.pan = result;
+            if (1.0f == ud->x3C) {
+                ud->x2C.pan = fn_800250A0(ud->current_frame, ud->end_frame,
+                                          ud->pan_left, ud->pan_right);
             } else {
-                int end_frame = ud->end_frame;
-                int cur_frame = ud->current_frame;
-                int pan_right = ud->pan_right;
-                int pan_left = ud->pan_left;
-                int result;
-                float val;
-
-                if (cur_frame > end_frame) {
-                    cur_frame = end_frame;
-                }
-                if (pan_left != pan_right) {
-                    if (pan_left <= pan_right) {
-                        val = (float) pan_left +
-                              ((float) cur_frame *
-                               ((float) pan_right - (float) pan_left)) /
-                                  (float) end_frame;
-                    } else {
-                        val = (float) pan_right +
-                              ((float) cur_frame *
-                               ((float) pan_left - (float) pan_right)) /
-                                  (float) end_frame;
-                    }
-                    if (val < 0.0f) {
-                        val = 0.0f;
-                    }
-                    if (val > 127.0f) {
-                        val = 127.0f;
-                    }
-                    result = (int) val;
-                } else {
-                    result = 0x40;
-                }
-                ud->x2C.pan = 0x7F - result;
+                ud->x2C.pan =
+                    0x7F - fn_800250A0(ud->current_frame, ud->end_frame,
+                                       ud->pan_left, ud->pan_right);
             }
         }
     }
@@ -1350,74 +1289,13 @@ bool fn_800256BC(HSD_GObj* gobj)
     if (gobj != NULL) {
         ud = gobj->user_data;
         if (ud != NULL) {
-            if (ud->x3C == 1.0f) {
-                int end_frame = ud->end_frame;
-                int cur_frame = ud->current_frame;
-                int pan_right = ud->pan_right;
-                int pan_left = ud->pan_left;
-                int result;
-                float val;
-
-                if (cur_frame > end_frame) {
-                    cur_frame = end_frame;
-                }
-                if (pan_left != pan_right) {
-                    if (pan_left <= pan_right) {
-                        val = (float) pan_left +
-                              ((float) cur_frame *
-                               ((float) pan_right - (float) pan_left)) /
-                                  (float) end_frame;
-                    } else {
-                        val = (float) pan_right +
-                              ((float) cur_frame *
-                               ((float) pan_left - (float) pan_right)) /
-                                  (float) end_frame;
-                    }
-                    if (val < 0.0f) {
-                        val = 0.0f;
-                    }
-                    if (val > 127.0f) {
-                        val = 127.0f;
-                    }
-                    result = (int) val;
-                } else {
-                    result = 0x40;
-                }
-                ud->x2C.pan = result;
+            if (1.0f == ud->x3C) {
+                ud->x2C.pan = fn_800250A0(ud->current_frame, ud->end_frame,
+                                          ud->pan_left, ud->pan_right);
             } else {
-                int end_frame = ud->end_frame;
-                int cur_frame = ud->current_frame;
-                int pan_right = ud->pan_right;
-                int pan_left = ud->pan_left;
-                int result;
-                float val;
-
-                if (cur_frame > end_frame) {
-                    cur_frame = end_frame;
-                }
-                if (pan_left != pan_right) {
-                    if (pan_left <= pan_right) {
-                        val = (float) pan_left +
-                              ((float) cur_frame *
-                               ((float) pan_right - (float) pan_left)) /
-                                  (float) end_frame;
-                    } else {
-                        val = (float) pan_right +
-                              ((float) cur_frame *
-                               ((float) pan_left - (float) pan_right)) /
-                                  (float) end_frame;
-                    }
-                    if (val < 0.0f) {
-                        val = 0.0f;
-                    }
-                    if (val > 127.0f) {
-                        val = 127.0f;
-                    }
-                    result = (int) val;
-                } else {
-                    result = 0x40;
-                }
-                ud->x2C.pan = 0x7F - result;
+                ud->x2C.pan =
+                    0x7F - fn_800250A0(ud->current_frame, ud->end_frame,
+                                       ud->pan_left, ud->pan_right);
             }
         }
     }
@@ -1641,37 +1519,27 @@ end:
 bool fn_80025E38(HSD_GObj* gobj)
 {
     lbAudioAx_UserData* ud;
-    s32 end_frame;
-    s32 current_frame;
-    s32 end_val;
-    s32 start_val;
     f32 diff;
     f32 ratio;
 
     if (gobj != NULL) {
         ud = gobj->user_data;
         if (ud != NULL) {
-            current_frame = ud->current_frame;
-            end_frame = ud->end_frame;
-
-            if (current_frame <= end_frame) {
-                start_val = ud->start_val;
-                end_val = ud->end_val;
-
-                if (start_val < end_val) {
-                    diff = (f32) end_val - (f32) start_val;
+            if (ud->current_frame <= ud->end_frame) {
+                if (ud->start_val < ud->end_val) {
+                    diff = (f32) ud->end_val - (f32) ud->start_val;
                     if (diff < 0.0f) {
                         diff = -diff;
                     }
-                    ratio = (f32) current_frame / (f32) end_frame;
-                    ud->x20 = start_val + (s32) (ratio * diff);
+                    ratio = (f32) ud->current_frame / (f32) ud->end_frame;
+                    ud->x20 = ud->start_val + (s32) (ratio * diff);
                 } else {
-                    diff = (f32) end_val - (f32) start_val;
+                    diff = (f32) ud->end_val - (f32) ud->start_val;
                     if (diff < 0.0f) {
                         diff = -diff;
                     }
-                    ratio = (f32) current_frame / (f32) end_frame;
-                    ud->x20 = end_val - (s32) (ratio * diff);
+                    ratio = (f32) ud->current_frame / (f32) ud->end_frame;
+                    ud->x20 = ud->end_val - (s32) (ratio * diff);
                 }
             } else {
                 ud->x20 = 0x7F;
@@ -1697,10 +1565,16 @@ typedef struct SoundParams {
 
 void fn_80025FAC(HSD_GObj* gobj, void* userdata, void* params)
 {
-    SoundParams* sp = params;
     lbAudioAx_UserData* ud = userdata;
+    SoundParams* sp = params;
 
-    if (gobj == NULL || ud == NULL || sp == NULL) {
+    if (gobj == NULL) {
+        return;
+    }
+    if (sp == NULL) {
+        return;
+    }
+    if (ud == NULL) {
         return;
     }
 
@@ -1766,30 +1640,34 @@ void fn_80025FAC(HSD_GObj* gobj, void* userdata, void* params)
     }
     }
 
-    {
-        s32 type = ud->xC;
-        if (type == 9) {
-            goto case9;
-        } else if (type >= 0 && type < 9) {
-            if (ud->current_frame < 0) {
-                ud->current_frame = 0;
-            }
-            if (ud->end_frame < 0) {
-                ud->end_frame = 0;
-            }
-            {
-                s32 group = ud->x40;
-                if (group == 0) {
-                    ud->voice_id =
-                        lbAudioAx_800237A8(ud->x14, ud->x20, ud->x2C.pan);
-                    return;
-                }
-                ud->voice_id =
-                    lbAudioAx_80023870(ud->x14, ud->x20, ud->x2C.pan, group);
-            }
+    switch (ud->xC) {
+    case 0:
+    case 1:
+    case 2:
+    case 3:
+    case 4:
+    case 5:
+    case 6:
+    case 7:
+    case 8:
+        if (ud->current_frame < 0) {
+            ud->current_frame = 0;
         }
-        goto done;
-    case9:
+        if (ud->end_frame < 0) {
+            ud->end_frame = 0;
+        }
+        {
+            s32 group = ud->x40;
+            if (group == 0) {
+                ud->voice_id =
+                    lbAudioAx_800237A8(ud->x14, ud->x20, ud->x2C.pan);
+                return;
+            }
+            ud->voice_id =
+                lbAudioAx_80023870(ud->x14, ud->x20, ud->x2C.pan, group);
+        }
+        break;
+    case 9:
         if (ud->current_frame < 0) {
             ud->current_frame = 0;
         }
@@ -1797,7 +1675,7 @@ void fn_80025FAC(HSD_GObj* gobj, void* userdata, void* params)
             ud->end_frame = 0;
         }
         ud->voice_id = sp->x28;
-    done:;
+        break;
     }
 }
 
@@ -2077,10 +1955,10 @@ void fn_800268B4(void)
     int i;
 
     lbl_804D6450 = 0;
-    lbl_804D644C = 0;
-    lbl_804D6448 = 0;
     arr_38a4 = lbl_804338A4;
+    lbl_804D644C = 0;
     arr_3984 = lbl_80433984;
+    lbl_804D6448 = 0;
     arr_4e4 = offsets_arr_803BC4E4;
 
     for (i = 0x37; i != 0; i--) {
@@ -2183,10 +2061,14 @@ s32 fn_80026C04(s32 arg0)
     s32 priority;
     s32 slot;
     int i;
+    s8(*arr_5d0)[4];
+    int* arr_194;
+    int* arr_274;
 
     if (arg0 != -1) {
+        int* p354 = st->x354;
         for (i = 0; i < 0x37; i++) {
-            if (arg0 == st->x354[i]) {
+            if (arg0 == p354[i]) {
                 st->x274[i] = 1;
                 {
                     s32 offset = offsets_arr_803BC4E4[i][0];
@@ -2200,16 +2082,22 @@ s32 fn_80026C04(s32 arg0)
     }
 
     for (priority = 4; priority >= 0; priority--) {
-        s8(*arr_5d0)[4] = s32_arr_803BB5D0;
-        int* arr_194 = st->x194;
-        int* arr_274 = st->x274;
+        arr_5d0 = s32_arr_803BB5D0;
+        arr_194 = st->x194;
+        arr_274 = st->x274;
 
         for (slot = 0; slot < 0x37; slot++) {
-            if (priority == arr_5d0[slot][1] && arr_194[slot] == 1 &&
-                arr_274[slot] == -1)
-            {
-                goto found;
+            if (priority != arr_5d0[slot][1]) {
+                goto next;
             }
+            if (arr_194[slot] != 1) {
+                goto next;
+            }
+            if (arr_274[slot] != -1) {
+                goto next;
+            }
+            goto found;
+        next:;
         }
     }
     slot = -1;
@@ -2217,8 +2105,8 @@ s32 fn_80026C04(s32 arg0)
 found:
     if (slot != -1) {
         s32 idx = slot * 4;
-        strcpy(&lbl_803BB340[lbl_804D38D0],
-               *(char**) (lbl_803BB300 + idx + 0x9FC));
+        char* q = lbl_803BB300 + idx;
+        strcpy(&lbl_803BB340[lbl_804D38D0], *(char**) (q + 0x9FC));
         priority = HSD_SynthSFXLoad(lbl_803BB340, 2, (int) fn_80026C04, 0);
         st->x354[slot] = priority;
     }
@@ -2335,21 +2223,25 @@ void lbAudioAx_80027168(void)
         s8(*arr5d0)[4] = s32_arr_803BB5D0;
         int* arr274 = st->x274;
         for (i = 0; i < 55; i++) {
-            if (arr5d0[i][1] != 5 && arr274[i] == 2) {
-                arr274[0] = 1;
+            if ((*arr5d0)[1] != 5 && *arr274 == 2) {
+                *arr274 = 1;
             }
+            arr5d0++;
+            arr274++;
         }
     }
 
-    count = 0;
     {
         s8(*arr5d0)[4] = s32_arr_803BB5D0;
         int* arr_b4 = st->xB4;
-        for (i = 55; i != 0; i--) {
-            if (arr5d0[i][1] != 5 && arr_b4[i] != -1) {
-                count++;
+        for (count = i = 0; count < 55; count++) {
+            if (arr5d0[count][1] == 5) {
+                break;
             }
-        };
+            if (arr_b4[count] == -1) {
+                break;
+            }
+        }
     }
 
     if (count != 0) {
@@ -2408,8 +2300,6 @@ s32 fn_80027488(void)
 
 void lbAudioAx_80027648(void)
 {
-    int* a = lbl_80433710.x194;
-    int* b = lbl_80433710.x274;
     int i;
     s32 result = 0;
 
@@ -2419,15 +2309,15 @@ void lbAudioAx_80027648(void)
         }
 
         for (i = 0; i < 55; i++) {
-            if (a[i] == 1 && b[i] == -1) {
+            if (lbl_804338A4[i] == 1 && lbl_80433984[i] == -1) {
                 result = 1;
                 goto check;
             }
         }
 
         for (i = 0; i < 55; i++) {
-            if (a[i] == 1 && b[i] == 1) {
-                b[i] = 2;
+            if (lbl_804338A4[i] == 1 && lbl_80433984[i] == 1) {
+                lbl_80433984[i] = 2;
             }
         }
         result = 0;
@@ -2446,7 +2336,7 @@ s32 lbAudioAx_8002785C(void)
         result = lbAudioAx_80026E84(Player_GetPlayerCharacter(0));
         for (i = 0; i < 3; i++) {
             if ((s8) gm_80169370(i) != (s8) CHKIND_MAX) {
-                s8 opp = (s8) gm_80169370(i);
+                int opp = (s8) gm_80169370(i);
                 result |= lbAudioAx_80026E84(opp);
                 if (opp == 4) {
                     result |= 0x200004000ULL;
@@ -2484,15 +2374,18 @@ s32 lbAudioAx_8002785C(void)
 
 void lbAudioAx_80027AB0(s32 arg0)
 {
-    lbAudioAx_PoolAlloc* st = &lbl_80433710;
     s32 lang;
+    int* a;
+    int* b;
+    int* c;
+    int* d;
 
     if (lbLang_IsSavedLanguageUS()) {
         strcpy(lbl_803BB340, "/audio/us/");
         lbl_804D38D0 = 10;
         lang = 1;
     } else {
-        strcpy(lbl_803BB340, "/audio/");
+        strcpy(lbl_803BB340, "/audio/\0");
         lbl_804D38D0 = 7;
         lang = 0;
     }
@@ -2512,45 +2405,58 @@ void lbAudioAx_80027AB0(s32 arg0)
         }
 
         {
-            int* a = st->x354;
-            int* b = st->xB4;
-            int* c = st->x194;
-            int* d = st->x274;
+            a = lbl_80433710.x354;
+            b = lbl_80433710.xB4;
+            c = lbl_80433710.x194;
+            d = lbl_80433710.x274;
             for (idx = 0; idx < 55; idx++) {
                 if (idx != 0) {
-                    a[idx] = -1;
-                    b[idx] = -1;
-                    c[idx] = -1;
-                    d[idx] = -1;
+                    *a = -1;
+                    *b = -1;
+                    *c = -1;
+                    *d = -1;
                 }
+                a++;
+                b++;
+                c++;
+                d++;
             }
         }
 
         HSD_SynthSFXUnloadBank(1);
         HSD_SynthSFXUnloadBank(2);
 
-        if (st->x274[0x33] < 1) {
-            strcpy(&lbl_803BB340[lbl_804D38D0],
-                   *(char**) (lbl_803BB300 + 0xAC8));
-            st->x354[0x33] = HSD_SynthSFXLoad(lbl_803BB340, 1, 0, 0);
-            HSD_SynthSFXWaitForLoadCompletion(lb_800195D0);
-            st->x274[0x33] = 2;
+        {
+            int* p = &lbl_80433710.x274[0x33];
+            if (lbl_80433710.x274[0x33] < 1) {
+                strcpy(&lbl_803BB340[lbl_804D38D0],
+                       *(char**) (lbl_803BB300 + 0xAC8));
+                lbl_80433710.x354[0x33] = HSD_SynthSFXLoad(lbl_803BB340, 1, 0, 0);
+                HSD_SynthSFXWaitForLoadCompletion(lb_800195D0);
+                *p = 2;
+            }
         }
 
-        if (st->x274[1] < 1) {
-            strcpy(&lbl_803BB340[lbl_804D38D0],
-                   *(char**) (lbl_803BB300 + 0xA00));
-            st->x354[1] = HSD_SynthSFXLoad(lbl_803BB340, 1, 0, 0);
-            HSD_SynthSFXWaitForLoadCompletion(lb_800195D0);
-            st->x274[1] = 2;
+        {
+            int* p = &lbl_80433710.x274[1];
+            if (lbl_80433710.x274[1] < 1) {
+                strcpy(&lbl_803BB340[lbl_804D38D0],
+                       *(char**) (lbl_803BB300 + 0xA00));
+                lbl_80433710.x354[1] = HSD_SynthSFXLoad(lbl_803BB340, 1, 0, 0);
+                HSD_SynthSFXWaitForLoadCompletion(lb_800195D0);
+                *p = 2;
+            }
         }
 
-        if (st->x274[0x36] < 1) {
-            strcpy(&lbl_803BB340[lbl_804D38D0],
-                   *(char**) (lbl_803BB300 + 0xAD4));
-            st->x354[0x36] = HSD_SynthSFXLoad(lbl_803BB340, 1, 0, 0);
-            HSD_SynthSFXWaitForLoadCompletion(lb_800195D0);
-            st->x274[0x36] = 2;
+        {
+            int* p = &lbl_80433710.x274[0x36];
+            if (lbl_80433710.x274[0x36] < 1) {
+                strcpy(&lbl_803BB340[lbl_804D38D0],
+                       *(char**) (lbl_803BB300 + 0xAD4));
+                lbl_80433710.x354[0x36] = HSD_SynthSFXLoad(lbl_803BB340, 1, 0, 0);
+                HSD_SynthSFXWaitForLoadCompletion(lb_800195D0);
+                *p = 2;
+            }
         }
     }
 }
@@ -2602,16 +2508,9 @@ void lbAudioAx_80027DF8(void)
         }
     } else if (lbl_804D38F0 != -1) {
         fn_80023750(0x83D60, lbl_804D6428, 0x40, 5, 4);
-        {
-            s32 carry = 0;
-            lbl_804D6428 = 0;
-            lbl_804D38F0 = -1;
-            if (lbl_804D38F4 == -1) {
-            } else {
-                carry = 0x7F;
-            }
-            lbl_804D642C = carry;
-        }
+        lbl_804D6428 = 0;
+        lbl_804D38F0 = -1;
+        lbl_804D642C = (lbl_804D38F4 == -1) ? 0 : 0x7F;
     }
 
     if (lbl_804D6424 != 0) {
@@ -2635,16 +2534,9 @@ void lbAudioAx_80027DF8(void)
         }
     } else if (lbl_804D38F4 != -1) {
         fn_80023750(0x83D60, lbl_804D642C, 0x40, 6, 4);
-        {
-            s32 carry = 0;
-            lbl_804D642C = 0;
-            lbl_804D38F4 = -1;
-            if (lbl_804D38F0 == -1) {
-            } else {
-                carry = 0x7F;
-            }
-            lbl_804D6428 = carry;
-        }
+        lbl_804D642C = 0;
+        lbl_804D38F4 = -1;
+        lbl_804D6428 = (lbl_804D38F0 == -1) ? 0 : 0x7F;
     }
 
     if (lbl_804D38F0 == -1 && lbl_804D38F4 == -1) {
