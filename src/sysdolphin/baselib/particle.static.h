@@ -64,9 +64,7 @@ STATIC_ASSERT(sizeof(struct ParticleConsoleState) == 0x28);
 
 // .sbss
 
-static int (**psCallback)(HSD_Particle* part);
-extern u16 numPeakParticles;
-extern u16 numActiveParticles;
+extern u16 hsd_804D78DC;
 /* 4D7850 */ static HSD_SList* hsd_804D7850;
 
 // .bss
@@ -74,7 +72,7 @@ extern u16 numActiveParticles;
 extern int psNumTexGroup[65];
 static HSD_PSFormGroup** psFormGroupArray[65];
 
-/* 4CF7E8 */ static struct ParticleConsoleState hsd_804CF7E8;
+/* 4CF7E8 */ extern struct ParticleConsoleState hsd_804CF7E8;
 /* 4CF810 */ static struct ParticleScreenState hsd_804CF810;
 /* 4D0908 */ static void* hsd_804D0908[146];
 /* 4D0B50 */ static HSD_PSTexGroup** psTexGroupArray[65];
@@ -112,7 +110,7 @@ static HSD_PSFormGroup** psFormGroupArray[65];
 /* 4D78C8 */ static int hsd_804D78C8;
 /* 4D78CC */ static u32 hsd_804D78CC;
 /* 4D78D0 */ static u32 hsd_804D78D0;
-/* 4D78D4 */ static u32 hsd_804D78D4;
+/* 4D78D4 */ static int (**hsd_804D78D4)(HSD_Particle* part);
 /* 4D78D8 */ static u16 hsd_804D78D8;
 /* 4D78DA */ static u16 hsd_804D78DA;
 /* 4D78DE */ static u16 hsd_804D78DE;

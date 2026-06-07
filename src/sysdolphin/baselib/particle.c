@@ -1102,7 +1102,7 @@ u8 fn_80392CD8(char* caller)
     return err;
 }
 
-s32 hsd_804CE728[0x106];
+extern s32 hsd_804CE728[];
 
 void fn_80392E2C(s32 event_type)
 {
@@ -1254,6 +1254,7 @@ bool hsd_803931A4(s32 exi_channel)
 {
     s32 channel;
     PAD_STACK(16);
+
 
     hsd_804CF740[0] = 0;
     hsd_804CF740[1] = 0;
@@ -1695,7 +1696,9 @@ s32 hsd_80393D2C(s32 enable)
 void hsd_80393DA0(u8* buf, size_t size)
 {
     PAD_STACK(4);
-    memset(&hsd_804CF7E8, 0, sizeof(hsd_804CF7E8));
+    /* @BINARY-DEVIATION-FIX: original clears only 0x24 bytes (excludes x24
+     * field), not sizeof(struct ParticleConsoleState) == 0x28. */
+    memset(&hsd_804CF7E8, 0, 0x24);
     hsd_804CF7E8.out_buf = buf;
     hsd_804CF7E8.buf_size = size;
     memset(buf, 0, size);
@@ -4469,7 +4472,7 @@ void hsd_803983A4(HSD_Generator* gen)
     }
 }
 
-HSD_JObj* hsd_804D08E8[8];
+extern HSD_JObj* hsd_804D08E8[];
 
 // @TODO: Currently 96.40% match - lis hoisting and r29/r30 register swap
 void psInitDataBankLoad(int bank, int* cmdBank, int* texBank, u32* ref,
@@ -4727,32 +4730,31 @@ void hsd_80398A08(u32 unused)
     HSD_ObjAllocInit((HSD_ObjAllocData*) ((u8*) base + 0x678), 0x98, 4);
     PAD_STACK(24);
 
-    i = 0;
-    base[0x20 / 4] = i;
     r4 = base + 0x470 / 4;
-    base[0x24 / 4] = i;
     r5 = base + 0x164 / 4;
-    base[0x28 / 4] = i;
     r6 = base + 0x574 / 4;
     r7 = base + 0x268 / 4;
-    base[0x2C / 4] = i;
     r8 = base + 0x36C / 4;
     r9 = base + 0x60 / 4;
-    base[0x30 / 4] = i;
-    base[0x34 / 4] = i;
-    base[0x38 / 4] = i;
-    base[0x3C / 4] = i;
-    base[0x40 / 4] = i;
-    base[0x44 / 4] = i;
-    base[0x48 / 4] = i;
-    base[0x4C / 4] = i;
-    base[0x50 / 4] = i;
-    base[0x54 / 4] = i;
-    base[0x58 / 4] = i;
-    base[0x5C / 4] = i;
-    hsd_804D78E2 = i;
-    numPeakParticles = i;
-    for (; i < 64; i += 8) {
+    base[0x20 / 4] = 0;
+    base[0x24 / 4] = 0;
+    base[0x28 / 4] = 0;
+    base[0x2C / 4] = 0;
+    base[0x30 / 4] = 0;
+    base[0x34 / 4] = 0;
+    base[0x38 / 4] = 0;
+    base[0x3C / 4] = 0;
+    base[0x40 / 4] = 0;
+    base[0x44 / 4] = 0;
+    base[0x48 / 4] = 0;
+    base[0x4C / 4] = 0;
+    base[0x50 / 4] = 0;
+    base[0x54 / 4] = 0;
+    base[0x58 / 4] = 0;
+    base[0x5C / 4] = 0;
+    hsd_804D78E2 = 0;
+    hsd_804D78DC = 0;
+    for (i = 0; i < 64; i += 8) {
         r4[0] = 0;
         r5[0] = 0;
         r6[0] = 0;
@@ -4823,7 +4825,7 @@ void hsd_80398A08(u32 unused)
             } while (--count != 0);
         }
     }
-    hsd_804D78D4 = 0;
+    hsd_804D78D4 = NULL;
     base[0] = 0;
     base[1] = 0;
     base[2] = 0;
@@ -4853,8 +4855,8 @@ HSD_Particle* hsd_80398C04(HSD_Particle** head, int linkNo, int bank, u32 kind,
     }
 
     hsd_804D78E2 += 1;
-    if (hsd_804D78E2 > numPeakParticles) {
-        numPeakParticles = hsd_804D78E2;
+    if (hsd_804D78E2 > hsd_804D78DC) {
+        hsd_804D78DC = hsd_804D78E2;
     }
 
     if (gp != NULL) {
@@ -6891,7 +6893,7 @@ void* hsd_8039930C(void* pp_arg, void* prev_arg)
                     if (idx == 0) {
                         pp->callback = NULL;
                     } else {
-                        pp->callback = psCallback[idx - 1];
+                        pp->callback = hsd_804D78D4[idx - 1];
                     }
                 }
                 break;
@@ -7199,7 +7201,7 @@ do_life:
             /* Free particle */
             hsd_8039D048(pp);
             HSD_ObjFree(&hsd_804D0F60.alloc_data, pp);
-            numActiveParticles--;
+            hsd_804D78E2--;
             return next_pp;
         }
     }
@@ -7397,7 +7399,7 @@ void hsd_8039D0A0(HSD_Generator* gen)
 
     prev = NULL;
     idnum = gen->idnum;
-    head = (HSD_Particle**) &hsd_804D0908[gen->linkNo];
+    head = (HSD_Particle**) &((void**) hsd_804D08E8)[8 + gen->linkNo];
     prt = (HSD_Particle*) *head;
 
     while (prt != NULL) {
@@ -7431,7 +7433,8 @@ void hsd_8039D0A0(HSD_Generator* gen)
                 }
             }
 
-            HSD_ObjFree(&hsd_804D0F60.alloc_data, prt);
+            HSD_ObjFree((HSD_ObjAllocData*) ((u8*) hsd_804D08E8 + 0x678),
+                        prt);
             hsd_804D78E2--;
         } else {
             prev = prt;
@@ -7456,6 +7459,30 @@ u16 hsd_8039D1EC(void)
     return lbl_804D6368;
 }
 
+static char lbl_804D636C[] = "jobj.h";
+static char lbl_804D6374[] = "jobj";
+
+/* Duplicates of the jobj.h inlines: this original TU emitted its own copies
+ * of the assert strings (lbl_804D636C/lbl_804D6374). */
+static inline bool HSD_JObjMtxIsDirty_dup(HSD_JObj* jobj)
+{
+    bool result;
+    (jobj) ? ((void) 0) : __assert(lbl_804D636C, 564, lbl_804D6374);
+    result = false;
+    if (!(jobj->flags & JOBJ_USER_DEF_MTX) && (jobj->flags & JOBJ_MTX_DIRTY)) {
+        result = true;
+    }
+    return result;
+}
+
+static inline void HSD_JObjSetupMatrix_dup(HSD_JObj* jobj)
+{
+    if (!jobj || !HSD_JObjMtxIsDirty_dup(jobj)) {
+        return;
+    }
+    HSD_JObjSetupMatrixSub(jobj);
+}
+
 void hsd_8039D214(HSD_Generator* gen)
 {
     HSD_JObj* jobj;
@@ -7468,7 +7495,7 @@ void hsd_8039D214(HSD_Generator* gen)
         return;
     }
 
-    HSD_JObjSetupMatrix(jobj);
+    HSD_JObjSetupMatrix_dup(jobj);
 
     if (gen->type & 0x200) {
         gen->pos.x = gen->jobj->mtx[0][3];
@@ -7660,7 +7687,7 @@ void hsd_8039D71C(HSD_Generator* gen)
         return;
     }
 
-    HSD_JObjSetupMatrix(jobj);
+    HSD_JObjSetupMatrix_dup(jobj);
 
     if (gen->type & 0x200) {
         gen->pos.x = gen->jobj->mtx[0][3];
@@ -8564,6 +8591,21 @@ void hsd_8039EE24(u32 mask)
     }
 }
 
+static char lbl_8040C2A4[] = "object.h";
+static char lbl_8040C2B0[] = "HSD_OBJ(o)->ref_count != HSD_OBJ_NOREF";
+
+/* Duplicate of object.h ref_INC: this original TU emitted its own copies of
+ * the assert strings (lbl_8040C2A4/lbl_8040C2B0). */
+static inline void ref_INC_dup(void* o)
+{
+    if (o != NULL) {
+        HSD_OBJ(o)->ref_count++;
+        (HSD_OBJ(o)->ref_count != HSD_OBJ_NOREF)
+            ? ((void) 0)
+            : __assert(lbl_8040C2A4, 93, lbl_8040C2B0);
+    }
+}
+
 HSD_Generator* hsd_8039EFAC(s32 linkNo, s32 bank, s32 gfx_id, HSD_JObj* jobj)
 {
     HSD_Generator* gen;
@@ -8575,7 +8617,7 @@ HSD_Generator* hsd_8039EFAC(s32 linkNo, s32 bank, s32 gfx_id, HSD_JObj* jobj)
     if (gen != NULL) {
         gen->jobj = jobj;
         if (jobj != NULL) {
-            ref_INC(jobj);
+            ref_INC_dup(jobj);
         }
     }
     gen->type |= (gen->kind & 0x20000) ? 0x500 : 0x700;
@@ -8823,7 +8865,7 @@ HSD_Generator* hsd_8039F6CC(s32 linkNo, s32 bank, s32 gfx_id, HSD_JObj* jobj)
     if (gen != NULL) {
         gen->jobj = jobj;
         if (jobj != NULL) {
-            ref_INC(jobj);
+            ref_INC_dup(jobj);
         }
     }
     gen->type |= (gen->kind & 0x20000) ? 0x500 : 0x700;
