@@ -20,10 +20,15 @@ typedef union {
     (raw_x & 0xFFFF)   // remaining 16 mantissa bits
 #define LN2 0.6931472f // natural logarithm of 2
 
-/// @todo use standard library constants, because this definition seems to be
-/// platform dependant
-float float_nan = 0.0 / 0.0;
-float float_inf = 1.0e100 * 1.0e100;
+/// logf Taylor series coefficients and IEEE specials, stored as u32 bit
+/// patterns: the exact bytes are not reproducible from float-typed
+/// initializers (MWCC folds 0.0/0.0 to 0xFFC00000, not 0x7FFFFFFF).
+/// Original names of the two coefficients are unknown (symbols.txt
+/// placeholders); __float_nan/__float_huge are the real MSL names.
+const u32 MSL_Math_804DE1B0 = 0xBF000030; // -0.500003F (logf C0)
+const u32 MSL_Math_804DE1B4 = 0x3EAAAA36; // 0.333329856F (logf C1)
+const u32 __float_nan = 0x7FFFFFFF;
+const u32 __float_huge = 0x7F800000;
 
 /// Math lookup tables - defined in math_data.c
 /// Keeping them in a separate compilation unit prevents the compiler from
@@ -32,11 +37,6 @@ extern const float __ln_F[];
 extern const float __one_over_F[];
 extern const float __sincos_on_quadrant[];
 extern const float __sincos_poly[];
-
-/// logf Taylor series coefficients - stored as u32 bit patterns in math_data.c
-/// to get the right codegen (lwz load from global)
-extern const u32 __logf_C0_bits; // 0xBF000030 = -0.500003F
-extern const u32 __logf_C1_bits; // 0x3EAA9F44 = 0.333329856F
 
 /*
 Computes the natural logarithm of x.
@@ -56,8 +56,9 @@ Taylor expansion at `y`. Maths detour:
     - So for `H := h/y` we have `ln(y + h) = ln(y) + H + H^2 * (-0.5 + H/3 -
 ...)`
     - I don't understand how this works, but the algorithm uses this
-approximation formula: `ln(1.M) = ln(y + h) = ln(y) + H + H^2 * (H*0.000005086
-- 0.500003)`
+approximation formula: `ln(1.M) = ln(y + h) = ln(y) + H + H^2 * (H*0.333329856
+- 0.500003)` (coefficient bit patterns 0x3EAAAA36 / 0xBF000030, byte-proven
+from the target .sdata2)
 - In the formula above, the algorithm computes `ln(y) = ln(1.m)` using a lookup
 table, then computes `H = h * 1/y = h * 1/1.m` using another lookup table for
 `1/1.m`.
@@ -75,9 +76,9 @@ float logf(float x)
         s32 E;
         s32 m;
 
-        coef[0] = __logf_C0_bits;
+        coef[0] = *(u32*) &MSL_Math_804DE1B0;
         raw_x = *(u32*) &x;
-        coef[1] = __logf_C1_bits;
+        coef[1] = *(u32*) &MSL_Math_804DE1B4;
         mant_bits = raw_x & MANT_MASK;
         E = F32_UNBIASED_EXPONENT(raw_x);
         m = F32_HIGH_MANTISSA_BITS(raw_x);
@@ -114,11 +115,12 @@ float logf(float x)
         if (raw_x & MANT_MASK) {
             return x;
         } else {
-            return (raw_x & SIGN_BIT) ? float_nan : float_inf;
+            return (raw_x & SIGN_BIT) ? F32_BIT_CAST(__float_nan)
+                                      : F32_BIT_CAST(__float_huge);
         }
     }
     case 0:
-        return -float_inf;
+        return -F32_BIT_CAST(__float_huge);
     }
 }
 /*

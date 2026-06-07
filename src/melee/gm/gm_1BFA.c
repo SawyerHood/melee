@@ -127,9 +127,13 @@ void gm_801BFBA8(GameScene* arg0)
 }
 
 /// @remarks unsure about this return type.
+/// arg0/arg2 are 32-bit ints, not s16: every caller in gm_801BFCFC passes
+/// them with plain register copies (addi rD,rS,0) and no extsh in the
+/// target, which is unreachable with s16 parameters (binary-proven). The
+/// x0/x2 stores stay extension-free because the fields are unsigned.
 #pragma push
 #pragma dont_inline on
-s32** gm_801BFC60(s16 arg0, s32 arg1, s16 arg2, s32 arg3, void** arg4)
+s32** gm_801BFC60(int arg0, s32 arg1, int arg2, s32 arg3, void** arg4)
 {
     struct un_804A1F48_t* temp_r3;
 

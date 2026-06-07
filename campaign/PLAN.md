@@ -5,9 +5,11 @@ bytes toward 100%. This file is the persistent campaign state — update it at
 the end of every session.
 
 > **⭐⭐ ENDGAME METRIC (live since wave 18): LINKED Matching file count.**
-> Currently **839/1041 linked (42.62%)**, matched 72.15%, fuzzy 97.59, HEAD
-> 4715a41d8. The FIRST FLIPS landed wave 18 (see FIRST FLIP VERDICT below) —
-> every stream now ranks its work by "what unblocks the next flip".
+> Currently **840/1041 linked** (code-complete 42.62% — flip #4 was
+> DATA-ONLY), matched 72.20%, fuzzy 97.59, HEAD ab2a4870d. Flips #1-3
+> landed wave 18, **flip #4 (hsd_40FF) wave 19**; **itdrop is FLIP-READY**
+> at the wave-19 boundary and quatlib/MSL-math are ONE park each from
+> ready — every stream ranks its work by "what unblocks the next flip".
 
 ## Ground rules
 
@@ -20,6 +22,12 @@ the end of every session.
   edits in one function can regress siblings. Never run two agents on the
   same .c concurrently. (Phase 0 found a real collision: cobj.c was claimed
   by two streams.)
+- **BUILD-RACE LAW (wave 19, live-incident-proven)**: two ninjas racing in
+  the shared build dir CORRUPT main.elf/main.dol (transient garbled DOL,
+  sha 9cdf54d4). `pgrep -fl 'ninja|mwcceppc'` and confirm idle before
+  EVERY full-ninja gate — mandatory for flip gates. Corollary: flips must
+  never go live mid-wave on shared trees (a mid-flight Matching flip
+  transiently broke the tree-wide DOL for a sibling stream this wave).
 
 ## Infrastructure
 
@@ -341,16 +349,16 @@ except gm_182F.c which rode flip commit 51951826b)**:
   struct). Head's single DOWN (fn_801803FC −0.85) root-caused
   C-unreachable (idiom 63; baseline "match" was an offset-0 shadow).
   Head gate 171 SAME / 10 UP / 1 DOWN; full ninja DOL sha1 EXACT.
-- **SCALE QUEUE re-rank (flip-aligned, front first)**: **hsd_40FF
-  DATA-ONLY 0x20bc0 recon package (idiom-98 class) = +1 LINKED FILE
-  with zero code work** (flip queue #10); head NAMING+SRC paired
+- **SCALE QUEUE re-rank (flip-aligned, front first)**: ✅ **hsd_40FF
+  DATA-ONLY recon EXECUTED + FLIPPED wave 19 (ab2a4870d — first
+  data-only flip; needed idiom-116 force_active)**; head NAMING+SRC paired
   package (early-inline @1427-29 string-trio reconstruction,
   particle-E80 class — recovers most of [.data-0]'s last 3.85pp);
   particle E80 string package; dead cluster AB00..ADC4; BAF0/BC3C;
   gmresult idiom-69 package; tydisplay map. gmallstar future flip
   needs gmClassic_80472AF8 static→global (noted in-source).
 
-## ⭐⭐ FIRST FLIP VERDICT (wave 18 — ACHIEVED ×3, COMMITTED; THE ENDGAME METRIC)
+## ⭐⭐ FLIP VERDICT (wave 18 ×3 + wave 19 ×1 = 4 FLIPS COMMITTED; THE ENDGAME METRIC)
 
 **The flip recipe is PROVEN.** Wave 18 flipped the first three units to
 `Object(Matching, ...)` — ninja links OUR compiled objects into the DOL,
@@ -380,28 +388,84 @@ recon-supplied .sbss def — + melee/pl/plattack.c, ZERO src work) +
 - Renamed/missing target-named local exports are link-neutral iff zero
   importers across all 1041 link inputs (verified per-symbol).
 
+**WAVE-19 ADDITION — flip #4 COMMITTED ab2a4870d**: hsd_40FF
+NonMatching→Matching, the first DATA-ONLY flip (11199-line u8[0x20BC0]
+brace-init recon, idiom-98 class, zero @-ids; .data/.symtab/.comment
+byte-IDENTICAL). 839→**840/1041 linked**. First attempt FAILED — **mwld
+DEADSTRIPS compiled zero-importer objects** (DOL shrank exactly 0x20bc0);
+dtk-extracted objects survive via the MW .comment per-symbol force-active
+flag 0x08, MWCC emits 0x00; cure = `#pragma force_active on` (idiom 116).
+
 **GATE INSTRUMENT**: `campaign/scratch/file-flip-w18/linkcheck.py`
 (resolved-reloc equality + weak-exempt + ALIGNFIX + export-importer
 closure) — gate flips with it, NOT fuzzy/analyzer counts (extends the
-idiom-88 hard rule to flips). Then full ninja + `main.dol: OK` + dtk
+idiom-88 hard rule to flips). ⚠ linkcheck.py does NOT model mwld
+deadstrip — run the idiom-116 force-active audit (zero-importer exports
+need the .comment keep bit) before gating every flip. Then `pgrep` for
+sibling builds (build-race law), full ninja + `main.dol: OK` + dtk
 shasum + idempotence. **FLIP-GATE LAW (all streams)**: a flipped unit's
 ours-object is LOAD-BEARING — naming/recon/S1 gates must re-baseline the
 DOL sha, and any edit to a flipped TU must keep it whole-byte-exact.
 
-### Ranked flip queue (linkcheck-verified wave 18; exports importer-cleared)
+### ⭐ Ranked flip queue (wave-19 unblocker sweep; flips #1-4 COMMITTED)
 
-1. **itdrop** — 8B .text + 2 reloc rows (the parked idiom-25 F3D4 site)
-   + ALIGNFIX; the F3D4 2-row park now GATES a flip → S1 front.
-2. **gm_1BFA** — 80B .text, one structural fn.
-3. **itdraw** — 37B .text, one fn.
-4. **quatlib** — 45B .text + 16B .sdata2 + 6 reloc.
-5. **lb_00CE** — 24B .text + 52B .sdata2 + 26 resolved-UNEQUAL relocs.
-6. **gm_16A9** — −4B .text + one 4B .sdata2 gap-pad def.
-7. **MSL/math** — 18B .text + 9 reloc + `__float_nan/huge` positioned defs.
-8. **ifprize** — 34B .text + 12 reloc + 4B .data tail.
-9. **ftCo_Shouldered** — 8B mid-.text insertion (3 EXPORT-MOVED +8).
-10. **hsd_40FF** — DATA-ONLY 0x20bc0 recon package (idiom-98 class) =
-    +1 linked file with ZERO code work → data-recon stream front.
+**Flipped (4)**: gm_182F + plattack (51951826b) · ftchangeparam
+(4715a41d8) · hsd_40FF (ab2a4870d, data-only). All importer-closures
+re-verified w19 (16/16 symbols, zero importers).
+
+1. **itdrop** — ✅ **FLIP-READY**: it_8026F3D4 →**100.00** via the
+   volatile-cast extern read (idiom 117); linkcheck ZERO hard issues
+   (residue = ALIGNFIX soft + gap_11 export, idiom-110d cleared); unit
+   .text byte-exact ×7 fns, zero @-ids, DOL sha EXACT. Executor: re-gate
+   over the settled merged tree at the wave boundary (mid-wave sibling
+   dirt observed), then `Object(Matching, "melee/it/itdrop.c")`.
+   FLIP-GATE LAW applies after. backlog.json baseline stale (95.56→100).
+2. **quatlib** — **25B .text ONLY** (was 45B + 16B .sdata2 + 6 reloc):
+   MatToQuat →100 (idiom 119 invented-local deletion), .sdata2
+   byte-EQUAL (embedded-assign pool order idiom 120 + EOF zero-const
+   gap def idiom 122; the 99.81 fuzzy is a pure @165↔@166 NAME swap —
+   dtk numbers by .text appearance, offsets EXACT). Sole blocker:
+   8037EC4C FPR temp-pair swap {f4,f3}↔{f6,f5}, rotation park (6
+   formulations VN-identical) → rotation-enumeration agent.
+3. **MSL/math** — **18B .text ONLY** (was 7 hard classes): .sdata2 0x20
+   byte-IDENTICAL + 15/15 relocs + 5/5 exports via in-TU positioned
+   `const u32` defs + `*(u32*)&` reads (idiom 127); cross-TU
+   flip-blocker removed. Residual = logf frame-layout immediates
+   (target frame 0x28, exact slot map known, fM/fm slot truth INVERTED
+   vs source order; ~50 shape probes). Best lines: (a) E18-class
+   two-stmt h2_poly (insn-seq 100%, +8B frame), (b) F3-class lone
+   `float H` (FPR map 100%) — combine with the array-decl-order law;
+   flip-mslmath-w19/progress.txt. SIDE ITEM (math_data.c owner): delete
+   lines 82-83 — now-dead `__logf_C0/C1_bits` defs whose C1 hex
+   0x3EAA9F44 is a binary-proven transcription error for 0x3EAAAA36 —
+   makes math_data.o byte-identical (DOL-neutral).
+4. **gm_1BFA** — **67B .text** (was 80B): gm_801BFC60 →100 EXACT
+   (s16→int params + s16→u16 fields, idiom 124 — fixes 4 structural
+   sites + 1 schedule row). Blocker: gm_801BFCFC whole-fn CS permutation
+   ~50 rows (WEB-ASSIGNMENT-ORDER ROTATION family, ~30 probes; target
+   reg map r31=tail..r25=idx12 + the LOAD-BEARING two-statement
+   `var_r26 = base; var_r26 += 0x44;` init in flip-unblock-w19/
+   progress.txt) → rotation-enumeration agent.
+5. **itdraw** — 37B .text unchanged (src REVERTED byte-identical after
+   ~20 probes). Best state: two-caller-var shape collapses the fn to ONE
+   global r28↔r29 transposition (46 uniform rows, 99.26) but the phase
+   is allocator tie-locked; inline-param vs inline-local proven
+   byte-identical (idiom 125) → rotation-enumeration agent (rebuild
+   recipe in progress.txt).
+6. **ifprize** — 34B .text + 12 reloc + 4B .data tail (w19 re-check:
+   REAL content, failed the ALIGNFIX zero-tail test).
+7. **ftCo_Shouldered** — 8B mid-.text insertion shifts later code +
+   .sdata2 surplus 0x18 NON-weak (w19 re-check: real, not exempt).
+8. **gm_16A9** — REFUTED as easy (w19): .text 4B LARGER with 2 extra
+   relocs = real codegen; the missing 4B .sdata2 shifts downstream
+   .sdata2 under align-8 — NOT alignment-restorable.
+9. **lb_00CE** — **DEMOTED below all non-dead-creator units** (src
+   reverted clean): target .sdata2 pool head needs a dead early creator
+   — C-UNREACHABLE for flips, idiom 118 FLIP-grade proof with
+   byte-measured device refutations. Same proof marks the
+   gm_1965/particle 0.0f-pool-head parks as flip blockers.
+   lb_8000D148's true 12-block shape found (99.06; residual fresh-reg
+   rotation {f9,f10,f11,f8}→{f8..f11} + frame +8) → S1 rotation stream.
 
 Family follow-ups (wave-17 list re-ranked by wave-18 results): gm_180A
 next-best in the gmregclear family (only fn_80180C60 98.17 blocks);
@@ -1337,6 +1401,93 @@ gmClassic_80472AF8 static→global. Re-run
    20/20 zero transient dups); (c) name-keyed snapshot accounting
    LIES on rename chains (8 phantom rows incl. a None→100 shown as
    DOWN) — use value/address-keyed accounting when names are reused.
+116. **⭐ FORCE-ACTIVE KEEP BIT GATES ZERO-IMPORTER FLIPS (hsd_40FF,
+   binary-proven)**: mwld deadstrips a compiled object whose only
+   global has zero importers (DOL shrank EXACTLY 0x20bc0, all
+   downstream addresses shifted); dtk-extracted objects survive via
+   MW .comment per-symbol flag byte 0x08 (force-active) — MWCC emits
+   0x00; ldscript FORCEACTIVE has only 4 CRT entries. Cure:
+   `#pragma force_active on` (codebase precedent mobj.c:379) — makes
+   .comment byte-IDENTICAL. linkcheck.py does NOT model deadstrip —
+   audit zero-importer exports before every flip gate.
+117. **VOLATILE-CAST EXTERN-F32 READ (extends 25; won it_8026F3D4
+   →100, the itdrop flip enabler)**: scheduler lfs-pairs-with-lis
+   canonicalization is breakable ONLY via a volatile-qualified
+   extern-f32 read — `*(volatile f32*)&ext` still emits the plain
+   `lfs sym@sda21` (no address materialization) but gains a hard
+   ordering edge against a preceding volatile store (target
+   lis/addi/stw/lfs order). Negatives: in-loop copy-assign hoists to
+   a post-`b` slot, not preheader end (idiom-14 route fails); inline
+   f32 helper costs a 4B inline-temp frame slot (consistent w/ 109b).
+118. **FLIP-grade vs SCORE-grade RECON SPLIT (extends 105/111;
+   lb_00CE, byte-measured)**: dead-creator pool heads CANNOT flip —
+   idiom-111's uncalled-static device pools correctly but EMITS its
+   own .text (0xac, verified in ftcoll.o too — 111 is SCORE-grade
+   only); `if (0)` emits nothing AND pools nothing (dies pre-pooling,
+   +2 @ids); called-once static inline pools at CALL SITE, not
+   definition; Fix-B defs can't reach mid-batch entries (2.0f inside
+   the expf batch) and true pool entries are not defs (pool/def
+   namespaces disjoint). Bonus: backend conversion-magic pools at
+   function END, after frontend + inline literals.
+119. **INVENTED-LOCAL FRAME HOME (extends 107; quatlib MatToQuat
+   →100)**: a decomp-invented staging local (`tr`) = +4 byte-invisible
+   phantom scalar home; deletion-only fix — original reuses the
+   surviving var via self-read (`s = sum; if (s > 0.0F) { s =
+   sqrtf(1.0F + s); … }`), frame 0x50→0x48.
+120. **POOL-ORDER INTRA-FN LEVER + dtk @-BY-APPEARANCE TRAP (extends
+   78; quatlib 8037EF28)**: an embedded assign inside a call arg
+   (`sinf((f32)(M_PI_2 * (1.0F - (t2 = 2.0F * t))))`) reorders pool
+   CREATION (pi/2 before 2.0f) with .text byte-identical. TRAP: dtk
+   numbers @ids by .text APPEARANCE order, not address — a creation-
+   order fix can show as a fuzzy DROP that is a pure @N↔@M name swap;
+   judge by resolved offsets (extends 91).
+121. **MWCC VN-FORWARDING LAW (quatlib EC4C, 6 formulations)**:
+   single-use scalar copies re-anchor at the use site through EVERY
+   sequencing construct (statement swap, staging local, goto shim,
+   if(0) second use, comma sequencing) — FPR temp-pair creation order
+   is value-numbering-canonical, unreachable from C sequencing
+   (rotation-park family).
+122. **F32 ZERO CONST EMITS .SDATA2 (refines the ≤8B-zero law of 98;
+   quatlib)**: `const f32 x = 0.0F;` at EOF DOES emit 4B .sdata2
+   (unlike zero u32/.sbss classes) — one-line gap-tail filler +
+   export-closure flip enabler (restored section size AND the
+   gap_11 export byte-EQUAL post weak-shift).
+123. **DEPTH-0 AUTO-INLINE (refines 73/83; itdraw EBC8/EC54)**: under
+   `-inline auto`, earlier-defined plain GLOBAL callees auto-inline at
+   expansion depth 0 EVEN WHEN LOOP-BEARING — the never-inlines law
+   holds only at depth ≥1. Corollary: target `bl`s to earlier-defined
+   helpers prove the original used depth-1 static inlines —
+   macro/open-code rewrites there are fake-match territory.
+124. **INT→U16 FIELD STORE (extends 43; gm_801BFC60 →100)**: assigning
+   int to a u16 field emits bare `sth`; an s16 field forces
+   `extsh r0` + `sth`. Caller-side: target passing narrow args as
+   plain `addi rD,rS,0` with NO extsh = 32-bit params (unreachable
+   from s16 params) — the int-params + unsigned-fields package fixed
+   4 call sites + callee in one edit.
+125. **INLINE-PARAM == INLINE-LOCAL EQUIVALENCE (itdraw P9)**:
+   `T* p = gobj->user_data;` as an inline's local vs the same
+   expression fed as the inline's param is byte-identical incl.
+   colors — never probe both.
+126. **LEFTOVER-CS ANONYMOUS ADDRESS-WEB (extends 29/39; gm_1BFA)**:
+   the anonymous address-web takes the LEFTOVER callee-saved reg
+   after all named webs are assigned, every run; copy-coalesce into
+   it happens only when the named var's own turn picks that reg.
+127. **MSL-MATH PACK (mwcc 1.2.5 -O4,p MSL flags; byte-proven)**:
+   (a) `(float)`-cast contraction blocker — `c + (float)(a*b)` →
+   fmuls+fadds, `c + a*b` → fmadds (either-side mul; zero cost);
+   (b) visible-init const u32 refs const-prop to lis/addi —
+   `*(u32*)&sym` defeats it and emits the named lwz @sda21 (extends
+   24 to integers, 26c to non-statics); top-of-file defs emit at
+   .sdata2 head BEFORE pool; (c) visible-init const FLOAT refs fold
+   to anonymous pool DUPS even under `-str pool,readonly` (24 holds);
+   (d) named float locals reserve 4B frame homes in branched fns but
+   NOT straight-line — trigger is STRUCTURAL, not count; `register`/
+   pragmas/flags don't remove homes; (e) frame bands: scalar
+   memory-homed pairs ascend in decl order; aggregates stack ABOVE
+   scalars; multiple arrays reverse-decl; aggregates ≥8B 8-align;
+   (f) GPR base-shift tell: deleting an address-taken scalar pair
+   shifts unrelated int-web maps down one reg; (g) mwld strips
+   unreferenced NON-weak .sdata2 objects (extends WEAK-STRIP).
 
 ### Experiment results (wave 3)
 
@@ -1491,10 +1642,20 @@ gmClassic_80472AF8 static→global. Re-run
   (26C04/27168/2838C); loop-counter-first volatile rotation (decl/def/init
   all no-ops); ud/sp param-copy homing swap (25FAC, 5 levers); 26EBC u64
   inline-result r3/r4 coalesce (expert inline-copy class).
-- **it_8026F3D4 (95.56)**: preheader lfs-after-volatile-stw — scheduler
-  canonicalizes every form to lfs-pairs-with-lis (~10 forms; idiom-15
-  singleton). **fn_802FF218 (94.33)**: y↔thing callee-saved swap + r6
+- ~~it_8026F3D4 (95.56)~~ **WON wave 19 →100.00** — the volatile-cast
+  extern read (idiom 117) breaks lfs-pairs-with-lis; itdrop flip enabler.
+  **fn_802FF218 (94.33)**: y↔thing callee-saved swap + r6
   arg-copy site, regalloc-resistant pair.
+- **Wave-19 parks (rotation-enumeration agent queue)**: gm_801BFCFC
+  97.84-capped whole-fn CS permutation (~50 rows; target reg map +
+  load-bearing two-statement r26 self-read init in flip-unblock-w19/
+  progress.txt); it_8026EECC allocator-tie ONE-transposition state
+  (99.26 recipe in progress.txt; unit reverted to baseline); quatlib
+  8037EC4C FPR temp-pair swap (idiom-121 VN-canonical, 6 forms);
+  lb_8000D148 fresh-reg rotation (true shape at 99.06 documented,
+  reverted); MSL logf 18B frame-layout (NOT rotation — slot-map class,
+  best lines in flip-mslmath-w19/progress.txt). lb_00CE pool head =
+  DEFINITIVE dead-creator park (idiom 118; do not re-attempt for flips).
 - **gm_18A5 wave-9 parks**: fn_8018E46C lwz/neg pair-order attractor (16
   rows, 6 levers — anonymous-temp attractor family; arg-reshuffles drift
   @991→@992); fn_801977AC single lwz/mr schedule row (6 levers; matched
@@ -1689,7 +1850,78 @@ gmClassic_80472AF8 static→global. Re-run
 
 ## Session log
 
-- **2026-06-07 — Wave 18 (⭐⭐ FIRST FLIPS ×3 COMMITTED + data-recon
+- **2026-06-07 — Wave 19 (⭐⭐ FLIP #4 hsd_40FF DATA-ONLY + flip-unblock
+  sweep ×4 streams: itdrop FLIP-READY, quatlib→25B, MSL/math→18B,
+  gm_1BFA→67B, lb_00CE/gm_16A9/ifprize/Shouldered adjudicated) — 1
+  commit (ab2a4870d), HEAD ab2a4870d; project 839→**840/1041 linked**
+  (code-complete % unchanged 42.62 — the flip is data-only), matched
+  72.15→**72.20%**, fuzzy 97.59; 3 NEW exact matches (it_8026F3D4,
+  gm_801BFC60, quatlib MatToQuat) + .sdata2 byte-EQUAL ×2 (quatlib,
+  MSL/math); ~190 compiles + ~12 full ninjas.** ⭐⭐ **FLIP #4 COMMITTED
+  ab2a4870d**: hsd_40FF NonMatching→Matching riding the 11199-line
+  brace-init recon package (u8[0x20BC0] 4bpp glyph sheet, idiom-98
+  class, ZERO @-ids, symbols/splits md5 unchanged); linkcheck [],
+  .data/.symtab/.comment byte-IDENTICAL, DOL sha 08e0bf20 EXACT +
+  idempotence ×2. **First gate attempt FAILED twice, both lessons
+  banked**: (1) mwld deadstrips compiled zero-importer objects — cure
+  `#pragma force_active on` (⭐ idiom 116; linkcheck.py blind to it,
+  audit added to the flip recipe); (2) a sibling ninja racing in the
+  shared build dir corrupted main.dol (BUILD-RACE LAW → ground rules:
+  pgrep idle before every flip gate). ⭐ **itdrop UNBLOCKED →
+  FLIP-READY** (queue #1 cleared, ~10 compiles): it_8026F3D4
+  95.56→**100.00 MATCH** via `*(volatile f32*)&ext` (⭐ idiom 117 —
+  the only breaker of the lfs-pairs-with-lis park; LICM/helper routes
+  refuted at 95.5); all gates PASS (6 siblings byte-identical, ninja
+  canonical, DOL EXACT ×2, zero @-ids); flip executor re-gates over
+  the settled merged tree at the boundary. ⭐ **quatlib → 25B-only**
+  (~30 compiles, only winning edits kept): MatToQuat →**100** (idiom
+  119 — delete invented `tr`, self-read `s`), .sdata2 byte-EQUAL
+  (embedded-assign pool-order idiom 120 — the 99.81 "drop" is a pure
+  @165↔@166 name swap, dtk-@-by-appearance trap) + EOF
+  `const f32 gap_11 = 0.0F` (idiom 122) closing size + export; sole
+  blocker EC4C FPR pair swap = VN-canonical rotation park (idiom 121).
+  **lb_00CE PARKED DEFINITIVE + DEMOTED** (src reverted): pool head
+  needs a dead early creator — idiom 118 FLIP-grade proof (uncalled
+  static emits .text; if(0) dies pre-pooling; called-once inline pools
+  at call site; Fix-B refuted ×2); gm_1965/particle 0.0f-pool-heads =
+  flip blockers by the same proof; D148 true shape (99.06) → S1.
+  ⭐ **MSL/math 7→1 hard issue** (~74 compiles): positioned `const u32`
+  defs + `*(u32*)&` reads (idiom 127) rebuilt .sdata2 0x20
+  byte-IDENTICAL (pins intact), 15/15 relocs, 5/5 exports, cross-TU
+  flip-blocker removed; **binary-proven deviation flagged in-source:
+  math_data.c:83 C1 hex 0x3EAA9F44 is a transcription error for
+  0x3EAAAA36** (its own comment + the DOL agree); also MWCC 0.0/0.0 =
+  0xFFC00000 ≠ target 0x7FFFFFFF — float-typed NaN initializers can't
+  reproduce the bytes. Residual 18B = logf frame layout (slot map
+  fully known, fM/fm truth inverted vs source; 2 best lines queued).
+  ⭐ **gm_1BFA 80B→67B** (~70 compiles): gm_801BFC60 →**100.00 EXACT**
+  via s16→int params + s16→u16 fields (idiom 124; 4 call sites prove
+  it); residual gm_801BFCFC ~50-row CS permutation park (target reg
+  map + LOAD-BEARING 2-stmt r26 init documented). **itdraw reverted
+  byte-identical** (~20 probes; one-transposition tie-locked state
+  documented); intel: depth-0 auto-inline (idiom 123), inline-param
+  ==inline-local (125), leftover-CS web (126). **QUEUES**:
+  rotation-enumeration agent now owns gm_801BFCFC + it_8026EECC +
+  quatlib EC4C + lb_8000D148 (+ 69A84/DAD4/gmregclear carryovers);
+  naming: quatlib @165↔@166 value-verified swap (post-flip,
+  score-only); math_data.c lines 82-83 deletion (DOL-neutral, makes
+  its .o byte-identical); ZERO naming debt from itdrop/hsd_40FF.
+  **WAVE BOUNDARY**: 5 src files dirty (math.c, gm_1BFA.c/.h,
+  itdrop.c, quatlib.c) + stale backlog.json (triage.py — itdrop
+  95.56→100); full configure + ninja + dtk shasum over the merged
+  settled tree, THEN itdrop flip #5 (executor monitors armed).
+  **WARNINGS**: (1) mutex pressure persists — 4 unblocker streams +
+  flip executor live concurrently; mid-wave the hsd_40FF pre-flip
+  transiently broke the tree-wide DOL for the gm_1BFA stream (later
+  landed clean) and configure.py/itdraw/itdrop/math.c sibling dirt
+  was observed by every stream — DOL stayed byte-exact over it on 4
+  independent gates, but flips mid-wave on shared trees are now
+  BANNED (build-race law); (2) durable records held (progress.txt ×4
+  + flip-unblock-w19/REPORT.md); (3) idiom-number collision in agent
+  reports (two streams both claimed "116") — playbook editor assigns
+  final numbers; agents must cite candidates as CANDIDATE-N. Idioms
+  116-127 added; flip queue re-ranked (lb_00CE demoted, gm_16A9
+  refuted-easy, hsd_40FF retired); FLIP VERDICT section now ×4.
   ftcoll + gmregclear family + naming round 14 + S1 rotation ×2 wins)
   — 3 commits (633eda23d naming-14 → 51951826b flips 1+2 →
   4715a41d8 flip 3), HEAD 4715a41d8; project 836→**839/1041 linked

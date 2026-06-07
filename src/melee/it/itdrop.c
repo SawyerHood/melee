@@ -58,7 +58,10 @@ bool it_8026F3D4(Item_GObj* item_gobj, struct it_8026F3D4_arg1_t* arg1,
     cnt = 0;
     item = item_gobj->user_data;
     cnt2 = 0;
-    zero = it_804DC6B8;
+    /* volatile read keeps the preheader lfs scheduled below the volatile
+     * cnt2 store, matching the target (plain read hoists lfs up to pair
+     * with the lis). */
+    zero = *(volatile f32*) &it_804DC6B8;
     for (cnt = 0; cnt < num; cnt++) {
         if ((new_var == 0) || (it_kind == -1)) {
             it_kind = it_8026C75C(&it_804A0E50);

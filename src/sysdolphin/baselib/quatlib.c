@@ -6,7 +6,6 @@
 #include <MSL/math_ppc.h>
 #include <MSL/trigf.h>
 
-/// @todo Currently 99.9% match - stack frame is 8 bytes too large.
 s32 MatToQuat(Mtx m, Quaternion* q)
 {
     f32 q3[3];
@@ -14,7 +13,6 @@ s32 MatToQuat(Mtx m, Quaternion* q)
     f32 lenCol[3];
     f32 s;
     f32 scale;
-    f32 tr;
     int i;
     int j;
     int k;
@@ -26,10 +24,10 @@ s32 MatToQuat(Mtx m, Quaternion* q)
     lenCol[2] =
         sqrtf(m[0][2] * m[0][2] + m[1][2] * m[1][2] + m[2][2] * m[2][2]);
 
-    tr = m[0][0] / lenCol[0] + m[1][1] / lenCol[1] + m[2][2] / lenCol[2];
+    s = m[0][0] / lenCol[0] + m[1][1] / lenCol[1] + m[2][2] / lenCol[2];
 
-    if (tr > 0.0F) {
-        s = sqrtf(1.0F + tr);
+    if (s > 0.0F) {
+        s = sqrtf(1.0F + s);
         q->w = 0.5F * s;
         scale = 0.5F / s;
         q->x = scale * ((m[2][1] / lenCol[1]) - (m[1][2] / lenCol[2]));
@@ -192,8 +190,11 @@ s32 HSD_QuatLib_8037EF28(Quaternion* p, Quaternion* q, Quaternion* out, f32 t)
         out->w = p->z;
 
         if (t < 0.5F) {
-            t2 = 2.0F * t;
-            sp = sinf((f32) (M_PI_2 * (1.0F - t2)));
+            /* The embedded assignment is load-bearing: it makes the f64
+             * pi/2 pool literal get created before the f32 2.0, matching
+             * the target's .sdata2 layout. Emitted code is identical to
+             * the two-statement form. */
+            sp = sinf((f32) (M_PI_2 * (1.0F - (t2 = 2.0F * t))));
             sq = sinf((f32) (M_PI_2 * t2));
             out->x = sp * p->x + sq * q->x;
             out->y = sp * p->y + sq * q->y;
@@ -213,3 +214,10 @@ s32 HSD_QuatLib_8037EF28(Quaternion* p, Quaternion* q, Quaternion* out, f32 t)
 
     return 0;
 }
+
+/// dtk emits the 4-byte alignment tail of this TU's .sdata2 as a named
+/// global (gap_11_804DE764_sdata2). It must be defined in-TU for a
+/// byte-exact Matching link (flip-link law; same device as the gm_182F
+/// .sbss def). Zero bytes, never referenced; placed after all literal
+/// uses so it cannot disturb pool creation order (idiom 104 window).
+const f32 gap_11_804DE764_sdata2 = 0.0F;
