@@ -1598,19 +1598,17 @@ static inline void Toy_JObjSetRotationY(HSD_JObj* jobj, f32 y, char* data)
 HSD_LObj* Toy_LoadLObjList(LightList** list, s32* hasAnim)
 {
     HSD_LObj* lobj;
-    HSD_LObj* first;
+    u8* base;
     HSD_LObj* prev;
     HSD_LightAnim** anims;
-    LightList** cur;
+    HSD_LObj* first;
     s32 idx;
-    u8* base;
     u8* animFlag;
     u8* posTable;
 
     PAD_STACK(4);
 
     prev = NULL;
-    cur = list;
     idx = 0;
     base = un_804D6ED4;
 
@@ -1618,11 +1616,11 @@ HSD_LObj* Toy_LoadLObjList(LightList** list, s32* hasAnim)
         *hasAnim = 0;
     }
 
-    while (*cur != NULL) {
-        lobj = HSD_LObjLoadDesc((*cur)->desc);
+    while (*list != NULL) {
+        lobj = HSD_LObjLoadDesc((*list)->desc);
         if (lobj != NULL) {
             animFlag = base + idx + 0xDC;
-            anims = (*cur)->anims;
+            anims = (*list)->anims;
             *animFlag = 0;
             if (anims != NULL && *anims != NULL) {
                 if (hasAnim != NULL) {
@@ -1647,7 +1645,7 @@ HSD_LObj* Toy_LoadLObjList(LightList** list, s32* hasAnim)
             first = lobj;
         }
         prev = lobj;
-        cur++;
+        list++;
     }
     return first;
 }
@@ -2100,6 +2098,11 @@ void fn_80307E84(HSD_GObj* gobj)
     }
 }
 
+typedef struct ToyMainData {
+    /* 0x000 */ u8 x0[0x3F0];
+    /* 0x3F0 */ ToyAnimState anim;
+} ToyMainData;
+
 void un_80307F64(s32 arg0, s32 arg1)
 {
     s8 idx;
@@ -2109,12 +2112,12 @@ void un_80307F64(s32 arg0, s32 arg1)
     HSD_JObj* jobj2;
 
     data = un_803FDD18;
-    state = (ToyAnimState*) ((u8*) un_804A26B8 + 0x3F0);
-    idx = state->x0E;
-    jobj1 = state->jobj[idx];
-    jobj2 = state->jobj[idx ^ 1];
+    state = &((ToyMainData*) un_804A26B8)->anim;
+    idx = ((ToyMainData*) un_804A26B8)->anim.x0E;
+    jobj1 = ((ToyMainData*) un_804A26B8)->anim.jobj[idx];
+    jobj2 = ((ToyMainData*) un_804A26B8)->anim.jobj[idx ^ 1];
 
-    if (state->x0F == 0) {
+    if (((ToyMainData*) un_804A26B8)->anim.x0F == 0) {
         if (arg1 != 0) {
             if (arg0 != state->x11) {
                 HSD_JObjRemoveAnimAll(jobj1);
