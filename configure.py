@@ -1201,7 +1201,7 @@ config.libs = [
             Object(Matching, "melee/it/items/itkinoko.c"),
             Object(Matching, "melee/it/items/itdkinoko.c"),
             Object(Matching, "melee/it/items/ithammer.c"),
-            Object(NonMatching, "melee/it/items/itwstar.c"),
+            Object(Matching, "melee/it/items/itwstar.c"),
             Object(Matching, "melee/it/items/itscball.c"),
             Object(Matching, "melee/it/items/itrabbitc.c"),
             Object(Matching, "melee/it/items/itmetalb.c"),
