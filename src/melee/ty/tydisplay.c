@@ -81,8 +81,14 @@ typedef struct TyDspNameTables {
     s32 terminator;
 } TyDspNameTables;
 
-extern const TyDspNameTables un_803B8988;
+typedef struct TyDspDatNames {
+    TyDspArchNames names;
+    const char* terminator;
+} TyDspDatNames;
+
+extern const TyDspArchNames un_803B8988;
 extern const TyDspArchNames un_803B8A34;
+extern const TyDspDatNames un_803B8AE0;
 
 typedef struct TyDspSceneGfx {
     /* 0x00 */ HSD_GObj* x00;
@@ -1374,6 +1380,7 @@ void fn_8031A94C(HSD_GObj* arg0)
 }
 
 static u16 un_804D5ABC = 0x15;
+static char un_804D5AC0[8] = "";
 
 void un_8031B1FC(void)
 {
@@ -1423,8 +1430,7 @@ void un_8031B1FC(void)
     HSD_ASSERT(0x43E, 0);
 }
 
-static s32 un_804DE018 = (s32) 0xC8C8C8FF;
-static f32 un_804DE01C = 0.6f;
+extern const s32 un_804DE018;
 
 void un_8031B328(void)
 {
@@ -1441,7 +1447,7 @@ void un_8031B328(void)
 
     if ((temp3 = ptr)->archive == NULL) {
         OSReport("*** BG data aren't being loaded!\n");
-        OSPanic(__FILE__, 0x459, "0");
+        OSPanic(__FILE__, 0x459, un_804D5AC0);
     }
 
     lightData = HSD_ArchiveGetPublicAddress(temp3->archive,
@@ -1469,7 +1475,10 @@ void un_8031B328(void)
     }
 }
 
+const s32 un_804DE018 = (s32) 0xC8C8C8FF;
+
 static char un_803FEFF0[] = "ToyDspPanel_Top_joint";
+static char un_803FF01C[] = "ToyDspStand_Top_joint";
 
 void un_8031B460_OnEnter(void* arg0)
 {
@@ -1762,11 +1771,10 @@ TyDspEntry* un_8031B9DC(s32 id)
 }
 
 static char un_803FF19C[] = "X  %3.2f\nZ  %3.2f";
-static f32 un_804DE020 = 12.0f;
-static s32 un_804DE024 = (s32) 0xE2E2E2FF;
-static s32 un_804DE028 = (s32) 0x4080D060;
-static f32 un_804DE02C = 18.0f;
-static f64 un_804DE030 = 0.0;
+extern const s32 un_804DE024;
+extern const s32 un_804DE028;
+extern const f32 un_804DE02C;
+extern const f64 un_804DE030;
 
 void un_8031BA78(s32 arg0, s32 arg1, f32 farg0)
 {
@@ -1792,114 +1800,124 @@ void un_8031BA78(s32 arg0, s32 arg1, f32 farg0)
     }
 }
 
+const TyDspArchNames un_803B8988 = { {
+    "ToyDspQues_Top_joint",       "ToyDspMycharaCmA_Top_joint",
+    "ToyDspMycharaCmB_Top_joint", "ToyDspMycharaCmC_Top_joint",
+    "ToyDspMycharaCmD_Top_joint", "ToyDspMycharaCmE_Top_joint",
+    "ToyDspMycharaR1A_Top_joint", "ToyDspMycharaR1B_Top_joint",
+    "ToyDspMycharaR1C_Top_joint", "ToyDspMycharaR1D_Top_joint",
+    "ToyDspMycharaR1E_Top_joint", "ToyDspMycharaR2A_Top_joint",
+    "ToyDspMycharaR2B_Top_joint", "ToyDspMycharaR2C_Top_joint",
+    "ToyDspMycharaR2D_Top_joint", "ToyDspMycharaR2E_Top_joint",
+    "ToyDspMapA_Top_joint",       "ToyDspMapB_Top_joint",
+    "ToyDspMapC_Top_joint",       "ToyDspMapD_Top_joint",
+    "ToyDspMapE_Top_joint",       "ToyDspFgseriesA_Top_joint",
+    "ToyDspFgseriesB_Top_joint",  "ToyDspFgseriesC_Top_joint",
+    "ToyDspFgseriesD_Top_joint",  "ToyDspFgseriesE_Top_joint",
+    "ToyDspFgetcA_Top_joint",     "ToyDspFgetcB_Top_joint",
+    "ToyDspFgetcC_Top_joint",     "ToyDspFgetcD_Top_joint",
+    "ToyDspFgetcE_Top_joint",     "ToyDspPokemonA_Top_joint",
+    "ToyDspPokemonB_Top_joint",   "ToyDspPokemonC_Top_joint",
+    "ToyDspPokemonD_Top_joint",   "ToyDspPokemonE_Top_joint",
+    "ToyDspItemA_Top_joint",      "ToyDspItemB_Top_joint",
+    "ToyDspItemC_Top_joint",      "ToyDspItemD_Top_joint",
+    "ToyDspItemE_Top_joint",      "ToyDspStand_Top_joint",
+    "ToyDspQues_Top_joint",
+} };
+
 s32 un_8031BB34(s8 idx)
 {
-    char* table[] = {
-        "ToyDspQues_Top_joint",       "ToyDspMycharaCmA_Top_joint",
-        "ToyDspMycharaCmB_Top_joint", "ToyDspMycharaCmC_Top_joint",
-        "ToyDspMycharaCmD_Top_joint", "ToyDspMycharaCmE_Top_joint",
-        "ToyDspMycharaR1A_Top_joint", "ToyDspMycharaR1B_Top_joint",
-        "ToyDspMycharaR1C_Top_joint", "ToyDspMycharaR1D_Top_joint",
-        "ToyDspMycharaR1E_Top_joint", "ToyDspMycharaR2A_Top_joint",
-        "ToyDspMycharaR2B_Top_joint", "ToyDspMycharaR2C_Top_joint",
-        "ToyDspMycharaR2D_Top_joint", "ToyDspMycharaR2E_Top_joint",
-        "ToyDspMapA_Top_joint",       "ToyDspMapB_Top_joint",
-        "ToyDspMapC_Top_joint",       "ToyDspMapD_Top_joint",
-        "ToyDspMapE_Top_joint",       "ToyDspFgseriesA_Top_joint",
-        "ToyDspFgseriesB_Top_joint",  "ToyDspFgseriesC_Top_joint",
-        "ToyDspFgseriesD_Top_joint",  "ToyDspFgseriesE_Top_joint",
-        "ToyDspFgetcA_Top_joint",     "ToyDspFgetcB_Top_joint",
-        "ToyDspFgetcC_Top_joint",     "ToyDspFgetcD_Top_joint",
-        "ToyDspFgetcE_Top_joint",     "ToyDspPokemonA_Top_joint",
-        "ToyDspPokemonB_Top_joint",   "ToyDspPokemonC_Top_joint",
-        "ToyDspPokemonD_Top_joint",   "ToyDspPokemonE_Top_joint",
-        "ToyDspItemA_Top_joint",      "ToyDspItemB_Top_joint",
-        "ToyDspItemC_Top_joint",      "ToyDspItemD_Top_joint",
-        "ToyDspItemE_Top_joint",      "ToyDspStand_Top_joint",
-        "ToyDspQues_Top_joint",
-    };
+    TyDspArchNames table = un_803B8988;
 
     if (idx == -1) {
         idx = 0;
     }
 
-    return (s32) table[idx];
+    goto ret; ret:
+    return (s32) table.entries[idx];
 }
+
+const TyDspArchNames un_803B8A34 = { {
+    un_804D5AC0,
+    "ToyDspMycharaCmA_Top_matanim_joint",
+    "ToyDspMycharaCmB_Top_matanim_joint",
+    "ToyDspMycharaCmC_Top_matanim_joint",
+    "ToyDspMycharaCmD_Top_matanim_joint",
+    "ToyDspMycharaCmE_Top_matanim_joint",
+    "ToyDspMycharaR1A_Top_matanim_joint",
+    "ToyDspMycharaR1B_Top_matanim_joint",
+    "ToyDspMycharaR1C_Top_matanim_joint",
+    "ToyDspMycharaR1D_Top_matanim_joint",
+    "ToyDspMycharaR1E_Top_matanim_joint",
+    "ToyDspMycharaR2A_Top_matanim_joint",
+    "ToyDspMycharaR2B_Top_matanim_joint",
+    "ToyDspMycharaR2C_Top_matanim_joint",
+    "ToyDspMycharaR2D_Top_matanim_joint",
+    "ToyDspMycharaR2E_Top_matanim_joint",
+    "ToyDspMapA_Top_matanim_joint",
+    "ToyDspMapB_Top_matanim_joint",
+    "ToyDspMapC_Top_matanim_joint",
+    "ToyDspMapD_Top_matanim_joint",
+    "ToyDspMapE_Top_matanim_joint",
+    "ToyDspFgseriesA_Top_matanim_joint",
+    "ToyDspFgseriesB_Top_matanim_joint",
+    "ToyDspFgseriesC_Top_matanim_joint",
+    "ToyDspFgseriesD_Top_matanim_joint",
+    "ToyDspFgseriesE_Top_matanim_joint",
+    "ToyDspFgetcA_Top_matanim_joint",
+    "ToyDspFgetcB_Top_matanim_joint",
+    "ToyDspFgetcC_Top_matanim_joint",
+    "ToyDspFgetcD_Top_matanim_joint",
+    "ToyDspFgetcE_Top_matanim_joint",
+    "ToyDspPokemonA_Top_matanim_joint",
+    "ToyDspPokemonB_Top_matanim_joint",
+    "ToyDspPokemonC_Top_matanim_joint",
+    "ToyDspPokemonD_Top_matanim_joint",
+    "ToyDspPokemonE_Top_matanim_joint",
+    "ToyDspItemA_Top_matanim_joint",
+    "ToyDspItemB_Top_matanim_joint",
+    "ToyDspItemC_Top_matanim_joint",
+    "ToyDspItemD_Top_matanim_joint",
+    "ToyDspItemE_Top_matanim_joint",
+    un_804D5AC0,
+    un_804D5AC0,
+} };
 
 char* un_8031BB94(s8 idx)
 {
-    char* table[] = {
-        "0",
-        "ToyDspMycharaCmA_Top_matanim_joint",
-        "ToyDspMycharaCmB_Top_matanim_joint",
-        "ToyDspMycharaCmC_Top_matanim_joint",
-        "ToyDspMycharaCmD_Top_matanim_joint",
-        "ToyDspMycharaCmE_Top_matanim_joint",
-        "ToyDspMycharaR1A_Top_matanim_joint",
-        "ToyDspMycharaR1B_Top_matanim_joint",
-        "ToyDspMycharaR1C_Top_matanim_joint",
-        "ToyDspMycharaR1D_Top_matanim_joint",
-        "ToyDspMycharaR1E_Top_matanim_joint",
-        "ToyDspMycharaR2A_Top_matanim_joint",
-        "ToyDspMycharaR2B_Top_matanim_joint",
-        "ToyDspMycharaR2C_Top_matanim_joint",
-        "ToyDspMycharaR2D_Top_matanim_joint",
-        "ToyDspMycharaR2E_Top_matanim_joint",
-        "ToyDspMapA_Top_matanim_joint",
-        "ToyDspMapB_Top_matanim_joint",
-        "ToyDspMapC_Top_matanim_joint",
-        "ToyDspMapD_Top_matanim_joint",
-        "ToyDspMapE_Top_matanim_joint",
-        "ToyDspFgseriesA_Top_matanim_joint",
-        "ToyDspFgseriesB_Top_matanim_joint",
-        "ToyDspFgseriesC_Top_matanim_joint",
-        "ToyDspFgseriesD_Top_matanim_joint",
-        "ToyDspFgseriesE_Top_matanim_joint",
-        "ToyDspFgetcA_Top_matanim_joint",
-        "ToyDspFgetcB_Top_matanim_joint",
-        "ToyDspFgetcC_Top_matanim_joint",
-        "ToyDspFgetcD_Top_matanim_joint",
-        "ToyDspFgetcE_Top_matanim_joint",
-        "ToyDspPokemonA_Top_matanim_joint",
-        "ToyDspPokemonB_Top_matanim_joint",
-        "ToyDspPokemonC_Top_matanim_joint",
-        "ToyDspPokemonD_Top_matanim_joint",
-        "ToyDspPokemonE_Top_matanim_joint",
-        "ToyDspItemA_Top_matanim_joint",
-        "ToyDspItemB_Top_matanim_joint",
-        "ToyDspItemC_Top_matanim_joint",
-        "ToyDspItemD_Top_matanim_joint",
-        "ToyDspItemE_Top_matanim_joint",
-        "0",
-        "0",
-    };
+    TyDspArchNames table = un_803B8A34;
 
     if (idx == -1) {
         idx = 0;
     }
 
-    return table[idx];
+    goto ret; ret:
+    return (char*) table.entries[idx];
 }
+
+const TyDspDatNames un_803B8AE0 = { { {
+    "TyQuesD.dat",  "TyMycCmA.dat", "TyMycCmB.dat", "TyMycCmC.dat",
+    "TyMycCmD.dat", "TyMycCmE.dat", "TyMycR1A.dat", "TyMycR1B.dat",
+    "TyMycR1C.dat", "TyMycR1D.dat", "TyMycR1E.dat", "TyMycR2A.dat",
+    "TyMycR2B.dat", "TyMycR2C.dat", "TyMycR2D.dat", "TyMycR2E.dat",
+    "TyMapA.dat",   "TyMapB.dat",   "TyMapC.dat",   "TyMapD.dat",
+    "TyMapE.dat",   "TySeriA.dat",  "TySeriB.dat",  "TySeriC.dat",
+    "TySeriD.dat",  "TySeriE.dat",  "TyEtcA.dat",   "TyEtcB.dat",
+    "TyEtcC.dat",   "TyEtcD.dat",   "TyEtcE.dat",   "TyPokeA.dat",
+    "TyPokeB.dat",  "TyPokeC.dat",  "TyPokeD.dat",  "TyPokeE.dat",
+    "TyItemA.dat",  "TyItemB.dat",  "TyItemC.dat",  "TyItemD.dat",
+    "TyItemE.dat",  "TyStandD.dat", "TyQuesD.dat",
+} } };
 
 s32 un_8031BBF4(s8 arg0)
 {
-    char* table[] = {
-        "TyQuesD.dat",  "TyMycCmA.dat", "TyMycCmB.dat", "TyMycCmC.dat",
-        "TyMycCmD.dat", "TyMycCmE.dat", "TyMycR1A.dat", "TyMycR1B.dat",
-        "TyMycR1C.dat", "TyMycR1D.dat", "TyMycR1E.dat", "TyMycR2A.dat",
-        "TyMycR2B.dat", "TyMycR2C.dat", "TyMycR2D.dat", "TyMycR2E.dat",
-        "TyMapA.dat",   "TyMapB.dat",   "TyMapC.dat",   "TyMapD.dat",
-        "TyMapE.dat",   "TySeriA.dat",  "TySeriB.dat",  "TySeriC.dat",
-        "TySeriD.dat",  "TySeriE.dat",  "TyEtcA.dat",   "TyEtcB.dat",
-        "TyEtcC.dat",   "TyEtcD.dat",   "TyEtcE.dat",   "TyPokeA.dat",
-        "TyPokeB.dat",  "TyPokeC.dat",  "TyPokeD.dat",  "TyPokeE.dat",
-        "TyItemA.dat",  "TyItemB.dat",  "TyItemC.dat",  "TyItemD.dat",
-        "TyItemE.dat",  "TyStandD.dat", "TyQuesD.dat",
-    };
+    TyDspArchNames table = un_803B8AE0.names;
+
     if (arg0 == -1) {
         arg0 = 0;
     }
-    return (s32) table[arg0];
+    goto ret; ret:
+    return (s32) table.entries[arg0];
 }
 
 HSD_GObj* un_8031BC54(s32 arg0)
@@ -1921,7 +1939,7 @@ HSD_GObj* un_8031BC54(s32 arg0)
     HSD_GObjObject_80390A70(gobj, HSD_GObj_804D7849, root);
     GObj_SetupGXLink(gobj, HSD_GObj_JObjCallback, 0x3C, 0);
     cat = (c = entry->x04);
-    jobj_names = *(TyDspArchNames*) un_803B8988.jobj_names;
+    jobj_names = un_803B8988;
     if ((s8) c == -1) {
         cat = 0;
     }
@@ -1953,7 +1971,7 @@ HSD_GObj* un_8031BC54(s32 arg0)
     HSD_JObjSetTranslateZ(child, entry->x0C);
 
     HSD_JObjAddChild(root, HSD_JObjLoadJoint(HSD_ArchiveGetPublicAddress(
-                               data->archives[41], "ToyDspStand_Top_joint")));
+                               data->archives[41], un_803FF01C)));
 
     if (un_804D6F24 != NULL) {
         DevText_Erase(un_804D6F24);
@@ -1965,9 +1983,6 @@ HSD_GObj* un_8031BC54(s32 arg0)
 
     return gobj;
 }
-
-static char un_804D5AAC[] = "jobj.h";
-static char un_804D5AB4[] = "jobj";
 
 void un_8031BF34(s32 arg0)
 {
@@ -2017,7 +2032,7 @@ void un_8031C1D0(void)
         DevText_HideCursor(un_804D6F24);
         DevText_80302AC0(un_804D6F24);
         DevText_SetBGColor(un_804D6F24, *(GXColor*) &bgColor);
-        DevText_SetScale(un_804D6F24, un_804DE020, un_804DE02C);
+        DevText_SetScale(un_804D6F24, 12.0f, un_804DE02C);
         DevText_Erase(un_804D6F24);
         DevText_SetCursorXY(un_804D6F24, 0, 0);
         DevText_StoreColorIndex(un_804D6F24, 0);
@@ -2026,6 +2041,11 @@ void un_8031C1D0(void)
         DevText_Print(un_804D6F24, buf);
     }
 }
+
+const s32 un_804DE024 = (s32) 0xE2E2E2FF;
+const s32 un_804DE028 = (s32) 0x4080D060;
+const f32 un_804DE02C = 18.0f;
+const f64 un_804DE030 = 0.0;
 
 void tyDisplay_8031C2CC(void)
 {
@@ -2105,7 +2125,7 @@ s32 un_8031C454(s32 arg0)
     const TyDspNameTables* tables;
 
     PAD_STACK(0x4);
-    tables = &un_803B8988;
+    tables = (const TyDspNameTables*) &un_803B8988;
     result = 0;
     archArr = un_804A2DE8;
 
@@ -2164,7 +2184,7 @@ HSD_JObj* un_8031C5E4(s32 arg0)
     HSD_JObj* root;
     HSD_JObj* child;
     u8 cat;
-    const TyDspNameTables* tables = &un_803B8988;
+    const TyDspNameTables* tables = (const TyDspNameTables*) &un_803B8988;
 
     HSD_Archive** archives = un_804A2DE8;
     u8 _3[4];

@@ -834,7 +834,7 @@ float un_80305D00(void)
     for (i = 0; i < 4; i++) {
         val = HSD_PadCopyStatus[(u8) i].nml_stickX;
         ret = val;
-        if (val < 0.0F) {
+        if (val < un_804DDCD8) {
             val = -val;
         }
         if (val > 0.1F) {
@@ -1045,10 +1045,8 @@ void un_803062EC(s32 arg0, u32 arg1, f32 farg0)
     if (un_804D6E9C != NULL) {
         DevText_Erase(un_804D6E9C);
         DevText_SetCursorXY(un_804D6E9C, 0, 0);
-        sprintf(
-            sp14,
-            "X   %3.2f\nY   %3.2f\nZ   %3.2f\nMS  %3.2f\nSS  %3.2f\nMD  %3.2f",
-            td->x08, td->x0C, td->x10, td->x14, td->x18, td->x1C);
+        sprintf(sp14, un_803FE2A4, td->x08, td->x0C, td->x10, td->x14, td->x18,
+                td->x1C);
         DevText_Print(un_804D6E9C, sp14);
     }
 }
@@ -1400,7 +1398,7 @@ void un_80306BB8(HSD_GObj* gobj)
         }
     } else {
         if (!lb_8000B09C(jobj)) {
-            HSD_JObjReqAnimAll(jobj, 0.0f);
+            HSD_JObjReqAnimAll(jobj, un_804DDCD8);
         }
         HSD_JObjAnimAll(jobj);
     }
@@ -1583,6 +1581,69 @@ static inline void Toy_JObjSetScaleZ(HSD_JObj* jobj, f32 z)
     }
 }
 
+static inline void Toy_JObjAddTranslationY(HSD_JObj* jobj, f32 y)
+{
+    (jobj) ? ((void) 0) : __assert(un_804D5A64, 0x45A, un_804D5A6C);
+    jobj->translate.y += y;
+    if (!(jobj->flags & JOBJ_MTX_INDEP_SRT)) {
+        Toy_JObjSetMtxDirty(jobj);
+    }
+}
+
+static inline void Toy_JObjAddRotationY(HSD_JObj* jobj, f32 v)
+{
+    (jobj) ? ((void) 0) : __assert(un_804D5A64, 0x411, un_804D5A6C);
+    jobj->rotate.y += v;
+    if (!(jobj->flags & JOBJ_MTX_INDEP_SRT)) {
+        Toy_JObjSetMtxDirty(jobj);
+    }
+}
+
+static inline void Toy_JObjAddScaleX(HSD_JObj* jobj, f32 v)
+{
+    (jobj) ? ((void) 0) : __assert(un_804D5A64, 0x429, un_804D5A6C);
+    jobj->scale.x += v;
+    if (!(jobj->flags & JOBJ_MTX_INDEP_SRT)) {
+        Toy_JObjSetMtxDirty(jobj);
+    }
+}
+
+static inline void Toy_JObjAddScaleY(HSD_JObj* jobj, f32 v)
+{
+    (jobj) ? ((void) 0) : __assert(un_804D5A64, 0x435, un_804D5A6C);
+    jobj->scale.y += v;
+    if (!(jobj->flags & JOBJ_MTX_INDEP_SRT)) {
+        Toy_JObjSetMtxDirty(jobj);
+    }
+}
+
+static inline void Toy_JObjAddScaleZ(HSD_JObj* jobj, f32 v)
+{
+    (jobj) ? ((void) 0) : __assert(un_804D5A64, 0x441, un_804D5A6C);
+    jobj->scale.z += v;
+    if (!(jobj->flags & JOBJ_MTX_INDEP_SRT)) {
+        Toy_JObjSetMtxDirty(jobj);
+    }
+}
+
+static inline void Toy_JObjAddTranslationX(HSD_JObj* jobj, f32 v)
+{
+    (jobj) ? ((void) 0) : __assert(un_804D5A64, 0x44e, un_804D5A6C);
+    jobj->translate.x += v;
+    if (!(jobj->flags & JOBJ_MTX_INDEP_SRT)) {
+        Toy_JObjSetMtxDirty(jobj);
+    }
+}
+
+static inline void Toy_JObjAddTranslationZ(HSD_JObj* jobj, f32 v)
+{
+    (jobj) ? ((void) 0) : __assert(un_804D5A64, 0x466, un_804D5A6C);
+    jobj->translate.z += v;
+    if (!(jobj->flags & JOBJ_MTX_INDEP_SRT)) {
+        Toy_JObjSetMtxDirty(jobj);
+    }
+}
+
 static inline void Toy_JObjSetRotationY(HSD_JObj* jobj, f32 y, char* data)
 {
     (jobj) ? ((void) 0) : __assert(un_804D5A64, 0x294, un_804D5A6C);
@@ -1666,7 +1727,7 @@ void un_80307018(void)
     ptr2 = un_804D6ED4;
 
     if (ptr1->x50 == NULL) {
-        HSD_ASSERTREPORT(0x912, NULL, "*** BG data aren't being loaded!\n");
+        (OSReport(un_803FE3B8), __assert(un_804D5A48, 0x912, un_804D5A50));
     }
 
     lights = HSD_ArchiveGetPublicAddress(ptr1->x50, un_803FE3DC);
@@ -1707,6 +1768,8 @@ void un_8030715C(f32 cstick_x, f32 cstick_y)
     s32 i;
     s8* flag_ptr;
     HSD_CObj* cobj;
+    f32 zero;
+    f32 deg2rad;
     PAD_STACK(36);
 
     data = (void*) un_804D6E68;
@@ -1731,13 +1794,13 @@ void un_8030715C(f32 cstick_x, f32 cstick_y)
 
     HSD_CObjSetInterest(cobj, &new_interest);
 
-    euler.x = 0.0F;
-    euler.y = 0.0F;
+    euler.x = un_804DDCD8;
+    euler.y = un_804DDCD8;
     euler.z = data->x20;
 
-    MTXRotRad(mtx, 'x', 0.017453292F * data->x18);
+    MTXRotRad(mtx, 'x', un_804DDCEC * data->x18);
     PSMTXMultVecSR(mtx, &euler, &euler);
-    MTXRotRad(mtx, 'y', 0.017453292F * -data->x1C);
+    MTXRotRad(mtx, 'y', un_804DDCEC * -data->x1C);
     PSMTXMultVecSR(mtx, &euler, &euler);
 
     euler.x += new_interest.x;
@@ -1747,15 +1810,17 @@ void un_8030715C(f32 cstick_x, f32 cstick_y)
     HSD_CObjSetEyePosition(cobj, &euler);
 
     cur = data2;
+    deg2rad = un_804DDCEC;
     i = 0;
     lobj = data2->x4->x28;
+    zero = un_804DDCD8;
 
     while (lobj != NULL) {
         flag_ptr = (s8*) data2 + i + 0xDC;
 
-        angles.x = 0.017453292F * data2->x14;
-        angles.y = 0.017453292F * -data2->x18;
-        angles.z = 0.0F;
+        angles.x = deg2rad * data2->x14;
+        angles.y = deg2rad * -data2->x18;
+        angles.z = zero;
 
         if (*flag_ptr != 0) {
             HSD_LObjGetPosition(lobj, &light_pos);
@@ -1937,17 +2002,24 @@ void un_80307828(int arg0)
 
     if (arg0 == 0) {
         data->x18 = data->x1C = (f32) (data->x58 = 0);
-        data2->x18 = 0.0F;
-        data2->x14 = 0.0F;
+        {
+            f32 z = un_804DDCD8;
+            data2->x18 = z;
+            data2->x14 = z;
+        }
     } else {
-        data->x18 = 0.0F;
-        data2->x14 = 0.0F;
+        f32 z = un_804DDCD8;
+        data->x18 = z;
+        data2->x14 = z;
     }
 
     data->x20 = 38.0F;
-    data->x2C = 0.0F;
-    data->x28 = 0.0F;
-    data->x24 = 0.0F;
+    {
+        f32 z = un_804DDCD8;
+        data->x2C = z;
+        data->x28 = z;
+        data->x24 = z;
+    }
 
     HSD_CObjSetInterest(cobj, &interest);
 
@@ -2049,7 +2121,7 @@ HSD_JObj* un_80307BA0(HSD_JObj* parent_jobj, s16 arg1)
         state->jobj[(s32) state->x0E] = jobj;
     }
 
-    HSD_JObjAddTranslationY(jobj, 0.25F);
+    Toy_JObjAddTranslationY(jobj, 0.25F);
 
     state->x11 = 2;
     state->x10 = 2;
@@ -2059,9 +2131,9 @@ HSD_JObj* un_80307BA0(HSD_JObj* parent_jobj, s16 arg1)
 
     scale_val = un_803060BC((int) arg1, 4);
 
-    HSD_JObjSetScaleX(jobj, scale_val);
-    HSD_JObjSetScaleY(jobj, scale_val);
-    HSD_JObjSetScaleZ(jobj, scale_val);
+    Toy_JObjSetScaleX(jobj, scale_val);
+    Toy_JObjSetScaleY(jobj, scale_val);
+    Toy_JObjSetScaleZ(jobj, scale_val);
 
     return jobj;
 }
@@ -2272,7 +2344,7 @@ void un_803083D8(HSD_JObj* jobj, s32 arg1)
     }
     HSD_JObjClearFlagsAll(jobj, 0x10);
     if (temp_r31 == 1) {
-        HSD_JObjReqAnim(jobj, 0.0F);
+        HSD_JObjReqAnim(jobj, un_804DDCD8);
     } else {
         HSD_JObjReqAnim(jobj, 1.0F);
     }
@@ -2299,8 +2371,8 @@ void un_803084A0(s32 arg0)
     color = un_804DDCFC;
 
     if (display->x144 == NULL) {
-        display->x144 = HSD_SisLib_803A5ACC(0, un_804D6E70, 0.9F, -10.9F, 0.0F,
-                                            384.0F, 64.0F);
+        display->x144 = HSD_SisLib_803A5ACC(0, un_804D6E70, 0.9F, -10.9F,
+                                            un_804DDCD8, 384.0F, 64.0F);
         one = 1;
         text = display->x144;
         text->default_fitting = one;
@@ -2313,7 +2385,7 @@ void un_803084A0(s32 arg0)
             text->font_size.x = 0.044F;
             text->font_size.y = 0.103F;
             text = display->x144;
-            text->x34.x = 2.0F;
+            text->x34.x = un_804DDCF0;
             text->x34.y = 1.0F;
         } else {
             text = display->x144;
@@ -2542,7 +2614,7 @@ void un_80308DC8(HSD_CObj* cobj)
     un_80307F64(2, 1);
 
     if (temp_r30->x18 < 10.0F) {
-        if (eye_pos.y < 0.0F) {
+        if (eye_pos.y < un_804DDCD8) {
             temp_r31->x0E = 1;
             HSD_JObjClearFlagsAll(temp_r31->jobj[1], 0x10);
             HSD_JObjSetFlagsAll(temp_r31->jobj[0], 0x10);
@@ -2587,7 +2659,7 @@ void un_80308F04(HSD_CObj* cobj)
     left = HSD_CObjGetLeft(cobj);
 
     if (jobj_ptr == NULL) {
-        __assert("jobj.h", 0x378, "jobj");
+        __assert(un_804D5A64, 0x378, un_804D5A6C);
     }
 
     if (state->x61 == 1) {
@@ -2700,10 +2772,10 @@ void un_80308F04(HSD_CObj* cobj)
             state->x61 = 0;
             un_80307828(1);
 
-            HSD_CObjSetTop(cobj, 0.049584F);
-            HSD_CObjSetBottom(cobj, -0.035585F);
-            HSD_CObjSetRight(cobj, 0.076839F);
-            HSD_CObjSetLeft(cobj, -0.026839F);
+            HSD_CObjSetTop(cobj, un_804DDD78);
+            HSD_CObjSetBottom(cobj, un_804DDD7C);
+            HSD_CObjSetRight(cobj, un_804DDD80);
+            HSD_CObjSetLeft(cobj, un_804DDD84);
 
             un_803102C4(1);
 
@@ -2811,7 +2883,7 @@ void fn_80309404(HSD_GObj* gobj)
 
         for (i = 0; i < 4; i++) {
             val = HSD_PadCopyStatus[(u8) i].nml_stickX;
-            if (val < 0.0F) {
+            if (val < 0.0f) {
                 abs = -val;
             } else {
                 abs = val;
@@ -3638,7 +3710,7 @@ void fn_8030B530(HSD_GObj* arg0)
                 state->x60 = 8;
             }
 
-            HSD_JObjAddRotationY(jobj_next, 0.017453292f * adj_x);
+            Toy_JObjAddRotationY(jobj_next, 0.017453292f * adj_x);
             un_803062EC((s32) anim->xC, 5U,
                         57.29578f * jobj_next->rotate.y);
 
@@ -3691,7 +3763,7 @@ void fn_8030B530(HSD_GObj* arg0)
                     f32 abs_x2 = (adj_x < 0.0f) ? -adj_x : adj_x;
                     if (abs_x2 > 0.8f) {
                         f32 dx = 0.01f * cosf(angle);
-                        HSD_JObjAddTranslationX(jobj_next, dx);
+                        Toy_JObjAddTranslationX(jobj_next, dx);
                         un_803062EC((s32) anim->xC,
                                     0U, jobj_next->translate.x);
                     }
@@ -3699,7 +3771,7 @@ void fn_8030B530(HSD_GObj* arg0)
                         f32 abs_y2 = (adj_y < 0.0f) ? -adj_y : adj_y;
                         if (abs_y2 > 0.8f) {
                             f32 dz = 0.01f * -sinf(angle);
-                            HSD_JObjAddTranslationZ(jobj_next, dz);
+                            Toy_JObjAddTranslationZ(jobj_next, dz);
                             un_803062EC((s32) anim->xC,
                                         2U, jobj_next->translate.z);
                         }
@@ -3708,7 +3780,7 @@ void fn_8030B530(HSD_GObj* arg0)
                     f32 abs_x3 = (adj_x < 0.0f) ? -adj_x : adj_x;
                     if (abs_x3 > 0.8f) {
                         f32 dx = 0.01f * cosf(angle);
-                        HSD_JObjAddTranslationX(jobj_next, dx);
+                        Toy_JObjAddTranslationX(jobj_next, dx);
                         un_803062EC((s32) anim->xC,
                                     0U, jobj_next->translate.x);
                     }
@@ -3716,7 +3788,7 @@ void fn_8030B530(HSD_GObj* arg0)
                         f32 abs_y3 = (adj_y < 0.0f) ? -adj_y : adj_y;
                         if (abs_y3 > 0.8f) {
                             f32 dy = 0.01f * sinf(angle);
-                            HSD_JObjAddTranslationY(jobj_next, dy);
+                            Toy_JObjAddTranslationY(jobj_next, dy);
                             un_803062EC((s32) anim->xC,
                                         1U, jobj_next->translate.y);
                         }
@@ -3757,12 +3829,12 @@ void fn_8030B530(HSD_GObj* arg0)
                                 } else {
                                     u32 btn10;
                                 scale_down_xz:
-                                    HSD_JObjAddScaleX(jobj_child, -0.01f);
-                                    HSD_JObjAddScaleZ(jobj_child, -0.01f);
+                                    Toy_JObjAddScaleX(jobj_child, -0.01f);
+                                    Toy_JObjAddScaleZ(jobj_child, -0.01f);
                                     {
                                         HSD_JObj* n2 = jobj_next->next;
-                                        HSD_JObjAddScaleX(n2, -0.01f);
-                                        HSD_JObjAddScaleZ(n2, -0.01f);
+                                        Toy_JObjAddScaleX(n2, -0.01f);
+                                        Toy_JObjAddScaleZ(n2, -0.01f);
                                         un_803062EC((s32) anim->xC,
                                                     4U, n2->scale.x);
                                     }
@@ -3774,12 +3846,12 @@ void fn_8030B530(HSD_GObj* arg0)
                             } else {
                                 u32 btn10;
                             scale_up_xz:
-                                HSD_JObjAddScaleX(jobj_child, 0.01f);
-                                HSD_JObjAddScaleZ(jobj_child, 0.01f);
+                                Toy_JObjAddScaleX(jobj_child, 0.01f);
+                                Toy_JObjAddScaleZ(jobj_child, 0.01f);
                                 {
                                     HSD_JObj* n2 = jobj_next->next;
-                                    HSD_JObjAddScaleX(n2, 0.01f);
-                                    HSD_JObjAddScaleZ(n2, 0.01f);
+                                    Toy_JObjAddScaleX(n2, 0.01f);
+                                    Toy_JObjAddScaleZ(n2, 0.01f);
                                     un_803062EC(
                                         (s32) anim->xC,
                                         4U, n2->scale.x);
@@ -3792,9 +3864,9 @@ void fn_8030B530(HSD_GObj* arg0)
                         } else {
                             u32 btn10;
                         scale_down_all:
-                            HSD_JObjAddScaleX(jobj_next, -0.01f);
-                            HSD_JObjAddScaleY(jobj_next, -0.01f);
-                            HSD_JObjAddScaleZ(jobj_next, -0.01f);
+                            Toy_JObjAddScaleX(jobj_next, -0.01f);
+                            Toy_JObjAddScaleY(jobj_next, -0.01f);
+                            Toy_JObjAddScaleZ(jobj_next, -0.01f);
                             un_803062EC((s32) anim->xC,
                                         3U, jobj_next->scale.x);
                             btn10 = un_80305C44();
@@ -3805,9 +3877,9 @@ void fn_8030B530(HSD_GObj* arg0)
                     } else {
                         u32 btn10;
                     scale_up_all:
-                        HSD_JObjAddScaleX(jobj_next, 0.01f);
-                        HSD_JObjAddScaleY(jobj_next, 0.01f);
-                        HSD_JObjAddScaleZ(jobj_next, 0.01f);
+                        Toy_JObjAddScaleX(jobj_next, 0.01f);
+                        Toy_JObjAddScaleY(jobj_next, 0.01f);
+                        Toy_JObjAddScaleZ(jobj_next, 0.01f);
                         un_803062EC((s32) anim->xC,
                                     3U, jobj_next->scale.x);
                         btn10 = un_80305C44();
@@ -4192,7 +4264,7 @@ void fn_8030E110(HSD_GObj* arg0)
 
         for (i = 0; i < 4; i++) {
             val = HSD_PadCopyStatus[(u8) i].nml_stickX;
-            if (val < 0.0F) {
+            if (val < 0.0f) {
                 abs = -val;
             } else {
                 abs = val;
@@ -5558,7 +5630,7 @@ void un_80310B48(HSD_GObj* gobj)
 
         for (i = 0; i < 4; i++) {
             val = HSD_PadCopyStatus[(u8) i].nml_stickX;
-            if (val < 0.0F) {
+            if (val < 0.0f) {
                 abs = -val;
             } else {
                 abs = val;

@@ -542,13 +542,13 @@ void grVenom_802040F0(Ground_GObj* gobj)
 
     Ground_801C2ED0(gobj->hsd_obj, gp->map_id);
     grAnime_801C7FF8(gobj, 0, 7, 0, 0.0F, 1.0F);
-    grAnime_801C8098(gobj, 0, 7, 1, 0.0F, 1.0F);
-    grAnime_801C7FF8(gobj, 0xB, 7, 2, 0.0F, 1.0F);
-    grAnime_801C7FF8(gobj, 0xD, 7, 2, 0.0F, 1.0F);
-    grAnime_801C7FF8(gobj, 0xF, 7, 2, 0.0F, 1.0F);
+    grAnime_801C8098(gobj, 0, 7, 1, grVe_804DB740, grVe_804DB73C);
+    grAnime_801C7FF8(gobj, 0xB, 7, 2, grVe_804DB740, grVe_804DB73C);
+    grAnime_801C7FF8(gobj, 0xD, 7, 2, grVe_804DB740, grVe_804DB73C);
+    grAnime_801C7FF8(gobj, 0xF, 7, 2, grVe_804DB740, grVe_804DB73C);
     new_var = gp;
-    grAnime_801C7FF8(gobj, 4, 7, 3, 0.0F, 1.0F);
-    grAnime_801C7FF8(gobj, 7, 7, 3, 0.0F, 1.0F);
+    grAnime_801C7FF8(gobj, 4, 7, 3, grVe_804DB740, grVe_804DB73C);
+    grAnime_801C7FF8(gobj, 7, 7, 3, grVe_804DB740, grVe_804DB73C);
     Ground_801C10B8(gobj, (HSD_GObjEvent) fn_802040B4);
     gp->gv.venom.xC8 = -1;
     gp->gv.venom.xCC = (u32) Ground_801C3FA4(gobj, 2);
@@ -644,7 +644,7 @@ void grVenom_80204428(Ground_GObj* gobj)
     gp->gv.venom2.xE0_state.b5 = 0;
     gp->gv.venom2.xE0_state.b6 = 0;
 
-    gp->gv.venom.xE4 = 0.0F;
+    gp->gv.venom.xE4 = grVe_804DB740;
 
     Ground_801C5440(gp, 0, 0x6B6C3);
     mpLib_80057BC0(2);
@@ -951,7 +951,7 @@ void grVenom_80204DD4(Ground_GObj* gobj)
 
     // HSD_JObjSetScaleX(jobj, 1.0F) expanded:
     ((jobj) ? ((void) 0) : __assert("jobj.h", 0x308, "jobj"));
-    jobj->scale.x = 1.0F;
+    jobj->scale.x = grVe_804DB73C;
     new_var3 = !(jobj->flags & (1 << 25));
     if (new_var3) {
         if (jobj != 0L && !HSD_JObjMtxIsDirty(jobj)) {
@@ -962,7 +962,7 @@ void grVenom_80204DD4(Ground_GObj* gobj)
     new_var = 1 << 25;
     // HSD_JObjSetScaleY(jobj, 1.0F) expanded:
     ((jobj) ? ((void) 0) : __assert("jobj.h", 0x317, "jobj"));
-    jobj->scale.y = 1.0F;
+    jobj->scale.y = grVe_804DB73C;
     new_var2 = jobj;
     if (!(new_var2->flags & new_var)) {
         if (new_var2 != 0L && !HSD_JObjMtxIsDirty(new_var2)) {
@@ -1190,10 +1190,8 @@ void grVenom_802056B0(Ground_GObj* gobj)
     joint_idx = grVe_803E5380;
     joints = grVe_803E5680;
     gp->gv.venom.xD0 = 0;
-    gp->gv.venom.xDC = 0.0F;
-    gp->gv.venom.xE8 = 0.0F;
-    gp->gv.venom.xE4 = 0.0F;
-    gp->gv.venom.xE0 = 0.0F;
+    gp->gv.venom.xE0 = gp->gv.venom.xE4 = gp->gv.venom.xE8 =
+        gp->gv.venom.xDC = grVe_804DB740;
     joint_offset = joint_idx[gp->gv.venom.xC8];
     joint_id = joints[joint_offset];
     mpJointListAdd(joint_id);
@@ -1293,9 +1291,9 @@ void grVenom_80205AD4(Ground_GObj* gobj)
     *(s32*) &gp->gv.venom.xE4 = zero;
     *(s32*) &gp->gv.venom.xE0 = zero;
 
-    grAnime_801C7FF8(gobj, 7, 7, 0, 0.0F, 1.0F);
-    grAnime_801C7FF8(gobj, 8, 7, 0, 0.0F, 1.0F);
-    grAnime_801C8098(gobj, 2, 7, 3, 0.0F, 1.0F);
+    grAnime_801C7FF8(gobj, 7, 7, 0, grVe_804DB740, grVe_804DB73C);
+    grAnime_801C7FF8(gobj, 8, 7, 0, grVe_804DB740, grVe_804DB73C);
+    grAnime_801C8098(gobj, 2, 7, 3, grVe_804DB740, grVe_804DB73C);
 
     data = base + gp->gv.venom.xC8 * 4;
     type = *(s32*) (data + 0x2C);
@@ -1728,8 +1726,8 @@ void grVenom_80206874(Ground_GObj* gobj)
     *(s32*) &gp->gv.venom.xE4 = zero;
     *(s32*) &gp->gv.venom.xE0 = zero;
 
-    grAnime_801C7FF8(gobj, 0, 7, 1, 0.0F, 1.0F);
-    grAnime_801C8098(gobj, 2, 7, 3, 0.0F, 1.0F);
+    grAnime_801C7FF8(gobj, 0, 7, 1, grVe_804DB740, grVe_804DB73C);
+    grAnime_801C8098(gobj, 2, 7, 3, grVe_804DB740, grVe_804DB73C);
 
     data = base + gp->gv.venom.xC8 * 4;
     type = *(s32*) (data + 0x2C);
@@ -1835,6 +1833,9 @@ bool grVenom_80206BF0(int arg0)
     Ground* gp;
     PAD_STACK(32);
 
+    goto venom_80206BF0_start;
+venom_80206BF0_start:
+
     if (Ground_801C2BA4(8) != NULL) {
         return 0;
     }
@@ -1846,7 +1847,7 @@ bool grVenom_80206BF0(int arg0)
         return 0;
     }
     wgobj = (Ground_GObj*) grVenom_80203EAC(8);
-    HSD_ASSERT(2244, wgobj);
+    ((wgobj) ? ((void) 0) : __assert(grVe_803E5524, 2244, "wgobj"));
     gp = wgobj->user_data;
     gp->gv.venom.xCC = 10;
     gp->gv.venom.xC8 = 0;

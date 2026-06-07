@@ -59,15 +59,6 @@
 int ftColl_803C0C40[] = { 141, 142, 143 };
 int ftColl_803C0C4C[] = { 107, 108, 109 };
 
-UNUSED static int ftColl_803C0CAC[] = {
-    1000, 1002, 1001, 1004, 1145, 1005, -1, -1, -1,
-    1000, 1000, -1,   -1,   1046, -1,   -1, 0,
-};
-UNUSED static char ftColl_803C0CF0[] =
-    "in ftCollisionSetHitStatus illegal parts!\n";
-UNUSED static char assert_msg_1[] = "fighter hit num over!\n";
-UNUSED static char assert_msg_2[] = "fighter dynamics hit num over!\n";
-
 struct UnkSize320_t {
     u8 x0[0x320];
 };
@@ -80,20 +71,6 @@ struct DmgLogEntry dmg_log1[20];
 static int dmg_log0_idx;
 static int dmg_log1_idx;
 static s8 ftColl_804D6560[8];
-
-/// .sdata2
-float const ftColl_804D82E0 = 0;
-float const ftColl_804D82E4 = 500;
-float const ftColl_804D82E8 = 0.5;
-float const ftColl_804D82EC = +1;
-float const ftColl_804D82F0 = -1;
-double const ftColl_804D82F8 = S32_TO_F32;
-float const ftColl_804D8300 = deg_to_rad;
-double const ftColl_804D8308 = U32_TO_F32;
-float const ftColl_804D8310 = F32_MAX;
-float const ftColl_804D8314 = 0.01;
-float const ftColl_804D8318 = 1e-5;
-float const ftColl_804D831C = rad_to_deg;
 
 /// Combo Count Logic
 void ftColl_800763C0(Fighter_GObj* attacker, Fighter_GObj* victim,
@@ -238,7 +215,7 @@ bool ftColl_80076640(Fighter* fp, float* dmg)
     }
     if (!fp->x221C_b4) {
         if (*dmg > 500) {
-            HSD_ASSERTREPORT(0xB7, NULL, "attack power over 500!! %f\n", *dmg);
+            HSD_ASSERTREPORT(0xB7, 0, "attack power over 500!! %f\n", *dmg);
         }
         fp->dmg.x1838_percentTemp += *dmg;
         if (env_dmg > fp->dmg.x183C_applied) {
@@ -263,7 +240,7 @@ void ftColl_80076764(int arg0, enum_t arg1, Fighter_GObj* arg2,
         entry->size_of_xC = arg3->count;
         ++dmg_log0_idx;
     } else {
-        HSD_ASSERTREPORT(0xF9, NULL, "damage log over %d!!\n",
+        HSD_ASSERTREPORT(0xF9, 0, "damage log over %d!!\n",
                          ARRAY_SIZE(dmg_log0));
     }
 }
@@ -501,19 +478,6 @@ void ftColl_80076CBC(Fighter* fp0, HitCapsule* hit0, Fighter* fp1)
     }
 }
 
-struct ftCollSFX {
-    int x0;
-    int x4;
-    int x8;
-    int xC;
-    int x10;
-    int x14;
-};
-
-struct ftCollSFX lbl_803C0C40 = {
-    0x8D, 0x8E, 0x8C, 0x6B, 0x6C, 0x6D,
-};
-
 /// @todo #ftColl_80076808
 inline void inlineB0(Fighter* fp0, HitCapsule* hitbox, Fighter* fp1, int arg3,
                      bool (*cb)(HitCapsule* hit, int arg1, void* fp))
@@ -558,7 +522,7 @@ static inline bool inlineB2(Fighter* fp1, float dmg, int var_r24_3)
     int var_r0_3;
     if (fp1->x221C_b4 == 0) {
         if (dmg > 500.0f) {
-            HSD_ASSERTREPORT(0xB7, NULL, "attack power over 500!! %f", dmg);
+            HSD_ASSERTREPORT(0xB7, 0, "attack power over 500!! %f\n", dmg);
         }
         fp1->dmg.x1838_percentTemp =
             (float) (fp1->dmg.x1838_percentTemp + dmg);
@@ -641,7 +605,7 @@ bool ftColl_80076ED8(Fighter* fp0, HitCapsule* hit0, Fighter* fp1,
                         entry->size_of_xC = len;
                         ++dmg_log1_idx;
                     } else {
-                        HSD_ASSERTREPORT(0x110, NULL, "tip log over %d!! ",
+                        HSD_ASSERTREPORT(0x110, 0, "tip log over %d!!\n",
                                          ARRAY_SIZE(dmg_log1));
                     }
                 }
@@ -701,8 +665,8 @@ bool ftColl_80076ED8(Fighter* fp0, HitCapsule* hit0, Fighter* fp1,
                             damageLog2->size_of_xC = len;
                             dmg_log0_idx++;
                         } else {
-                            HSD_ASSERTREPORT(0xe3, NULL,
-                                             "damage log over %d!! ",
+                            HSD_ASSERTREPORT(0xe3, 0,
+                                             "damage log over %d!!\n",
                                              ARRAY_SIZE(dmg_log1));
                         }
                         inner_ret = true;
@@ -887,7 +851,7 @@ void ftColl_80077688(Item* item, HitCapsule* hurt, Fighter* fp, Vec3* pos,
 
         if (item->xDCE_flag.b5) {
             if (fp->x221B_b1) {
-                float angle = ftColl_804D8300 * p_ftCommonData->x2D0;
+                float angle = deg_to_rad * p_ftCommonData->x2D0;
                 float cos_val;
                 float sin_val;
 
@@ -960,11 +924,11 @@ void ftColl_80077970(Item* item, HitCapsule* hit1, Fighter* fp,
     PAD_STACK(16);
 
     midpoint.x =
-        (hit1->hurt_coll_pos.x + hit2->hurt_coll_pos.x) * ftColl_804D82E8;
+        (hit1->hurt_coll_pos.x + hit2->hurt_coll_pos.x) * 0.5f;
     midpoint.y =
-        (hit1->hurt_coll_pos.y + hit2->hurt_coll_pos.y) * ftColl_804D82E8;
+        (hit1->hurt_coll_pos.y + hit2->hurt_coll_pos.y) * 0.5f;
     midpoint.z =
-        (hit1->hurt_coll_pos.z + hit2->hurt_coll_pos.z) * ftColl_804D82E8;
+        (hit1->hurt_coll_pos.z + hit2->hurt_coll_pos.z) * 0.5f;
 
     dmg1_int = (int) hit1->damage;
     dmg2_int = (int) hit2->damage;
@@ -1172,8 +1136,8 @@ bool ftColl_80077C60(Item* item, HitCapsule* hit, Fighter* fp,
                                 entry->size_of_xC = (size_t) half_raw_f;
                                 dmg_log1_idx++;
                             } else {
-                                HSD_ASSERTREPORT(0x110, NULL,
-                                                 "tip log over %d!! ",
+                                HSD_ASSERTREPORT(0x110, 0,
+                                                 "tip log over %d!!\n",
                                                  ARRAY_SIZE(dmg_log1));
                             }
                         }
@@ -1243,8 +1207,8 @@ bool ftColl_80077C60(Item* item, HitCapsule* hit, Fighter* fp,
 
                 if (!fp->x221C_b4) {
                     if (scaled_dmg > 500.0f) {
-                        HSD_ASSERTREPORT(0xB7, NULL,
-                                         "attack power over 500!! %f",
+                        HSD_ASSERTREPORT(0xB7, 0,
+                                         "attack power over 500!! %f\n",
                                          scaled_dmg);
                     }
                     fp->dmg.x1838_percentTemp += scaled_dmg;
@@ -1271,7 +1235,7 @@ bool ftColl_80077C60(Item* item, HitCapsule* hit, Fighter* fp,
                         entry->size_of_xC = (size_t) raw_dmg;
                         dmg_log0_idx++;
                     } else {
-                        HSD_ASSERTREPORT(0xE3, NULL, "damage log over %d!! ",
+                        HSD_ASSERTREPORT(0xE3, 0, "damage log over %d!!\n",
                                          ARRAY_SIZE(dmg_log1));
                     }
                     inner_ret = true;
@@ -1483,8 +1447,6 @@ void ftColl_80078998(HSD_GObj* arg0, HSD_GObj* arg1, float arg2)
 }
 #pragma pop
 
-extern float const ftColl_804D8310;
-
 inline HitCapsule* HitCapsuleGetPtr(Fighter* fp, u32 i)
 {
     return &fp->x914[i];
@@ -1577,7 +1539,6 @@ void ftColl_80078A2C(Fighter_GObj* this_gobj)
 
 void ftColl_80078C70(Fighter_GObj* this_gobj)
 { // clang-format off
-    const static u32 hit_sfx[20];
     Fighter* this_fp;
     HSD_GObj* victim_gobj;
     bool is_same_gobj;
@@ -1688,7 +1649,7 @@ void ftColl_80078C70(Fighter_GObj* this_gobj)
                                                     if ((u32) temp_r23->element != (u32) HitElement_Inert) {
                                       if (ftColl_80076ED8((Fighter*) victim_fp, temp_r23, this_fp, (HitCapsule*)&this_fp ->hurt_capsules [n]) != false) {
                                                             if (((int) this_fp ->x1988 != 0) || ((int) this_fp ->x198C != 0) || this_fp ->x221D_b6 || ((&this_fp->hurt_capsules[n].capsule)->state != 0)) {
-                                                                ft_PlaySFX(this_fp, hit_sfx [temp_r23 ->sfx_severity], 0x7FU, 0x40U);
+                                                                ft_PlaySFX(this_fp, ftColl_803C0C40 [temp_r23 ->sfx_severity], 0x7FU, 0x40U);
                                                                 var_r0_2 = true;
                                                             } else {
                                                                 var_r0_2 = false;
@@ -1900,9 +1861,9 @@ void ftColl_8007925C(Fighter_GObj* gobj)
                 {
                     float dir;
                     if (fp->cur_pos.x > item->pos.x) {
-                        dir = ftColl_804D82F0;
+                        dir = -1.0f;
                     } else {
-                        float one = ftColl_804D82EC;
+                        float one = 1.0f;
                         dir = one;
                     }
                     fp->AbsorbAttr.x1A40_absorbHitDirection = dir;
@@ -1977,7 +1938,7 @@ void ftColl_8007925C(Fighter_GObj* gobj)
 
             var_r3 = true;
             if (fp->x221B_b3) {
-                if (ftColl_804D82F0 == fp->facing_dir) {
+                if (-1.0f == fp->facing_dir) {
                     if (fp->cur_pos.x < item->pos.x) {
                         var_r3 = false;
                     }
@@ -2088,9 +2049,6 @@ void ftColl_8007925C(Fighter_GObj* gobj)
 } // clang-format on
 #pragma dont_inline off
 
-extern double const ftColl_804D8308;
-extern float const ftColl_804D8314;
-
 float ftColl_80079AB0(Fighter* fp, HitCapsule* hit, int unk_count, float arg3,
                       float attack, float defense, float weight)
 {
@@ -2103,14 +2061,14 @@ float ftColl_80079AB0(Fighter* fp, HitCapsule* hit, int unk_count, float arg3,
         float x24_f;
 
         decay = ftd->xF8;
-        result = (w * decay) / (ftColl_804D82EC + w);
+        result = (w * decay) / (1.0f + w);
         decay -= result;
 
         result = ftd->x118 * (float) (u32) hit->x28;
         result = ftd->x118 * ftd->x110 + ftd->x114 * result;
         result = decay * result;
         result = ftd->x11C * result + ftd->x120;
-        x24_f = ftColl_804D8314 * (float) (u32) hit->x24;
+        x24_f = 0.01f * (float) (u32) hit->x24;
         result = x24_f * result + (float) (u32) hit->x2C;
         result = arg3 * result;
         result = attack * result;
@@ -2131,14 +2089,14 @@ float ftColl_80079AB0(Fighter* fp, HitCapsule* hit, int unk_count, float arg3,
         }
 
         decay = ftd->xF8;
-        result = (w * decay) / (ftColl_804D82EC + w);
+        result = (w * decay) / (1.0f + w);
         decay -= result;
         damage = (float) count + fp->dmg.x1838_percentTemp;
         result = (float) (u32) unk_count * damage;
         result = ftd->x110 * damage + ftd->x114 * result;
         result = decay * result;
         result = ftd->x11C * result + ftd->x120;
-        x24_f = ftColl_804D8314 * (float) (u32) hit->x24;
+        x24_f = 0.01f * (float) (u32) hit->x24;
         result = x24_f * result + (float) (u32) hit->x2C;
         result = arg3 * result;
         result = attack * result;
@@ -2169,14 +2127,14 @@ float ftColl_80079C70(Fighter* fp, Fighter* attacker, HitCapsule* hit,
         float x24_f;
 
         decay = ftd->xF8;
-        result = (w * decay) / (ftColl_804D82EC + w);
+        result = (w * decay) / (1.0f + w);
         decay -= result;
 
         result = ftd->x118 * (float) (u32) hit->x28;
         result = ftd->x118 * ftd->x110 + ftd->x114 * result;
         result = decay * result;
         result = ftd->x11C * result + ftd->x120;
-        x24_f = ftColl_804D8314 * (float) (u32) hit->x24;
+        x24_f = 0.01f * (float) (u32) hit->x24;
         result = x24_f * result + (float) (u32) hit->x2C;
         result = arg3 * result;
         result = attack * result;
@@ -2197,14 +2155,14 @@ float ftColl_80079C70(Fighter* fp, Fighter* attacker, HitCapsule* hit,
         }
 
         decay = ftd->xF8;
-        result = (w * decay) / (ftColl_804D82EC + w);
+        result = (w * decay) / (1.0f + w);
         decay -= result;
         damage = (float) count + fp->dmg.x1838_percentTemp;
         result = (float) (u32) unk_count * damage;
         result = ftd->x110 * damage + ftd->x114 * result;
         result = decay * result;
         result = ftd->x11C * result + ftd->x120;
-        x24_f = ftColl_804D8314 * (float) (u32) hit->x24;
+        x24_f = 0.01f * (float) (u32) hit->x24;
         result = x24_f * result + (float) (u32) hit->x2C;
         result = arg3 * result;
         result = attack * result;
@@ -2229,17 +2187,17 @@ float ftColl_80079EA8(Fighter* fp, HitCapsule* hit, int unk_count)
         float x24_f;
 
         decay = ftd->xF8;
-        result = (w * decay) / (ftColl_804D82EC + w);
+        result = (w * decay) / (1.0f + w);
         decay -= result;
 
         result = ftd->x118 * (float) (u32) hit->x28;
         result = ftd->x118 * ftd->x110 + ftd->x114 * result;
         result = decay * result;
         result = ftd->x11C * result + ftd->x120;
-        x24_f = ftColl_804D8314 * (float) (u32) hit->x24;
+        x24_f = 0.01f * (float) (u32) hit->x24;
         result = x24_f * result + (float) (u32) hit->x2C;
         {
-            float one = ftColl_804D82EC;
+            float one = 1.0f;
             result = one * result;
             result = one * result;
             result = one * result;
@@ -2260,17 +2218,17 @@ float ftColl_80079EA8(Fighter* fp, HitCapsule* hit, int unk_count)
         }
 
         decay = ftd->xF8;
-        result = (w * decay) / (ftColl_804D82EC + w);
+        result = (w * decay) / (1.0f + w);
         decay -= result;
         damage = (float) count + fp->dmg.x1838_percentTemp;
         result = (float) (u32) unk_count * damage;
         result = ftd->x110 * damage + ftd->x114 * result;
         result = decay * result;
         result = ftd->x11C * result + ftd->x120;
-        x24_f = ftColl_804D8314 * (float) (u32) hit->x24;
+        x24_f = 0.01f * (float) (u32) hit->x24;
         result = x24_f * result + (float) (u32) hit->x2C;
         {
-            float one = ftColl_804D82EC;
+            float one = 1.0f;
             result = one * result;
             result = one * result;
             result = one * result;
@@ -2283,6 +2241,16 @@ float ftColl_80079EA8(Fighter* fp, HitCapsule* hit, int unk_count)
 
     return result;
 }
+
+/// .data
+static int ftColl_803C0CAC[] = {
+    1000, 1002, 1001, 1004, 1145, 1005, -1, -1, -1,
+    1000, 1000, -1,   -1,   1046, -1,   -1, 0,
+};
+static char ftColl_803C0CF0[] =
+    "in ftCollisionSetHitStatus illegal parts!\n";
+static char assert_msg_1[] = "fighter hit num over!\n";
+static char assert_msg_2[] = "fighter dynamics hit num over!\n";
 
 #pragma push
 #pragma dont_inline on
@@ -2330,7 +2298,7 @@ void ftColl_8007A06C(Fighter_GObj* gobj, void* dmg_ptr, void* log, size_t idx,
     fp = (Fighter*) gobj->user_data;
     co = &fp->co_attrs;
     entries = (DmgLogEntry*) log;
-    best_kb = ftColl_804D82F0;
+    best_kb = -1.0f;
     best_idx = 0;
 
     for (i = 0; i < idx; i++) {
@@ -2386,7 +2354,7 @@ void ftColl_8007A06C(Fighter_GObj* gobj, void* dmg_ptr, void* log, size_t idx,
                 Fighter* owner_fp = (Fighter*) owner_gobj->user_data;
                 attack = Player_GetAttackRatio(owner_fp->player_id);
             } else {
-                attack = ftColl_804D82EC;
+                attack = 1.0f;
             }
 
             weight = co->weight;
@@ -2400,14 +2368,14 @@ void ftColl_8007A06C(Fighter_GObj* gobj, void* dmg_ptr, void* log, size_t idx,
                 float x24_f;
 
                 decay = ftd->xF8;
-                result = (w * decay) / (ftColl_804D82EC + w);
+                result = (w * decay) / (1.0f + w);
                 decay -= result;
 
                 result = ftd->x118 * (float) (u32) hit->x28;
                 result = ftd->x118 * ftd->x110 + ftd->x114 * result;
                 result = decay * result;
                 result = ftd->x11C * result + ftd->x120;
-                x24_f = ftColl_804D8314 * (float) (u32) hit->x24;
+                x24_f = 0.01f * (float) (u32) hit->x24;
                 result = x24_f * result + (float) (u32) hit->x2C;
                 result = stage * result;
                 result = attack * result;
@@ -2428,14 +2396,14 @@ void ftColl_8007A06C(Fighter_GObj* gobj, void* dmg_ptr, void* log, size_t idx,
                 }
 
                 decay = ftd->xF8;
-                result = (w * decay) / (ftColl_804D82EC + w);
+                result = (w * decay) / (1.0f + w);
                 decay -= result;
                 damage = (float) count + fp->dmg.x1838_percentTemp;
                 result = (float) (u32) entry->size_of_xC * damage;
                 result = ftd->x110 * damage + ftd->x114 * result;
                 result = decay * result;
                 result = ftd->x11C * result + ftd->x120;
-                x24_f = ftColl_804D8314 * (float) (u32) hit->x24;
+                x24_f = 0.01f * (float) (u32) hit->x24;
                 result = x24_f * result + (float) (u32) hit->x2C;
                 result = stage * result;
                 result = attack * result;
@@ -2479,7 +2447,7 @@ void ftColl_8007A06C(Fighter_GObj* gobj, void* dmg_ptr, void* log, size_t idx,
             float defense, stage, weight;
             float w, decay, result;
 
-            attack = ftColl_804D82EC;
+            attack = 1.0f;
             lbColl_80008D30(&stack_hit,
                             (lbColl_80008D30_arg1*) entry->unk_anim0);
 
@@ -2493,14 +2461,14 @@ void ftColl_8007A06C(Fighter_GObj* gobj, void* dmg_ptr, void* log, size_t idx,
                 float x24_f;
 
                 decay = ftd->xF8;
-                result = (w * decay) / (ftColl_804D82EC + w);
+                result = (w * decay) / (1.0f + w);
                 decay -= result;
 
                 result = ftd->x118 * (float) (u32) stack_hit.x28;
                 result = ftd->x118 * ftd->x110 + ftd->x114 * result;
                 result = decay * result;
                 result = ftd->x11C * result + ftd->x120;
-                x24_f = ftColl_804D8314 * (float) (u32) stack_hit.x24;
+                x24_f = 0.01f * (float) (u32) stack_hit.x24;
                 result = x24_f * result + (float) (u32) stack_hit.x2C;
                 result = stage * result;
                 result = attack * result;
@@ -2521,14 +2489,14 @@ void ftColl_8007A06C(Fighter_GObj* gobj, void* dmg_ptr, void* log, size_t idx,
                 }
 
                 decay = ftd->xF8;
-                result = (w * decay) / (ftColl_804D82EC + w);
+                result = (w * decay) / (1.0f + w);
                 decay -= result;
                 damage = (float) count + fp->dmg.x1838_percentTemp;
                 result = (float) (u32) stack_hit.unk_count * damage;
                 result = ftd->x110 * damage + ftd->x114 * result;
                 result = decay * result;
                 result = ftd->x11C * result + ftd->x120;
-                x24_f = ftColl_804D8314 * (float) (u32) stack_hit.x24;
+                x24_f = 0.01f * (float) (u32) stack_hit.x24;
                 result = x24_f * result + (float) (u32) stack_hit.x2C;
                 result = stage * result;
                 result = attack * result;
@@ -2566,9 +2534,9 @@ void ftColl_8007A06C(Fighter_GObj* gobj, void* dmg_ptr, void* log, size_t idx,
 
         hit = best_entry->hit0;
         if (fp->cur_pos.x > attacker_fp->cur_pos.x) {
-            dir = ftColl_804D82F0;
+            dir = -1.0f;
         } else {
-            dir = ftColl_804D82EC;
+            dir = 1.0f;
         }
         angle = (float) (u32) hit->kb_angle;
         element = hit->element;
@@ -2582,20 +2550,20 @@ void ftColl_8007A06C(Fighter_GObj* gobj, void* dmg_ptr, void* log, size_t idx,
 
         hit = best_entry->hit0;
         vel_x = item->x40_vel.x;
-        if (vel_x < ftColl_804D82E0) {
+        if (vel_x < 0.0f) {
             vel_x = -vel_x;
         }
         if (vel_x < it_804D6D28->x78_float) {
             if (fp->cur_pos.x > item->pos.x) {
-                dir = ftColl_804D82F0;
+                dir = -1.0f;
             } else {
-                dir = ftColl_804D82EC;
+                dir = 1.0f;
             }
         } else {
-            if (item->x40_vel.x < ftColl_804D82E0) {
-                dir = ftColl_804D82EC;
+            if (item->x40_vel.x < 0.0f) {
+                dir = 1.0f;
             } else {
-                dir = ftColl_804D82F0;
+                dir = -1.0f;
             }
         }
         angle = (float) (u32) hit->kb_angle;
@@ -2624,28 +2592,28 @@ void ftColl_8007A06C(Fighter_GObj* gobj, void* dmg_ptr, void* log, size_t idx,
         float dx, dy, abs_dx;
 
         dx =
-            ftColl_804D82E8 * (hurt->capsule.a_pos.x + hurt->capsule.b_pos.x) -
+            0.5f * (hurt->capsule.a_pos.x + hurt->capsule.b_pos.x) -
             best_entry->pos.x;
         dy =
-            ftColl_804D82E8 * (hurt->capsule.a_pos.y + hurt->capsule.b_pos.y) -
+            0.5f * (hurt->capsule.a_pos.y + hurt->capsule.b_pos.y) -
             best_entry->pos.y;
 
-        if (dx < ftColl_804D82E0) {
-            dir = ftColl_804D82EC;
+        if (dx < 0.0f) {
+            dir = 1.0f;
         } else {
-            dir = ftColl_804D82F0;
+            dir = -1.0f;
         }
 
-        if (dx < ftColl_804D82E0) {
+        if (dx < 0.0f) {
             abs_dx = -dx;
         } else {
             abs_dx = dx;
         }
 
-        if (abs_dx < ftColl_804D8318) {
+        if (abs_dx < 1e-5f) {
             angle_int = 0;
         } else {
-            angle_int = (s32) (ftColl_804D831C * atanf(dy / abs_dx));
+            angle_int = (s32) (rad_to_deg * atanf(dy / abs_dx));
         }
         angle = (float) angle_int;
     }
@@ -2731,7 +2699,7 @@ void ftColl_8007ABD0(HitCapsule* arg0, u32 arg1, Fighter_GObj* arg2)
 
     fp = arg2->user_data;
     dmg = (float) arg1;
-    if (fp->x34_scale.y != ftColl_804D82EC) {
+    if (fp->x34_scale.y != 1.0f) {
         dmg = ftCo_CalcYScaledKnockback(dmg, fp->x34_scale.y,
                                         Fighter_804D6524->x4);
     }
@@ -2904,8 +2872,7 @@ void ftColl_8007B128(Fighter_GObj* fighter_gobj, int bone_id,
         }
     }
 
-    HSD_ASSERTREPORT(0x888, NULL,
-                     "in ftCollisionSetHitStatus illegal parts!\n");
+    HSD_ASSERTREPORT(0x888, 0, ftColl_803C0CF0);
 }
 
 /// @todo @p shield is #AbsorbDesc, and #AbsorbDesc is part of #ShieldDesc
@@ -2958,7 +2925,7 @@ void ftColl_8007B320(Fighter_GObj* gobj)
     PAD_STACK(8);
 
     if (x30->count > 0xF) {
-        HSD_ASSERTREPORT(0x8C9, NULL, "too many hurt capsules\n");
+        HSD_ASSERTREPORT(0x8C9, 0, assert_msg_1);
     }
 
     fp->hurt_capsules_len = x30->count;
@@ -2976,7 +2943,7 @@ void ftColl_8007B320(Fighter_GObj* gobj)
     }
 
     if (dyn->x4 > 0xB) {
-        HSD_ASSERTREPORT(0x8DF, NULL, "too many x1670 entries\n");
+        HSD_ASSERTREPORT(0x8DF, 0, assert_msg_2);
     }
 
     fp->x166C = dyn->x4;
@@ -3400,7 +3367,7 @@ void ftColl_8007BE3C(Fighter_GObj* gobj)
 
     if (!fp->x221C_b4) {
         if (fp->dmg.x1898 > 500.0f) {
-            HSD_ASSERTREPORT(0xB7, NULL, "attack power over 500!! %f\n",
+            HSD_ASSERTREPORT(0xB7, 0, "attack power over 500!! %f\n",
                              fp->dmg.x1898);
         }
         fp->dmg.x1838_percentTemp += fp->dmg.x1898;

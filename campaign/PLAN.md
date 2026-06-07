@@ -158,7 +158,12 @@ sweep, proposed cuts incl. fallbacks in
 gm18a5_w12/LOG.txt: .text fn_80190ABC | fn_80196510; .bss lbl_804771B8
 | lbl_804799B8; .data lbl_803D9F80 | lbl_803DA0D0; .sdata ~0x804D4150 |
 0x804D4170; .sdata2 0x804DA6E8 | 0x804DA7E0 — each pends object-boundary
-+ simultaneous-partition verification). DOL-safe for ALL
++ simultaneous-partition verification). **Wave-14 status: split
+queue UNBLOCKED for wave 15** — gm_1601 front, then gm_18A5;
+serialize the split lands vs naming-11 AND the five uncommitted
+inversion trees (ftcoll/camera/toy/tydisplay/grvenom — tydisplay's
+tree includes a 4-line symbols.txt rename) at the wave boundary.
+DOL-safe for ALL
 NonMatching units. Caveat: land splits.txt + src halves together —
 splits-only temporarily drops the tail functions from report.json.
 **Recipe refinement (wave 12)**: land multi-cut splits ONE AT A TIME in
@@ -672,11 +677,17 @@ the rest of the queue):**
    <unit>.worklist.txt` (post-naming-9 baseline). High-conf totals:
    **LIT2EXT 361 (355 actionable) vs EXT2LIT 4 (~90:1)** + AT_RENUM 15 +
    SHADOW ~190 (park) + NAMEPAIR ~20 — the naming-8 SRC-FIRST direction
-   is conclusively dead. Wave-14 src-fix owner order (idiom 24-B/25
-   conversions, canary @-pins): ftcoll 85 rows/9 syms → camera 79/~15
-   (cm_804D7E14 ×39; idiom-25 LICM caution on loop sites) → toy 60 (+
-   the ONLY EXT2LIT 4: un_804D6E80/84/88/8C, idiom-24 Fix-A) →
-   tydisplay 49 → grvenom 30 (ours order-swapped) → grbigblue 20 →
+   is conclusively dead. ✅ **Wave-14 EXECUTED the first five** (one
+   owner per unit, src-only, all gated, trees UNCOMMITTED): ftcoll
+   DONE (root cause = Fix-A not B; 9 fns→100, 24 UP / 0 DOWN; 14-
+   rename naming-11 map) → camera DONE (14 UP / 0 DOWN, ~32/81 rows
+   paired; no pure-LIT2EXT fns existed so no new 100s; 3 Fix-A
+   renames + 1 NAMEPAIR queued) → toy DONE (5 fns→100; the EXT2LIT 4
+   = fadds swap-pair rows, C-UNREACHABLE — Fix-A framing was wrong;
+   address-keyed renumber map) → tydisplay DONE (ALL 49 rows cleared,
+   un_8031C1D0→100, ZERO @-drift) → grvenom DONE (28/30, 3 fns→100;
+   2 donor-keeper leftovers BY DESIGN, idiom 86). REMAINING
+   worklists: grbigblue 20 →
    sislib 11 (our @264 serves TWO targets — dup-literal split) →
    lb_00F9 8 (keep @328 alive for its @176 rows) → gmresult 5 →
    gm_1832 3 NEW (@-budget). Jumptable rows (ftCo jtbl_803C5C70/BE8,
@@ -770,6 +781,60 @@ the rest of the queue):**
    idiom-48 cost entries (cast-copy +1, assignment-in-condition −1,
    goto-label +1) measured ZERO @-drift here — always canary, never
    precompute from the table.
+84. **FIX-A RESOLVE-PAIRING + POOL-MASS CONSERVATION (extends 22/24;
+   ftcoll 9 instant 100s, camera)**: when target "named" .sdata2 syms
+   are names ON anonymous pool entries, delete the const defs and use
+   literals — our pool lands on the target's exact offsets and objdiff
+   resolve-pairs immediately with ZERO config (beats renames; renames
+   become optional cleanup). Corollary: OFFSET-PAIRING IS LOAD-BEARING
+   — pool byte-mass above a paired entry must be conserved (camera
+   0.5f@+0x30 pairs A0C0×3 + CF8×6 rows; do-not-kill literal list in
+   inversion-camera-w14/REPORT.md). Conversion magics (0x4330…) pool
+   ONLY from live codegen (dead inline / if(0) / dead-init local all
+   fail) while STRING literals in never-expanded inlines DO pool; MWCC
+   dedups identical strings TU-wide (a 1-char content typo = dup pool
+   entry — binary tell, 3 fixed); zero-init static float → .sbss; dtk
+   tail-pad gaps are unreconstructable residue.
+85. **CONVERTIBLE-SITE TAXONOMY + NAMED-REMAT DRIFT (refines 25;
+   camera, per-site measured)**: literal→extern converts byte-exact at
+   compare-operand and call-arg sites (even across calls/diamonds);
+   BREAKS at store-value temps, dominated re-reads (CSE), const-prop'd
+   compares, and loop reads — attractor/CSE-locked. A literal site can
+   emit a NAMED reloc via its value-number representative and FLIP
+   under unrelated edits — pin the choice in source. MSL-inline clone
+   recipe: byte-exact sqrtf clone needs EXPANSION-LOCAL `double
+   half/three` copies (direct extern reads rotate the web) plus one
+   plain-sqrtf expansion kept alive — the dead weak _half/_three 0x10
+   .sdata2 bytes are load-bearing ballast.
+86. **EXTERN-ALIAS RELOAD CURES + RANK FLIP + DONOR-KEEPER (extends
+   25/33, refines 23/72; toy, grvenom)**: extern f32 reads do NOT CSE
+   across pointer stores (alias barrier) — per-use reloads where pool
+   literals CSE; cures: per-region block-local copy (byte-exact,
+   frame-neutral; +1 @id) or reversed chain-assign
+   `xE0 = xE4 = xE8 = xDC = ext;` (innermost-first store order =
+   target, single lfs, 0 ids); bulk loop-fn conversions all regress.
+   EXTERN-RANK FLIP: an extern zero takes the HIGHER FPR vs a literal
+   in unrolled multi-use compares — extern is byte-exact only
+   straight-line/arg-position. fadds operand order canonicalizes
+   lit-first (invariant to source order/volatile/local routing — the
+   4 EXT2LIT rows are swap-pairs, C-unreachable). DONOR-KEEPER: when
+   the pool creation site is itself in LIT2EXT scope, keep the FIRST
+   occurrence literal — preserves creation order, pool offsets, every
+   downstream pin, zero shims.
+87. **LOCAL-TABLE COPY TELL + POSITIONED Fix-B (extends 24/69;
+   tydisplay)**: target head `stwu + lis/addi + li N + mtctr +
+   lwzu/stwu` = a local array copied from a named .rodata template —
+   convert as `T table = <named>;` copy-then-index ONLY (direct
+   indexing collapses to 4%); dtk sizes the copy-loop align pad into
+   the template (0xB0 object = 0xAC + pad, NOT an extra entry). Fix-B
+   defs are POSITION tools: legal anywhere after seen uses; def
+   placement reconstructs the .sdata2 emission stream around pool
+   creations. Idiom-24 extends to s32 (const int folds to lis/subi
+   immediates); SDA21 rA (r13 vs r2) diffs are real rows.
+88. **INSTRUMENT SPLIT (tydisplay, hard rule)**: report.json fuzzy is
+   reloc-name-BLIND — a 49-row reloc debt scored 100 there. Gate all
+   inversion/naming work on inversion-sweep analyze.py + check_fn /
+   objdiff match_percent only.
 
 ### Experiment results (wave 3)
 
@@ -1038,9 +1103,153 @@ the rest of the queue):**
   the B24 tail-web coloring AFTER those land (analysis in
   lbaudio_w13/progress.txt). NEGATIVES: idiom-34 +0 does NOT block
   const-prop (ret=0 fork) nor arg-position int-grouping reassoc.
+- **Wave-14 inversion parks**: ftcoll .sdata2 3-entry pool PERMUTATION
+  (pends the true shape of 7861C — prime suspect frame 0x48 vs 0x40 =
+  one dead u32→f32 conversion temp pair; cracking it frees the 3
+  near-100s 78A2C/7BC90/7ABD0 + [.sdata2-0]→100) + 77970 rotation web
+  + 79EA8 FPR rotation + getEnvDmg ours-only + 7 size-mismatched
+  structural fns (all improved); camera ~45 permanent style-conflict
+  rows (zero/0.125/0.85/0.5/deg2rad/±2^31 — CSE-, attractor-,
+  const-prop- and loop-LICM-locked classes; enumerated in
+  inversion-camera-w14/REPORT.md) + 29CF8 extra callee-saved f26 web
+  (needs a dedicated S1 session); toy @288 ×13 conversion-magic (park
+  class re-confirmed binary-side) + 8F04 add-order ×8 + clamp ×3 +
+  DB0/EB4/FB8 extern-rank-flip ×3 (stay literal, idiom 86) +
+  un_804DDCFC .sdata-vs-.sdata2 row + big-fn structural gaps;
+  tydisplay BF34 95.57 frame+4 + r30/r31 mr-vs-addi park (naming rows
+  all paired), un_804D6F10 ×2 + un_804DDFB0 structural S3, quicksort
+  ours-only; grvenom 80205AD4/80206874 rotation residuals → S1,
+  802040F0 +0x28/+0x30 permanent src-side (idiom-75: renaming
+  grVe_804DB740→@452 forbidden — extern-referenced from converted
+  sites); SHADOW offset-0 parks throughout (camera cm_80452C68 ×78,
+  ftcoll, tydisplay ×4 incl. B1FC/B328 .data layout d-forms — a full
+  idiom-69 .data reconstruction would also fix B460; target byte map
+  in tydisplay-w14/REPORT.md).
 
 ## Session log
 
+- **2026-06-07 — Wave 14 (grand-inversion EXECUTION ×5 units + naming
+  round 10) — idiom-72's worklist head fully executed; 23 fns→100
+  (18 src + 5 naming).** ⭐ Five inversion agents (one owner per unit,
+  src-only, every gate DOL+shasum PASS; trees UNCOMMITTED):
+  **ftcoll** — root cause was idiom-24 **Fix A**, not B (target
+  .sdata2 IS the anonymous pool; ftColl_804D82E0-family = names ON
+  pool entries incl. 2 C-unreachable conversion magics): deleted 12
+  const defs + 3 extern redecls, pool landed on target's exact
+  offsets → resolve-paired instantly (idiom 84); **9 fns→100**
+  (76640/699C/6CBC/7464/AB80/AD18/B128/GetWindOffsetVec/BBCC),
+  fns<100 27→18, [.data-0] 54.1→**99.3** (idiom-69 decl-order
+  reconstruction — byte-identical .data fixing anchor-folded d-forms
+  in 4 fns; residual = unreachable dtk tail pad), [.sdata-0]
+  15.4→40.0 (content exact, →100 pends @340 rename), .sdata2/.bss
+  sizes target-EXACT (0x40/0x640); binary-proven: assert `NULL`→`0`
+  ×12, 3 string-content typos (TU-dedup killed dup pool entries),
+  7B320 asserts print assert_msg_1/2, phantom hit_sfx[20] + dead
+  lbl_803C0C40 deleted; gate 24 UP / 0 DOWN / 0 GONE (12 sym-level
+  drops = target data names pending rename, enumerated); 14-rename
+  naming-11 map in ftcoll-inversion-w14/progress.txt. **camera** —
+  14 fns UP / 0 DOWN / 0 GONE (~32 of 81 LIT2EXT+LC rows paired;
+  29CF8 +4, BD88 +5, C5B4 +6 via cam_sqrtf clone, C010/B0E0/A0C0
+  +2 each…); no pure-LIT2EXT fns existed so no new 100s (A4AC held);
+  canary @717 tripped twice and rebalanced EXACTLY (idiom-48
+  counterexample: inline DEFINITION consumed 2 ids); cm_804D7E20 =
+  0x4330 magic confirmed, 13 rows C-unreachable → naming-11 Fix-A;
+  report inversion-camera-w14/REPORT.md. **toy** — **5 fns→100**
+  (un_80305D00/803062EC/80306BB8/80307018/803083D8); 8+18 rows fixed
+  (+76 BONUS clone-pack rows in fn_8030B530) + @656/@895-7/@1188/
+  setters ×4/@938 LC; [.sdata-0] 46.8→72.2; bytegate (masked-reloc
+  .text vs pristine baseline_toy.o) proved ALL functions
+  byte-identical — every gate DOWN (9) is reloc-name-only @-drift;
+  address-keyed renumber map in toy-inversion-w14/REPORT.md; the
+  only EXT2LIT 4 (un_804D6E80-8C) = fadds swap-pair rows,
+  C-UNREACHABLE. **tydisplay** — **ALL 49 LIT2EXT rows CLEARED**
+  (analyzer OK 390→439, LIT2EXT+LC 52→0), un_8031C1D0→**100**,
+  un_8031BC54/B328/BF34 up; ZERO @-drift (@682..@1693 byte-verified;
+  3 blob deaths repaid with exactly 3 goto-shims); binary-proven
+  un_804D5AC0 empty-string (not "0") deviation fixed; 6 .rodata/
+  .sdata2 objects defined via POSITIONED Fix-B (idiom 87; copy-then-
+  index local tables); tree INCLUDES a 4-line symbols.txt rename
+  (un_804D5AAC/B4→@699/@700, un_804DE01C/020→@1675/@1676,
+  global→local shasum-proven, extends idiom 80) — must land WITH
+  tydisplay.c; report tydisplay-w14/REPORT.md. **grvenom** — 28/30
+  rows (LIT2EXT 30→2, OK 237→265), **3 fns→100** (80204428,
+  802056B0 via reversed chain-assign, 80206BF0 via expanded
+  __assert("wgobj") + zero-code label shim); 2 donor-keeper
+  leftovers BY DESIGN (idiom 86 resolved the worklist's
+  "order-swapped" note with NO decl/emission work); gate 6 UP / 0 fn
+  DOWN ([.data-0] −0.37 = dead @1264 display artifact, accepted);
+  NEW header tell: 80204F20 stores 1/0 through f32 xD4/xD8 → fields
+  likely s32 (tgt has 2 extra grVe_803E5348 refs, size +0xC);
+  progress.txt in grvenom-inversion-w14/. **Naming-10 COMMITTED
+  f9229dac1** (symbols.txt only, +39/−37): 36/39 particle-split pins
+  applied (all value-verified pin-by-pin, 0 fails; hsd_3983 18 +
+  hsd_39D1 18) + lbl_8040BFB0 SUBDIVIDED → @236/@237/@238 (exact
+  NUL-terminated sizes per lbl_8040C248 precedent, all 3 pair 100);
+  net 23 UP / 0 DOWN (psInitDataBankLoad/98C04/991D8/D3AC/EE24→100);
+  3 BLOCKED pins honored (lbl_804DE98C 1e-10 / @2723 f64 2.0 /
+  lbl_804DE9E8 π÷2 — need particle S1 shape fixes first); DOL+shasum
+  at baseline/post-apply/no-op idempotence; post-apply concurrency
+  re-check: 39/39 re-verified on then-current objects, all 5
+  inversion units' split ranges script-proven DISJOINT, symbols.txt
+  cmp-intact through commit — no naming-9-style clobber of the
+  committed file.
+  **NAMING-11 QUEUE**: ftcoll 14 address-keyed (ftColl_804D82E0→@312,
+  E4→@337, E8/EC/F0→@463/@464/@465, F8→@468, 8300→@771, 8308→@1520,
+  8310→@1102, 8314→@1518, 8318/831C→@1778/@1779, ftColl_804D3A68→
+  @340, assert_msg_0→@655; all scope:local, cross-TU grep-clean —
+  recovers all 12 drops + 83 rows + [.sdata-0]→100); camera
+  cm_804D7E20→@274 ×13 + cm_804D7E18→@272 + cm_804D7E28→@297 (each
+  with coordinated EOF-def + header-decl deletion) + NAMEPAIR
+  cm_803B73B8→cm_WorldForward (A768 ×2); toy renumber map (@626→@627,
+  @1182-87→@1198-1203, @1380-87→@1395-1402, @1899-1915→@1913-1929,
+  @3537/8→@3571/2; kill target-true @535/@656/@895-7/@938/@1062/3/
+  @1188/@1391) — VALUE-KEYED re-verify at land time is policy
+  (precomputed shim ledgers hopeless, toy empirics); tydisplay
+  re-pin float @1021 (.sdata2 0x804DDF64, false-pairs with our .data
+  string) FIRST, then un_80319EF0 @1021→un_803FF074 ×2 (+ naming-11
+  re-apply map in tydisplay-w14 REPORT addendum); naming-10 BLOCKED
+  trio after particle S1; carryovers: lbaudio unit-map recompute,
+  gm_1601 dup-literal pins post-split, optional jtbl→@ probe.
+  **SRC/RETRY QUEUE**: remaining inversion worklists (idiom 72):
+  grbigblue 20 → sislib 11 (@264 dup-literal split) → lb_00F9 8
+  (keep @328 alive) → gmresult 5 → gm_1832 3 (@-budget); ftcoll
+  7861C pool-permutation probe (frame 0x48 vs 0x40 = one dead
+  u32→f32 temp pair; frees 3 more 100s + [.sdata2-0]→100); camera
+  29CF8 dedicated S1 (extra callee-saved f26 web); grvenom 80204F20
+  s32-field header verify; particle S1 shape fixes (1e-10 / f64 2.0
+  / π÷2) unblock the 3 naming pins; wave-13 carryovers unchanged
+  (gm_1601 gm_80166378 + fn_8016588C, .data reconstruction agent,
+  gm_18A5 95AF0 post-renumber; header queue: gm_1601.h:53/:157-159/
+  :168, TrainingModeState +0x114, lbaudio full_tree_with_pkg.patch
+  WHOLE).
+  **SPLIT QUEUE (unblocked for wave 15)**: gm_1601 (spec READY,
+  gm1601_w13/cuts_gm1601.txt — front) → gm_18A5 (cuts proposed in
+  gm18a5_w12/LOG.txt, SECFOLD 6 re-confirmed; pends object-boundary +
+  simultaneous-partition verification) — serialize vs naming-11 and
+  the six dirty trees at the wave boundary.
+  **WARNINGS**: (1) mutex HELD for the committed file this round
+  (naming-10 proved range-disjointness pre- AND post-apply) BUT a
+  sibling clobbered tydisplay's working-tree symbols.txt at 02:24
+  (re-applied + fully re-gated) — src agents' working-tree config
+  edits need the same wave-boundary serialization; (2) do NOT kill
+  camera's 0.65/0.0/1.0/1e-4 pool literals (928C/958C/29AAC) nor
+  BAA8's plain sqrtf expansion — offset-pairing + weak-sym ballast
+  depend on them (idioms 84/85); (3) idiom-79 dtk symbols.txt
+  auto-rewrite RECURRED on every re-splitting ninja in the toy tree
+  (4 lines, tylist/tydisplay ranges, NOT toy — saved diff + reverted;
+  `git status` symbols.txt after each ninja); (4) REPORT.md harness
+  block persists for 2 agents (ftcoll + grvenom — progress.txt is
+  the durable record, naming-7 precedent); (5) report.json fuzzy is
+  reloc-name-BLIND (idiom 88) — never gate inversion work on it;
+  (6) shared build dir: one agent's ninja rebuilds siblings'
+  in-flight objects (harmless — gates are unit-scoped; snapshot
+  before judging). Idioms 84–88 added; idiom-23/41/48 cost tables
+  re-flagged context-dependent (grvenom measured goto-shim +1 vs
+  gm_1601's zero — ALWAYS canary). ~110+ compiles reported
+  (16/45/35/14 + camera/naming uncounted). Uncommitted src:
+  ftcoll.c, camera.c, toy.c, tydisplay.c (+ 4-line symbols.txt),
+  grvenom.c, plus wave-13 carryovers (gm/types.h, gm_1601.c,
+  lbaudio_ax.c; stale backlog.json — triage.py before wave 15).
 - **2026-06-07 — Wave 13 (particle TU-split + naming round 9 +
   grand-inversion sweep + types.h header land + 2 unit campaigns) —
   five commits landed, HEAD b701858cc.** ⭐ **TU-SPLIT particle LANDED

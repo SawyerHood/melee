@@ -59,6 +59,25 @@ static inline float vec_len(Vec3* offset)
                  (offset->z * offset->z));
 }
 
+/// TU-local clone of the MSL sqrtf inline; the original references its own
+/// named .sdata2 constants here (binary-proven: relocs point at
+/// cm_804D7E14/cm_804D7E78/cm_804D7E80 rather than the pooled literals).
+static inline float cam_sqrtf(float x)
+{
+    volatile float y;
+    if (x > cm_804D7E14) {
+        double half = cm_804D7E78;
+        double three = cm_804D7E80;
+        double guess = __frsqrte((double) x);
+        guess = half * guess * (three - guess * guess * x);
+        guess = half * guess * (three - guess * guess * x);
+        guess = half * guess * (three - guess * guess * x);
+        y = (float) (x * guess);
+        return y;
+    }
+    return x;
+}
+
 inline BOOL abs_threshold_inline(f32 value, f32 threshold)
 {
     f32 abs_value = value;
@@ -598,8 +617,8 @@ inline float get_follow_speed(float temp_f4, float spread,
 
 inline float get_delta(float temp_f)
 {
-    if (temp_f > 0.0001f) {
-        return 1.0f / temp_f;
+    if (temp_f > cm_804D7E58) {
+        return cm_804D7E04 / temp_f;
     } else {
         return cm_804D7E5C;
     }
@@ -769,10 +788,10 @@ void Camera_80029CF8(CameraBounds* bounds, CameraTransformState* transform)
     temp_f29 = pitch_angle;
 
     fov_u = (0.5f * (deg_to_rad * transform->fov)) + temp_f29;
-    HSD_ASSERTMSG(0x4FA, fov_u < (f32) M_PI_2, "fov_u<MTXDegToRad(90.0F)");
+    HSD_ASSERTMSG(0x4FA, fov_u < cm_804D7E64, "fov_u<MTXDegToRad(90.0F)");
 
     fov_d = (0.5f * (deg_to_rad * transform->fov)) - temp_f29;
-    HSD_ASSERTMSG(0x4FB, fov_d < (f32) M_PI_2, "fov_d<MTXDegToRad(90.0F)");
+    HSD_ASSERTMSG(0x4FB, fov_d < cm_804D7E64, "fov_d<MTXDegToRad(90.0F)");
 
     tan_fov_u = tanf(fov_u);
     vert_frustum_dist =
@@ -799,9 +818,9 @@ void Camera_80029CF8(CameraBounds* bounds, CameraTransformState* transform)
     }
 
     fov_r = (0.5f * (deg_to_rad * transform->fov)) - temp_f29;
-    HSD_ASSERTMSG(0x508, fov_r < (f32) M_PI_2, "fov_r<MTXDegToRad(90.0F)");
+    HSD_ASSERTMSG(0x508, fov_r < cm_804D7E64, "fov_r<MTXDegToRad(90.0F)");
     fov_l = (0.5f * (deg_to_rad * transform->fov)) + temp_f29;
-    HSD_ASSERTMSG(0x509, fov_l < (f32) M_PI_2, "fov_l<MTXDegToRad(90.0F)");
+    HSD_ASSERTMSG(0x509, fov_l < cm_804D7E64, "fov_l<MTXDegToRad(90.0F)");
 
     temp_f26 = cm_803BCB64.aspect * tanf(fov_r);
     {
@@ -851,7 +870,7 @@ void Camera_8002A0C0(CameraBounds* bounds, CameraTransformState* state)
 
     var_f31 *= cm_80452C68.x2BC;
     var_f30 *= cm_80452C68.x2BC;
-    temp_f5 = bounds->z_pos * tanf(0.5f * (0.017453292f * state->fov));
+    temp_f5 = bounds->z_pos * tanf(0.5f * (cm_804D7E60 * state->fov));
     temp_f28 = cm_803BCB64.aspect *
                (temp_f5 / (0.5f * (f32) (cm_803BCB64.viewport.xmax -
                                          cm_803BCB64.viewport.xmin)));
@@ -861,7 +880,7 @@ void Camera_8002A0C0(CameraBounds* bounds, CameraTransformState* state)
     temp_f29 = Stage_GetCamZoomRate();
     temp_f29_2 = Stage_GetCamMaxDepth() - temp_f29;
 
-    if (temp_f29_2 < 0.001f) {
+    if (temp_f29_2 < cm_804D7E68) {
         var_f6 = 0.5f;
     } else {
         var_f6 = (bounds->z_pos - Stage_GetCamZoomRate()) / temp_f29_2;
@@ -1306,13 +1325,13 @@ void Camera_8002B0E0(void)
     f32 var_f2;
     PAD_STACK(8);
 
-    if ((gm_8016B41C() != 0) && (cm_80452C68.x2C0 > 0.0f)) {
+    if ((gm_8016B41C() != 0) && (cm_80452C68.x2C0 > cm_804D7E14)) {
         {
             s32 idx = Player_GetPlayerId(0) & 0xFF;
             var_f1 = HSD_PadCopyStatus[idx].nml_subStickY;
         }
         var_f2 = var_f1;
-        if (var_f2 < 0.0f) {
+        if (var_f2 < cm_804D7E14) {
             var_f1 = -var_f1;
         }
         if (var_f1 < cm_804D7E74) {
@@ -1714,16 +1733,16 @@ void Camera_8002BD88(f32 x, f32 y)
     up = cm_WorldUp;
     pos = cm_80452C68.pause_eye_offset;
     forward = pos;
-    forward.x *= -1.0F;
-    forward.y *= -1.0F;
-    forward.z *= -1.0F;
+    forward.x *= cm_804D7E10;
+    forward.y *= cm_804D7E10;
+    forward.z *= cm_804D7E10;
     view_dir = lbVector_Normalize(&forward);
 
-    if (view_dir < 1.0F) {
+    if (view_dir < cm_804D7E04) {
         forward.y = 0.0F;
         forward.x = 0.0F;
-        forward.z = 1.0F;
-        cm_80452C68.pause_eye_distance = 10.0F;
+        forward.z = cm_804D7E04;
+        cm_80452C68.pause_eye_distance = cm_804D7E4C;
     }
 
     clamp_result = Camera_8002BC78(&forward, &up, &right);
@@ -1746,7 +1765,7 @@ void Camera_8002BD88(f32 x, f32 y)
     // lbVector_Normalize(&up);
     cm_80452C68.pause_up = up;
 
-    if (y != 0.0F) {
+    if (y != cm_804D7E14) {
         scale = y * ((view_dir * cm_803BCCA0.xBC) + cm_803BCCA0.xC0);
         // scale = y * ((view_dir * cm_803BCCA0._44[0x1E]) +
         // cm_803BCCA0._44[0x1F]);
@@ -1802,7 +1821,7 @@ void Camera_8002C010(f32 farg0, f32 farg1)
 
     Camera_8002BC78(&forward, &up, &right);
 
-    if (0.0f != farg1) {
+    if (cm_804D7E14 != farg1) {
         temp_f1_2 = (var_f30 * cm_803BCCA0.xB4) + cm_803BCCA0.xB8;
         temp_f1 = farg1 * temp_f1_2;
         up.x *= temp_f1;
@@ -1811,7 +1830,7 @@ void Camera_8002C010(f32 farg0, f32 farg1)
         lbVector_Add(&cm_80452C68.x314, &up);
     }
 
-    if (0.0f != farg0) {
+    if (cm_804D7E14 != farg0) {
         temp_f1 = (var_f30 * cm_803BCCA0.xB4) + cm_803BCCA0.xB8;
         temp_f1 = -(farg0 * temp_f1);
         right.x *= temp_f1;
@@ -1880,7 +1899,7 @@ void Camera_8002C1A8(void)
 
         if ((x10_btns & PAD_BUTTON_A) != 0) {
             abs_f1 = ABS(stick_x);
-            if (abs_f1 > 0.125) {
+            if (abs_f1 > cm_804D7EA0) {
                 x_move = stick_x;
             }
             abs_f1 = ABS(stick_y);
@@ -2024,11 +2043,13 @@ void Camera_8002C5B4(Camera_x2D0* arg0)
     eye_offset = &cam->pause_eye_offset;
 
     len_3d =
-        sqrtf(eye_offset->z * eye_offset->z +
-              (eye_offset->x * eye_offset->x + eye_offset->y * eye_offset->y));
+        cam_sqrtf(eye_offset->z * eye_offset->z +
+                  (eye_offset->x * eye_offset->x +
+                   eye_offset->y * eye_offset->y));
 
     xz_dist =
-        sqrtf(eye_offset->x * eye_offset->x + eye_offset->z * eye_offset->z);
+        cam_sqrtf(eye_offset->x * eye_offset->x +
+                  eye_offset->z * eye_offset->z);
 
     PSVECCrossProduct(eye_offset, &cam->pause_up, &cross1);
     lbVector_Normalize(&cross1);
@@ -3394,7 +3415,7 @@ void Camera_8002E490(void* unused)
     case 2:
         cm_80452C68.x378.f32 +=
             (1.0f - cm_80452C68.x378.f32) * cm_80452C68.x37C.f32;
-        if (cm_80452C68.x378.f32 > 0.999f) {
+        if (cm_80452C68.x378.f32 > cm_804D7E88) {
             cm_80452C68.x378.f32 = 1.0f;
         }
         break;
@@ -3901,8 +3922,8 @@ void Camera_8002F4D4(s8 arg0, s8 arg1, s32 arg2)
         }
 
         Camera_8002BAA8(0.0f);
-        Camera_8002BD88(0.0f, 0.0f);
-        Camera_8002C010(0.0f, 0.0f);
+        Camera_8002BD88(cm_804D7E14, cm_804D7E14);
+        Camera_8002C010(cm_804D7E14, cm_804D7E14);
 
         {
             CameraTransformState* transform = &cm_80452C68.transform;
@@ -4066,8 +4087,8 @@ void Camera_8002F9E4(s8 arg0, s8 arg1)
     }
 
     Camera_8002BAA8(0.0f);
-    Camera_8002BD88(0.0f, 0.0f);
-    Camera_8002C010(0.0f, 0.0f);
+    Camera_8002BD88(cm_804D7E14, cm_804D7E14);
+    Camera_8002C010(cm_804D7E14, cm_804D7E14);
 
     transform = &cm_80452C68.transform;
     cm_80452C68.transform.target_interest = cm_80452C68.x308;
@@ -4145,8 +4166,8 @@ void Camera_8002FC7C(s8 arg0, s8 arg1)
         cm_80452C68.pause_eye_distance = temp_f2;
     }
     Camera_8002BAA8(0.0f);
-    Camera_8002BD88(0.0f, 0.0f);
-    Camera_8002C010(0.0f, 0.0f);
+    Camera_8002BD88(cm_804D7E14, cm_804D7E14);
+    Camera_8002C010(cm_804D7E14, cm_804D7E14);
     transform = &cm_80452C68.transform;
     cm_80452C68.transform.target_interest = cm_80452C68.x308;
     lbVector_Add(&transform->target_interest, &cm_80452C68.x314);
@@ -4517,7 +4538,7 @@ bool Camera_800307D0(f32* left, f32* center, f32* right)
     HSD_CObjGetEyeVector(cobj, &forward);
     HSD_CObjGetInterest(cobj, &interest_pos);
 
-    if (ABS(forward.x) > 1e-4 && ABS(forward.z) > 1e-4) {
+    if (ABS(forward.x) > cm_804D7EE8 && ABS(forward.z) > 1e-4) {
         // ray casts?
         forward.x *= cm_804D7E10;
         forward.y *= cm_804D7E10;
