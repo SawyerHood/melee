@@ -1088,18 +1088,18 @@ bool gm_8017D7AC(MatchExitInfo* arg0, Unk1PData* arg1, u8 arg2)
 
 s32 fn_8017D9C0(u8* arg0, u8* arg1)
 {
+    u8* base;
     s32 len;
     s32 i;
     u8* p;
     u8 temp;
     u8* dst;
     u8 ch;
+    u8* q;
     s32 var_r0;
     s32 var_r0_2;
-    u8* base;
 
-    base = lbl_803D79F0;
-    p = base;
+    p = base = lbl_803D79F0;
     len = 0;
     while ((s32) *p != 0x21) {
         p++;
@@ -1119,26 +1119,31 @@ s32 fn_8017D9C0(u8* arg0, u8* arg1)
     for (i = 0; i < len; i++) {
         if (gm_80164840(*p) != 0) {
             ch = *p;
+            q = arg0;
             if ((s8) ch == (s8) arg0[0]) {
                 var_r0 = -1;
-            } else if ((s8) ch == (s8) arg0[1]) {
+            } else if ((s8) ch == (s8) *++q) {
                 var_r0 = -1;
-            } else if ((s8) ch == (s8) arg0[2]) {
+            } else if ((s8) ch == (s8) *++q) {
                 var_r0 = -1;
-            } else if ((s8) ch == (s8) arg0[3]) {
+            } else if ((s8) ch == (s8) q[1]) {
                 var_r0 = -1;
             } else {
                 var_r0 = 4;
             }
             if (var_r0 != -1) {
-                if ((s8) ch == (s8) arg1[0]) {
-                    var_r0_2 = -1;
-                } else if ((s8) ch == (s8) arg1[1]) {
-                    var_r0_2 = -1;
-                } else if ((s8) ch == (s8) arg1[2]) {
+                dst = arg1;
+                if ((s8) ch == (s8) *dst) {
                     var_r0_2 = -1;
                 } else {
-                    var_r0_2 = 3;
+                    dst++;
+                    if ((s8) ch == (s8) *dst) {
+                        var_r0_2 = -1;
+                    } else if ((s8) ch == (s8) dst[1]) {
+                        var_r0_2 = -1;
+                    } else {
+                        var_r0_2 = 3;
+                    }
                 }
                 if (var_r0_2 != -1) {
                     return (s32) base[i];
@@ -1175,11 +1180,11 @@ s32 gm_8017DB88(void* arg0, u8 arg1, s32 arg2, s32 arg3, u8* arg4, u8 arg5,
                 u8 (*arg8)(s32, s32, u8), f32 (*arg9)(s32, s32),
                 f32 (*arg10)(s32, s32))
 {
-    RegClearCharEntry* out;
-    u8 chars[4];
     u8* p;
-    s32 count;
+    RegClearCharEntry* out;
     s32 i;
+    s32 count;
+    u8 chars[4];
     u8 val;
     f32 fval;
 
@@ -1195,19 +1200,19 @@ s32 gm_8017DB88(void* arg0, u8 arg1, s32 arg2, s32 arg3, u8* arg4, u8 arg5,
         p[1] = fn_8017D9C0(chars, arg4);
         out->x0 = p[1];
         if (arg8 != NULL) {
-            val = arg8(arg3, arg2, (u8) i);
+            val = ((int (*)(s32, s32, u8)) arg8)(arg3, arg2, (u8) i);
         } else {
             val = 0;
         }
         out->x1 = val;
         if (arg6 != NULL) {
-            val = arg6(arg3, arg2, (u8) i);
+            val = ((int (*)(s32, s32, u8)) arg6)(arg3, arg2, (u8) i);
         } else {
             val = 0;
         }
         out->x2 = val;
         if (arg7 != NULL) {
-            val = arg7(arg3, arg2, (u8) i);
+            val = ((int (*)(s32, s32, u8)) arg7)(arg3, arg2, (u8) i);
         } else {
             val = 0;
         }
@@ -1743,11 +1748,13 @@ void fn_8017EE40(int arg0_int)
 {
     MatchEnd* arg0 = (MatchEnd*) arg0_int;
     struct StartMeleeRules* rules;
+    UnkAllstarData* p;
     gmm_x0_528_t* main_data;
     u32 total_time;
     int i;
 
     rules = gm_8016AE50();
+    p = &lbl_80472CB0;
 
     if (fn_8017E318() > 0) {
         ((u8_bits*) &arg0->_x448[2])->b3 = 1;
@@ -1755,10 +1762,10 @@ void fn_8017EE40(int arg0_int)
 
     if (rules->x4_5) {
         main_data = gmMainLib_8015CDC8();
-        total_time = lbl_80472CB0.x0.xC.x20 + gm_8016AEDC();
+        total_time = p->x0.xC.x20 + gm_8016AEDC();
         ((u8_bits*) &arg0->_x448[0])->b7 = 1;
 
-        if ((u8) lbl_80472CB0.x0.cpu_level == 4) {
+        if ((u8) p->x0.cpu_level == 4) {
             ((u8_bits*) &arg0->_x448[0])->b4 = 1;
         }
 
@@ -1768,21 +1775,21 @@ void fn_8017EE40(int arg0_int)
             ((u8_bits*) &arg0->_x448[2])->b7 = 1;
         }
 
-        if ((u32) lbl_80472CB0.x0.xC.x1C == 0U &&
+        if ((u32) p->x0.xC.x1C == 0U &&
             (u32) arg0->player_standings[0].x44 == 0U)
         {
             ((u8_bits*) &arg0->_x448[1])->b1 = 1;
         }
 
-        if ((u8) lbl_80472CB0.x0.xC.xE != 0) {
+        if ((u8) p->x0.xC.xE != 0) {
             ((u8_bits*) &arg0->_x448[2])->b5 = 1;
         }
 
-        if ((u8) lbl_80472CB0.x0.xC.xF != 0) {
+        if ((u8) p->x0.xC.xF != 0) {
             ((u8_bits*) &arg0->_x448[2])->b4 = 1;
         }
 
-        if ((u8) lbl_80472CB0.x0.xC.xD != 0) {
+        if ((u8) p->x0.xC.xD != 0) {
             ((u8_bits*) &arg0->_x448[1])->b0 = 1;
         } else if ((s8) arg0->player_standings[0].stocks ==
                    (s32) main_data->stocks)
@@ -1949,13 +1956,13 @@ s32 fn_8017F2A4(HSD_Text** arg0, f32 farg0, f32 farg1)
 
 s32 fn_8017F47C(HSD_Text** arg0, int arg1)
 {
-    s32* p;
-    s32 prev_idx;
-    int entry;
-    s32 i;
     u8 mask;
-    s32 idx;
     s32 val;
+    s32* p;
+    s32 i;
+    int entry;
+    s32 prev_idx;
+    s32 idx;
 
     entry = arg1;
     prev_idx = -999;
@@ -2345,12 +2352,13 @@ void fn_8017FE54(HSD_GObj* gobj)
 void fn_8017FF1C(HSD_GObj* gobj)
 {
     HSD_JObj* jobj;
-    struct lbl_80472D28_t* state = &lbl_80472D28;
+    struct lbl_80472D28_t* state;
     s32 result;
     s32 i;
     u8 mask;
     HSD_JObj* sp28;
 
+    state = &lbl_80472D28;
     jobj = gobj->hsd_obj;
     HSD_JObjAnimAll(gobj->hsd_obj);
 
@@ -2960,8 +2968,7 @@ void fn_80181598(void)
             s32 cur;
             s32* tbl;
             if ((cur = *(s32*) (base + 0x80)) >
-                (tbl = (s32*) (base + 0x14))[gm_80164024(
-                    (u8) * (s32*) (base + 4))])
+                (tbl = (s32*) (base + 0x14))[gm_80164024((u8) *punk)])
             {
                 tbl[gm_80164024((u8) *punk)] = cur;
             }
@@ -3204,9 +3211,8 @@ s32 fn_80181C80(s32 arg0)
         gm_8016EDDC(sp38, &sp10);
         Player_SetNametagSlotID(sp38, 0x78);
         un_802FD28C(sp38);
-        state->x0 += 1;
     }
-    return state->x0;
+    return state->x0++;
 }
 
 void fn_80181E18(void)
@@ -3746,9 +3752,21 @@ s32 gm_80182578(void)
 
 void fn_80182B5C(void)
 {
+    typedef struct {
+        /* 0x000 */ char pad_0[0x6BC];
+        /* 0x6BC */ u8 x0;
+        /* 0x6BD */ char pad_6BD;
+        /* 0x6BE */ u16 x2;
+        /* 0x6C0 */ int x4;
+        /* 0x6C4 */ int x8;
+        /* 0x6C8 */ int xC;
+        /* 0x6CC */ s8 x10;
+        /* 0x6CD */ u8 x11;
+    } ext_t;
     RecordBlock* blocks = (RecordBlock*) lbl_803D8D08;
-    int mode = lbl_80473594.x8;
-    int idx = lbl_80473594.xC;
+    ext_t* st = (ext_t*) &lbl_80472ED8;
+    int mode = st->x8;
+    int idx = st->xC;
     int var_r6;
     u32 var_r30;
 
@@ -3807,11 +3825,11 @@ void fn_80182B5C(void)
     case 34:
         gmMainLib_8015D710(gm_80164024((u8) idx));
     func:
-        if (lbl_80473594.x0 != 0) {
-            if ((u32) lbl_80473594.x4 < var_r30) {
+        if (st->x0 != 0) {
+            if ((u32) st->x4 < var_r30) {
                 gm_8016B350(0x9C40);
                 gm_8016B364(0x144);
-                gm_80167858((s32) lbl_80473594.x10, (s32) lbl_80473594.x11,
+                gm_80167858((s32) st->x10, (s32) st->x11,
                             0xD, 0x5A);
                 return;
             }
@@ -3823,19 +3841,19 @@ void fn_80182B5C(void)
         break;
     case 35:
     case 36:
-        if (lbl_80473594.x0 != 0 && (s32) lbl_80473594.x2 > var_r6) {
+        if (st->x0 != 0 && (s32) st->x2 > var_r6) {
             gm_8016B350(0x9C40);
             gm_8016B364(0x144);
-            gm_80167858((s32) lbl_80473594.x10, (s32) lbl_80473594.x11, 0xD,
+            gm_80167858((s32) st->x10, (s32) st->x11, 0xD,
                         0x5A);
         }
         break;
     case 37:
     case 38:
-        if ((s32) lbl_80473594.x2 > var_r6) {
+        if ((s32) st->x2 > var_r6) {
             gm_8016B350(0x9C40);
             gm_8016B364(0x144);
-            gm_80167858((s32) lbl_80473594.x10, (s32) lbl_80473594.x11, 0xD,
+            gm_80167858((s32) st->x10, (s32) st->x11, 0xD,
                         0x5A);
         }
         break;
