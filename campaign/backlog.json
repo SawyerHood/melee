@@ -279,6 +279,19 @@
    "severity": "near_miss"
   },
   {
+   "name": "ftCo_800A9CB4",
+   "unit": "main/melee/ft/chara/ftCommon/ftCo_0A01",
+   "vaddr": "0x800A9CB4",
+   "size": 1644,
+   "fuzzy": 99.94,
+   "class": "mixed_arg",
+   "rows": {
+    "layout": 6,
+    "regalloc": 4
+   },
+   "severity": "near_miss"
+  },
+  {
    "name": "ftYs_SpecialAirSLoop_2_Coll",
    "unit": "main/melee/ft/chara/ftYoshi/ftYs_SpecialS",
    "vaddr": "0x80131F80",
@@ -373,6 +386,19 @@
    "class": "layout",
    "rows": {
     "layout": 9
+   },
+   "severity": "near_miss"
+  },
+  {
+   "name": "ftCo_800A9904",
+   "unit": "main/melee/ft/chara/ftCommon/ftCo_0A01",
+   "vaddr": "0x800A9904",
+   "size": 944,
+   "fuzzy": 99.9,
+   "class": "mixed_arg",
+   "rows": {
+    "layout": 4,
+    "regalloc": 4
    },
    "severity": "near_miss"
   },
@@ -1590,21 +1616,6 @@
    "severity": "near_miss"
   },
   {
-   "name": "ftCo_800A9CB4",
-   "unit": "main/melee/ft/chara/ftCommon/ftCo_0A01",
-   "vaddr": "0x800A9CB4",
-   "size": 1644,
-   "fuzzy": 99.3,
-   "class": "codegen",
-   "rows": {
-    "layout": 6,
-    "gap": 2,
-    "mixed": 1,
-    "regalloc": 4
-   },
-   "severity": "near_miss"
-  },
-  {
    "name": "gm_801BFCFC",
    "unit": "main/melee/gm/gm_1BFA",
    "vaddr": "0x801BFCFC",
@@ -2405,21 +2416,6 @@
    "rows": {
     "regalloc": 24,
     "mixed": 2
-   },
-   "severity": "near_miss"
-  },
-  {
-   "name": "ftCo_800A9904",
-   "unit": "main/melee/ft/chara/ftCommon/ftCo_0A01",
-   "vaddr": "0x800A9904",
-   "size": 944,
-   "fuzzy": 98.8,
-   "class": "codegen",
-   "rows": {
-    "gap": 2,
-    "mixed": 1,
-    "layout": 4,
-    "regalloc": 4
    },
    "severity": "near_miss"
   },
@@ -7134,6 +7130,18 @@
    "severity": "near_miss"
   },
   {
+   "name": "fn_802FF218",
+   "unit": "main/melee/if/ifcoget",
+   "vaddr": "0x802FF218",
+   "size": 328,
+   "fuzzy": 95.12,
+   "class": "codegen",
+   "rows": {
+    "gap": 4
+   },
+   "severity": "near_miss"
+  },
+  {
    "name": "gmCamera_801A2BF0",
    "unit": "main/melee/gm/gmcamera",
    "vaddr": "0x801A2BF0",
@@ -7725,20 +7733,6 @@
     "regalloc": 28,
     "gap": 8,
     "mnemonic": 2
-   },
-   "severity": "near_miss"
-  },
-  {
-   "name": "fn_802FF218",
-   "unit": "main/melee/if/ifcoget",
-   "vaddr": "0x802FF218",
-   "size": 328,
-   "fuzzy": 94.33,
-   "class": "codegen",
-   "rows": {
-    "regalloc": 11,
-    "gap": 4,
-    "other_arg": 1
    },
    "severity": "near_miss"
   },

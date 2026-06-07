@@ -258,6 +258,23 @@ static inline void un_802FE918_updateX3(int r)
     un_803F9D48.x3 = new_x3;
 }
 
+/* L1' re-solve (idioms 163/171): the v_x6/v_x8 cluster lives in a void
+ * static-inline helper so the named v_x8 web is promoted ABOVE the
+ * anonymous &x3/&x24 address chains (joining new_x3's r27); as a
+ * caller block local it processed after the chains and took r26. The
+ * addi-spelled b/v_x8 arg copies are the expansion-param tell. */
+static inline void un_802FE918_show3E(int b)
+{
+    unsigned short v_x6;
+    unsigned short v_x8;
+    v_x6 = un_803F9D48.x6;
+    v_x8 = un_803F9D48.x8;
+    HSD_SisLib_803A6530(2, 0x4A, v_x6);
+    HSD_SisLib_803A660C(2, 0x4A, un_803063D4(b, 0x4E, 0x174));
+    HSD_SisLib_803A660C(2, 0x4A, v_x8);
+    HSD_SisLib_803A6368(un_803F9D48.x20, 0x4A);
+}
+
 void un_802FE918(int a, int b, int c)
 {
     struct un_803F9B30* x;
@@ -279,16 +296,9 @@ void un_802FE918(int a, int b, int c)
 found:
     un_803F9D48.x4 = i;
     if (a == 0x3E) {
-        unsigned short v_x6;
-        unsigned short v_x8;
         un_802FE3F8(a, 2, (short*) &un_803F9D48.x6,
                     (short*) &un_803F9D48.x8);
-        v_x6 = un_803F9D48.x6;
-        v_x8 = un_803F9D48.x8;
-        HSD_SisLib_803A6530(2, 0x4A, v_x6);
-        HSD_SisLib_803A660C(2, 0x4A, un_803063D4(b, 0x4E, 0x174));
-        HSD_SisLib_803A660C(2, 0x4A, v_x8);
-        HSD_SisLib_803A6368(un_803F9D48.x20, 0x4A);
+        un_802FE918_show3E(b);
     } else {
         un_802FE3F8(a, 2, (short*) &un_803F9D48.x6, NULL);
         HSD_SisLib_803A6368(un_803F9D48.x20, un_803F9D48.x6);
