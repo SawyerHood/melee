@@ -1488,7 +1488,7 @@ void gm_801877A8_OnEnter(void* arg0_)
 }
 #pragma pop
 
-static struct {
+static struct Gm1832OpeningState {
     DynamicModelDesc*** x0;
     HSD_CameraAnim** x4;
     HSD_GObj* x8;
@@ -1513,23 +1513,24 @@ extern f32 lbl_804DA5E8;
 
 void fn_80187910(HSD_GObj* arg0)
 {
+    struct Gm1832OpeningState* st;
     Vec3 sp10;
     HSD_CObj* cobj;
     s32 frame;
     f32 scale;
 
-    PAD_STACK(8);
+    PAD_STACK(4);
+    st = &lbl_804736C0;
+    st = (struct Gm1832OpeningState*) ((u8*) st + 0);
     cobj = arg0->hsd_obj;
-    if (gm_801A36A0(lbl_804736C0.x38) & 0x100) {
-        lbl_804736C0.x37.frame_counter =
-            (s32) cobj->eyepos->aobj->curr_frame / 300;
-        lbl_804736C0.x37.frame_counter++;
-        if (lbl_804736C0.x37.frame_counter >= 8U) {
-            lbl_804736C0.x37.frame_counter = 0;
+    if (gm_801A36A0(st->x38) & 0x100) {
+        st->x37.frame_counter = (s32) cobj->eyepos->aobj->curr_frame / 300;
+        if (++st->x37.frame_counter >= 8U) {
+            st->x37.frame_counter = 0;
         }
-        frame = lbl_804736C0.x37.frame_counter * 0x12C;
+        frame = st->x37.frame_counter * 0x12C;
         HSD_CObjRemoveAnim(cobj);
-        HSD_CObjAddAnim(cobj, *(HSD_CameraAnim**) lbl_804736C0.x4[1]);
+        HSD_CObjAddAnim(cobj, *(HSD_CameraAnim**) st->x4[1]);
         HSD_CObjReqAnim(cobj, (f32) frame);
     }
     HSD_CObjAnim(cobj);
@@ -1557,54 +1558,56 @@ typedef struct {
     u8 b7 : 1, b6 : 1, b5 : 1, b4 : 1, b3 : 1, b2 : 1, b1 : 1, b0 : 1;
 } u8_bits;
 
+static inline void fn_80187AB4_play(HSD_JObj* jobj,
+                                    struct Gm1832OpeningState* st,
+                                    DynamicModelDesc* desc)
+{
+    int anim_state;
+    if (desc->anims != NULL) {
+        anim_state = st->x37.anim_state;
+        if (desc->anims[anim_state] != NULL) {
+            lb_8000C0E8(jobj, anim_state, desc);
+            HSD_JObjReqAnimAll(jobj, lbl_804DA5E8);
+            HSD_JObjAnimAll(jobj);
+        }
+    }
+}
+
 void fn_80187AB4(HSD_GObj* gobj)
 {
-    HSD_JObj* jobj = GET_JOBJ(gobj);
-    int state = lbl_804736C0.x37.anim_state;
-    DynamicModelDesc* desc;
-    int anim_state;
-    PAD_STACK(8);
+    struct Gm1832OpeningState* st = &lbl_804736C0;
+    HSD_JObj* jobj;
+    int state;
+    PAD_STACK(16);
+
+    st = (struct Gm1832OpeningState*) ((u8*) st + 0);
+    jobj = GET_JOBJ(gobj);
+    state = st->x37.anim_state;
 
     switch (state) {
     case 0:
         if (lb_8000B09C(jobj) == 0) {
-            lbl_804736C0.x37.anim_state = 1;
-            desc = (*lbl_804736C0.x0)[11 - lbl_804736C0.x36.stage_index];
-            if (desc->anims != NULL) {
-                anim_state = lbl_804736C0.x37.anim_state;
-                if (desc->anims[anim_state] != NULL) {
-                    lb_8000C0E8(jobj, anim_state, desc);
-                    HSD_JObjReqAnimAll(jobj, lbl_804DA5E8);
-                    HSD_JObjAnimAll(jobj);
-                }
-            }
-            lbl_804736C0.x34 = 0x960;
+            st->x37.anim_state = 1;
+            fn_80187AB4_play(jobj, st, (*st->x0)[11 - st->x36.stage_index]);
+            st->x34 = 0x960;
         }
         break;
     case 1:
-        if ((u32) lbl_804736C0.x36.active == 1U) {
-            lbl_804736C0.x36.flash = 1;
+        if ((u32) st->x36.active == 1U) {
+            st->x36.flash = 1;
         }
-        if (lbl_804736C0.x36.flash) {
-            lbl_804736C0.x37.anim_state = 2;
-            lbl_804736C0.x36.done = 1;
+        if (st->x36.flash) {
+            st->x37.anim_state = 2;
+            st->x36.done = 1;
             lbBgFlash_8002063C(1);
         }
         if (lb_8000B09C(jobj) == 0) {
-            desc = (*lbl_804736C0.x0)[11 - lbl_804736C0.x36.stage_index];
-            if (desc->anims != NULL) {
-                anim_state = lbl_804736C0.x37.anim_state;
-                if (desc->anims[anim_state] != NULL) {
-                    lb_8000C0E8(jobj, anim_state, desc);
-                    HSD_JObjReqAnimAll(jobj, lbl_804DA5E8);
-                    HSD_JObjAnimAll(jobj);
-                }
-            }
+            fn_80187AB4_play(jobj, st, (*st->x0)[11 - st->x36.stage_index]);
         }
         break;
     case 2:
         if (lb_8000B09C(jobj) == 0) {
-            lbl_804736C0.x36.done = 1;
+            st->x36.done = 1;
             HSD_GObjPLink_80390228(gobj);
         }
         break;
@@ -1619,58 +1622,49 @@ void fn_80187C9C(HSD_GObj* gobj, int arg1)
     HSD_StateInvalidate(0x40);
 }
 
+static inline void fn_80187CF4_play(HSD_JObj* jobj,
+                                    struct Gm1832OpeningState* st,
+                                    DynamicModelDesc* desc)
+{
+    int anim_state = st->x37.state2;
+    if (desc->anims[anim_state] != NULL) {
+        lb_8000C0E8(jobj, anim_state, desc);
+        HSD_JObjReqAnimAll(jobj, lbl_804DA5E8);
+        HSD_JObjAnimAll(jobj);
+    }
+}
+
 void fn_80187CF4(HSD_GObj* gobj)
 {
-    HSD_JObj* jobj = GET_JOBJ(gobj);
-    int state = lbl_804736C0.x37.state2;
-    DynamicModelDesc* desc;
-    int anim_state;
+    struct Gm1832OpeningState* st = &lbl_804736C0;
+    HSD_JObj* jobj;
+    int state;
+
+    st = (struct Gm1832OpeningState*) ((u8*) st + 0);
+    jobj = GET_JOBJ(gobj);
+    state = st->x37.state2;
 
     switch (state) {
     case 0:
         if (lb_8000B09C(jobj) == 0) {
-            lbl_804736C0.x37.state2 = 1;
-            anim_state = lbl_804736C0.x37.state2;
-            desc = (*lbl_804736C0.x0)[12];
-            if (desc->anims[anim_state] != NULL) {
-                lb_8000C0E8(jobj, anim_state, desc);
-                HSD_JObjReqAnimAll(jobj, lbl_804DA5E8);
-                HSD_JObjAnimAll(jobj);
-            }
+            st->x37.state2 = 1;
+            fn_80187CF4_play(jobj, st, (*st->x0)[12]);
         }
         break;
     case 1:
         if (lb_8000B09C(jobj) == 0) {
-            lbl_804736C0.x37.state2 = 2;
-            anim_state = lbl_804736C0.x37.state2;
-            desc = (*lbl_804736C0.x0)[12];
-            if (desc->anims[anim_state] != NULL) {
-                lb_8000C0E8(jobj, anim_state, desc);
-                HSD_JObjReqAnimAll(jobj, lbl_804DA5E8);
-                HSD_JObjAnimAll(jobj);
-            }
+            st->x37.state2 = 2;
+            fn_80187CF4_play(jobj, st, (*st->x0)[12]);
         }
         break;
     case 2:
-        if (gm_801A36A0(lbl_804736C0.x38) & 0x1000) {
+        if (gm_801A36A0(st->x38) & 0x1000) {
             lbAudioAx_80024030(1);
-            lbl_804736C0.x36.active = 1;
-            lbl_804736C0.x37.state2 = 3;
-            anim_state = lbl_804736C0.x37.state2;
-            desc = (*lbl_804736C0.x0)[12];
-            if (desc->anims[anim_state] != NULL) {
-                lb_8000C0E8(jobj, anim_state, desc);
-                HSD_JObjReqAnimAll(jobj, lbl_804DA5E8);
-                HSD_JObjAnimAll(jobj);
-            }
+            st->x36.active = 1;
+            st->x37.state2 = 3;
+            fn_80187CF4_play(jobj, st, (*st->x0)[12]);
         } else if (lb_8000B09C(jobj) == 0) {
-            anim_state = lbl_804736C0.x37.state2;
-            desc = (*lbl_804736C0.x0)[12];
-            if (desc->anims[anim_state] != NULL) {
-                lb_8000C0E8(jobj, anim_state, desc);
-                HSD_JObjReqAnimAll(jobj, lbl_804DA5E8);
-                HSD_JObjAnimAll(jobj);
-            }
+            fn_80187CF4_play(jobj, st, (*st->x0)[12]);
         }
         break;
     case 3:
@@ -1745,6 +1739,8 @@ static HSD_Archive* lbl_804D6620;
 
 void gm_80187F48_OnEnter(void* arg0_)
 {
+    struct Gm1832OpeningState* st = &lbl_804736C0;
+    char** tbl = lbl_803D9750;
     u8* arg0 = arg0_;
     u8 stage_index;
     HSD_GObj* cam_gobj;
@@ -1755,11 +1751,13 @@ void gm_80187F48_OnEnter(void* arg0_)
     HSD_GObj* gobj5;
     HSD_JObj* jobj;
     HSD_JObj* jobj2;
-    DynamicModelDesc* desc;
-    int anim_idx;
     PAD_STACK(24);
 
-    lbl_804736C0.x38 = arg0[0];
+    st = (struct Gm1832OpeningState*) (u8*) st;
+    tbl = (char**) ((u8*) tbl + 0);
+
+
+    st->x38 = arg0[0];
     lb_8000FCDC();
     mpColl_80041C78();
     Ground_801C0378(0x40);
@@ -1773,82 +1771,68 @@ void gm_80187F48_OnEnter(void* arg0_)
     Player_InitAllPlayers();
     lbBgFlash_800209F4();
 
-    lbl_804736C0.x37.anim_state = 0;
-    lbl_804736C0.x37.frame_counter = 0;
-    lbl_804736C0.x34 = 0;
-    lbl_804736C0.x36.done = 0;
-    lbl_804736C0.x36.flash = 0;
-    lbl_804736C0.x36.stage_index = arg0[1];
-    lbl_804736C0.x37.state2 = 0;
-    lbl_804736C0.x36.active = 0;
+    st->x37.anim_state = 0;
+    st->x37.frame_counter = 0;
+    st->x34 = 0;
+    st->x36.done = 0;
+    st->x36.flash = 0;
+    st->x36.stage_index = arg0[1];
+    st->x37.state2 = 0;
+    st->x36.active = 0;
 
     stage_index = arg0[1];
     lbl_804D6620 = lbArchive_80016DBC(
-        lbl_804D4138, &lbl_804736C0.x0, (char*) &lbl_803D9750[48],
-        &lbl_804736C0.x4, lbl_803D9750[stage_index], NULL);
+        lbl_804D4138, &st->x0, (char*) &tbl[48],
+        &st->x4, tbl[stage_index], NULL);
 
-    lbAudioAx_80026F2C((s32) lbl_803D9750[stage_index + 12]);
+    lbAudioAx_80026F2C((s32) tbl[stage_index + 12]);
     {
         u64 ret = lbAudioAx_80026E84(Player_GetPlayerCharacter(0));
-        lbAudioAx_8002702C((s32) lbl_803D9750[stage_index + 12],
-                           ret | *(u64*) &lbl_803D9750[stage_index * 2 + 24]);
+        lbAudioAx_8002702C((s32) tbl[stage_index + 12],
+                           ret | *(u64*) ((u8*) tbl + stage_index * 8 + 0x60));
     }
     lbAudioAx_80027168();
     lbAudioAx_80027648();
 
     cam_gobj = GObj_Create(0x13, 0x14, 0);
-    lbl_804736C0.x8 = cam_gobj;
-    cobj = HSD_CObjLoadDesc((HSD_CObjDesc*) *lbl_804736C0.x4);
+    st->x8 = cam_gobj;
+    cobj = HSD_CObjLoadDesc((HSD_CObjDesc*) *st->x4);
     HSD_GObjObject_80390A70(cam_gobj, HSD_GObj_804D784B, cobj);
     GObj_SetupGXLinkMax(cam_gobj, (void*) Camera_800304E0, 8);
     HSD_GObj_SetupProc(cam_gobj, fn_80187910, 0);
-    HSD_CObjAddAnim(cobj, *(HSD_CameraAnim**) lbl_804736C0.x4[1]);
+    HSD_CObjAddAnim(cobj, *(HSD_CameraAnim**) st->x4[1]);
     HSD_CObjReqAnim(cobj, lbl_804DA5E8);
 
     gobj2 = GObj_Create(0x13, 0x14, 0);
     HSD_GObjObject_80390A70(
         gobj2, HSD_GObj_804D784B,
-        HSD_CObjLoadDesc(((SceneDesc*) lbl_804736C0.x0)->cameras[0].desc));
+        HSD_CObjLoadDesc(((SceneDesc*) st->x0)->cameras[0].desc));
     GObj_SetupGXLinkMax(gobj2, HSD_GObj_803910D8, 8);
     gobj2->gxlink_prios = 0xC00;
 
     gobj3 = GObj_Create(0xB, 3, 0);
     HSD_GObjObject_80390A70(
         gobj3, HSD_GObj_804D784A,
-        lb_80011AC4(((SceneDesc*) lbl_804736C0.x0)->lights));
+        lb_80011AC4(((SceneDesc*) st->x0)->lights));
     GObj_SetupGXLink(gobj3, HSD_GObj_LObjCallback, 0xA, 0);
 
     gobj4 = GObj_Create(0xE, 0xF, 0);
     jobj = HSD_JObjLoadJoint(
-        (*lbl_804736C0.x0)[11 - lbl_804736C0.x36.stage_index]->joint);
+        (*st->x0)[11 - st->x36.stage_index]->joint);
     lb_80011C18(jobj, 0x08000000);
     HSD_GObjObject_80390A70(gobj4, HSD_GObj_804D7849, jobj);
     GObj_SetupGXLink(gobj4, fn_80187C9C, 0xB, 0xB);
 
-    desc = (*lbl_804736C0.x0)[11 - lbl_804736C0.x36.stage_index];
-    if (desc->anims != NULL) {
-        anim_idx = lbl_804736C0.x37.anim_state;
-        if (desc->anims[anim_idx] != NULL) {
-            lb_8000C0E8(jobj, anim_idx, desc);
-            HSD_JObjReqAnimAll(jobj, lbl_804DA5E8);
-            HSD_JObjAnimAll(jobj);
-        }
-    }
+    fn_80187AB4_play(jobj, st, (*st->x0)[11 - st->x36.stage_index]);
     HSD_GObj_SetupProc(gobj4, fn_80187AB4, 0);
 
     gobj5 = GObj_Create(0xE, 0xF, 0);
-    jobj2 = HSD_JObjLoadJoint((*lbl_804736C0.x0)[12]->joint);
+    jobj2 = HSD_JObjLoadJoint((*st->x0)[12]->joint);
     lb_80011C18(jobj2, 0x08000000);
     HSD_GObjObject_80390A70(gobj5, HSD_GObj_804D7849, jobj2);
     GObj_SetupGXLink(gobj5, fn_80187C9C, 0xB, 0xB);
 
-    anim_idx = lbl_804736C0.x37.state2;
-    desc = (*lbl_804736C0.x0)[12];
-    if (desc->anims[anim_idx] != NULL) {
-        lb_8000C0E8(jobj2, anim_idx, desc);
-        HSD_JObjReqAnimAll(jobj2, lbl_804DA5E8);
-        HSD_JObjAnimAll(jobj2);
-    }
+    fn_80187CF4_play(jobj2, st, (*st->x0)[12]);
 
     HSD_JObjReqAnimAll(jobj2, lbl_804DA5E8);
     HSD_JObjAnimAll(jobj2);
@@ -1944,14 +1928,15 @@ int fn_8018846C(void)
 inline int fn_801884F8_inline(void)
 {
     int result;
+    TrainingModeState* state = &lbl_80473700;
 
     result = pl_80041300(0);
     if (result != 0) {
-        lbl_80473700.result_cache[0] = result;
-        lbl_80473700.result_cache[1] = 1;
+        state->result_cache[0] = result;
+        state->result_cache[1] = 1;
     }
-    if (lbl_80473700.result_cache[1] != 0) {
-        result = lbl_80473700.result_cache[0];
+    if (state->result_cache[1] != 0) {
+        return state->result_cache[0];
     }
     return result;
 }
@@ -2081,7 +2066,8 @@ void fn_80188738(HSD_JObj* arg0)
     jobjs[0] = (jobjs[1] == NULL) ? NULL : jobjs[1]->next;
 
     if ((val / 100) != 0) {
-        HSD_JObjReqAnimAll(jobjs[0], (f32) (val / 100));
+        int q = val + 0;
+        HSD_JObjReqAnimAll(jobjs[0], (f32) (q / 100));
     } else {
         HSD_JObjReqAnimAll(jobjs[0], lbl_804DA608);
     }
@@ -2121,7 +2107,8 @@ void fn_80188910(HSD_JObj* arg0)
     jobjs[0] = (jobjs[1] == NULL) ? NULL : jobjs[1]->next;
 
     if ((val / 100) != 0) {
-        HSD_JObjReqAnimAll(jobjs[0], (f32) (val / 100));
+        int q = val + 0;
+        HSD_JObjReqAnimAll(jobjs[0], (f32) (q / 100));
     } else {
         HSD_JObjReqAnimAll(jobjs[0], lbl_804DA608);
     }
@@ -2154,7 +2141,8 @@ void fn_80188B3C(HSD_JObj* arg0)
     jobjs[0] = (jobjs[1] == NULL) ? NULL : jobjs[1]->next;
 
     if ((val / 100) != 0) {
-        HSD_JObjReqAnimAll(jobjs[0], (f32) (val / 100));
+        int q = val + 0;
+        HSD_JObjReqAnimAll(jobjs[0], (f32) (q / 100));
     } else {
         HSD_JObjReqAnimAll(jobjs[0], lbl_804DA608);
     }
@@ -2205,11 +2193,18 @@ void fn_80188D3C(HSD_JObj* arg0)
 
 void fn_80188EE8(HSD_GObj* gobj)
 {
-    CssSubStruct* sub = &lbl_80473700.css;
+    TrainingModeState* state;
+    CssSubStruct* sub;
+    s32* menu;
     HSD_JObj* jobj;
+    HSD_Text* text;
     s32 val;
 
-    PAD_STACK(16);
+    PAD_STACK(8);
+
+    state = &lbl_80473700;
+    state = (TrainingModeState*) ((u8*) state + 0);
+    sub = &state->css;
 
     if (gm_801A45E8(2) != 0) {
         HSD_SisLib_803A6368(sub->text, 0x1E);
@@ -2218,17 +2213,16 @@ void fn_80188EE8(HSD_GObj* gobj)
         HSD_JObjClearFlagsAll(sub->jobjs[3], 0x10);
     }
 
+    if ((u32) sub->anim_frames[22] < 10 ||
+        ((u32) sub->anim_frames[22] >= 20 && (u32) sub->anim_frames[22] < 30))
     {
-        u32 counter = sub->anim_frames[22];
-        if (counter < 10 || (counter >= 20 && counter < 30)) {
-            sub->anim_frames[22] = counter + 1;
-            sub->anim_frames[1] = sub->anim_frames[22];
-        }
+        sub->anim_frames[22]++;
+        sub->anim_frames[1] = sub->anim_frames[22];
     }
 
-    HSD_JObjReqAnimAll(sub->jobjs[22], (f32) sub->anim_frames[22]);
+    HSD_JObjReqAnimAll(sub->jobjs[22], (f32) (u32) sub->anim_frames[22]);
     HSD_JObjAnimAll(sub->jobjs[22]);
-    HSD_JObjReqAnimAll(sub->jobjs[1], (f32) sub->anim_frames[1]);
+    HSD_JObjReqAnimAll(sub->jobjs[1], (f32) (u32) sub->anim_frames[1]);
     HSD_JObjAnimAll(sub->jobjs[1]);
 
     sub->text->pos_x =
@@ -2239,45 +2233,49 @@ void fn_80188EE8(HSD_GObj* gobj)
     fn_80188910(sub->jobjs[5]);
     fn_80188B3C(sub->jobjs[19]);
 
+    menu = state->css.menu_values;
+    menu = (s32*) ((u8*) menu + 0);
+
     jobj = sub->jobjs[12];
-    HSD_JObjReqAnimAll(jobj, (f32) sub->x03);
+    HSD_JObjReqAnimAll(jobj, (f32) state->css.x03);
     HSD_JObjAnimAll(jobj);
 
     jobj = sub->jobjs[13];
-    HSD_JObjReqAnimAll(jobj, (f32) sub->menu_values[0]);
+    HSD_JObjReqAnimAll(jobj, (f32) (u32) state->css.menu_values[0]);
     HSD_JObjAnimAll(jobj);
 
     jobj = sub->jobjs[23];
-    HSD_JObjReqAnimAll(jobj, (f32) sub->x00);
+    HSD_JObjReqAnimAll(jobj, (f32) state->css.x00);
     HSD_JObjAnimAll(jobj);
 
     jobj = sub->jobjs[34];
-    HSD_JObjReqAnimAll(jobj, (f32) sub->menu_values[0]);
+    HSD_JObjReqAnimAll(jobj, (f32) (u32) menu[0]);
     HSD_JObjAnimAll(jobj);
 
-    val = sub->menu_values[1];
+    val = state->css.menu_values[1];
+    text = state->css.text;
     if (lbLang_IsSettingUS() != 0 && val == 0x13) {
-        HSD_SisLib_803A6368(sub->text, 0x17);
+        HSD_SisLib_803A6368(text, 0x17);
     } else {
-        HSD_SisLib_803A6368(sub->text,
-                            (s32) * (s16*) &lbl_803D9828[val * 4 + 2]);
+        HSD_SisLib_803A6368(text,
+                            (s32) ((s16*) &lbl_803D9828[val * 4])[1]);
     }
 
     jobj = sub->jobjs[32];
-    HSD_JObjReqAnimAll(jobj, (f32) (sub->menu_values[2] + 1));
+    HSD_JObjReqAnimAll(jobj, (f32) (u32) (state->css.menu_values[2] + 1));
     HSD_JObjAnimAll(jobj);
 
     jobj = sub->jobjs[31];
-    HSD_JObjReqAnimAll(jobj, (f32) sub->menu_values[3]);
+    HSD_JObjReqAnimAll(jobj, (f32) (u32) state->css.menu_values[3]);
     HSD_JObjAnimAll(jobj);
 
     fn_80188D3C(sub->jobjs[27]);
 
     HSD_JObjSetFlags(sub->jobjs[25], 0x10);
 
-    val = sub->menu_values[6];
+    val = state->css.menu_values[6];
     jobj = sub->jobjs[26];
-    if (val == 2 && lbl_80473700.mode == 3) {
+    if (val == 2 && state->mode == 3) {
         val = 3;
     }
     HSD_JObjReqAnimAll(jobj, (f32) val);
@@ -2598,18 +2596,21 @@ s32 fn_80189B88(void)
 {
     HSD_GObj* gobj;
     HSD_JObj* jobj;
+    TrainingModeState* state;
     CssSubStruct* sub;
     int i;
     PAD_STACK(8);
 
-    sub = &lbl_80473700.css;
-    sub->x00 = 0;
-    sub->x01 = 0;
+    state = &lbl_80473700;
+    state = (TrainingModeState*) ((u8*) state + 0);
+    sub = &state->css;
+    state->css.x00 = 0;
+    state->css.x01 = 0;
     HSD_GObj_SetupProc(GObj_Create(0xE, 2, 0), (HSD_GObjEvent) fn_801891F4,
                        0x15);
     gobj = GObj_Create(0xE, 0xF, 0);
     jobj = HSD_JObjLoadJoint((*lbl_804D662C)->joint);
-    sub->gobj = gobj;
+    state->css.gobj = gobj;
     HSD_GObjObject_80390A70(gobj, HSD_GObj_804D7849, jobj);
     GObj_SetupGXLink(gobj, HSD_GObj_JObjCallback, 0xB, 0);
     HSD_GObj_SetupProc(gobj, (HSD_GObjEvent) fn_80188EE8, 0x11);
@@ -2622,19 +2623,16 @@ s32 fn_80189B88(void)
     }
     sub->anim_frames[22] = 0x1E;
     sub->anim_frames[1] = 0x1E;
-    sub->menu_values[0] = 0;
-    sub->menu_values[1] = 0;
-    sub->menu_values[2] = 0;
-    sub->menu_values[3] = 0;
-    sub->menu_values[4] = 0;
-    sub->menu_values[5] = 0;
-    sub->menu_values[6] = 0;
+    sub->menu_values[6] = sub->menu_values[5] = sub->menu_values[4] =
+        sub->menu_values[3] = sub->menu_values[2] = sub->menu_values[1] =
+            sub->menu_values[0] = 0;
     sub->menu_values[0] = 2;
     return 0;
 }
 
 TrainingModeState* gm_80189CDC(StartMeleeData* arg0)
 {
+    TrainingModeState* state;
     s32 i;
 
     arg0->rules.x0_0 = 0;
@@ -2643,19 +2641,22 @@ TrainingModeState* gm_80189CDC(StartMeleeData* arg0)
     arg0->rules.x20 = 0xFFFFFFFFFFFFFFFFULL;
     arg0->rules.x5_0 = 1;
 
+    state = &lbl_80473700;
+    state = (TrainingModeState*) ((u8*) state + 0);
+
     for (i = 0; i < 4; i++) {
-        lbl_80473700.css.saved_players[i] = arg0->players[i];
-        lbl_80473700.players[i] = lbl_80473700.css.saved_players[i];
+        state->css.saved_players[i] = arg0->players[i];
+        state->players[i] = state->css.saved_players[i];
     }
 
-    lbl_80473700.mode = (s32) (arg0->players[0].slot - 1);
-    lbl_80473700.count = 1;
+    state->mode = (s32) (arg0->players[0].slot - 1);
+    state->count = 1;
 
-    for (i = 0; i < 25; i++) {
-        lbl_80473700.char_data[i] = 0;
+    for (i = 0; i < 27; i++) {
+        state->char_data[i] = 0;
     }
 
-    return &lbl_80473700;
+    return state;
 }
 
 inline void resetText(HSD_Text* text)
@@ -2686,19 +2687,19 @@ HSD_Text* fn_8018A000(void)
         HSD_SisLib_803A62A0(0, (char*) &data[0xDC], (char*) &data[0xC8]);
     }
 
-    state->css.text = HSD_SisLib_803A5ACC(
+    *(textp = &state->css.text) = HSD_SisLib_803A5ACC(
         0, 0,
         (12.0f * (HSD_JObjGetTranslationX(state->css.jobjs[1]) + 9.798828f)) +
             50.0f,
         150.0f, 0.1f, 167.0f, 16.0f);
-    textp = &state->css.text;
     text = state->css.text;
     lbLang_IsSettingUS();
     HSD_SisLib_803A6368(text, (s32) * (s16*) &data[2]);
     (*textp)->default_fitting = 1;
     resetText(*textp);
-    (*textp)->default_alignment = 2;
-    return *textp;
+    text = *textp;
+    text->default_alignment = 2;
+    return text;
 }
 
 u8 gm_8018A160(u8 difficulty, u8 stage_slot)
