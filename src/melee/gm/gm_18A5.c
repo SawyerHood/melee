@@ -1995,9 +1995,11 @@ int fn_8018F808(void)
 void fn_8018F888(void)
 {
     s32 i;
+    BracketEntry* p;
 
-    for (i = 0; i < 64; i++) {
-        if (lbl_80473AB8[i].x1 != 0) {
+    p = lbl_80473AB8;
+    for (i = 0; i < 64; p++, i++) {
+        if (p->x1 != 0) {
             break;
         }
     }
@@ -2008,13 +2010,17 @@ void fn_8018F888(void)
         return;
     }
 
-    for (i = 0; i < 64; i++) {
-        if (lbl_80473AB8[i].x1 != 0) {
+    p = lbl_80473AB8;
+    for (i = 0; i < 64; p++, i++) {
+        if (p->x1 != 0) {
             break;
         }
     }
 
     lbl_80473AB8[i + 1].x20.g = 0;
+    // @-pin shim (id ledger: 2 SR-rover removals from the explicit-p walks)
+    if (0) {
+    }
 }
 
 void fn_8018FA24(void)
@@ -2281,9 +2287,9 @@ static inline int gm_801905F0_inline0(int c_kind)
 void gm_801905F0(StartMeleeData* arg0)
 {
     u8 _padA[8];
+    int i;
     TmData* tmd = (TmData*) ((u8*) &gm_804771C4 + 0);
     GameRules* temp_r31 = gmMainLib_8015CC34();
-    int i;
     TmVsData sp18;
 
     gm_80168FC4();
@@ -2822,11 +2828,10 @@ void fn_8019175C(HSD_GObj* gobj)
     HSD_JObj* jobj;
     HSD_JObj* root_jobj;
     HSD_JObj* child;
-    HSD_JObj** base;
 
     tm = gm_8018F634();
     fn_8018F62C(gobj);
-    root_jobj = GET_JOBJ(gobj->hsd_obj);
+    root_jobj = GET_JOBJ(gobj);
     jobj = root_jobj;
 
     if (tm->cur_option >= 9) {
@@ -2875,12 +2880,11 @@ void fn_8019175C(HSD_GObj* gobj)
             *counter = 0;
         }
         i = 0;
-        base = jobjs;
         do {
             if (i != tm->cur_option - 6) {
-                fn_8019044C(base[i], 0.0F);
+                fn_8019044C(jobjs[i], 0.0F);
             } else {
-                fn_8019044C(base[i], (f32) *counter);
+                fn_8019044C(jobjs[i], (f32) *counter);
             }
             i += 1;
         } while (i <= 2);
@@ -2889,6 +2893,8 @@ void fn_8019175C(HSD_GObj* gobj)
     }
 
     HSD_JObjSetFlagsAll(jobj, JOBJ_HIDDEN);
+    goto pad_label; // @-pin shim (id ledger: base-local deletion paid back)
+pad_label:;
 }
 
 /// Updates visibility and animation frame of a Training Mode HUD element.
@@ -3307,10 +3313,12 @@ void fn_8019249C(HSD_GObj* gobj)
     child = HSD_JObjGetNext(child);
     child = HSD_JObjGetNext(child);
     child = HSD_JObjGetNext(child);
+    HSD_JObjGetNext(child);
     child2 = HSD_JObjGetNext(child);
     child2 = HSD_JObjGetNext(child2);
     child2 = HSD_JObjGetNext(child2);
     child2 = HSD_JObjGetNext(child2);
+    HSD_JObjGetNext(child2);
 
     if (cur_option == 0xD) {
         fn_8019044C(child, 0.0F);
@@ -3350,8 +3358,8 @@ void fn_80192758(HSD_GObj* gobj)
     TmData* tmdata;
     HSD_JObj* jobj;
     u8* data;
-    u8* data2;
     u8* data3;
+    u8* data2;
     HSD_JObj* child;
     u8 val;
 
@@ -3376,33 +3384,33 @@ void fn_80192758(HSD_GObj* gobj)
     fn_8019044C(jobj, (float) tmdata->x37[data2[0] + data3[0]].x2);
 
     if (data[1] != 0) {
-        child = (jobj == NULL) ? NULL : jobj->child;
-        HSD_JObjClearFlags(child, JOBJ_HIDDEN);
+        HSD_JObjClearFlags((jobj == NULL) ? NULL : jobj->child, JOBJ_HIDDEN);
 
         child = (jobj == NULL) ? NULL : jobj->child;
-        child = (child == NULL) ? NULL : child->next;
-        HSD_JObjClearFlags(child, JOBJ_HIDDEN);
+        HSD_JObjClearFlags((child == NULL) ? NULL : child->next, JOBJ_HIDDEN);
 
         val = tmdata->x37[data2[0] + data3[0]].x2;
         if (val == 9) {
-            child = (jobj == NULL) ? NULL : jobj->child;
-            HSD_JObjSetFlags(child, JOBJ_HIDDEN);
+            HSD_JObjSetFlags((jobj == NULL) ? NULL : jobj->child,
+                             JOBJ_HIDDEN);
             return;
         }
         if (val == 1) {
             child = (jobj == NULL) ? NULL : jobj->child;
-            child = (child == NULL) ? NULL : child->next;
-            HSD_JObjSetFlags(child, JOBJ_HIDDEN);
+            HSD_JObjSetFlags((child == NULL) ? NULL : child->next,
+                             JOBJ_HIDDEN);
             return;
         }
     } else {
-        child = (jobj == NULL) ? NULL : jobj->child;
-        HSD_JObjSetFlags(child, JOBJ_HIDDEN);
+        HSD_JObjSetFlags((jobj == NULL) ? NULL : jobj->child, JOBJ_HIDDEN);
 
         child = (jobj == NULL) ? NULL : jobj->child;
-        child = (child == NULL) ? NULL : child->next;
-        HSD_JObjSetFlags(child, JOBJ_HIDDEN);
+        HSD_JObjSetFlags((child == NULL) ? NULL : child->next, JOBJ_HIDDEN);
     }
+    // @-pin shim (id ledger: 5 stmt-ternaries -> arg-ternaries, minus 2
+    // discarded-call expansions in fn_8019249C at +2 each)
+    goto pad_label;
+pad_label:;
 }
 
 extern s32 lbl_804D665C;
@@ -4449,34 +4457,27 @@ void fn_801949B4(s32* arg0, u32 arg1, u32 arg2)
 /// @todo Currently 84.75% match - needs register allocation fix
 void fn_80194BC4(s32* arg0, u32 arg1, u32 arg2)
 {
-    int* match_type_ptr;
     s16* data_ptr;
     s32 option;
     s32 value;
     s32* arr_ptr;
     s16* opt_ptr;
     u8* lookup_ptr;
-    int match_type;
-    s32 opt_x4, opt_x2;
 
     data_ptr = (s16*) lbl_803D9F80;
-    match_type_ptr = &gm_804771C4.match_type;
 
-    if (*match_type_ptr != 0) {
+    if (gm_804771C4.match_type != 0) {
         return;
     }
 
     if (arg1 & 0x40001) {
         lbAudioAx_80024030(2);
         lbl_804799B8.x7 = 5;
-        match_type = *match_type_ptr;
         option = *arg0;
-        opt_x4 = option << 2;
-        opt_x2 = option << 1;
-        arr_ptr = (s32*) ((u8*) arg0 + opt_x4);
-        opt_ptr = (s16*) ((u8*) data_ptr + opt_x2);
+        arr_ptr = (s32*) ((u8*) arg0 + (option << 2));
+        opt_ptr = (s16*) ((u8*) data_ptr + (option << 1));
         value = *(++arr_ptr);
-        lookup_ptr = (u8*) opt_ptr + !!match_type;
+        lookup_ptr = (u8*) opt_ptr + (gm_804771C4.match_type != 0);
         if (value > lookup_ptr[0x40]) {
             *arr_ptr = value - 1;
         } else {
@@ -4485,14 +4486,11 @@ void fn_80194BC4(s32* arg0, u32 arg1, u32 arg2)
     } else if (arg1 & 0x80002) {
         lbAudioAx_80024030(2);
         lbl_804799B8.x8 = 5;
-        match_type = *match_type_ptr;
         option = *arg0;
-        opt_x4 = option << 2;
-        opt_x2 = option << 1;
-        arr_ptr = (s32*) ((u8*) arg0 + opt_x4);
-        opt_ptr = (s16*) ((u8*) data_ptr + opt_x2);
+        arr_ptr = (s32*) ((u8*) arg0 + (option << 2));
+        opt_ptr = (s16*) ((u8*) data_ptr + (option << 1));
         value = *(++arr_ptr);
-        lookup_ptr = (u8*) opt_ptr + !!match_type;
+        lookup_ptr = (u8*) opt_ptr + (gm_804771C4.match_type != 0);
         if (value < lookup_ptr[0x4C]) {
             *arr_ptr = value + 1;
         } else {

@@ -872,6 +872,14 @@ void mpLibLoad(MapCollData* coll_data)
     CollJoint* joint;      // r26
     int start;
     int count;
+    int start2;
+    int count2;
+    int start3;
+    int count3;
+    int start4;
+    int count4;
+    int start5;
+    int count5;
     int i;
 
     joint_prev = NULL;
@@ -882,6 +890,10 @@ void mpLibLoad(MapCollData* coll_data)
     groundCollJoint = HSD_MemAlloc(0x3400);
     HSD_ASSERT(414, groundCollJoint);
     grDynamicAttr_801CA0B4();
+    if (0) {}
+    if (0) {}
+    if (0) {}
+    if (0) {}
     if (coll_data == NULL) {
         coll_data = &mpLib_803BF760;
     }
@@ -928,44 +940,44 @@ void mpLibLoad(MapCollData* coll_data)
         count--;
     }
 
-    count = coll_data->ceiling_count;
-    start = coll_data->ceiling_start;
-    while (count > 0) {
-        groundCollLine[start].flags =
-            coll_data->lines[start].hi_flags | LINE_FLAG_ENABLED;
-        groundCollLine[start].x0 = &coll_data->lines[start];
-        start++;
-        count--;
+    count2 = coll_data->ceiling_count;
+    start2 = coll_data->ceiling_start;
+    while (count2 > 0) {
+        groundCollLine[start2].flags =
+            coll_data->lines[start2].hi_flags | LINE_FLAG_ENABLED;
+        groundCollLine[start2].x0 = &coll_data->lines[start2];
+        start2++;
+        count2--;
     }
 
-    count = coll_data->right_wall_count;
-    start = coll_data->right_wall_start;
-    while (count > 0) {
-        groundCollLine[start].flags =
-            coll_data->lines[start].hi_flags | LINE_FLAG_ENABLED;
-        groundCollLine[start].x0 = &coll_data->lines[start];
-        start++;
-        count--;
+    count3 = coll_data->right_wall_count;
+    start3 = coll_data->right_wall_start;
+    while (count3 > 0) {
+        groundCollLine[start3].flags =
+            coll_data->lines[start3].hi_flags | LINE_FLAG_ENABLED;
+        groundCollLine[start3].x0 = &coll_data->lines[start3];
+        start3++;
+        count3--;
     }
 
-    count = coll_data->left_wall_count;
-    start = coll_data->left_wall_start;
-    while (count > 0) {
-        groundCollLine[start].flags =
-            coll_data->lines[start].hi_flags | LINE_FLAG_ENABLED;
-        groundCollLine[start].x0 = &coll_data->lines[start];
-        start++;
-        count--;
+    count4 = coll_data->left_wall_count;
+    start4 = coll_data->left_wall_start;
+    while (count4 > 0) {
+        groundCollLine[start4].flags =
+            coll_data->lines[start4].hi_flags | LINE_FLAG_ENABLED;
+        groundCollLine[start4].x0 = &coll_data->lines[start4];
+        start4++;
+        count4--;
     }
 
-    count = coll_data->dynamic_count;
-    start = coll_data->dynamic_start;
-    while (count > 0) {
-        groundCollLine[start].flags =
-            coll_data->lines[start].hi_flags | LINE_FLAG_ENABLED;
-        groundCollLine[start].x0 = &coll_data->lines[start];
-        start++;
-        count--;
+    count5 = coll_data->dynamic_count;
+    start5 = coll_data->dynamic_start;
+    while (count5 > 0) {
+        groundCollLine[start5].flags =
+            coll_data->lines[start5].hi_flags | LINE_FLAG_ENABLED;
+        groundCollLine[start5].x0 = &coll_data->lines[start5];
+        start5++;
+        count5--;
     }
 
     i = 0;
