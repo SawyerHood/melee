@@ -484,7 +484,7 @@ config.libs = [
         [
             Object(Matching, "melee/pl/player.c"),
             Object(Matching, "melee/pl/plstale.c"),
-            Object(NonMatching, "melee/pl/plattack.c"),
+            Object(Matching, "melee/pl/plattack.c"),
             Object(NonMatching, "melee/pl/pltrick.c"),
             Object(NonMatching, "melee/pl/plbonus.c"),
             Object(Matching, "melee/pl/plbonuslib.c"),
@@ -972,7 +972,7 @@ config.libs = [
             Object(NonMatching, "melee/gm/gmregclear.c"),
             Object(NonMatching, "melee/gm/gm_180A.c"),
             Object(NonMatching, "melee/gm/gm_181A.c"),
-            Object(NonMatching, "melee/gm/gm_182F.c"),
+            Object(Matching, "melee/gm/gm_182F.c"),
             Object(NonMatching, "melee/gm/gm_1832.c"),
             Object(NonMatching, "melee/gm/gm_1884.c"),
             Object(NonMatching, "melee/gm/gm_18A5.c"),

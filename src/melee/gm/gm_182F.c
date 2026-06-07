@@ -5,7 +5,6 @@
 
 #include "baselib/forward.h"
 
-#include <math_ppc.h>
 #include <dolphin/gx.h>
 #include <sysdolphin/baselib/aobj.h>
 #include <sysdolphin/baselib/controller.h>
@@ -57,7 +56,10 @@
 #include <melee/sc/types.h>
 #include <melee/ty/toy.h>
 
-extern u8 lbl_804D65E8;
+/* data-recon w18: defined in-TU (was undefined extern); target .sbss object
+ * at 0x804D65E8 (the TU's only .sbss object; dtk size 0x8 is gap-inclusive,
+ * idiom 101). Required for a future Object(Matching) flip of this TU. */
+u8 lbl_804D65E8;
 
 void fn_80182F40(HSD_GObj* unused)
 {
