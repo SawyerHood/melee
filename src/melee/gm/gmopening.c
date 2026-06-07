@@ -21,11 +21,19 @@ static struct {
     /* 0x30 */ char x30[12];
 } gm_803DBF78 = {
     { 0, 1600.0F, 400.0F, 0, 1330.0F, 130.0F, 0, -3.0F, 0 },
-    "\\cfff00%2d",
-    "\\cfff00%3d",
+    "\\cffff00%2d",
+    "\\cffff00%3d",
 };
 
-static PerfLabelLine gm_80480B38[4];
+/* Lives in another gm unit's .bss range (target imports it). */
+extern PerfLabelLine gm_80480B38[4];
+
+/* Named pool head slots (target .sdata2 +0x00/+0x04); reads via
+ * re-typed casts to defeat const-prop folding (idioms 139/140).
+ * NOTE: must be NON-static -- static const f32 defs do NOT emit at
+ * their lexical slot (they sink to first-use creation order). */
+const f32 gm_804DAAA8 = 82.0F;
+const f32 gm_804DAAAC = 290.0F;
 
 static const Vec3 gm_803B7D68 = { 0.0f, 0.0f, 1.0f };
 static const Vec3 gm_803B7D74 = { 0.0f, 0.0f, 0.0f };
@@ -125,9 +133,12 @@ static u8 gm_804D67E1;
 static u8 gm_804D67E2;
 static u32 gm_804D67E4;
 static HSD_GObj* gm_804D67E8;
-u32 gm_804D67EC;
+/* Common (non-static, uninitialized) defs emit AFTER all statics in
+ * REVERSE declaration order -> declared F4, F0, EC to land EC, F0, F4
+ * at .sbss +0x1c/+0x20/+0x24 (target layout). */
+HSD_GObj* gm_804D67F4;
 int gm_804D67F0;
-static HSD_GObj* gm_804D67F4;
+u32 gm_804D67EC;
 
 static int gm_803DBFB4[] = {
     0x000004E2, 0x00000002, 0x0000018A, 0x00000001, 0x00010000, 0x00000002,
@@ -219,8 +230,8 @@ void gm_801AA28C_OnFrame(void)
         GObj_SetupGXLink(temp_r3_2, HSD_SObjLib_803A49E0, 0x11U, 0U);
         temp_r3_3 =
             HSD_SObjLib_803A477C(temp_r3_2, gm_804D67F0, 0, 0, 0x80, 0);
-        temp_r3_3->x10 = 82.0f;
-        temp_r3_3->x14 = 290.0f;
+        temp_r3_3->x10 = *(f32*) &gm_804DAAA8;
+        temp_r3_3->x14 = *(f32*) &gm_804DAAAC;
         gm_804D67D4 = temp_r3_2;
     }
     if ((gm_804D67D4 != NULL) && ((u32) gm_804D67EC >= 0x202)) {

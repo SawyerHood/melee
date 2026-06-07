@@ -629,24 +629,6 @@
    "severity": "near_miss"
   },
   {
-   "name": "logf",
-   "unit": "main/MSL/math",
-   "vaddr": "0x803265A8",
-   "size": 364,
-   "fuzzy": 99.8,
-   "class": "layout",
-   "rows": {
-    "layout": 18
-   },
-   "severity": "near_miss",
-   "scratch": {
-    "pct": 61.85,
-    "id": "UmjGN",
-    "author": "Ka-lua",
-    "n_scratches": 1
-   }
-  },
-  {
    "name": "HSD_CObjSetUpVector",
    "unit": "main/sysdolphin/baselib/cobj",
    "vaddr": "0x803690B4",
@@ -2555,6 +2537,18 @@
    "severity": "near_miss"
   },
   {
+   "name": "grGreatBay_801F5460",
+   "unit": "main/melee/gr/grgreatbay",
+   "vaddr": "0x801F5460",
+   "size": 408,
+   "fuzzy": 98.73,
+   "class": "regalloc",
+   "rows": {
+    "regalloc": 26
+   },
+   "severity": "near_miss"
+  },
+  {
    "name": "un_803053C4",
    "unit": "main/melee/ty/toy",
    "vaddr": "0x803053C4",
@@ -4453,19 +4447,6 @@
    "severity": "near_miss"
   },
   {
-   "name": "grGreatBay_801F5460",
-   "unit": "main/melee/gr/grgreatbay",
-   "vaddr": "0x801F5460",
-   "size": 408,
-   "fuzzy": 97.3,
-   "class": "codegen",
-   "rows": {
-    "gap": 2,
-    "regalloc": 15
-   },
-   "severity": "near_miss"
-  },
-  {
    "name": "it_802A6474",
    "unit": "main/melee/it/items/itlinkhookshot",
    "vaddr": "0x802A6474",
@@ -5244,20 +5225,6 @@
     "gap": 5,
     "mixed": 1,
     "mnemonic": 1
-   },
-   "severity": "near_miss"
-  },
-  {
-   "name": "grGreatBay_801F63F4",
-   "unit": "main/melee/gr/grgreatbay",
-   "vaddr": "0x801F63F4",
-   "size": 536,
-   "fuzzy": 96.72,
-   "class": "codegen",
-   "rows": {
-    "regalloc": 10,
-    "mnemonic": 3,
-    "gap": 2
    },
    "severity": "near_miss"
   },

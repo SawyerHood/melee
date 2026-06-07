@@ -18,6 +18,19 @@
 #include <baselib/jobj.h>
 #include <baselib/random.h>
 
+ItemStateTable it_803F61B0[] = {
+    { 0, itWstar_UnkMotion0_Anim, itWstar_UnkMotion0_Phys,
+      itWstar_UnkMotion0_Coll },
+    { -1, itWstar_UnkMotion1_Anim, itWstar_UnkMotion1_Phys,
+      itWstar_UnkMotion1_Coll },
+    { -1, itWstar_UnkMotion3_Anim, NULL, NULL },
+    { 2, itWstar_UnkMotion3_Anim, NULL, NULL },
+    { -1, itWstar_UnkMotion4_Anim, itWstar_UnkMotion4_Phys,
+      itWstar_UnkMotion4_Coll },
+    { 1, itWstar_UnkMotion5_Anim, itWstar_UnkMotion5_Phys,
+      itWstar_UnkMotion5_Coll },
+};
+
 HSD_AnimJoint* it_80294364(Item_GObj* gobj)
 {
     Item* ip = GET_ITEM(gobj);
@@ -74,7 +87,7 @@ void itWStar_Logic29_Spawned(Item_GObj* gobj)
     ip->xDCE_flag.b7 = 0;
     ip->xDD4_itemVar.wstar.xDD8 = 1.0f;
     ip->xDD4_itemVar.wstar.xDD4 = 1.0f;
-    it_80294364(gobj);
+    it_80294624(gobj);
 }
 
 void it_8029455C(Item_GObj* gobj)

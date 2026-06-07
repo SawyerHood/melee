@@ -34,13 +34,13 @@
 #include <MSL/string.h>
 
 /// .data
-/* 3F9A00 */ static int un_803F9A00[] = {
+/* 3F9A00 */ int un_803F9A00[] = {
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1,
     1, 1, 1, 3, 2, 2, 5, 5, 4, 6, 6, 8, 8, 8, 8, 8, 8, 8, 8,
     8, 8, 8, 8, 8, 8, 8, 8, 8, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5,
     5, 5, 5, 6, 6, 5, 7, 7, 7, 7, 7, 7, 5, 5, 5, 5, 5, 5, 5
 };
-/* 3F9B30 */ static struct un_803F9B30 {
+/* 3F9B30 */ struct un_803F9B30 {
     int x0;
     unsigned short x4;
 } un_803F9B30[67] = {
@@ -90,9 +90,18 @@ struct un_803F9D48 {
     0, 0, 0, 0, 0, 0, 0, { 0x43, 0x44, 0x45 },
 };
 
-/// .sbss
-/* 4D6D98 */ static HSD_Archive* un_804D6D98;
-/* 4D6D9C */ static SceneDesc* un_804D6D9C;
+/// String table of the original TU: named defs pin these ABOVE the
+/// string pool (the sprintf formats of un_802FE918 pool after them),
+/// matching the target .data order. lbl_803F9D84 is global in the
+/// target object; the rest are local.
+/* 3F9D84 */ char lbl_803F9D84[] = "ScInfPrize_scene_data";
+/* 3F9D9C */ static char un_803F9D9C[] = "SdPrize.usd";
+/* 3F9DA8 */ static char un_803F9DA8[] = "SIS_PrizeData";
+/* 3F9DB8 */ static char un_803F9DB8[] = "SdPrize.dat";
+
+/// .sbss (MWCC allocates .sbss in reverse declaration order)
+/* 4D6D9C */ SceneDesc* un_804D6D9C;
+/* 4D6D98 */ HSD_Archive* un_804D6D98;
 
 void un_802FE3F8(int a, int b, short* c, short* d)
 {
@@ -234,21 +243,12 @@ execute:
     HSD_SisLib_803A5F50(2);
 }
 
-void un_802FE918(int a, int b, int c)
+static inline void un_802FE918_updateX3(int r)
 {
-    struct un_803F9B30* x;
-    int new_x3;
-    int r;
     int k;
-    int i;
-    char sp1C[0x104];
-    datetime sp14;
-
-    lbAudioAx_800236DC();
-    lbAudioAx_80023F28(un_803F9D48.x30[un_803F9D48.x3]);
-    r = HSD_Randi(2);
+    int new_x3;
     for (k = 0; k < 3; k++) {
-        if (un_803F9D48.x3 == k) {
+        if (k == un_803F9D48.x3) {
             r++;
         } else if (r == k) {
             new_x3 = r;
@@ -256,6 +256,18 @@ void un_802FE918(int a, int b, int c)
         }
     }
     un_803F9D48.x3 = new_x3;
+}
+
+void un_802FE918(int a, int b, int c)
+{
+    struct un_803F9B30* x;
+    int i;
+    char sp1C[0x104];
+    datetime sp14;
+
+    lbAudioAx_800236DC();
+    lbAudioAx_80023F28(un_803F9D48.x30[un_803F9D48.x3]);
+    un_802FE918_updateX3(HSD_Randi(2));
     gmMainLib_8015D8B0(a);
     for (x = &un_803F9B30[0]; x->x0 != 66; x++) {
         if (x->x0 == a) {
@@ -267,10 +279,13 @@ void un_802FE918(int a, int b, int c)
 found:
     un_803F9D48.x4 = i;
     if (a == 0x3E) {
+        unsigned short v_x6;
         unsigned short v_x8;
-        un_802FE3F8(a, 2, (short*) &un_803F9D48.x6, (short*) &un_803F9D48.x8);
+        un_802FE3F8(a, 2, (short*) &un_803F9D48.x6,
+                    (short*) &un_803F9D48.x8);
+        v_x6 = un_803F9D48.x6;
         v_x8 = un_803F9D48.x8;
-        HSD_SisLib_803A6530(2, 0x4A, un_803F9D48.x6);
+        HSD_SisLib_803A6530(2, 0x4A, v_x6);
         HSD_SisLib_803A660C(2, 0x4A, un_803063D4(b, 0x4E, 0x174));
         HSD_SisLib_803A660C(2, 0x4A, v_x8);
         HSD_SisLib_803A6368(un_803F9D48.x20, 0x4A);
@@ -320,12 +335,12 @@ found:
     un_803F9D48.x1 = 0;
     un_803F9D48.xC = arg0x4;
     un_803F9D48.x0a = 1;
-    un_804D6D98 = lbArchive_80016DBC("IfPrize", &un_804D6D9C,
-                                     "ScInfPrize_scene_data", 0);
+    un_804D6D98 =
+        lbArchive_80016DBC("IfPrize", &un_804D6D9C, lbl_803F9D84, 0);
     if (lbLang_IsSavedLanguageUS()) {
-        HSD_SisLib_803A62A0(2, "SdPrize.usd", "SIS_PrizeData");
+        HSD_SisLib_803A62A0(2, un_803F9D9C, un_803F9DA8);
     } else {
-        HSD_SisLib_803A62A0(2, "SdPrize.dat", "SIS_PrizeData");
+        HSD_SisLib_803A62A0(2, un_803F9DB8, un_803F9DA8);
     }
     un_802FE6A8();
 }

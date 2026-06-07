@@ -52,10 +52,10 @@ Item_GObj* it_802B1DF8(Item_GObj* owner, Vec3* pos, Vec3* vel, s32 count,
     SpawnItem spawn;
     u8 _pad[4];
     u32 x40 = Item_8026AE60();
-    Item_GObj* first;
+    s32 cur_delay;
     void* new_var;
     Item_GObj* item_gobj;
-    s32 cur_delay;
+    Item_GObj* first;
     Item_GObj* prev = NULL;
     int i;
 
@@ -233,6 +233,12 @@ void it_802B22B8(Item_GObj* gobj)
     it_802B22B8_inline(gobj);
 }
 
+/// it_804DCFB0 is defined below itPikachuthunder_UnkMotion2_Anim so the
+/// 0.01F literal pools AFTER the s32-cast f64 magic constant (it_804DCFA8),
+/// matching the target .sdata2 slot order (idiom 146); the cast read at the
+/// use site defeats the const-prop pool-dup fold (idiom 147).
+extern const f32 it_804DCFB0;
+
 static inline f32 pika_scale(f32 a, f32 b)
 {
     f32 f = 10000.0f * a / b;
@@ -260,7 +266,7 @@ static inline void itPikachuthunder_UnkMotion2_UpdateScale(Item_GObj* gobj)
         ip->xDD4_itemVar.pikachuthunder.x18 =
             pika_scale(ip->xDD4_itemVar.pikachuthunder.x10, attrs->x4);
         if (ip->xDD4_itemVar.pikachuthunder.x18 <= 0.0f) {
-            ip->xDD4_itemVar.pikachuthunder.x18 = 0.01f;
+            ip->xDD4_itemVar.pikachuthunder.x18 = *(f32*) &it_804DCFB0;
         }
         itPikachuthunder_UnkMotion2_ScaleCall(gobj);
         ip->xDD4_itemVar.pikachuthunder.xC =
@@ -282,6 +288,8 @@ bool itPikachuthunder_UnkMotion2_Anim(Item_GObj* gobj)
     HSD_JObjSetScaleY(jobj, ip->xDD4_itemVar.pikachuthunder.x18);
     return false;
 }
+
+const f32 it_804DCFB0 = 0.01F;
 
 bool itPikachuThunder_Logic39_DmgDealt(Item_GObj* arg0)
 {
@@ -311,3 +319,6 @@ void itPikachuThunder_Logic39_EvtUnk(Item_GObj* gobj, Item_GObj* ref_gobj)
     }
     it_8026B894(gobj, ref_gobj);
 }
+
+/// dtk .sdata2 gap tail (idiom 122): restores section size 0x20.
+const f32 gap_11_804DCFB4_sdata2 = 0.0F;

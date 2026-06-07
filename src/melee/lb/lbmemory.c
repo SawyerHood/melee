@@ -270,13 +270,13 @@ u32 lbMemory_8001529C(Handle* h, void* arg1, u32 arg2)
 void lbMemory_80015320(int arg0, Handle* handle, int arg2, int cancelflag)
 {
     struct Allocator* alloc;
-    struct LBMgr* mgr;
-    int enabled;
-    void** currentp;
-    u32 size;
     u32 current;
-    u32 old;
+    u32 size;
+    int enabled;
+    u32 src;
+    void** currentp;
     Handle* next;
+    u32 old;
 
     alloc = &g_alloc;
     currentp = &alloc->x6E4;
@@ -289,32 +289,45 @@ void lbMemory_80015320(int arg0, Handle* handle, int arg2, int cancelflag)
     if (handle != NULL) {
         if ((old = (u32) handle->x4_lo) != current) {
             handle->x4_lo = (void*) current;
+            src = old;
             *currentp = (void*) ((u32) handle->x4_lo + (u32) handle->x8_hi);
 
             if ((u32) handle->x4_lo < 0x80000000U) {
                 HSD_DevComRequest(
-                    0, old, current, ((u32) handle->x8_hi + 0x1F) & 0xFFFFFFE0,
+                    0, src, current, ((u32) handle->x8_hi + 0x1F) & 0xFFFFFFE0,
                     0x1B, 1, (HSD_DevComCallback) lbMemory_80015320,
                     handle->x0_next);
                 return;
             } else {
-                mgr = &alloc->x6A0_mgr;
+                /* The original keeps ONE register for the allocator anchor
+                 * and destroys it in place here (target: addi r30,r30,0x6a0;
+                 * all LBMgr accesses then use 0x28..0x3C displacements off
+                 * that register). The int-laundered self-assign is the only
+                 * C form found that blocks the const-offset re-association
+                 * fold (plain pointer forms fold the size read back to
+                 * alloc+0x6D0). */
+                alloc = (struct Allocator*) ((u32) alloc + 0x6A0);
                 next = handle->x0_next;
                 size = ((u32) handle->x8_hi + 0x1F) & 0xFFFFFFE0;
                 enabled = OSDisableInterrupts();
 
-                if (mgr->size != 0) {
+                if (((struct LBMgr*) alloc)->size != 0) {
                     __assert(lbl_803BA2C0, 0x14FU, lbl_803BA368);
                 }
-                mgr->src = (u8*) old;
-                mgr->dst = (u8*) current;
-                mgr->size = size;
-                mgr->offset = 0;
-                mgr->cb_arg = (u32) next;
-                mgr->cb = (void (*)(u32, u32, u32, u32)) lbMemory_80015320;
+                ((struct LBMgr*) alloc)->src = (u8*) old;
+                ((struct LBMgr*) alloc)->dst = (u8*) current;
+                /* int-laundered store: keeps the +0x30 load and store as
+                 * separate address nodes, else the repeat-across-call node
+                 * routes through an extra CS addi temp (idiom 137). */
+                *(u32*) ((u32) alloc + 0x30) = size;
+                ((struct LBMgr*) alloc)->offset = 0;
+                ((struct LBMgr*) alloc)->cb_arg = (u32) next;
+                ((struct LBMgr*) alloc)->cb =
+                    (void (*)(u32, u32, u32, u32)) lbMemory_80015320;
                 OSRestoreInterrupts(enabled);
-                OSCreateAlarm(&mgr->alarm);
-                OSSetAlarm(&mgr->alarm, OSMillisecondsToTicks(3), fn_80015184);
+                OSCreateAlarm(&((struct LBMgr*) alloc)->alarm);
+                OSSetAlarm(&((struct LBMgr*) alloc)->alarm,
+                           OSMillisecondsToTicks(3), fn_80015184);
                 return;
             }
         }

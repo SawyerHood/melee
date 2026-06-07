@@ -251,6 +251,32 @@ void HSD_SObjLib_803A49E0(HSD_GObj* gobj, int unused)
     }
 }
 
+/// @remarks Frame-layout evidence (w22): the by-value GX color calls in
+/// HSD_SObjLib_803A4A68 form one descending per-site temp stream. The
+/// switch/z sites must be per-site block-scope copy-init locals (their
+/// forwarded call slots land at the exact target offsets 0x34..0x4C and
+/// pool 0x28 of dead home space); the TevColorS10/KColor sites must be
+/// cast-init locals inside these static inline wrappers (store-reload-copy
+/// groups). Residual: the four wrapper groups sit at the zone bottom
+/// (0xC..0x33) while the target has them at 0x50..0x77 with the dead pool
+/// at the bottom - band order is mirrored; no C spelling found that
+/// reorders the bands (12+ forms probed, see
+/// campaign/scratch/flip-unblock-w22).
+static inline void setTevColorS10(GXTevRegID reg, u32 hi, u32 lo)
+{
+    GXColorS10 color;
+    ((u32*) &color)[0] = hi;
+    ((u32*) &color)[1] = lo;
+    GXSetTevColorS10(reg, color);
+}
+
+static inline void setTevKColor(GXTevKColorID id, u32 val)
+{
+    GXColor color;
+    *(u32*) &color = val;
+    GXSetTevKColor(id, color);
+}
+
 void HSD_SObjLib_803A4A68(HSD_SObj* sobj)
 {
     f32 x_cos;
@@ -278,10 +304,6 @@ void HSD_SObjLib_803A4A68(HSD_SObj* sobj)
     u16 obj_width;
     u16 obj_height;
     u8 tex_fmt;
-    GXColorS10 tev_color;
-    GXColor k_color;
-
-    PAD_STACK(0x20);
 
     if (sobj->x40 & 1) {
         return;
@@ -392,16 +414,12 @@ void HSD_SObjLib_803A4A68(HSD_SObj* sobj)
 
         GXSetAlphaCompare(GX_ALWAYS, 0, GX_AOP_OR, GX_ALWAYS, 0);
 
-        ((u32*) &tev_color)[0] = HSD_SObjLib_804DEA80;
-        ((u32*) &tev_color)[1] = HSD_SObjLib_804DEA84;
-        GXSetTevColorS10(GX_TEVREG0, tev_color);
+        setTevColorS10(GX_TEVREG0, HSD_SObjLib_804DEA80,
+                       HSD_SObjLib_804DEA84);
 
-        *(u32*) &k_color = HSD_SObjLib_804DEA88;
-        GXSetTevKColor(GX_KCOLOR0, k_color);
-        *(u32*) &k_color = HSD_SObjLib_804DEA8C;
-        GXSetTevKColor(GX_KCOLOR1, k_color);
-        *(u32*) &k_color = HSD_SObjLib_804DEA90;
-        GXSetTevKColor(GX_KCOLOR2, k_color);
+        setTevKColor(GX_KCOLOR0, HSD_SObjLib_804DEA88);
+        setTevKColor(GX_KCOLOR1, HSD_SObjLib_804DEA8C);
+        setTevKColor(GX_KCOLOR2, HSD_SObjLib_804DEA90);
 
         GXSetTevSwapModeTable(GX_TEV_SWAP0, GX_CH_RED, GX_CH_GREEN, GX_CH_BLUE,
                               GX_CH_ALPHA);
@@ -440,8 +458,14 @@ void HSD_SObjLib_803A4A68(HSD_SObj* sobj)
             switch (tex_fmt) {
             case GX_TF_I4:
             case GX_TF_I8:
-                GXSetTevColor(GX_TEVREG0, sobj->x38_color);
-                GXSetTevColor(GX_TEVREG1, sobj->x3C_color);
+                {
+                GXColor c = sobj->x38_color;
+                GXSetTevColor(GX_TEVREG0, c);
+            }
+                {
+                GXColor c = sobj->x3C_color;
+                GXSetTevColor(GX_TEVREG1, c);
+            }
                 GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_C0, GX_CC_C1, GX_CC_TEXC,
                                 GX_CC_ZERO);
                 GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO,
@@ -453,8 +477,14 @@ void HSD_SObjLib_803A4A68(HSD_SObj* sobj)
                 break;
             case GX_TF_IA4:
             case GX_TF_IA8:
-                GXSetTevColor(GX_TEVREG0, sobj->x38_color);
-                GXSetTevColor(GX_TEVREG1, sobj->x3C_color);
+                {
+                GXColor c = sobj->x38_color;
+                GXSetTevColor(GX_TEVREG0, c);
+            }
+                {
+                GXColor c = sobj->x3C_color;
+                GXSetTevColor(GX_TEVREG1, c);
+            }
                 GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_C0, GX_CC_C1, GX_CC_TEXC,
                                 GX_CC_ZERO);
                 GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO,
@@ -465,7 +495,10 @@ void HSD_SObjLib_803A4A68(HSD_SObj* sobj)
                                 GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
                 break;
             case GX_TF_RGB565:
-                GXSetTevColor(GX_TEVREG0, sobj->x3C_color);
+                {
+                GXColor c = sobj->x3C_color;
+                GXSetTevColor(GX_TEVREG0, c);
+            }
                 GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_ZERO, GX_CC_TEXC, GX_CC_C0,
                                 GX_CC_ZERO);
                 GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO,
@@ -481,7 +514,10 @@ void HSD_SObjLib_803A4A68(HSD_SObj* sobj)
             case GX_TF_C8:
             case GX_TF_C14X2:
             case GX_TF_CMPR:
-                GXSetTevColor(GX_TEVREG0, sobj->x3C_color);
+                {
+                GXColor c = sobj->x3C_color;
+                GXSetTevColor(GX_TEVREG0, c);
+            }
                 GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_ZERO, GX_CC_TEXC, GX_CC_C0,
                                 GX_CC_ZERO);
                 GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO,
@@ -537,6 +573,7 @@ void HSD_SObjLib_803A4A68(HSD_SObj* sobj)
     HSD_StateInitTev();
     HSD_ClearVtxDesc();
     HSD_StateSetZMode(1, GX_LEQUAL, 1);
+
 }
 
 const s32 HSD_SObjLib_804DEA80 = 0xFFA60000;

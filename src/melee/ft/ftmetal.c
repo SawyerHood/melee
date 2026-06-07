@@ -160,91 +160,86 @@ static inline HSD_DObj* dobj_next(HSD_DObj* dobj)
 
 void ft_800C85B8(Fighter_GObj* gobj)
 {
-    u8 _[8];
     HSD_Joint* sp20;
     s32 sp1C;
 
-    Fighter* temp_r28;
-    u32 var_r27;
-    int var_r26;
-    HSD_JObj* temp_r25;
-    int var_r24;
-    HSD_DObj* var_r24_2;
-    HSD_Joint* temp_r23;
+    Fighter* fp;
     int i;
-    HSD_DObj* var_r21;
+    s32 total_dobjs;
+    HSD_JObj* jobj;
+    HSD_DObj* dobj;
+    HSD_Joint* joint;
+    s32 group_count;
+    HSD_DObj* tail;
+    HSD_MObj* mobj;
 
     PAD_STACK(8);
 
-    var_r26 = 0;
-    temp_r28 = GET_FIGHTER(gobj);
-    temp_r23 = temp_r28->ft_data->x5C;
-    sp20 = temp_r23;
-    sp1C = 0;
-    i = 0;
-    while (sp20 != 0) {
-        if (ftParts_8007506C(temp_r28->kind, i) != 0) {
+    fp = GET_FIGHTER(gobj);
+    joint = fp->ft_data->x5C;
+    sp20 = joint;
+    total_dobjs = i = sp1C = 0;
+    while (sp20 != NULL) {
+        if (ftParts_8007506C(fp->kind, i) != 0) {
             i++;
         } else {
-            HSD_IDInsertToTable(NULL, (u32) sp20, temp_r28->parts[i].joint);
+            HSD_IDInsertToTable(NULL, (u32) sp20, fp->parts[i].joint);
             i++;
             ftAnim_GetNextJointInTree(&sp20, &sp1C);
         }
     }
-    var_r27 = 0;
-    sp20 = temp_r23;
-    sp1C = 0;
-    while (sp20 != 0) {
-        if (ftParts_8007506C(temp_r28->kind, var_r27) != 0) {
-            var_r27 += 1;
+    sp20 = joint;
+    sp1C = i = 0;
+    while (sp20 != NULL) {
+        if (ftParts_8007506C(fp->kind, i) != 0) {
+            i++;
         } else {
-            i = 0;
-            temp_r25 = temp_r28->parts[i].joint;
-            var_r24_2 = HSD_DObjLoadDesc(sp20->u.dobjdesc);
-            if (var_r24_2 != NULL) {
-                var_r21 = HSD_JObjGetDObj(temp_r25);
-                temp_r28->parts[i].flags2_b5 = true;
-                HSD_DObjResolveRefsAll(var_r24_2, sp20->u.dobjdesc);
-                if (var_r21 == NULL) {
-                    HSD_JObjAddDObj(temp_r25, var_r24_2);
+            group_count = 0;
+            jobj = fp->parts[i].joint;
+            dobj = HSD_DObjLoadDesc(sp20->u.dobjdesc);
+            if (dobj != NULL) {
+                tail = HSD_JObjGetDObj(jobj);
+                fp->parts[i].flags2_b5 = true;
+                HSD_DObjResolveRefsAll(dobj, sp20->u.dobjdesc);
+                if (tail == NULL) {
+                    HSD_JObjAddDObj(jobj, dobj);
                 } else {
-                    while (var_r21 != NULL) {
-                        if (!(var_r21 != NULL ? var_r21->next : NULL)) {
+                    while (tail != NULL) {
+                        HSD_DObj* nxt = (tail != NULL) ? tail->next : NULL;
+                        if (nxt == NULL) {
                             break;
                         }
-                        var_r21 = var_r21 != NULL ? var_r21->next : NULL;
+                        tail = (tail != NULL) ? tail->next : NULL;
                     }
-                    lb_8000CE30(var_r21, var_r24_2);
+                    lb_8000CE30(tail, dobj);
                 }
                 while (true) {
-                    if (var_r24_2 == NULL) {
+                    if (dobj == NULL) {
                         break;
                     }
-                    if (var_r26 >= 0x20) {
+                    if (total_dobjs >= 0x20) {
                         OSReport("fighter parts model dobj num over!\n");
                         __assert("ftmetal.c", 0xF8, "0");
                     }
-                    temp_r28->x203C.data[var_r26] = var_r24_2;
-                    {
-                        HSD_MObj* mobj = var_r24_2->mobj;
-                        if (mobj != NULL) {
-                            hsdChangeClass(mobj, &ftMObj);
-                        }
+                    fp->x203C.data[total_dobjs] = dobj;
+                    mobj = dobj->mobj;
+                    if (mobj != NULL) {
+                        hsdChangeClass(mobj, &ftMObj);
                     }
-                    var_r24_2 = var_r24_2 != NULL ? var_r24_2->next : NULL;
-                    var_r26++;
-                    i++;
+                    dobj = (dobj != NULL) ? dobj->next : NULL;
+                    total_dobjs += 1;
+                    group_count += 1;
                 }
-                if (i >= 0x80) {
+                if (group_count >= 0x80) {
                     OSReport("fighter dobj num over!\n");
                     __assert("ftmetal.c", 0x106, "0");
                 }
-                temp_r28->parts[i].xD = var_r26 - 1;
-                temp_r28->parts[i].flags2_b6 = true;
+                fp->parts[i].xD = total_dobjs - 1;
+                fp->parts[i].flags2_b6 = true;
             }
-            var_r27 += 1;
+            i++;
             ftAnim_GetNextJointInTree(&sp20, &sp1C);
         }
     }
-    temp_r28->x203C.count = var_r26;
+    fp->x203C.count = total_dobjs;
 }

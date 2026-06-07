@@ -15,10 +15,56 @@
 /* literal */ extern char ftDevice_803C6B78[];
 /* literal */ extern char ftCo_804D3C18[];
 
-struct ftDeviceUnk3 ft_80459A68[4];
-static int ft_804D6570;
+struct ftDeviceUnk3 ft_80459A68[1];
+
+/* .sbss commons also emit in REVERSE declaration order ->
+ * ft_804D6570 @+0x0, ftDevice_BuryThingCount @+0x4, ft_804D6578 @+0x8.
+ * ft_804D6570 must be non-static (ftcoll.c imports it). */
 struct ftDeviceUnk4 ft_804D6578;
 int ftDevice_BuryThingCount;
+int ft_804D6570;
+
+/* TU .bss reconstruction (target layout 0xc58). Code-referenced commons
+ * emit in first-reference order (ft_80459A68 only); UNREFERENCED commons
+ * emit at the tail in REVERSE declaration order -> declared in reverse
+ * target order so they land ftDevice_BuryThings @+0xc .. ft_8045A6A8
+ * @+0xc40 (per-character Kirby-hat/costume containers; types mirror
+ * ft_0877.h / ftdata.c externs). */
+HSD_Joint* ft_8045A6A8[6];
+HSD_Joint* ft_8045A690[6];
+HSD_Joint* ft_8045A678[6];
+HSD_Joint* ft_8045A660[6];
+HSD_Joint* ft_8045A648[6];
+HSD_Joint* ft_8045A630[6];
+UnkCostumeStruct ft_8045A5B8[5];
+UnkCostumeStruct ft_8045A540[5];
+UnkCostumeStruct ft_8045A4E0[4];
+UnkCostumeStruct ft_8045A480[4];
+UnkCostumeStruct ft_8045A420[4];
+UnkCostumeStruct ft_8045A3A8[5];
+UnkCostumeStruct ft_8045A330[5];
+UnkCostumeStruct ft_8045A2D0[4];
+UnkCostumeStruct ft_8045A270[4];
+UnkCostumeStruct ft_8045A1F8[5];
+HSD_Joint* ft_8045A1E0[6];
+UnkCostumeStruct ft_8045A168[5];
+UnkCostumeStruct ft_8045A0F0[5];
+UnkCostumeStruct ft_8045A090[4];
+UnkCostumeStruct ft_8045A000[6];
+UnkCostumeStruct ft_80459F88[5];
+UnkCostumeStruct ft_80459F28[4];
+UnkCostumeStruct ft_80459EC8[4];
+UnkCostumeStruct ft_80459E68[4];
+UnkCostumeStruct ft_80459DF0[5];
+UnkCostumeStruct ft_80459D90[4];
+UnkCostumeStruct ft_80459D18[5];
+UnkCostumeStruct ft_80459CA0[5];
+UnkCostumeStruct ft_80459C10[6];
+struct ft_80459B88_t ft_80459B88;
+UnkCostumeStruct ft_80459B28[4];
+UnkCostumeStruct ft_80459A98[6];
+struct ftDeviceUnk3 ft_80459A8C;
+struct ftDeviceUnk5 ftDevice_BuryThings[2];
 
 ColorOverlay* ftCo_800C0658(Fighter* fp)
 {
