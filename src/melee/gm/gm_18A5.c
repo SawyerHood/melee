@@ -891,7 +891,7 @@ void fn_8018B090(HSD_GObj* arg0)
     }
 }
 
-static GXColor lbl_804DA67C = { 255, 255, 0, 255 };
+static const GXColor lbl_804DA67C = { 255, 255, 0, 255 };
 
 /// Draws tournament bracket lines for different bracket types (0-3).
 void fn_8018C8D4(void* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5,
@@ -1073,7 +1073,7 @@ void fn_8018C8D4(void* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5,
     }
 }
 
-static GXColor lbl_804DA684 = { 255, 255, 0, 255 };
+static const GXColor lbl_804DA684 = { 255, 255, 0, 255 };
 
 /// Draws tournament bracket connector lines with optional tail segments.
 void fn_8018D50C(void* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5,
@@ -1193,7 +1193,7 @@ void fn_8018D50C(void* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5,
     }
 }
 
-static GXColor col = { 255, 0, 255, 255 };
+static const GXColor lbl_804DA698 = { 255, 255, 0, 255 };
 
 void fn_8018DC18(void* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5,
                  s32 arg6, f32 farg0)
@@ -1207,9 +1207,9 @@ void fn_8018DC18(void* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5,
     s32 center;
     GXColor c0, c1, c2, c3, c4, c5, c6, c7, c8;
 
-    c8 = col;
+    c8 = lbl_804DA698;
     thickness = data->x1C;
-    c1 = col;
+    c1 = lbl_804DA698;
     DrawRectangle((f32) arg1, (f32) arg2, thickness, (f32) arg4, &c1);
 
     right = arg1 + arg3;
@@ -4721,9 +4721,9 @@ void fn_80194F30(s32* state_ptr, u32 buttons, u32 trigger)
             if (gm_804771C4.match_type == 0) {
                 TmData* tmdata = gm_8018F634();
                 fn_8018EC7C();
-                fn_8018E618(tmdata->entrants, 1, 4.5f);
-                fn_80190480(130.0f);
-                fn_80190520(-278.0f, 255.0f, 0.0f);
+                fn_8018E618(tmdata->entrants, 1, lbl_804DA6D8);
+                fn_80190480(lbl_804DA6DC);
+                fn_80190520(lbl_804DA6E0, lbl_804DA6E4, lbl_804DA6E8);
             }
         } else {
             lbl_804799B8.x1 = 0;
@@ -5688,9 +5688,18 @@ void fn_80196EEC(HSD_GObj* gobj)
 
 extern s32 lbl_803B7CE0[9];
 
+extern f32 lbl_804DA7E0; // -19.5f
+extern f32 lbl_804DA7E4; // 13.0f
+extern f32 lbl_804DA7E8; // 6.5f
+extern f32 lbl_804DA7EC; // 19.5f
+extern f32 lbl_804DA7F0; // 2.0f
+extern f32 lbl_804DA808; // 0.0f
+extern f32 lbl_804DA80C; // 1.0f
+
 void fn_80196FFC(HSD_GObj* gobj)
 {
     TmData* tm;
+    struct Lbl804799D8_t* d8 = &lbl_804799D8;
     HSD_JObj* jobj;
     s32 pnum;
     s32 in_range;
@@ -5698,21 +5707,15 @@ void fn_80196FFC(HSD_GObj* gobj)
     u8 players;
     u8 state;
     u8 start_frame, cur_frame, end_frame, loop_flag;
-    s32 table[9];
+    struct lbl_803B7CE0_t {
+        s32 x[9];
+    } table;
 
     tm = gm_8018F634();
     pnum = fn_8018F62C(gobj);
     jobj = gobj->hsd_obj;
 
-    table[0] = lbl_803B7CE0[0];
-    table[1] = lbl_803B7CE0[1];
-    table[2] = lbl_803B7CE0[2];
-    table[3] = lbl_803B7CE0[3];
-    table[4] = lbl_803B7CE0[4];
-    table[5] = lbl_803B7CE0[5];
-    table[6] = lbl_803B7CE0[6];
-    table[7] = lbl_803B7CE0[7];
-    table[8] = lbl_803B7CE0[8];
+    table = *(struct lbl_803B7CE0_t*) lbl_803B7CE0;
 
     if ((s32) gm_8018F634()->cur_option >= 0x1B &&
         (s32) gm_8018F634()->cur_option <= 0x1E)
@@ -5733,73 +5736,73 @@ void fn_80196FFC(HSD_GObj* gobj)
         (u8) tm->x4B8[pnum].x0 != 1)
     {
         HSD_JObjSetFlagsAll(jobj, JOBJ_HIDDEN);
-        HSD_SisLib_803A7548(tm->x524[2], (s32) pnum, 0.0f, 0.0f);
+        HSD_SisLib_803A7548(tm->x524[2], (s32) pnum, lbl_804DA808, lbl_804DA808);
         return;
     }
 
-    state = lbl_804799D8.x2A[pnum].state;
+    state = d8->x2A[pnum].state;
     if (state == 4) {
-        HSD_SisLib_803A7548(tm->x524[2], (s32) pnum, 0.0f, 0.0f);
+        HSD_SisLib_803A7548(tm->x524[2], (s32) pnum, lbl_804DA808, lbl_804DA808);
     } else {
-        HSD_SisLib_803A7548(tm->x524[2], (s32) pnum, 1.0f, 1.0f);
+        HSD_SisLib_803A7548(tm->x524[2], (s32) pnum, lbl_804DA80C, lbl_804DA80C);
     }
 
     players = tm->x30;
     if ((s32) players == 4) {
-        x = (13.0f * (f32) pnum) + -19.5f;
+        x = (lbl_804DA7E4 * (f32) pnum) + lbl_804DA7E0;
     } else if ((s32) players == 3) {
-        x = 6.5f + ((13.0f * (f32) pnum) - 19.5f);
+        x = lbl_804DA7E8 + ((lbl_804DA7E4 * (f32) pnum) - lbl_804DA7EC);
     } else {
-        x = 6.5f + ((13.0f * (2.0f * (f32) pnum)) - 19.5f);
+        x = lbl_804DA7E8 + ((lbl_804DA7E4 * (lbl_804DA7F0 * (f32) pnum)) - lbl_804DA7EC);
     }
 
     HSD_JObjSetTranslateX(jobj, x);
 
     tm->x524[2]->hidden = 0;
 
-    state = lbl_804799D8.x2A[pnum].state;
-    lbl_804799D8.x2A[pnum].start = ((u16*) table)[state * 3 + 0];
-    lbl_804799D8.x2A[pnum].end = ((u16*) table)[state * 3 + 1];
-    lbl_804799D8.x2A[pnum].loop = ((u16*) table)[state * 3 + 2];
+    state = d8->x2A[pnum].state;
+    d8->x2A[pnum].start = ((u16*) &table)[state * 3 + 0];
+    d8->x2A[pnum].end = ((u16*) &table)[state * 3 + 1];
+    d8->x2A[pnum].loop = ((u16*) &table)[state * 3 + 2];
 
-    start_frame = lbl_804799D8.x2A[pnum].start;
-    cur_frame = lbl_804799D8.x2A[pnum].cur;
-    end_frame = lbl_804799D8.x2A[pnum].end;
-    loop_flag = lbl_804799D8.x2A[pnum].loop;
+    start_frame = d8->x2A[pnum].start;
+    cur_frame = d8->x2A[pnum].cur;
+    end_frame = d8->x2A[pnum].end;
+    loop_flag = d8->x2A[pnum].loop;
 
     if (cur_frame < start_frame) {
-        lbl_804799D8.x2A[pnum].cur = start_frame;
+        d8->x2A[pnum].cur = start_frame;
         cur_frame = start_frame;
     }
 
     if (cur_frame < end_frame) {
-        lbl_804799D8.x2A[pnum].cur = (u8) (cur_frame + 1);
+        d8->x2A[pnum].cur = (u8) (cur_frame + 1);
     } else {
-        lbl_804799D8.x2A[pnum].done = 1;
+        d8->x2A[pnum].done = 1;
         if (loop_flag != 0) {
-            lbl_804799D8.x2A[pnum].cur = start_frame;
+            d8->x2A[pnum].cur = start_frame;
         } else {
-            lbl_804799D8.x2A[pnum].cur = end_frame;
+            d8->x2A[pnum].cur = end_frame;
         }
     }
 
-    state = lbl_804799D8.x2A[pnum].state;
-    if (state == 0 && lbl_804799D8.x44[pnum] == 6) {
-        if (lbl_804799D8.x2A[pnum].done != 0 && (u8) tm->x4B8[pnum].x0 != 0) {
-            lbl_804799D8.x2A[pnum].state = 1;
-            lbl_804799D8.x2A[pnum].done = 0;
+    state = d8->x2A[pnum].state;
+    if (state == 0 && d8->x44[pnum] == 6) {
+        if (d8->x2A[pnum].done != 0 && (u8) tm->x4B8[pnum].x0 != 0) {
+            d8->x2A[pnum].state = 1;
+            d8->x2A[pnum].done = 0;
         }
     }
 
-    state = lbl_804799D8.x2A[pnum].state;
+    state = d8->x2A[pnum].state;
     if (state == 1) {
-        if (lbl_804799D8.x2A[pnum].done != 0) {
-            lbl_804799D8.x2A[pnum].state = 2;
-            lbl_804799D8.x2A[pnum].done = 0;
+        if (d8->x2A[pnum].done != 0) {
+            d8->x2A[pnum].state = 2;
+            d8->x2A[pnum].done = 0;
         }
     }
 
-    fn_8019044C(jobj, (f32) lbl_804799D8.x2A[pnum].cur);
+    fn_8019044C(jobj, (f32) d8->x2A[pnum].cur);
 }
 
 extern f32 lbl_804DA7E0; // -19.5f
@@ -5936,6 +5939,7 @@ void fn_801977AC(HSD_GObj* gobj)
     TmData* tm;
     s32 pnum;
     HSD_JObj* jobj;
+    struct Lbl804799D8_t* d8 = &lbl_804799D8;
     s32 in_range;
     f32 x;
     u8 players;
@@ -5970,20 +5974,14 @@ void fn_801977AC(HSD_GObj* gobj)
 
     fn_8018FDC4(jobj, lbl_804DA81C + x, lbl_804DA820, lbl_804DA818);
 
-    if (lbl_804799D8.x2A[pnum].state == 4) {
-        u8* counter_ptr;
-        u8 counter;
-
-        counter_ptr = &lbl_804799D8.x1D[pnum];
-        counter = *counter_ptr;
-        if (counter < 0x28) {
-            *counter_ptr = counter + 1;
+    if (d8->x2A[pnum].state == 4) {
+        if (d8->x1D[pnum] < 0x28) {
+            d8->x1D[pnum] = d8->x1D[pnum] + 1;
         }
-        counter = *counter_ptr;
 
-        HSD_JObjSetTranslateY(jobj, lbl_803DA0D0.bounce_y[counter]);
+        HSD_JObjSetTranslateY(jobj, lbl_803DA0D0.bounce_y[d8->x1D[pnum]]);
     } else {
-        lbl_804799D8.x1D[pnum] = 0;
+        d8->x1D[pnum] = 0;
     }
 
     if ((s8) (u8) HSD_PadMasterStatus[(u8) pnum].err != 0 &&
@@ -6010,11 +6008,11 @@ void fn_80197AF0(HSD_GObj* gobj)
     TmData* tm;
     s32 pnum;
     HSD_JObj* jobj;
+    struct Lbl804799D8_t* d8 = &lbl_804799D8;
     s32 in_range;
     f32 x;
     u8 players;
     u8 state;
-    u16* counter;
 
     tm = gm_8018F634();
     pnum = fn_8018F62C(gobj);
@@ -6058,19 +6056,18 @@ void fn_80197AF0(HSD_GObj* gobj)
 
     fn_8018FDC4(jobj, x, lbl_804DA818, lbl_804DA818);
 
-    if (lbl_804799D8.x44[pnum] != 6 || lbl_804799D8.x2A[pnum].state == 1 ||
-        lbl_804799D8.x2A[pnum].state == 2 || lbl_804799D8.x2A[pnum].state == 4)
+    if (d8->x44[pnum] != 6 || d8->x2A[pnum].state == 1 ||
+        d8->x2A[pnum].state == 2 || d8->x2A[pnum].state == 4)
     {
         HSD_JObjSetFlagsAll(jobj, 0x10U);
     }
 
-    counter = &lbl_804799D8.x12[pnum];
-    if (*counter < 0x258U) {
-        *counter = (u16) (*counter + 1);
+    if (d8->x12[pnum] < 0x258U) {
+        d8->x12[pnum] = (u16) (d8->x12[pnum] + 1);
     } else {
-        *counter = 0U;
+        d8->x12[pnum] = 0U;
     }
-    fn_8019044C(jobj, (f32) *counter);
+    fn_8019044C(jobj, (f32) d8->x12[pnum]);
 }
 
 /// Updates visibility of a menu JObj based on current menu option.
@@ -6217,6 +6214,7 @@ void fn_801981A0(HSD_GObj* gobj)
     TmData* data;
     s32 pnum;
     HSD_JObj* jobj;
+    struct Lbl804799D8_t* d8 = &lbl_804799D8;
     u8* state_ptr;
     f32 x_pos;
     s32 in_range;
@@ -6241,13 +6239,13 @@ void fn_801981A0(HSD_GObj* gobj)
     HSD_JObjClearFlagsAll(jobj, JOBJ_HIDDEN);
 
     if (HSD_PadMasterStatus[(u8) pnum].err != 0 &&
-        lbl_804799D8.x2A[pnum].state != 4)
+        d8->x2A[pnum].state != 4)
     {
         HSD_JObjSetFlagsAll(jobj, JOBJ_HIDDEN);
         return;
     }
 
-    if (*(&lbl_804799D8.x44[pnum]) == 6) {
+    if (*(&d8->x44[pnum]) == 6) {
         HSD_JObjSetFlagsAll(jobj, JOBJ_HIDDEN);
     }
 
@@ -6263,16 +6261,16 @@ void fn_801981A0(HSD_GObj* gobj)
 
     fn_8018FDC4(jobj, x_pos, lbl_804DA818, lbl_804DA824);
 
-    counter = lbl_804799D8.x21[pnum];
+    counter = d8->x21[pnum];
     counter = (counter + 1) % 11;
-    lbl_804799D8.x21[pnum] = counter;
+    d8->x21[pnum] = counter;
 
-    if (*(&lbl_804799D8.x44[pnum]) == 7) {
-        fn_8019044C(jobj, (f32) lbl_804799D8.x21[pnum]);
+    if (*(&d8->x44[pnum]) == 7) {
+        fn_8019044C(jobj, (f32) d8->x21[pnum]);
         return;
     }
 
-    fn_8019044C(jobj, (f32) (lbl_804799D8.x21[pnum] + 0x14));
+    fn_8019044C(jobj, (f32) (d8->x21[pnum] + 0x14));
 }
 
 /// Updates the visibility and position of a player's controller indicator.
@@ -7212,8 +7210,10 @@ void fn_8019A71C(s32* state, u32 unused1, u32 unused2)
 {
     u32* counter = &lbl_804799D8.x0;
 
-    if (*state == 0x13) {
+    switch (*state) {
+    case 0x13:
         fn_8019B458(state);
+        break;
     }
 
     if (*state > 0x14) {
@@ -7800,7 +7800,7 @@ void fn_8019B458(s32* arg0)
         }
 
         fn_80198BA0();
-        fn_8018E618(tm->entrants, (s32) tm->x2C, 4.5f);
+        fn_8018E618(tm->entrants, (s32) tm->x2C, lbl_804DA810);
         fn_8018E85C(lbl_804D6670->models[4], tm->x2C);
         fn_8018FA24();
 
