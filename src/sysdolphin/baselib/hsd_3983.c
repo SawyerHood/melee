@@ -1335,7 +1335,9 @@ void* hsd_8039930C(void* pp_arg, void* prev_arg)
                 /* Conditional kill */
                 {
                     u8 threshold = *pc++;
-                    if (threshold >= (s32) (256.0F * HSD_Randf())) {
+                    /* binary-proven: the DOL multiplies by 100.0f
+                     * (lbl_804DE980) - a percent roll, not a byte roll */
+                    if (threshold >= (s32) (100.0F * HSD_Randf())) {
                         pp->life = 1;
                         goto exit_loop;
                     }

@@ -410,6 +410,13 @@ HSD_Generator* hsd_8039D9C8(void)
 
 // @TODO: Currently 86.32% match - register allocation, shape/velocity
 // switch case logic, Newton-Raphson sqrt inlining, trig matrix layout
+static char lbl_8040C248[] = "generator.c";
+static char lbl_8040C254[] = "psCamera";
+
+/* The original TU's HSD_ASSERT(677, psCamera) emitted its own copies of
+ * the file/condition strings (idiom 27); psCamera was the original name
+ * of hsd_804D78F0. */
+
 f32 hsd_8039DAD4(HSD_Generator* gen)
 {
     Mtx rot_mtx;
@@ -504,7 +511,9 @@ f32 hsd_8039DAD4(HSD_Generator* gen)
 
     /* Billboard orientation: kind & 0x10000 */
     if (gen->kind & 0x10000) {
-        HSD_ASSERT(677, hsd_804D78F0);
+        ((void) ((hsd_804D78F0)
+                     ? ((void) 0)
+                     : __assert(lbl_8040C248, 677, lbl_8040C254)));
         {
             HSD_CObj* cobj = (HSD_CObj*) hsd_804D78F0;
             void* view = *(void**) ((u8*) cobj + 0x24);
@@ -642,7 +651,8 @@ f32 hsd_8039DAD4(HSD_Generator* gen)
     }
 
     /* Main particle emission loop */
-    eps = 1e-10;
+    /* binary-proven: the DOL's epsilon is (f64)(f32)0.001 (lbl_804DE9F8) */
+    eps = 0.001F;
     while (gen->count >= 1.0F) {
         switch (gen->type & 0xF) {
         case 0: /* point, disc, cone, sphere, etc. */
