@@ -58,15 +58,20 @@ struct un_804A1F58_x8_t {
     HSD_GObj* x0;
     HSD_Text* x4;
     unsigned int x8;
+    unsigned int xC;
+    unsigned char x10;
 };
 
-// TODO: sizeof(un_804A1F58) should be 0x80, see un_802FF498
-// change 0x80 to sizeof(un_804A1F58) when done
-/* 4A1F58 */ static struct un_804A1F58_t {
+/* 4A1F58 */ struct un_804A1F58_t {
     unsigned int x0;
     unsigned char x4;
-    struct un_804A1F58_x8_t x8;
-} un_804A1F58[7];
+    struct un_804A1F58_x8_t x8[6];
+} un_804A1F58;
+
+static inline struct un_804A1F58_x8_t* un_804A1F58_slot(int i)
+{
+    return &un_804A1F58.x8[i];
+}
 
 /// .sbss
 /* 4D6DA0 */ static void* un_804D6DA0;
@@ -168,31 +173,32 @@ void un_802FF1B4(void)
 void fn_802FF218(HSD_GObj* arg0)
 {
     int x;
+    int found;
+    struct un_804A1F58_x8_t* thing;
     int y;
-    PAD_STACK(24);
+    PAD_STACK(32);
     for (x = 0; x < 6; x++) {
-        if (un_804A1F58[x].x8.x0 == arg0) {
-            y = x;
+        if (un_804A1F58.x8[x].x0 == arg0) {
+            found = x;
             goto _done;
         }
     }
-    y = -1;
+    found = -1;
 _done:
-    if (y >= 0) {
-        if (un_804A1F58[y].x0 == 1) {
-            HSD_SisLib_803A70A0(un_804A1F58[y].x8.x4, un_804A1F58[y].x8.x8,
-                                "");
+    y = found;
+    if (found >= 0) {
+        thing = un_804A1F58_slot(found);
+        if (thing->x10 == 1) {
+            HSD_SisLib_803A70A0(thing->x4, thing->x8, "");
         } else {
-            int s;
             gm_8016B774();
-            s = gm_8016C658(y);
-            if (s > 9999) {
-                s = 9999;
+            y = gm_8016C658(y);
+            if (y > 9999) {
+                y = 9999;
             }
-            if (un_804A1F58[y].x0 != s) {
-                HSD_SisLib_803A70A0(un_804A1F58[y].x8.x4, un_804A1F58[y].x8.x8,
-                                    "%d", s);
-                un_804A1F58[y].x0 = s;
+            if (thing->xC != y) {
+                HSD_SisLib_803A70A0(thing->x4, thing->x8, "%d", y);
+                thing->xC = y;
             }
         }
     }
@@ -206,9 +212,9 @@ void un_802FF364(int slot)
     Vec3* ifAll;
     struct un_804A1F58_x8_t* thing;
     HSD_GObj* gobj;
-    struct un_804A1F58_t* base = un_804A1F58;
+    struct un_804A1F58_t* base = &un_804A1F58;
     PAD_STACK(0x10);
-    thing = &base[slot].x8;
+    thing = &base->x8[slot];
     ifAll = ifAll_802F3424(slot);
     gobj = thing->x0;
     if ((thing && thing) && thing) {
@@ -239,22 +245,22 @@ void un_802FF364(int slot)
 void un_802FF498(void)
 {
     PAD_STACK(8);
-    memzero(un_804A1F58,
-            0x80); // TODO: change to sizeof(un_802FF498) when size fixed
-    un_804A1F58->x0 =
+    memzero(&un_804A1F58, sizeof(un_804A1F58));
+    un_804A1F58.x0 =
         HSD_SisLib_803A611C(2, ifAll_802F3404(), 14, 15, 0, 11, 0, 19);
 }
 
 void un_802FF4FC(void)
 {
+    struct un_804A1F58_x8_t* thing;
     int i;
-    PAD_STACK(8);
     for (i = 0; i < 6; i++) {
-        if (un_804A1F58[i].x8.x0) {
-            HSD_GObjPLink_80390228(un_804A1F58[i].x8.x0);
+        thing = un_804A1F58_slot(i);
+        if (thing->x0) {
+            HSD_GObjPLink_80390228(thing->x0);
         }
-        if (un_804A1F58[i].x8.x4) {
-            HSD_SisLib_803A5CC4(un_804A1F58[i].x8.x4);
+        if (thing->x4) {
+            HSD_SisLib_803A5CC4(thing->x4);
         }
     }
 }
@@ -265,8 +271,9 @@ void un_802FF570(void)
     struct un_804A1F58_x8_t* thing;
     HSD_Text* text;
     for (i = 0; i < 6; i++) {
-        un_804A1F58[i + 1].x4 = 1;
-        text = (thing = &un_804A1F58[i].x8)->x4;
+        thing = &un_804A1F58.x8[i];
+        thing->x10 = 1;
+        text = thing->x4;
         if (text) {
             text->hidden = 1;
         }
@@ -275,17 +282,16 @@ void un_802FF570(void)
 
 void un_802FF620(void)
 {
+    struct un_804A1F58_x8_t* thing;
     int i;
-    struct un_804A1F58_t* base = un_804A1F58;
-    PAD_STACK(8);
     for (i = 0; i < 6; i++) {
-        base[i + 1].x4 = 0;
-        if (base[i].x8.x4) {
+        thing = un_804A1F58_slot(i);
+        thing->x10 = 0;
+        if (thing->x4) {
             un_802FF364(i);
-            base[i].x8.x4->hidden = 0;
+            thing->x4->hidden = 0;
         }
     }
-    base[i].x8 = base[i].x8;
 }
 
 void un_802FF6A0(void)
