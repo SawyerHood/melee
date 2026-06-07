@@ -117,7 +117,7 @@ struct lbl_80472D28_t {
 };
 
 /// Adventure mode stage data table entry (size 0x1A)
-/// Table has 110 entries: 22 stages × 5 difficulty levels
+/// Table has 110 entries: 22 stages x 5 difficulty levels
 /// Indexed as: difficulty * 5 + stage_slot
 typedef struct AdventureStageEntry {
     /* 0x00 */ u8 stage_kind;
@@ -129,7 +129,7 @@ typedef struct AdventureStageEntry {
 STATIC_ASSERT(sizeof(AdventureStageEntry) == 0x1A);
 
 /// Allstar mode stage data table entry (size 0x1A)
-/// Table has 55 entries: 11 stages × 5 difficulty levels
+/// Table has 55 entries: 11 stages x 5 difficulty levels
 typedef struct AllstarStageEntry {
     /* 0x00 */ u8 stage_kind;
     /* 0x01 */ u8 pad_1;

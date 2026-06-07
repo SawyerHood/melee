@@ -1025,7 +1025,7 @@ Item_GObj* it_802E0100(s32 arg0, Vec3* pos, s32 facing_int)
     return spawn_gobj;
 }
 
-// unused debug message? (jimen = じめん = 地面 = "ground")
+// unused debug message? (jimen = Japanese for "ground")
 static void jimenn(void)
 {
     OSReport("JIMENN!!!\n");

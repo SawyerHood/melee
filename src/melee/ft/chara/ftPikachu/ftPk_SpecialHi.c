@@ -589,7 +589,7 @@ void ftPk_SpecialHi_80126E1C(HSD_GObj* gobj)
         // set facing direction if stick x meets a threshold
         ftCommon_8007DA24(fp);
 
-        // use max stick_mag and 90°
+        // use max stick_mag and 90 degrees
         final_stick_mag = MAX_STICK_MAG;
         some_angle = (float) M_PI_2;
 

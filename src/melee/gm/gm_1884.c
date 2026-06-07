@@ -100,7 +100,7 @@ typedef struct {
 STATIC_ASSERT(sizeof(ClassicSplashRow) == 0x30);
 
 /// Classic mode stage data table entry (size 0x10)
-/// Table has 65 entries: 13 stages × 5 difficulty levels
+/// Table has 65 entries: 13 stages x 5 difficulty levels
 typedef struct ClassicStageEntry {
     /* 0x00 */ u8 stage_kind;
     /* 0x01 */ u8 pad_1;

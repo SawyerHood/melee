@@ -5,17 +5,24 @@ bytes toward 100%. This file is the persistent campaign state — update it at
 the end of every session.
 
 > **⭐⭐ ENDGAME METRIC (live since wave 18): LINKED Matching file count.**
-> Currently **845/1041 linked (43.56% code-complete)**, HEAD 0c6fe90d1.
+> Currently **849/1041 linked**, HEAD 53d7181ae.
 > Flips #1-3 wave 18, #4 (hsd_40FF, data-only) wave 19, #5 (itdrop)
-> wave-19 boundary, #6 (bytecode, ZERO src work) wave 20, **#7-9
-> (MSL/math + ftPr_SpecialN + itlinkbomb) COMMITTED 0c6fe90d1 at the
-> wave-21→22 boundary**. **FOUR units sit FLIP-READY at the wave-22
-> close (uncommitted src)**: ftmetal (ft_800C85B8 →100, full DOL gate
-> already run), ftdevice + itwstar (pool-order sweep recon, zero hard
-> rows), ftkirbyspecialfox (HEADGAP-gate law, idiom 166). Next tier:
-> ifprize 2B · gmopening 12B · itpikachuthunder 17B · gm_1BFA 20B —
-> ONE slot-inverter mechanism now unlocks SEVEN parked units at once;
-> every stream ranks its work by "what unblocks the next flip".
+> wave-19 boundary, #6 (bytecode, ZERO src work) wave 20, #7-9
+> (MSL/math + ftPr_SpecialN + itlinkbomb) 0c6fe90d1 at the wave-21→22
+> boundary, **#10-13 COMMITTED wave 23, one commit each: ftmetal
+> d711d02b2 · ftdevice 3084bc2f4 · itwstar b31fdd544 ·
+> ftkirbyspecialfox 53d7181ae (first HEADGAP-law flip)**. Rank pass-2:
+> **FLIP-READY pool EMPTY**. ⭐⭐ W23 SLOT-INVERTER VERDICT: there is
+> NO single inverter mechanism to wait for — idiom 128's cursor law is
+> FALSIFIED, replaced by **L1' lowest-dirty-first (idiom 171)**; at low
+> pressure processing = pure decl order (172) and the idiom-140 "slot
+> park" class DISSOLVES. The 8 SLOT-PARK units re-queue as per-unit
+> L1'-guided re-solves (gm_1BFA is ONE anon-order move from 100 via
+> rover anonymization, idiom 173). Cheapest new flip-unblock:
+> if_2FC93 (zero .text, solved data-recon class). Full strategic
+> census of all 190 remaining NonMatching units lives in the FLIP
+> VERDICT section; every stream ranks its work by "what unblocks the
+> next flip".
 
 ## Ground rules
 
@@ -34,6 +41,11 @@ the end of every session.
   EVERY full-ninja gate — mandatory for flip gates. Corollary: flips must
   never go live mid-wave on shared trees (a mid-flight Matching flip
   transiently broke the tree-wide DOL for a sibling stream this wave).
+  **W23 SHARPENING (incident-confessed)**: `pgrep ... || echo IDLE; ninja`
+  does NOT enforce the law — the guard must HARD-EXIT
+  (`pgrep -f 'ninja|mwcceppc' && exit 1`) or poll-loop. A hygiene relink
+  launched while a sibling's flip gate was live (post-hoc sha EXACT, both
+  workloads byte-identical, no corruption — but only by luck).
 
 ## Infrastructure
 
@@ -47,6 +59,14 @@ the end of every session.
 - Concurrency: parallel compiles on *different* units are safe (verified).
 - `campaign/triage.py` — regenerates `backlog.json` from a fresh build's
   report.json. Re-run after each session; classes are audit-validated (v2.1).
+  ⚠ report.json fuzzy and check_fn (reloc-aware) can legitimately DIVERGE:
+  fns at report-100 but check_fn sub-100 with one `~` row of identical
+  instruction text = idiom-45 synthetic-reloc class (0 bytes) — they are
+  backlog-invisible BY DESIGN; rank/linkcheck already treats them as 0B
+  (hygiene w23: grgreatbay 499C/4300 "stale-100" alarm resolved this way).
+- **Bytegate target**: ours = `build/GALE01/src/<unit>.o` (mwcc_sjis
+  output); `build/GALE01/obj/...` is the dtk-EXTRACTED original — never
+  compare against obj/ to validate a src edit.
 - Per-function verification is NOT sufficient: gate = function at 100% →
   whole-unit objdiff clean (no sibling regressions) → full ninja DOL check.
 - **Durable reports (wave-10 lesson)**: agents MUST stream findings to
@@ -364,7 +384,7 @@ except gm_182F.c which rode flip commit 51951826b)**:
   gmresult idiom-69 package; tydisplay map. gmallstar future flip
   needs gmClassic_80472AF8 static→global (noted in-source).
 
-## ⭐⭐ FLIP VERDICT (w18 ×3 + w19 ×2 + w20 ×1 + w21/22 boundary ×3 = 9 FLIPS COMMITTED; THE ENDGAME METRIC)
+## ⭐⭐ FLIP VERDICT (w18 ×3 + w19 ×2 + w20 ×1 + w21/22 boundary ×3 + w23 ×4 = 13 FLIPS COMMITTED; THE ENDGAME METRIC)
 
 **The flip recipe is PROVEN.** Wave 18 flipped the first three units to
 `Object(Matching, ...)` — ninja links OUR compiled objects into the DOL,
@@ -434,83 +454,127 @@ commit messages. MSL/math.c is now a FLIPPED byte-frozen TU: the
 still-open math_data.c:82-83 deletion is a DIFFERENT unit (safe), but
 any future MSL edit re-baselines under the flip-gate law.
 
+**WAVE-23 — FLIPS #10-13 COMMITTED (one commit each, configure.py
+only; durable file-flip-w23/progress.txt)**: ftmetal **d711d02b2**
+(rank FLIP-READY, hard NONE; ours-only UNREFERENCED 1B .sbss static
+ftCo_804D3C90 mwld-deadstripped at link, DOL byte-proof — idiom 176) +
+ftdevice **3084bc2f4** (hard NONE; 48 imported exports; force_active
+already in src) + itwstar **b31fdd544** (hard NONE; .text/.data
+imported, .sdata/.sdata2 intra-object reachable, idiom 134) +
+ftkirbyspecialfox **53d7181ae — FIRST HEADGAP-LAW FLIP**: stock
+linkcheck's 9 hard rows were ALL the uniform +4 .sdata2 head shift;
+`gate_headgap.py` .sdata2=804D944C → hard NONE; predecessor
+ftKb_SpecialNPk links its dtk object ending 804D944C, link-order
+adjacent (configure.py:745/746); the link restored the 4B pad
+byte-exactly — **idiom 166 is now link/DOL-PROVEN**. 845→**849/1041
+linked** (report.json complete-flag 849). Gates ×4 PASS: pgrep idle →
+configure `--no-warn-error` → full ninja → `main.dol: OK` → sha1
+08e0bf20 EXACT → link edge consumes `build/GALE01/src/<unit>.o` →
+idempotence (sha EXACT). Rank pass-2: **FLIP-READY pool EMPTY** (190
+ranked + 2 src-less = 192 NonMatching remaining). W22-shrunk units
+verified STILL CONTENT-blocked both passes: sobjlib 27B · grgreatbay
+29B · lbmemory 34B · itpikachuthunder 17B; **ifprize 2B remains the
+smallest gap**. ⚠ Baseline correction: the w22 log's "uncommitted
+src" note was STALE — 3419e0862 had already committed the four
+flip-ready src trees.
+
 **GATE INSTRUMENT**: `campaign/scratch/file-flip-w18/linkcheck.py`
 (resolved-reloc equality + weak-exempt + ALIGNFIX + export-importer
 closure) — gate flips with it, NOT fuzzy/analyzer counts (extends the
 idiom-88 hard rule to flips). ⚠ linkcheck.py does NOT model mwld
 deadstrip — run the idiom-116 force-active audit (zero-importer exports
-need the .comment keep bit) before gating every flip. Then `pgrep` for
+need the .comment keep bit) before gating every flip. ⚠ W23 TOOLING
+GAP (idiom 176): linkcheck iterates TARGET sections only and never
+reports OURS-EXTRA sections — a REFERENCED ours-extra section would
+link extra bytes while linkcheck shows clean; rank.py should adopt the
+OURS-EXTRA-SECTION row (hard if referenced/exported, soft if
+unreferenced; gate_headgap.py already has the check). Then `pgrep` for
 sibling builds (build-race law), full ninja + `main.dol: OK` + dtk
 shasum + idempotence. **FLIP-GATE LAW (all streams)**: a flipped unit's
 ours-object is LOAD-BEARING — naming/recon/S1 gates must re-baseline the
 DOL sha, and any edit to a flipped TU must keep it whole-byte-exact.
 
-### ⭐ Ranked flip queue (wave-22 results, live-linkcheck; flips #1-9 COMMITTED)
+### ⭐⭐ STRATEGIC BLOCKER CENSUS (w23 exec, all 190 ranked NonMatching units + 2 src-less)
 
-**Flipped (9)**: gm_182F + plattack (51951826b) · ftchangeparam
+Full per-unit lists: `campaign/scratch/file-flip-w23/
+strategic_classification.txt` (classifier `classify.py`). Re-derive
+after each wave. ⚠ Census ran against the committed tree — the w23
+in-wave UNCOMMITTED wins (ifcoget fn 95.12 + .sdata2 byte-exact,
+ftCo_0A01 ×2) shrink their rows further.
+
+| class | n | meaning / members |
+|---|---|---|
+| SLOT-PARK | 8 | itdraw 37B · gm_1BFA 20B · ifprize 2B · lbmemory 34B · gmopening 12B · grgreatbay 29B · itpikachuthunder 17B · sobjlib 27B — the old "one slot-inverter" framing is VOID (w23): each needs an L1'-guided re-solve (idioms 171-173); = the next 8 flips |
+| S1-SMALL+DATA | 4 | vi0501 41B · ft_0852 · ifcoget 34B · itmewtwoshadowball 20B (≤60B .text + solved-class data rows) |
+| S1-MED+DATA | 6 | lbshadow 126B · leak 78B · itkyasarin 83B · vi0502 64B · textdraw 144B · ftmaterial 123B |
+| CODEGEN+DATA | 1 | efsync — 4844B same-size .text, schedule/mnemonic |
+| DATA-RECON | 1 | **if_2FC93 — ZERO .text work, solved recon class = cheapest new flip-unblock** |
+| STRUCT-NEAR | 60 | .text size delta ≤0x20 (8 pure + 52 with data rows; gm_180A/181A/190A, lbheap, ftcoll, particle, gmregclear…) — the near-match frontier |
+| STRUCT-DEEP | 106 | real decomp work (6 pure + 100 with data; mn*/gr*/vi* heavies, THPDec, psdisp…) |
+| BLOCKED | 4 | quatlib (145) · lb_00CE (118/148) · ftKb_SpecialNZd (155/169) · ftKb_SpecialNPk (139/W4) — C-unreachable or mechanism-blocked, do not re-attempt |
+
+Roadmap reading: ~19 units (SLOT-PARK + S1-SMALL + DATA-RECON + part
+of S1-MED) are within reach of current laws + L1' re-solves; the
+endgame then runs through the 60-unit STRUCT-NEAR band before the
+106-unit deep tail.
+
+### ⭐ Ranked flip queue (w23 results, live-linkcheck; flips #1-13 COMMITTED)
+
+**Flipped (13)**: gm_182F + plattack (51951826b) · ftchangeparam
 (4715a41d8) · hsd_40FF (ab2a4870d, data-only) · itdrop (d4fee40d1) ·
 bytecode (b6674faf6, zero src work) · MSL/math + ftPr_SpecialN +
-itlinkbomb (0c6fe90d1, the w21 trio). Importer closures all
+itlinkbomb (0c6fe90d1, the w21 trio) · **ftmetal (d711d02b2) ·
+ftdevice (3084bc2f4) · itwstar (b31fdd544) · ftkirbyspecialfox
+(53d7181ae, HEADGAP) — the w23 quartet**. Importer closures all
 re-verified at flip time. Re-rank after every recon/S1 wave with
 `file-flip-w20/rank.py` (en-masse importer closure mandatory, idiom
-132; w22 pass-1 coverage 194 ranked + 2 src-less = all 196
-NonMatching link inputs, COMPLETE).
+132). **Post-flip rank pass-2 (w23): FLIP-READY pool EMPTY** — every
+remaining flip pends real work per the census above.
 
-**⭐ REACHABILITY ESTIMATE (w22 exec scan, file-flip-w22/progress.txt)**:
-pre-w22, only TWO of 194 NonMatching units had ZERO .text-byte hard
-rows (ftdevice, if_2FC93 — both pure data-recon class). w22 cleared
-ftdevice AND made ftmetal/itwstar/fox flip-ready via src work, so the
-remaining zero-.text-work flip pool = **if_2FC93 ONLY** (SIZE .rodata
-0x10vs0x90 + .bss 0x34vs0x48 + .sdata2 + ~30 imported const exports —
-named-def recon, the solved class; the ifprize re-split already fixed
-its SIZE:.sdata2 row for free). EVERY other unit needs .text byte
-work. Highest-leverage single mechanism = the **slot-inverter**
-(idiom-140 class, p09/p10 probe): it now unlocks **SEVEN** parked
-residuals at once — ifprize 2B · gmopening 12B · itpikachuthunder 17B
-· gm_1BFA 20B · grgreatbay 5460 · itdraw 37B · lbmemory 15320+FC8.
-Deadstrip pre-audits (116/134) already PASS for all queue heads.
+**⭐ REACHABILITY (w23 re-scan)**: the only zero-.text-work flip left
+is **if_2FC93** (SIZE .rodata 0x10vs0x90 + .bss 0x34vs0x48 + .sdata2 +
+~30 imported const exports — named-def recon, the solved class).
+EVERY other unit needs .text byte work. The w22 "ONE slot-inverter
+unlocks SEVEN units" framing is RETIRED: the W23 inverter verdict
+(see ROTATION-LAW section) replaced the mechanism hunt with per-unit
+L1' re-solves — same 8 units, now each a bounded decl-perm/anon-order
+problem instead of a missing compiler law. Deadstrip pre-audits
+(116/134) already PASS for all queue heads.
 
-1. **ftmetal — FLIP-READY (w22, uncommitted src)**: ft_800C85B8
-   89.45→**100.00** (all 5 fns 100; old code indexed `parts[0]` —
-   semantic bug — target indexes `parts[outer]`; idioms 161/162);
-   linkcheck hard rows **NONE** (2 ALIGNFIX + 9 zero-importer
-   EXPORT-MISSING). **Full DOL gate ALREADY RUN by the stream**: sha1
-   08e0bf20 EXACT + idempotent via targeted `ninja
-   build/GALE01/main.dol`. Executor re-gates on the quiesced tree.
-2. **ftdevice — FLIP-READY (w22, uncommitted src)**: SIZE:.bss
-   0x30→0xc58 cured via 36-object .bss recon (costume/hat containers,
-   commons emission law idiom 168); BuryThings + ft_804D6570
-   un-static'd for importers; ftdevice.h `[4]`→`[]`; sibling ftcoll.o
-   byte-IDENTICAL. Hard rows **NONE**.
-3. **itwstar — FLIP-READY (w22, uncommitted src)**: ItemStateTable
-   it_803F61B0[6] recon + REAL fuzzy-invisible REL24 bug fixed
-   (Logic29 called it_80294364, target calls it_80294624 — idiom 170).
-   Hard rows **NONE**.
-4. **ftkirbyspecialfox — flip-ready under HEADGAP law (w22)**: .text
-   byte-IDENTICAL; 7 named const defs (incl f64 M_PI) + ~30 cast-reads
-   + extern assert-strings (idioms 165/167). Executor MUST gate with
-   `pool-order-w22/gate_headgap.py` (.sdata2=804D944C; predecessor
-   condition: ftKb_SpecialNPk dtk object ends 804D944C; idiom 166).
+1-4. ~~ftmetal · ftdevice · itwstar · ftkirbyspecialfox~~ **FLIPPED
+   #10-13 (w23, see FLIP VERDICT)**.
 5. **ifprize** — **2B .text, SINGLE hard row = smallest gap in the
    campaign** (w22: 34B+12reloc+SIZE rows all cured — string table
    named defs, static→global ×4, .sbss reverse order, idioms 163/164 +
    the splits.txt 5-way .sdata2 re-split, DOL byte-proven). Residual =
-   un_802FE918 99.89, one v_x8 r26↔r27 cursor join = slot-inverter
-   class. Sibling follow-up: ifcoget/soundtest/textdraw/textlib owners
+   un_802FE918 99.89, one v_x8 r26↔r27 anon-after-named join — same
+   L1' class as the gm inversion; per idiom 172, check whether plain
+   decl moves suffice at its (low) pressure FIRST. Sibling follow-up:
+   ~~ifcoget~~ (**DONE w23** — externs→literals + gap slot claimed,
+   .sdata2 byte-exact, idiom 179) / soundtest/textdraw/textlib owners
    swap `extern f32 un_804DDC*` reads → plain literals (pools now
    self-owned).
 6. **gmopening** — 4 hard rows→**12B CONTENT:.text** (w22 pool-order
    sweep: "\cffff00" string fix + head-pair defs + sbss reorder +
    extern gm_80480B38 — the old static fuzzy-100 was a FALSE match,
-   idiom-63 class). Residual = slot-inverter class.
+   idiom-63 class). Residual = L1' re-solve class (was
+   "slot-inverter"; idiom 172).
 7. **itpikachuthunder** — **17B .text only** (w22: .sdata2 0x20 cured
    byte-exact via idiom 157 + 146/147/122; all 3 RELOC rows snapped,
    UnkMotion2_Anim →100; DF8 99.18→99.35 with target-exact CS map).
-   Residual 17B = known-const store remat park (idiom 160,
-   prop-invincible, pattern unique game-wide) + slot-inverter prologue.
-8. **gm_1BFA** — 20B SINGLE hard row (w21). gm_801BFCFC 99.28 = ONE
-   r27↔r28 transposition; target map pure-L1-reachable (226 orders) —
-   slot-inverter class (idiom 140).
+   Residual 17B = known-const store remat park (idiom 160 — **w23:
+   threshold PROVEN synthetically, idiom 174**: zero web needs ≥2
+   STORE uses, own `=0` init never counts; DF8 park STANDS with
+   mechanism proof) + DF8 prologue L1' re-solve.
+8. **gm_1BFA** — 20B SINGLE hard row; **w23: CRACKED HALF-OPEN**.
+   gm_801BFCFC 99.28 = exactly ONE processing precedence under L1'
+   ({drop BASE<w1}, forced-precedence diff proven minimal; the
+   226-order cursor corpus is VOID). Rover anonymization (idiom 173:
+   direct `gm_8049E558[idx]` indexing, deletes the decomp's invented
+   walkers) produced **BASE=r27 on the real fn for the first time**
+   (probe 98.25); residual = demote the anon rover from phase-0 —
+   the fn is ONE anon-order move from 100. Src byte-reverted to the
+   99.2812 baseline (sha-verified).
 9. **quatlib** — 25B .text ONLY, **DEMOTED** (w21): EC4C FPR pair swap
    C-UNREACHABLE with mechanism proof (idiom 145). Do not re-attempt.
 10. **sobjlib** — 39B→**27B** (w22, uncommitted src): 803A4A68
@@ -522,16 +586,23 @@ Deadstrip pre-audits (116/134) already PASS for all queue heads.
 11. **grgreatbay** — 31B→**29B** (w22): 499C →**99.9927** (per-case
    block Vec3 + case locals folded to call args, idiom 155; residual =
    one 0-byte idiom-45 reloc row, NOT a blocker); sole real blocker =
-   5460 r29↔r31, slot-inverter class. ⚠ Recorded baselines for
-   499C/4300 were STALE-100 — backlog re-triage queued.
+   5460 r29↔r31, L1' re-solve class. ⚠ ~~Recorded baselines for
+   499C/4300 were STALE-100 — backlog re-triage queued~~ **RESOLVED
+   w23 (hygiene): METRIC DIVERGENCE, not staleness** — report.json
+   scores both 100.0; reloc-aware check_fn 99.9927/99.9231 with one
+   idiom-45 synthetic-reloc `~` row each (0 bytes); the uncommitted
+   backlog refresh correctly dropped 499C; no regen needed. NOTE:
+   .text now 29B (a w22 commit shaved 2B vs the 31B record).
 12. **lbmemory** — 79B→**34B** (w22): 80015320 96.11→**98.64** (anchor-
    destruction self-assign idiom 158 + address-node split 159 + `src =
    old` copy + decl order); residual = [alloc,current,old] 3-cycle +
    currentp slot park; FC8 99.32 = param transposition park. Both
-   slot-inverter class.
+   L1' re-solve class — ⚠ the w22 "old must process first"
+   requirement was derived under the cursor rule and is VOID;
+   re-derive under L1' (idiom 171).
 13. **itdraw** — 37B .text (src reverted; V7 recipe saved
-   cs-law-w21/itdraw_V7_99.2628.c) — pure global r28↔r29,
-   slot-inverter class; GPR-side L1 applies.
+   cs-law-w21/itdraw_V7_99.2628.c) — pure global r28↔r29; GPR-side
+   L1' re-solve (the w21 order reconstruction is cursor-era, VOID).
 14. Tail: 3-hard tier (vi0501, lbshadow, leak, itkyasarin).
    **lb_00CE stays DEMOTED** (dead-creator pool head, C-unreachable —
    idioms 118/148). **gm_16A9** refuted-easy (w19). **ftCo_Shouldered**
@@ -552,7 +623,7 @@ owner): delete lines 82-83 — dead `__logf_C0/C1_bits` defs, C1 hex
 math_data.o byte-identical (math_data is NOT the flipped TU; safe).
 Re-run `file-flip-w20/rank.py` after each recon/S1 wave.
 
-## ⭐ ROTATION-LAW VERDICT (wave 20 — the allocator CHOICE rule is SOLVED)
+## ⭐ ROTATION-LAW VERDICT (wave 20; ⚠ W23: L1/idiom-128 FALSIFIED — the true rule is L1', idiom 171. L2-L5 retained; see the W23 INVERTER VERDICT below)
 
 After 8 falsified models (waves 12-19) plus ~12 more falsified this
 wave, the rotation-enum agent derived the law pack via a synthetic-probe
@@ -562,23 +633,26 @@ disasm, ~1.5s/probe; solve2.py reconstructs processing orders from any
 new reg map). Validated against 7 independent colorings by exhaustive
 order-search; full text in rotation-enum-w20/REPORT.md.
 
-- **L1 — CHOICE RULE (SOLVED, unique fit; = idiom 128)**: at each web,
-  scan registers CIRCULAR-DESCENDING starting AT the cursor (the reg
-  assigned to the previously-processed web), DIRTY (already-used) regs
-  first; take the first whose holders all don't interfere; else the
-  highest VIRGIN reg. "Chains" = consecutively-processed disjoint webs;
-  the campaign's "rotation parks" are cursor artifacts.
+- **L1 — CHOICE RULE — ⚠ FALSIFIED w23 (was idiom 128)**: the cursor
+  + circular-descending model fit by ACCIDENT wherever chains were
+  short; the w20 falsification sweep tested first-fit-DESCENDING but
+  never ASCENDING. True rule = **L1' (idiom 171)**: scan DIRTY CS regs
+  in ASCENDING numeric order, take the first non-interfering; else the
+  HIGHEST VIRGIN. No cursor. All cursor-era "order reconstructions"
+  (226-order gm corpus, p09 90-order set, itdraw/lbmemory derivations)
+  are INVALID as specs.
 - **L2 — LOW PRESSURE (≤7 CS webs)**: processing order = anonymous LICM
   temps (creation order) then named locals in DECL ORDER — re-validates
   and EXPLAINS idiom 1.
 - **L3 — HIGH PRESSURE structural promotions (= idiom 131)**: whole-fn
   multi-def webs first (decl tiebreak), loop-LICM consts ~3rd, per-BB
   local pass for call-result temps; explains the old 24-perm cap.
-- **L3c — ANCHOR-PAIR LAW (= idiom 129, extends 126)**: the anonymous
-  @ha/@l anchor allocates immediately BEFORE its first copy-derived
-  named web (one-above-the-walker in every perm); anchor-below-walker
-  targets are decl-UNREACHABLE — the exact gm_801BFCFC blocker
-  (deadlock proof in the report).
+- **L3c — ANCHOR-PAIR LAW (= idiom 129, extends 126; ⚠ w23-revised)**:
+  the anonymous @ha/@l anchor processes immediately after the
+  const/call-temp chain, before named singles (52/52 replica
+  observations; replica BASE web ends at w3's def). The w21
+  "decl-UNREACHABLE deadlock proof" was cursor-era and is VOID —
+  anchor-below-named IS reachable via rover anonymization (idiom 173).
 - **L4 — CHAIN STEERING (= idiom 130, the actionable S1 lever)**:
   declaring the LATER loop's idx first rebinds the earlier idx onto its
   register chain (won +0.22 real on gm_801BFCFC; +1.44 total with the
@@ -592,18 +666,56 @@ order-search; full text in rotation-enum-w20/REPORT.md.
   (1-3 dummy fns incl. a 15-CS-web monster prepended → coloring
   byte-identical; extern-buf reshape is what moves maps).
 
-**⭐ W21 SLOT-LAW REFINEMENT (idiom 140, supersedes the "anchor-pair
-decl-UNREACHABLE" framing of L3c/129)**: solve2.py order-reconstruction
-shows one-transposition park targets ARE pure-L1-consistent — gm_801BFCFC
-has 226 valid orders with the anchor processed AFTER w1; itdraw's target
-processes comp1 LAST. The blocker is the processing SLOT, not the choice
-rule. Decl order, comma/for-init, block scope, variable splits, inline
-decl/definition order, and TU position are ALL slot-inert (23+ perms +
-4 queued ideas resolved w21). The class pends a SLOT-INVERTER; the
-p09/p10 probe anomaly is the only observed mechanism — next probe:
-vary statement forms between walker init and loop head on a
-real-fn-shaped probe. The 226-order corpus (cs-law-w21/solve2.py) is
-the spec — cross-check new reg maps against it before burning compiles.
+**~~⭐ W21 SLOT-LAW REFINEMENT (idiom 140)~~ — DISSOLVED w23**: the
+"processing SLOT pends an inverter" framing and the p09/p10 anomaly
+were ARTIFACTS of the wrong choice rule; under L1' the p09/p10 pair
+flip is plain lowest-dirty-first behavior. The 226-order corpus
+(cs-law-w21/solve2.py) is NOT a spec — do not cross-check against it.
+
+**⭐⭐ W23 INVERTER VERDICT (slotlaw-inverter-w23/REPORT.md; ~46
+compiles, l1prime.py verifier + solve3/mine44/fitlaw toolchain)**:
+- **L1' (idiom 171) — the true CS choice rule**: dirty-ASCENDING
+  first-fit, else highest virgin, NO cursor. Evidence: 22/22 new
+  synthetic probes byte-fit with processing = pure lexical decl order
+  (including every cursor-era "anomaly": p09/p10, two-walker loops,
+  unpaired webs, 5-loop chains); 44/44 w20 replica colorings
+  order-consistent (mine44.py, 0 NOFIT, one range fix: replica BASE
+  web ends at w3's def); all 3 gm_801BFCFC maps consistent (solve3.py).
+- **Corollary (idiom 172)**: at low pressure with NO anon webs,
+  processing = PURE DECL ORDER — decl perms are a COMPLETE lever (any
+  L1'-admissible coloring is reachable), so the idiom-140 slot-park
+  class CANNOT EXIST in that regime. Re-judge every parked
+  low-pressure pair against L1' predictions before calling it parked.
+- **Anon webs**: anchors/LICM consts/SR rovers process immediately
+  after the const/call-temp chain in all 52 replica observations; no
+  decl perm moved an anchor below a named single. gm_801BFCFC's full
+  requirement under L1' = exactly **{drop BASE<w1}** (forced-precedence
+  diff, proven minimal). **C-reachable lever found (idiom 173, rover
+  anonymization)**: direct `base[idx]` indexing (deleting invented
+  walker pointers) converts the walker to an SR rover and REORDERS the
+  (anchor, walker) pair — produced BASE=r27 on the real fn for the
+  first time (98.25); residual = rover phase-0 demotion (queued forms:
+  do-while spelling, store-line position, (s32)-cast index).
+- **High-pressure order law OPEN**: multi-def whole-fn webs promote
+  NON-MONOTONICALLY in decl position (decl-late tail/count promote to
+  top; decl-slot-0 DEMOTES; decl-slot-2/3 neighbors flip slot-1
+  promotion); single-BB call temps are decl-inert (9-entry sweep). 44
+  labeled (perm→coloring) points + tooling ready for mining.
+- **Negative results (do not re-derive)**: variable names fully inert
+  (byte-identical .text); statement forms between walker init and loop
+  head inert; init statement order inert; trip counts inert; linear
+  priority models (refs/decl-index mixes) fit 0/44 replica entries.
+  Falsified on the real gm fn (reverted): 4 replica-guided decl perms
+  (96.97-98.03), w1-init hoist (98.09), memzeros-through-w1 (97.68);
+  replica score-9 perms do NOT transfer (L5 confirmed live).
+- **Idiom-160 threshold PROVEN (idiom 174)**: g01/g02/g05 — a shared
+  zero becomes a register web only at ≥2 STORE uses (call-crossing
+  pair → CS reg); a live web's own `=0` init never joins. The
+  itpikachuthunder DF8 park stands WITH mechanism proof.
+- **FPR caveat**: idiom 145's proof was built against the cursor
+  model — the verdict (quatlib C-unreachable) may survive but the
+  proof SHAPE is invalidated; re-test virgin-descending vs
+  lowest-dirty on the EC4C/DAD4 data before relying on it.
 
 **⭐ FPR-LAW VERDICT (w21 — L1 does NOT transfer to FPRs; idiom 145)**:
 volatile FPR expression temps = fresh VIRGIN regs DESCENDING from the
@@ -615,24 +727,32 @@ transfers to FPR named webs, closing the staging route). Consequence:
 quatlib EC4C's cross-statement anonymous y-half lifetime is
 C-UNREACHABLE (E1/E2 fingerprint proof, cslaw-parks-w21/progress.txt) —
 single-use copies VN-forward (121), multi-use/multi-def named webs
-band/promote. FPR pair parks are a DIFFERENT mechanism from GPR cursor
-parks: itdraw's r28↔r29 tie is GPR-side (L1 + slot law apply); DAD4 /
-sobjlib FPR trio / EC4C are the FPR family.
+band/promote. FPR pair parks are a DIFFERENT mechanism from GPR
+parks: itdraw's r28↔r29 tie is GPR-side (L1' applies); DAD4 /
+sobjlib FPR trio / EC4C are the FPR family. ⚠ w23: the proof SHAPE
+behind 145 pends re-test under L1' (see INVERTER VERDICT above).
 
-**Practice**: re-judge every parked "rotation family" under L1-L5 + the
-slot law + the FPR variant before burning compiles. Rotation queue:
-slot-inverter mechanism probe (p09/p10, real-fn-shaped) — after w22 it
-unlocks **SEVEN** units (gm_801BFCFC · itdraw V7-copy · grgreatbay 5460
-r29↔r31 · ifprize 2B v_x8 r26↔r27 · gmopening 12B · itpikachuthunder
-DF8 prologue · lbmemory 15320 3-cycle + FC8 pair) — by far the
-highest-leverage probe in the campaign · itpikachuthunder const-store
-GCSE-threshold synthetic probe (idiom 160) · lb_8000D148 · lbaudio
+**Practice (rewritten w23)**: re-judge every parked "rotation family"
+under **L1' + idiom 172** (decl perms are COMPLETE at low pressure —
+several parks may just be wrong decl orders scored against
+cursor-model expectations) before burning compiles. Rotation queue
+(ranked): 1) gm_801BFCFC rover-demotion form — ONE anon-order move
+from 100; 2) L1' re-solve of ifprize v_x8 (2B!) · grgreatbay 5460 ·
+lbmemory 3-cycle/FC8 · itdraw V7 (solve3.py pattern; the cursor-era
+"levers falsified" lists do NOT bind L1'-guided perms); 3) mine the
+high-pressure promotion order law (44 labeled entries +
+mine44/probegen ready); 4) FPR re-test (145 proof shape) ·
+lb_8000D148 · lbaudio
 27488 entry-exchange (exact target map in lbaudio-s1-w20/progress.txt)
-+ 27DF8 r0/r4 · 69A84/gmregclear carryovers. CURSOR-SIM FIRST at ≤7 webs (idiom 150: hand-simulate
-L1+L2 before probing — first fully-predicted S1 win at grgreatbay
-63F4). Falsified-on-real-fn list (do not re-probe): named-base
-packages (94.28/97.90/97.65), variable merges (96.75/98.03), quatlib
-EC4C any-C-form, gm_801BFCFC decl-perm space.
++ 27DF8 r0/r4 · 69A84/gmregclear carryovers. HAND-SIM FIRST at ≤7
+webs (idiom 150, w23-updated: simulate **L1' + decl order**, not the
+cursor — first fully-predicted S1 win at grgreatbay 63F4 predates the
+rule fix and still validated because the chain was short). Falsified-
+on-real-fn list (do not re-probe the FORMS; but cursor-era ORDER
+conclusions no longer bind): named-base packages (94.28/97.90/97.65),
+variable merges (96.75/98.03), quatlib EC4C any-C-form. ⚠ "gm_801BFCFC
+decl-perm space exhausted" was a cursor-era verdict — the rover lever
+(idiom 173) already escaped it.
 
 ## Validated playbook (update after every session)
 
@@ -942,6 +1062,12 @@ EC4C any-C-form, gm_801BFCFC decl-perm space.
    expansion = +2 (idiom 60); statement-position ternary = +1 vs
    arg-position (idiom 61); block-decl hoisting measured id- AND
    frame-neutral once (gm_18A5) — idiom-50 frame claim needs refinement.
+   **W23 CORRECTION (measured ×2, ftCo_0A01)**: fn-scope CAST-ONLY
+   self-read blocker = **+1 id** in that TU (the table's 0 is wrong at
+   least there); PAD_STACK(N)→`UNUSED u8 pad[N]` swap stays byte-neutral
+   even WITH addressed Vec3 aggregates in-frame. ⚠ @-pin canary checks
+   against a stale build-tree .o (`--no-build`) are BOGUS — only fresh
+   scratch/ninja objects reflect edits; use the json gate.
 49. **SQRTF DEPTH-2 HOLE-KILL (extends 31/41; ftCo AF78C win)**: depth-1
    sqrtf instantiation reserves {4B dead hole + volatile y}; routing
    through a one-line `static inline` wrapper re-instantiates at depth 2
@@ -1646,18 +1772,18 @@ EC4C any-C-form, gm_801BFCFC decl-perm space.
    (f) GPR base-shift tell: deleting an address-taken scalar pair
    shifts unrelated int-web maps down one reg; (g) mwld strips
    unreferenced NON-weak .sdata2 objects (extends WEAK-STRIP).
-128. **⭐ MWCC CS CHOICE LAW (rotation-enum w20, solver-proven unique
-   fit over 7 colorings)**: scan circular-DESCENDING from the cursor
-   (= the previous web's register), DIRTY regs first, take the first
-   non-interfering; else the highest VIRGIN reg. Same-reg "chains" =
-   consecutively-processed disjoint webs; rotation parks are cursor
-   artifacts. See the ROTATION-LAW VERDICT section (L1).
-129. **ANCHOR-PAIR LAW (extends 126; rotation-enum w20)**: the
-   anonymous @ha/@l address-anchor web allocates immediately BEFORE
-   its first copy-derived named web — one-above-the-walker in every
-   permutation; anchor-below-walker targets are decl-UNREACHABLE
-   (gm_801BFCFC residual's deadlock proof in rotation-enum-w20/
-   REPORT.md).
+128. ~~**⭐ MWCC CS CHOICE LAW (rotation-enum w20)**: cursor +
+   circular-descending dirty-first.~~ **FALSIFIED w23 — see idiom 171
+   (L1', lowest-dirty-ASCENDING-first)**. The cursor model fit by
+   accident on short chains; the w20 sweep never tested
+   first-fit-ascending. Its order reconstructions (226-order gm
+   corpus etc.) are VOID as specs.
+129. **ANCHOR-PAIR LAW (extends 126; rotation-enum w20; ⚠ w23-revised
+   under L1')**: the anonymous @ha/@l address-anchor web processes
+   immediately after the const/call-temp chain, before named singles
+   (52/52 replica observations). The "anchor-below-walker targets are
+   decl-UNREACHABLE" deadlock proof was cursor-era and is VOID —
+   reachable via rover anonymization (idiom 173).
 130. **IDX-CHAIN JOIN LEVER (extends 1/57; won +0.22 real,
    gm_801BFCFC)**: declare the LATER loop's index first to rebind the
    earlier index onto its register chain (cursor-join steering).
@@ -1709,13 +1835,14 @@ EC4C any-C-form, gm_801BFCFC decl-perm space.
    stay byte-identical (only .comment moves) and the row clears free.
    Audit ALL importer-cleared EXPORT-MISSING rows against symbols.txt
    scope.
-140. **ANCHOR-PAIR IS A SLOT LAW (refines 129; cs-law w21,
-   solve2.py)**: one-transposition rotation parks are pure-L1-REACHABLE
-   (gm_801BFCFC: 226 consistent orders with anchor AFTER w1; itdraw:
-   comp1 processed last) — the blocker is the processing SLOT. Decl
-   order, comma/for-init, block scope, variable splits, inline
-   decl/definition order, TU position are ALL slot-inert. Pends a
-   slot-inverter (p09/p10 anomaly = only observed mechanism).
+140. ~~**ANCHOR-PAIR IS A SLOT LAW (refines 129; cs-law w21)**~~
+   **DISSOLVED w23 (idioms 171/172)**: at low pressure processing is
+   pure decl order under L1' — the "slot park" class cannot exist
+   there, and the p09/p10 "inverter mechanism" anomaly was an
+   artifact of the falsified cursor rule. Surviving content: anon
+   anchors process right after the const/call-temp chain (no decl
+   perm moves them below a named single); gm-class parks reduce to
+   ONE anon-vs-named precedence, attackable via idiom 173.
 141. **TAIL-MERGE TRAP (extends 73/83; itdraw V6 47.59)**:
    byte-identical sibling expansions from ONE static inline get
    cross-jumped (MWCC tail-merges them) — duplicated target code must
@@ -1749,7 +1876,10 @@ EC4C any-C-form, gm_801BFCFC decl-perm space.
    L3-promoted ahead of loads (131 transfers to FPR named webs).
    Cross-statement anonymous y-half lifetimes are C-unreachable
    (single-use copies VN-forward per 121; named webs band/promote).
-   See FPR-LAW VERDICT in the rotation section.
+   See FPR-LAW VERDICT in the rotation section. ⚠ w23: the GPR rule
+   change (171) invalidates this proof's SHAPE (built against the
+   cursor model) — re-test virgin-descending vs lowest-dirty on the
+   EC4C/DAD4 data; verdict provisionally stands.
 146. **NAMED-DEF POOL-SLOT INTERLEAVING (extends 122/127b, closes
    118's mid-pool gap; ftPr_SpecialN + itlinkbomb, byte-proven)**:
    file-scope `const f32` defs emit into .sdata2 at their LEXICAL
@@ -1774,10 +1904,12 @@ EC4C any-C-form, gm_801BFCFC decl-perm space.
    direct `arr[i]` lets MWCC create the target's strength-reduction
    rovers, incl. the `addi rR,rI,0` rover-init of a known-zero i
    (not a user copy) and hit-branch `slwi` recomputes.
-150. **CURSOR-SIM PREDICTIVE AT ≤7 WEBS (grgreatbay 63F4)**:
-   hand-simulating idiom-128 L1+L2 over the decl order predicted a
+150. **HAND-SIM PREDICTIVE AT ≤7 WEBS (grgreatbay 63F4; w23-updated)**:
+   hand-simulating the choice rule over the decl order predicted a
    full 4-CS-reg map BEFORE compiling (first fully-predicted S1 win)
-   — simulate before probing.
+   — simulate before probing. ⚠ w23: simulate **L1' (idiom 171) +
+   pure decl order (172)**, NOT the falsified cursor model (the 63F4
+   prediction survived because the chain was short).
 151. **MUTATION-DEMOTION IS NON-COMPOSITIONAL (refines 34; grgreatbay
    5460)**: idiom-34 self-read demotions do NOT compose across
    subsets — a `+0` form dissolves where the cast form acts; probe
@@ -1872,12 +2004,13 @@ EC4C any-C-form, gm_801BFCFC decl-perm space.
    non-static globals; int literals sitting in f32 ARG positions count
    as pool entries; INT-param literals must STAY literal; f64 M_PI is
    definable this way.
-166. **HEADGAP LAW — head-side ALIGNFIX dual (fox gate, w22)**: dtk
-   absorbs a predecessor's align pad into the NEXT unit's section
-   head; the pad restores at link via align-8. Gate such units with
+166. **HEADGAP LAW — head-side ALIGNFIX dual (fox gate, w22; ⭐
+   link/DOL-PROVEN w23 by flip #13)**: dtk absorbs a predecessor's
+   align pad into the NEXT unit's section head; the pad restores at
+   link via align-8 (fox: byte-exact at the DOL). Gate such units with
    `pool-order-w22/gate_headgap.py` + the predecessor-end condition
-   (fox: ftKb_SpecialNPk dtk object ends 804D944C), not raw
-   whole-object equality.
+   (fox: ftKb_SpecialNPk dtk object ends 804D944C) + link-order
+   adjacency, not raw whole-object equality; final proof = DOL sha.
 167. **LITERAL-COMPARE OPERAND CANON (extends 50; pool-order sweep
    w22)**: target compares emit const-FIRST (`k == x3`) — literal
    operand order is codegen-visible; use const-first when the target
@@ -1895,6 +2028,98 @@ EC4C any-C-form, gm_801BFCFC decl-perm space.
    fuzzy-100 scoring — itwstar's Logic29 called it_80294364 where the
    target calls it_80294624. Audit REL24s on every fuzzy-100 unit
    before flip; linkcheck.py catches it, fuzzy does not.
+171. **⭐⭐ L1' — CS CHOICE RULE IS LOWEST-DIRTY-FIRST (slotlaw-inverter
+   w23; REPLACES/FALSIFIES 128)**: scan DIRTY callee-saved regs in
+   ASCENDING numeric order (r25 before r26 … r31), take the first
+   whose holders don't interfere; else the HIGHEST VIRGIN reg. NO
+   cursor, NO descending dirty scan. Validated: 22/22 synthetic
+   byte-fits (incl. every cursor-era "anomaly") + 44/44 w20 replica
+   colorings + all 3 gm_801BFCFC maps (l1prime.py/mine44.py/solve3.py
+   in slotlaw-inverter-w23/). All cursor-artifact reasoning and the
+   w20/w21 order corpora are VOID.
+172. **⭐ LOW-PRESSURE PROCESSING = PURE DECL ORDER (corollary of 171;
+   sharpens 1/131, DISSOLVES 140)**: with no anonymous webs, decl
+   perms reach EVERY L1'-admissible coloring — a complete lever; the
+   "slot park" class cannot exist below the promotion regime.
+   Re-triage all parked transposition pairs against L1' predictions
+   first. High-pressure promotion is decl-NON-monotonic (slot-0
+   demotes, decl-late tail/count promote, slot-2/3 neighbors flip
+   slot-1, call-temps decl-inert) — quantitative law OPEN, 44 labeled
+   points ready.
+173. **ROVER ANONYMIZATION MOVES THE ANCHOR PAIR (extends 149/162; gm
+   real-fn byte-proven, w23)**: replacing decomp-invented walker
+   pointers with direct `base[idx]` indexing converts the walker web
+   to an SR rover, REORDERING the (anchor, walker) allocation pair —
+   the first C-reachable lever that moved gm_801BFCFC's BASE to its
+   target register (98.25). Cost: the rover processes phase-0; pends
+   the rover-demotion form.
+174. **CONST-STORE ZERO-WEB THRESHOLD (proves/extends 160; g01/g02/g05
+   synthetic, w23)**: a shared zero becomes a register web only at
+   ≥2 STORE uses (call-crossing pair → CS reg; adjacent no-call pair
+   → r0); a live variable's own `=0` init NEVER joins the store web
+   from plain C. The itpikachuthunder DF8 prologue (single sth
+   sharing the live web's li) is thereby proven a park.
+175. **SJISWRAP NON-ASCII TRAP TAXONOMY (hygiene w23, bytegate-proven
+   ×7)**: src is UTF-8 and sjiswrap converts UTF-8→SJIS at compile;
+   non-ASCII inside string literals is INTENTIONAL Japanese — never
+   touch; the trap class is typography in COMMENTS (U+2014 em-dash,
+   U+00D7, U+00B0, stray kana) — replace with ASCII; comment-only
+   fixes are byte-neutral (cmp-identical .o). Scanners must NOT do
+   SJIS lead-byte skipping (UTF-8 trail bytes are never ASCII;
+   lead-skip misparses and false-flags strings).
+176. **OURS-EXTRA UNREFERENCED SECTION IS DEADSTRIPPED (sharpens
+   116/134; ftmetal flip #10 DOL byte-proof, w23)**: an ours-only
+   section with no relocs into it, no exported syms, no force_active,
+   inside a KEPT object is mwld-deadstripped at link — benign for
+   flips. TOOLING GAP: stock linkcheck.py iterates TARGET sections
+   only and never reports OURS-EXTRA — a REFERENCED ours-extra
+   section would silently break the DOL; rank.py should add the row.
+177. **ENTRY-ANCHOR PREPEND LAW (texp p01-p10, w23; sharpens 15/56 —
+   the mr-vs-addi "compiler-internal" singleton class is an
+   IR-POSITION tell)**: GCSE-merged pooled-constant anchors land at
+   the END of the entry BB; only LICM from a loop whose preheader IS
+   the entry BB PREPENDS the lis above the param homes — and the
+   early IR slot flips copy mnemonics mr→addi-0. while+break triggers
+   all three phenomena but pays jump-to-test rotation;
+   do-while(0)/for(;;)break/trip-1 loops dissolve BEFORE LICM (no
+   trigger). TExpAssignReg parked on this (98.30, 6 rows; do-not-
+   re-probe list in s1-texp-ifcoget-w23/REPORT.md).
+178. **VOID-INLINE CS RE-RANK (extends 37/57/163; won fn_802FF218
+   r30↔r31, w23)**: idiom 57's expansion re-rank applies to
+   CALLEE-SAVED webs of a void static-inline expanded in caller
+   position — first-decl-highest INSIDE the expansion; cracks
+   fn-scope slot-inert transpositions at zero frame cost (void = 0B;
+   value-returning variant charges +8B even with a single direct
+   return — measured both ways).
+179. **NAMED-ZERO GAP CLAIM (extends 146/165; ifcoget .sdata2
+   byte-exact, w23)**: a dtk `gap_NN` 4-byte zero slot between pool
+   entries is claimable by a positioned dead NON-static
+   `const f32 name = 0.0f;` — it does NOT dedup against the anonymous
+   0.0f pool entry (complement of 105's unreachable stream heads —
+   this one IS reachable).
+180. **VARARG INT-ARG addi NEEDS EXPANSION (extends 56; fn_802FF218,
+   w23)**: `mr rArg,rCS` becomes `addi rArg,rCS,0` iff the value
+   travels as an inline-expansion parameter; the node stays at the
+   expansion's IR slot and CANNOT cross into the condition BB from an
+   arm-resident call. All disp-copy spellings (plain/+0/int-laundered/
+   ptr-laundered/self-read/assignment-in-condition) VN-canonicalize.
+181. **BRANCH-ARM F2I STAGING-ZONE RESERVATION (ftCo AC5A0 law
+   candidate, 14 probes, w23; frame analog of 118/148, park family
+   156)**: branch-arm float→int conversions reserve a 3-slot frame
+   staging zone whose FIRST-created slot dies — the phantom 8B is NOT
+   sqrtf-owned (survives sqrtf removal and every local/scope/
+   init-class/register/type/cast/inline-depth spelling); it dies ONLY
+   when the f2i conversions become straight-line single-BB. Do not
+   re-probe the listed spellings.
+182. **GRAV-POINTER BLOCKED-DEREF RECIPE (extends 42/46; won ftCo
+   A9904 +1.10 / A9CB4 +0.63, w23)**: target tell = `addi rP` then
+   `lfs lit@sda21` then `lfs 0x16c(rBase)` order with a later
+   cross-BB `lfs 0x0(r3)` ⇒ build a blocked pointer
+   (`temp = &agg.field;` + cast-only self-read) and route BOTH the
+   same-BB read (folds to d-form but schedules AFTER the addi) and
+   the else-arm divisor through `*temp` (one shared deref node); repay
+   the @-ledger exactly (PAD_STACK→UNUSED-pad −4, `if(0){}` +2,
+   `goto L; L:` +1).
 
 ### Experiment results (wave 3)
 
@@ -2031,12 +2256,23 @@ EC4C any-C-form, gm_801BFCFC decl-perm space.
   r28/r29~~ **WON wave 11 →100** (idiom 66 helper swap; the LIFO
   free-stack model's lever was the preceding region); ~~A2718~~ **WON
   wave 12 →100 EXACT** (idiom 73/74 package); A6A98/A6D2C → FY-PROP
-  park family (above); A6FC4 root cause = full FPR map rotation (@471
-  at f31 vs our f21) + 1 extra GPR; AC5A0 dead 8B
-  between y and f2i temps; A9904/A9CB4 dead-below-y + `fadds f1,f1,f31`
-  canonical operand order (both source orders emit f31-first); A61D8
-  loop-group-vs-invariant coloring; AE7AC r4-vs-r7 pick + inverted mr/addi
-  param-homing pair.
+  park family (above; w23: idiom-147 read-cast probe INERT (96.13,
+  reverted) — add to the falsified list; w13 "second def of aggregate"
+  theory still untried; the extra blocked/result bool web (3 diamonds
+  vs target 2, +1 CS GPR) = dedicated-session item); A6FC4 root cause =
+  full FPR map rotation (@471 at f31 vs our f21) + 1 extra GPR;
+  **AC5A0 diagnosis UPGRADED w23 (re-parked 99.88)**: the phantom 8B is
+  NOT sqrtf-owned — branch-arm f2i staging-zone reservation, idiom 181
+  (14 probes, all spellings falsified, band-mirror/156 park family);
+  ~~A9904 98.80 / A9CB4 99.30~~ **WON w23 →99.8983/+1.10 and
+  →99.9367/+0.63** via the grav-pointer blocked-deref recipe (idiom
+  182; exact @-ledger repaid; ten downstream 100-pins re-verified;
+  residual 8 rows each = instance-band mirror + f1/f2 virgin-temp
+  transposition (145-class) — pends a band-mirror inverter); A61D8
+  loop-group-vs-invariant coloring; AE7AC r4-vs-r7 pick + inverted
+  mr/addi param-homing pair (A61D8/AE7AC/B2790: re-judge under L1'
+  first). ⚠ AF78C is CONFIRMED 100 (third check, incl. `--full`) —
+  the "99.99, 2 sqrtf-slot rows" note was STALE.
 - **gm_1832 residuals**: fn_801851C0 r30/r31 LICM-temp swap (8 forms);
   fn_80188550 + fn_80188644 TU split **LANDED wave 11** — now 99.18
   (8 pure S1 regalloc rows: r28↔r25/r31↔r26 swaps) and 99.34 (→100 pends
@@ -2049,18 +2285,36 @@ EC4C any-C-form, gm_801BFCFC decl-perm space.
   (26C04/27168/2838C); loop-counter-first volatile rotation (decl/def/init
   all no-ops); ud/sp param-copy homing swap (25FAC, 5 levers); 26EBC u64
   inline-result r3/r4 coalesce (expert inline-copy class).
+- **texp w23 park (src reverted byte-clean)**: TExpAssignReg 98.30, 6
+  rows, ONE mechanism = entry-anchor prepend class (idiom 177): target
+  needs LICM-from-an-entry-preheader loop (prologue lis + all-addi
+  homes) but emits an if at codegen; every loop form that survives to
+  codegen pays jump-to-test rotation, every dissolving form dissolves
+  pre-LICM. 19 unit compiles + 10 probes; matched in-TU corpus anchors
+  the law (HSD_TExpSetReg/ColorOp, pobj fns). Do-not-re-probe list in
+  s1-texp-ifcoget-w23/REPORT.md. If "loop-at-LICM, if-at-codegen" is
+  ever cracked, texp is 1 fn from 100 and likely flip-rankable.
 - ~~it_8026F3D4 (95.56)~~ **WON wave 19 →100.00** — the volatile-cast
   extern read (idiom 117) breaks lfs-pairs-with-lis; itdrop flip enabler.
-  **fn_802FF218 (94.33)**: y↔thing callee-saved swap + r6
-  arg-copy site, regalloc-resistant pair.
-- **Wave-19 parks (updated wave 21)**: gm_801BFCFC residual r27↔r28
-  transposition = slot-law park (idiom 140; ALL 4 queued ideas + 23
-  decl perms resolved w21 — pends a slot-inverter); it_8026EECC
+  ~~fn_802FF218 (94.33)~~ **w23 →95.1219 (16→4 rows)**: y↔thing
+  r30↔r31 CRACKED via void-inline CS re-rank (idiom 178; decl forms
+  were all inert); residual 4 rows = cond-BB arg-copy slot (idiom 180
+  position mechanism) — on any L1' slot win, retry the
+  `settext(v, thing)` call-only form FIRST (addi already correct
+  there, only the slot is wrong). Plus .sdata2 0x30 byte-exact (idiom
+  179) — un_804DDC20/28/2C externs retired game-wide (zero importers,
+  @-demotion candidates; symbols.txt:33872-74).
+- **Wave-19 parks (updated wave 21; RE-FRAMED w23 under L1')**:
+  gm_801BFCFC residual r27↔r28 = ONE anon precedence {drop BASE<w1},
+  rover lever already moved BASE (idiom 173; pends rover-demotion form
+  — ONE move from 100); it_8026EECC
   allocator-tie ONE-transposition state — V7 99.26 recipe REBUILT +
   saved (cs-law-w21/itdraw_V7_99.2628.c), all idiom-130 levers inert,
-  same slot-inverter class (GPR-side, L1 applies); ~~quatlib 8037EC4C~~
+  GPR-side L1' re-solve queued (cursor-era order analysis VOID);
+  ~~quatlib 8037EC4C~~
   PARKED DEFINITIVE w21 with mechanism proof (idiom 145 — do NOT
-  re-attempt from C); lb_8000D148 fresh-reg rotation (true shape at
+  re-attempt from C; ⚠ w23: proof shape pends the 145 re-test);
+  lb_8000D148 fresh-reg rotation (true shape at
   99.06 documented, reverted); ~~MSL logf 18B~~ **WON wave 21 →100.0000
   MATCH** (scope-overlay frame law, idiom 143 — MSL/math link-clean).
   lb_00CE pool head = DEFINITIVE dead-creator park (idioms 118/148; do
@@ -2259,6 +2513,86 @@ EC4C any-C-form, gm_801BFCFC decl-perm space.
 
 ## Session log
 
+- **2026-06-07 — Wave 23 (⭐⭐ FLIPS #10-13 COMMITTED: ftmetal
+  d711d02b2 · ftdevice 3084bc2f4 · itwstar b31fdd544 ·
+  ftkirbyspecialfox 53d7181ae = first HEADGAP-law flip, 845→**849/1041
+  linked**, FLIP-READY pool now EMPTY; ⭐⭐ L1' VERDICT: idiom-128
+  cursor law FALSIFIED → idiom 171 lowest-dirty-first, idiom-140 slot
+  class DISSOLVED → the 8 SLOT-PARK units become per-unit L1'
+  re-solves; first strategic census of ALL 190 remaining units) — 4
+  commits (configure.py only, one per flip); HEAD 53d7181ae; 5
+  streams, ~158 unit compiles + 8 full-ninja gates, DOL sha1 08e0bf20
+  EXACT throughout.**
+  ⭐⭐ **SLOT-INVERTER RESEARCH (durable slotlaw-inverter-w23/
+  REPORT.md)**: L1' (idiom 171) replaces the cursor model — 22/22
+  synthetic byte-fits incl. every cursor-era anomaly (p09/p10 was an
+  artifact), 44/44 w20 replica colorings, all 3 gm maps; low-pressure
+  processing = pure decl order (172, decl perms COMPLETE — the
+  idiom-140 class cannot exist there); rover anonymization (173)
+  produced gm_801BFCFC BASE=r27 on the real fn for the FIRST time
+  (98.25; fn byte-reverted, sha-verified; residual = rover phase-0
+  demotion, ONE move from 100); idiom-160 threshold proven (174,
+  g01/g02/g05 — DF8 park stands w/ mechanism); all cursor-era order
+  corpora (226-order gm spec, itdraw/lbmemory derivations) VOID;
+  high-pressure promotion law OPEN (non-monotonic; 44 labeled points +
+  tooling ready); FPR idiom-145 proof SHAPE invalidated, verdict pends
+  re-test. ⭐⭐ **EXEC (file-flip-w23/progress.txt)**: 4 flips, full
+  gate chain ×4 + idempotence ×4; rank pass-2 FLIP-READY EMPTY (190
+  ranked + 2 src-less); w22-shrunk units verified still
+  CONTENT-blocked; **strategic census** (classify.py): SLOT-PARK 8 ·
+  S1-SMALL+DATA 4 · S1-MED+DATA 6 · CODEGEN+DATA 1 (efsync) ·
+  DATA-RECON 1 (**if_2FC93 = cheapest new flip-unblock**) ·
+  STRUCT-NEAR 60 · STRUCT-DEEP 106 · BLOCKED 4 — table now lives in
+  the FLIP VERDICT section; idioms 176 (ours-extra deadstrip +
+  linkcheck OURS-EXTRA gap) + 166 link-proven (H1). ⚠ w22's
+  "uncommitted src" note was stale — 3419e0862 had committed it.
+  ⭐ **S1 texp+ifcoget (durable s1-texp-ifcoget-w23/REPORT.md)**:
+  brief named grkraid/grstory but BOTH already Matching (stale brief —
+  remove from gr queues); claimed fallbacks: **fn_802FF218
+  94.33→95.12** (void-inline CS re-rank, idiom 178; residual = cond-BB
+  arg-copy slot, idiom 180) + **ifcoget .sdata2 0x30 BYTE-EXACT**
+  (externs un_804DDC20/28/2C → literals + named-zero gap claim, idiom
+  179; the PLAN line-499 ifcoget follow-up DONE, externs retired
+  game-wide); texp TExpAssignReg PARKED 98.30 (entry-anchor prepend
+  law, idiom 177; src reverted byte-clean); 14 siblings 100.0 ×2
+  gates. ⭐ **S1 ftCo_0A01 (REPORT.md write blocked by harness — full
+  text in orchestrator return only; scratch ftco0a01-s1-w23/ has
+  baseline+bak)**: **A9904 98.80→99.90 + A9CB4 99.30→99.94** via the
+  grav-pointer blocked-deref recipe (idiom 182) w/ exact @-ledger
+  repayment; ten downstream 100-pins re-verified through real ninja;
+  AC5A0 diagnosis UPGRADED (idiom 181 f2i staging zone, 14 probes —
+  NOT sqrtf); AF78C note was STALE (confirmed 100 3rd time); A6A98
+  idiom-147 probe inert; idiom-48 correction (cast-only self-read =
+  +1 id, measured ×2; stale-.o canaries BOGUS). ⭐ **HYGIENE
+  (hygiene-w23/progress.txt)**: camera.c sjiswrap-breaking em-dash +
+  6 more files fixed (comment-only; grbigblue/itzgshell/gm_1832/
+  gm_1884/gmregclear/ftPk_SpecialHi) — src now 0 outside-string
+  non-ASCII, bytegate PASS ×7, DOL sha EXACT; grgreatbay 499C/4300
+  "stale-100" RESOLVED as idiom-45 metric divergence (report-100 vs
+  reloc-aware sub-100, 0 bytes; backlog refresh faithful — safe to
+  commit; grgreatbay .text 29B not 31B); in-string Japanese correctly
+  untouched (idiom 175). **INCIDENT (confessed)**: hygiene's DOL
+  relink launched during exec's live f13 gate — `pgrep || echo` does
+  NOT halt; ground rule sharpened to hard-exit guards; post-hoc sha
+  exact, no corruption. **WARNINGS**: (1) idiom-number collision
+  AGAIN — research self-assigned 170-173 (170 was taken); final
+  numbers **171-182** assigned here; (2) one stream's durable
+  REPORT.md was harness-blocked (ftCo) — 4/5 durable records on disk;
+  (3) briefs stale ×2 (grkraid/grstory Matching; w22 src already
+  committed) — orchestrator briefs must re-derive state at spawn.
+  **QUEUES (ranked)**: (1) gm_801BFCFC rover-demotion form — ONE move
+  from 100, then gm_1BFA flips; (2) L1' re-solves: ifprize v_x8 2B
+  (decl moves may suffice, idiom 172) · grgreatbay 5460 · lbmemory
+  3-cycle/FC8 · itdraw V7 · gmopening · itpika DF8 prologue ·
+  fn_802FF218 settext form; (3) if_2FC93 data-recon = next flip; (4)
+  high-pressure order-law mining (44 points); (5) FPR 145 re-test;
+  (6) ifprize sibling literal swaps (soundtest/textdraw/textlib
+  remain); (7) commit the 10 dirty files (7 hygiene + ifcoget +
+  ftCo_0A01 + backlog.json) at next grant; (8) naming: un_804DDC20/
+  28/2C @-demotion; (9) band-mirror inverter (156/181 family);
+  (10) math_data.c:82-83 still open. Idioms 171-182 added; 128/140
+  struck; 48/166 amended; ground rules + infra amended (pgrep
+  hard-exit, bytegate target, idiom-45 metric divergence).**
 - **2026-06-07 — Wave 22 (⭐⭐ FLIPS #7-9 COMMITTED at the open
   (0c6fe90d1: MSL/math + ftPr_SpecialN + itlinkbomb, 842→**845/1041
   linked, 43.56%**) + FOUR NEW FLIP-READY UNITS built in-wave: ftmetal

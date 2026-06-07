@@ -4945,7 +4945,7 @@ void Camera_800313E0(HSD_GObj* gobj, u64 prios)
     HSD_GObj_80390ED0(gobj, 4);
 }
 
-/// sdata2 pool — defined after all uses so the compiler references the
+/// sdata2 pool -- defined after all uses so the compiler references the
 /// named symbols instead of folding them into anonymous literal pools.
 f32 const cm_804D7E00 = -3.4028235E+38f;
 f32 const cm_804D7E04 = 1.0f;

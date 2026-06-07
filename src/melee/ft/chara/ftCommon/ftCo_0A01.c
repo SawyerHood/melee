@@ -4352,8 +4352,7 @@ void ftCo_800A9904(Fighter* fp)
     Vec3 sp40;
     int sp3C;
     u32 sp38;
-
-    PAD_STACK(0x24);
+    UNUSED u8 pad[0x24];
 
     if (ftCo_800A3498(fp) != 0) {
         if (fp->co_attrs.max_jumps > fp->x1968_jumpsUsed) {
@@ -4373,11 +4372,12 @@ void ftCo_800A9904(Fighter* fp)
             var_f0 = dx / fp->pos_delta.x;
         }
         temp_r3 = &fp->co_attrs.grav;
-        if (is_small(fp->co_attrs.grav)) {
+        temp_r3 = (f32*) ((u8*) temp_r3 + 0);
+        if (is_small(*temp_r3)) {
             var_f5 = 1000.0F;
         } else {
             var_f5 = -(-fp->co_attrs.terminal_vel - fp->pos_delta.y) /
-                     fp->co_attrs.grav;
+                     *temp_r3;
         }
         if (var_f5 <= 0.0F) {
             var_f4 = (fp->pos_delta.y * var_f0) + fp->cur_pos.y;
@@ -4390,6 +4390,9 @@ void ftCo_800A9904(Fighter* fp)
                 (fp->pos_delta.y * var_f5 - 0.5 * (*temp_r3 * sqrtf(var_f5)) -
                  ((var_f0 - var_f5) * fp->co_attrs.terminal_vel));
         }
+        if (0) { }
+        goto pay_w23;
+    pay_w23:
         {
             int stick = 4.7000003F * (temp_r31->level + 1) + 80.0f;
             if (var_f0 < 0.0 || var_f4 < temp_r31->x54.y) {
@@ -4460,8 +4463,7 @@ void ftCo_800A9CB4(Fighter* fp)
     f32* temp_r3;
     enum_t var_r0_2;
     int var_r0_6;
-
-    PAD_STACK(0x58);
+    UNUSED u8 pad[0x58];
 
     if (ftCo_800A1CA8(fp)) {
         ftCo_800B46B8(fp, CpuCmd_SetLstickX, 0);
@@ -4537,12 +4539,16 @@ void ftCo_800A9CB4(Fighter* fp)
         var_f0 = 0.0F;
     }
     temp_r3 = &fp->co_attrs.grav;
-    if (is_small(fp->co_attrs.grav)) {
+    temp_r3 = (f32*) (u8*) temp_r3;
+    if (is_small(*temp_r3)) {
         var_f5 = 1000.0F;
     } else {
         var_f5 = -(-fp->co_attrs.terminal_vel - fp->pos_delta.y) /
-                 fp->co_attrs.grav;
+                 *temp_r3;
     }
+    if (0) { }
+    goto pay_w23b;
+pay_w23b:
     if (var_f5 <= 0.0F) {
         var_f2 = (fp->pos_delta.y * var_f0) + fp->cur_pos.y;
     } else if (var_f0 < var_f5) {

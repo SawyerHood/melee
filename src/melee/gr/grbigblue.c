@@ -3043,7 +3043,7 @@ void grBigBlue_801ECB50(Ground_GObj* gobj)
     s32 active_count = 0;
     PAD_STACK(8);
 
-    /* Count free (0) and reserved (2) lanes - 5×6=30 total */
+    /* Count free (0) and reserved (2) lanes - 5x6=30 total */
     {
         s32 ctr = 5;
         do {
