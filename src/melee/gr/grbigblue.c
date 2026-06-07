@@ -285,6 +285,11 @@ void grBigBlue_801E5B20(Ground_GObj* gobj)
 
     jobj = HSD_JObjGetChild(jobj);
     if (jobj != NULL) {
+        /* Inversion park (wave 14): the six 0.0F setter args below are
+         * @205-pool rows whose target reloc is grBb_804DB2F4; converting
+         * them to the extern costs +1 file-wide @id per inline expansion
+         * (+6 total, breaks every downstream @-pin) - C-unreachable at
+         * zero id cost. */
         HSD_JObjSetTranslateX(jobj, 0.0F);
         HSD_JObjSetTranslateY(jobj, 0.0F);
         HSD_JObjSetTranslateZ(jobj, 0.0F);
@@ -421,7 +426,7 @@ void grBigBlue_801E6364(Ground_GObj* gobj)
     Ground_801C2ED0(jobj, gp->map_id);
     PAD_STACK(4);
 
-    scale.x = scale.y = scale.z = 1.0F;
+    scale.x = scale.y = scale.z = grBb_804DB2F0;
     HSD_JObjSetScale(jobj, &scale);
 
     gp->gv.bigblue.xC8 = HSD_MemAlloc(120);
@@ -528,7 +533,7 @@ void grBigBlue_801E6904(Ground_GObj* gobj)
     Ground_801C2ED0(jobj, gp->map_id);
     gp->x10_flags.b5 = 1;
 
-    scale.x = scale.y = scale.z = 1.0F;
+    scale.x = scale.y = scale.z = grBb_804DB2F0;
     HSD_JObjSetScale(jobj, &scale);
 
     grAnime_801C8138(gobj, gp->map_id, 0);
@@ -628,7 +633,7 @@ void grBigBlue_801E6C60(Ground_GObj* gobj)
                     neg_pos.x = -(10.0f + Stage_GetBlastZoneRightOffset());
 
                     right_y = grBigBlue_801EC58C(&pos, NULL, 500.0f);
-                    left_y = grBigBlue_801EC58C(&neg_pos, NULL, 500.0f);
+                    left_y = grBigBlue_801EC58C(&neg_pos, NULL, grBb_804DB30C);
 
                     if (right_y != -3.4028235e38f || left_y != -3.4028235e38f)
                     {
@@ -825,7 +830,7 @@ void grBigBlue_801E6C60(Ground_GObj* gobj)
             f32 speed_val;
 
             HSD_JObjGetTranslation(jobj, &cur_pos);
-            surface_y = grBigBlue_801EC58C(&cur_pos, &normal, 500.0f);
+            surface_y = grBigBlue_801EC58C(&cur_pos, &normal, grBb_804DB30C);
             if (surface_y == -3.4028235e38f) {
                 normal.z = 0.0f;
                 *(f32*) &normal = 0.0f;
@@ -1045,7 +1050,7 @@ void grBigBlue_801E6C60(Ground_GObj* gobj)
                 }
 
                 probe_pos = cur_pos;
-                probe_y = grBigBlue_801EC58C(&probe_pos, NULL, 500.0f);
+                probe_y = grBigBlue_801EC58C(&probe_pos, NULL, grBb_804DB30C);
 
                 {
                     Vec3 speeds5;
@@ -1227,6 +1232,11 @@ bool grBigBlue_801E8794(void* exclude, Vec3* pos, bool checkSecondary,
     int i;
     f32 dist;
 
+    /* Inversion park (wave 14): the LICM'd 0.0F below is an @205 row whose
+     * target reloc is grBb_804DB2F4; idiom-86 extern-rank-flip - every
+     * extern form (fn-scope local, decl-first, direct use) rotates the
+     * f29/f30/f31 zero/rangeX/rangeY map (99.96 -> 98.0/95.2). Stays
+     * literal by design. */
     for (i = 0; i < 3; i++) {
         if (exclude == gp->gv.bigblue.xD4[i]) {
             continue;
@@ -1399,6 +1409,9 @@ void grBigBlue_801E8D64(Ground_GObj* gobj)
         y_pos = grBb_804DB2F4;
     }
 
+    /* Inversion park (wave 14): the two 0.0F setter args are @205 rows
+     * (target grBb_804DB2F4); the extern form GCSEs into a new callee-saved
+     * f30 across the asserts (frame +8) - store-value class, idiom 85. */
     HSD_JObjSetTranslateX(jobj, 0.0F);
 
     y_pos += grBb_804D69C8->xCC;
@@ -1406,7 +1419,7 @@ void grBigBlue_801E8D64(Ground_GObj* gobj)
 
     HSD_JObjSetTranslateZ(jobj, 0.0F);
 
-    *(f32*) ((u8*) gp + 0xD8) = 0.0F;
+    *(f32*) ((u8*) gp + 0xD8) = grBb_804DB2F4;
     *(s32*) ((u8*) gp + 0xC8) = (s32) (grBb_804D69C8->xD8);
     *(u8*) ((u8*) gp + 0xC4) = 2;
 
@@ -1414,7 +1427,7 @@ void grBigBlue_801E8D64(Ground_GObj* gobj)
 
     HSD_JObjGetTranslation2(jobj, &pos);
     {
-        f32 inv = 1.0F / Ground_801C0498();
+        f32 inv = grBb_804DB2F0 / Ground_801C0498();
         pos.x *= inv;
         pos.y *= inv;
         pos.z *= inv;
@@ -1458,7 +1471,11 @@ void grBigBlue_801E93D8(Ground_GObj* gobj)
 
     HSD_JObjGetTranslation2(jobj, &pos);
 
-    if (grBigBlue_801EC58C(&pos, &normal, 500.0f) == -3.4028235e38f) {
+    if (grBigBlue_801EC58C(&pos, &normal, grBb_804DB30C) == grBb_804DB310) {
+        /* Inversion park (wave 14): converting this 0/0/1 triple to
+         * grBb_804DB2F4/grBb_804DB2F0 consumes +1 file-wide @id (CSE temp
+         * for the adjacent same-extern refs) and breaks downstream @-pins
+         * (idiom 48/72) - stays literal by design. */
         normal.z = 0.0f;
         normal.x = 0.0f;
         normal.y = 1.0f;
@@ -1513,8 +1530,8 @@ void grBigBlue_801E93D8(Ground_GObj* gobj)
 
                 memzero(&pos, 0xC);
                 pos.x = Stage_GetBlastZoneLeftOffset() - 50.0f;
-                height = grBigBlue_801EC58C(&pos, NULL, 500.0f);
-                if (height != -3.4028235e38f) {
+                height = grBigBlue_801EC58C(&pos, NULL, grBb_804DB30C);
+                if (grBb_804DB310 != height) {
                     f32 speed;
                     s32 collided;
 
@@ -1542,7 +1559,7 @@ void grBigBlue_801E93D8(Ground_GObj* gobj)
                     if (collided != 0) {
                         pos.y = 30.0f + Stage_GetCamBoundsTopOffset();
                     }
-                    if (pos.y == -3.4028235e38f) {
+                    if (grBb_804DB310 == pos.y) {
                         OSReport((char*) grBb_803E2938 + 0x560);
                         __assert((char*) grBb_803E2938 + 0x440, 0x6CB,
                                  &grBb_804D46B8);
@@ -1571,7 +1588,7 @@ void grBigBlue_801E93D8(Ground_GObj* gobj)
                                    (60.0f * Ground_801C0498()) + 30.0f,
                                    140.0f * Ground_801C0498()) != 0)
             {
-                *(f32*) (bp + 0xD8) = 0.0f;
+                *(f32*) (bp + 0xD8) = grBb_804DB2F4;
             } else {
                 *(f32*) (bp + 0xD8) = grBb_804D69C8->xD0;
             }
@@ -1618,7 +1635,7 @@ void grBigBlue_801E93D8(Ground_GObj* gobj)
                 }
                 *(s32*) (mgp2 + 0xC8) = 1;
             }
-            *(f32*) (bp + 0xCC) = 0.0f;
+            *(f32*) (bp + 0xCC) = grBb_804DB2F4;
             HSD_JObjSetRotationZ(jobj, 0.0f);
             bp[0xC4] = 0;
         }
@@ -1662,9 +1679,9 @@ void grBigBlue_801E93D8(Ground_GObj* gobj)
                                          cam_bot2, cam_left2, cam_right2);
         }
         check_pos = pos;
-        check_h = grBigBlue_801EC58C(&check_pos, NULL, 500.0f);
+        check_h = grBigBlue_801EC58C(&check_pos, NULL, grBb_804DB30C);
         if (bound_y <= check_h) {
-            if (check_h == -3.4028235e38f) {
+            if (grBb_804DB310 == check_h) {
                 *(f32*) (bp + 0xD0) = fwd.y;
             } else {
                 *(f32*) (bp + 0xD0) = check_h + grBb_804D69C8->xCC;
@@ -1742,7 +1759,11 @@ void grBigBlue_801EA05C(Ground_GObj* gobj)
 
     HSD_JObjGetTranslation2(jobj, &pos);
 
-    if (grBigBlue_801EC58C(&pos, &normal, 500.0f) == grBb_804DB310) {
+    if (grBigBlue_801EC58C(&pos, &normal, grBb_804DB30C) == grBb_804DB310) {
+        /* Inversion park (wave 14): converting this 0/0/1 triple to
+         * grBb_804DB2F4/grBb_804DB2F0 consumes +1 file-wide @id (CSE temp
+         * for the adjacent same-extern refs) and breaks downstream @-pins
+         * (idiom 48/72) - stays literal by design. */
         normal.z = 0.0f;
         normal.x = 0.0f;
         normal.y = 1.0f;
@@ -1787,12 +1808,12 @@ void grBigBlue_801EA05C(Ground_GObj* gobj)
             pos.x = Stage_GetBlastZoneRightOffset();
             half_bot.x = -Stage_GetBlastZoneRightOffset();
 
-            right_y = grBigBlue_801EC58C(&pos, NULL, 500.0f);
-            left_y = grBigBlue_801EC58C(&half_bot, NULL, 500.0f);
+            right_y = grBigBlue_801EC58C(&pos, NULL, grBb_804DB30C);
+            left_y = grBigBlue_801EC58C(&half_bot, NULL, grBb_804DB30C);
 
             *(f32*) ((u8*) gp + 0xD4) = grBb_804D69C8->xF4;
             range = grBb_804D69C8->xF8 - grBb_804D69C8->xF4;
-            if (range < 0.0f) {
+            if (range < grBb_804DB2F4) {
                 range = -range;
             }
             if ((s32) range != 0) {
@@ -1816,7 +1837,7 @@ void grBigBlue_801EA05C(Ground_GObj* gobj)
                     gp->gv.bigblue.x1 = 1;
                 } else {
                     f32 diff = right_y - left_y;
-                    if (diff < 0.0f) {
+                    if (diff < grBb_804DB2F4) {
                         diff = -diff;
                     }
                     if (diff < 80.0f) {
@@ -1898,7 +1919,7 @@ void grBigBlue_801EA05C(Ground_GObj* gobj)
 
         pos2 = pos;
 
-        surface_y = grBigBlue_801EC58C(&pos2, NULL, 500.0f);
+        surface_y = grBigBlue_801EC58C(&pos2, NULL, grBb_804DB30C);
 
         half_h = 52.0f * Ground_801C0498() * 0.5f + 4.0f;
         ace_result = grBigBlue_801EACE8(
@@ -1973,7 +1994,7 @@ void grBigBlue_801EA05C(Ground_GObj* gobj)
                     speed_r = 0;
                 }
                 speed = (f32) speed_r * 0.1f;
-                if (speed == 0.0f) {
+                if (speed == grBb_804DB2F4) {
                     speed = grBb_804D69C8->xFC;
                 }
                 *(f32*) ((u8*) gp + 0xE4) = speed * (f32) (s8) gp->gv.bigblue.x1;
@@ -2010,7 +2031,7 @@ void grBigBlue_801EA05C(Ground_GObj* gobj)
                     speed_r = 0;
                 }
                 speed = (f32) speed_r * 0.1f;
-                if (speed == 0.0f) {
+                if (speed == grBb_804DB2F4) {
                     speed = grBb_804D69C8->x104;
                 }
                 if (HSD_Randi(2) != 0) {
@@ -2059,7 +2080,7 @@ bool grBigBlue_801EAB50(Vec3* pos, s32 flag, f32 rangeX, f32 rangeY)
 
     if ((s8) gp->gv.bigblue.x0 == 2) {
         dist = HSD_JObjGetTranslationX(jobj) - pos->x;
-        if (dist < 0.0F) {
+        if (dist < grBb_804DB2F4) {
             dist = -(HSD_JObjGetTranslationX(jobj) - pos->x);
         } else {
             dist = HSD_JObjGetTranslationX(jobj) - pos->x;
@@ -2067,7 +2088,7 @@ bool grBigBlue_801EAB50(Vec3* pos, s32 flag, f32 rangeX, f32 rangeY)
 
         if (dist < rangeX) {
             dist = HSD_JObjGetTranslationY(jobj) - pos->y;
-            if (dist < 0.0F) {
+            if (dist < grBb_804DB2F4) {
                 dist = -(HSD_JObjGetTranslationY(jobj) - pos->y);
             } else {
                 dist = HSD_JObjGetTranslationY(jobj) - pos->y;
@@ -2294,9 +2315,9 @@ void grBigBlue_801EB004(Ground_GObj* gobj)
 
         HSD_JObjClearFlagsAll(active, JOBJ_HIDDEN);
 
-        pos.x = 0.0F;
+        pos.x = grBb_804DB2F4;
         pos.y = grBb_804D69C8->x0 * Ground_801C0498();
-        pos.z = 0.0F;
+        pos.z = grBb_804DB2F4;
 
         HSD_JObjSetTranslate(active, &pos);
     }
@@ -2834,7 +2855,11 @@ f32 grBigBlue_801EC58C(Vec3* pos, Vec3* normal_out, f32 half_height)
     f32 bottom;
     u32 i;
 
-    max_y = 0.0F;
+    /* Binary-proven fix: the target initializes the best-y accumulator with
+     * grBb_804DB2F4-style named pool float grBb_804DB310 = -FLT_MAX (callers
+     * test the return value against grBb_804DB310); 0.0F was a decomp
+     * deviation that also broke the no-hit sentinel semantics. */
+    max_y = grBb_804DB310;
     local_ids = grBb_803B8134;
 
     x1 = pos->x;
@@ -3857,7 +3882,7 @@ void grBigBlue_801ED694(Ground_GObj* gobj, s32 lane)
     if ((lane_gp[0xD4] >> 1) & 1) {
         /* Grounded path */
         ground_y = grBigBlue_801EC58C((Vec3*) (lane_gp + 0xE0),
-                                      &sp_vec, (f32) 500.0f);
+                                      &sp_vec, (f32) grBb_804DB30C);
 
         if (0.0F != ground_y && ground_y > rank_factor) {
             if (*(f32*) (lane_gp + 0x10C) < 0.0F) {
@@ -3951,7 +3976,7 @@ s32 grBigBlue_801EDF44(Ground_GObj* gobj, s32 index)
     case 1:
         break;
     case 9:
-        if (0.0F == *(f32*) (gp + offset + 0xEC)) {
+        if (grBb_804DB2F4 == *(f32*) (gp + offset + 0xEC)) {
             result = 1;
         }
         break;
@@ -3961,7 +3986,7 @@ s32 grBigBlue_801EDF44(Ground_GObj* gobj, s32 index)
 
         if (*(f32*) (gp + offset + 0xE0) > blast + grBb_804D69C8->x68 * scale)
         {
-            if (0.0F != *(f32*) (gp + offset + 0xEC)) {
+            if (grBb_804DB2F4 != *(f32*) (gp + offset + 0xEC)) {
                 result = 9;
             } else {
                 result = 1;
@@ -3975,7 +4000,7 @@ s32 grBigBlue_801EDF44(Ground_GObj* gobj, s32 index)
 
         if (*(f32*) (gp + offset + 0xE0) < blast - grBb_804D69C8->x68 * scale)
         {
-            if (0.0F != *(f32*) (gp + offset + 0xEC)) {
+            if (grBb_804DB2F4 != *(f32*) (gp + offset + 0xEC)) {
                 result = 9;
             } else {
                 result = 1;
@@ -4797,6 +4822,10 @@ void grBigBlue_801EF424(Ground_GObj* gobj)
         grBigBlue_801ED694(gobj, n);
     }
 
+    /* Inversion park (wave 14): the LICM'd 0.0F compares below are the @205
+     * row (target grBb_804DB2F4, f28); a named fn-scope copy ranks the
+     * extern ABOVE the @1105/@1157 LICM doubles (f30 vs f28, 99.96 ->
+     * 99.63) - idiom-86 extern-rank-flip, stays literal by design. */
     changed = 1;
     k = 0;
 
@@ -4902,9 +4931,7 @@ void grBigBlue_801EF7D8(Vec3* pos)
         pos->x = grBb_804DB3F0;
         pos->z = pos->y = grBb_804DB2F4;
     } else {
-        pos->z = 0.0F;
-        pos->y = 0.0F;
-        pos->x = 0.0F;
+        pos->x = pos->y = pos->z = grBb_804DB2F4;
     }
 }
 

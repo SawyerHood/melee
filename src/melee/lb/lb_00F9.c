@@ -50,6 +50,9 @@
 
 typedef bool (*lb_803BA248_fn)(ColorOverlay*);
 
+extern f32 lb_804D7C50;
+extern f32 lb_804D7C70;
+
 struct lb_Collider {
     /* 0x00 */ char pad_00[0x0C];
     /* 0x0C */ f32 radius;
@@ -1927,10 +1930,8 @@ bool lb_80013C18(ColorOverlay* arg0)
     arg0->x58_light_green = arg0->x50_light_color.g;
     arg0->x5C_light_blue = arg0->x50_light_color.b;
     arg0->x60_light_alpha = arg0->x50_light_color.a;
-    arg0->x70_lightblend_alpha = 0.0f;
-    arg0->x6C_lightblend_blue = 0.0f;
-    arg0->x68_lightblend_green = 0.0f;
-    arg0->x64_lightblend_red = 0.0f;
+    arg0->x64_lightblend_red = arg0->x68_lightblend_green =
+        arg0->x6C_lightblend_blue = arg0->x70_lightblend_alpha = lb_804D7C50;
     ++arg0->x8_ptr1;
     arg0->x7C_flag2 = true;
     return false;
@@ -1947,10 +1948,8 @@ bool lb_80013D68(ColorOverlay* arg0)
     arg0->x58_light_green = arg0->x50_light_color.g;
     arg0->x5C_light_blue = arg0->x50_light_color.b;
     arg0->x60_light_alpha = arg0->x50_light_color.a;
-    arg0->x70_lightblend_alpha = 0.0f;
-    arg0->x6C_lightblend_blue = 0.0f;
-    arg0->x68_lightblend_green = 0.0f;
-    arg0->x64_lightblend_red = 0.0f;
+    arg0->x64_lightblend_red = arg0->x68_lightblend_green =
+        arg0->x6C_lightblend_blue = arg0->x70_lightblend_alpha = lb_804D7C50;
     ++arg0->x8_ptr1;
     return false;
 }
@@ -1997,10 +1996,8 @@ bool lb_80014014(ColorOverlay* arg0)
     arg0->x34_color_green = arg0->x2C_hex.g;
     arg0->x38_color_blue = arg0->x2C_hex.b;
     arg0->x3C_color_alpha = arg0->x2C_hex.a;
-    arg0->x4C_colorblend_alpha = 0.0f;
-    arg0->x48_colorblend_blue = 0.0f;
-    arg0->x44_colorblend_green = 0.0f;
-    arg0->x40_colorblend_red = 0.0f;
+    arg0->x40_colorblend_red = arg0->x44_colorblend_green =
+        arg0->x48_colorblend_blue = arg0->x4C_colorblend_alpha = lb_804D7C50;
     ++arg0->x8_ptr1;
     return false;
 }
@@ -2134,7 +2131,7 @@ void lb_800145F4(void)
 
 static inline float inlineC0(Vec3* a, Vec3* b, Vec3* c)
 {
-    if (ABS(b->z - a->z) < 0.01f) {
+    if ((b->z - a->z < lb_804D7C70 ? -(b->z - a->z) : b->z - a->z) < 0.01f) {
         return 1.0f;
     } else {
         return (c->z - a->z) / (b->z - a->z);
@@ -2254,10 +2251,10 @@ bool lb_800149E0(Mtx arg0, u32 arg1)
             GXBegin(GX_LINESTRIP, GX_VTXFMT0, 2);
             {
                 float y = arg0[1][0];
-                GXPosition3f32(arg0[0][2], y, 0.0f);
+                GXPosition3f32(arg0[0][2], y, lb_804D7C70);
                 GXColor4u8(yellow.r, yellow.g, yellow.b, yellow.a);
 
-                GXPosition3f32(arg0[0][3], y, 0.0f);
+                GXPosition3f32(arg0[0][3], y, lb_804D7C70);
                 GXColor4u8(yellow.r, yellow.g, yellow.b, yellow.a);
             }
             GXEnd();

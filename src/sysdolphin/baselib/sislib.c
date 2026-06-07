@@ -74,11 +74,18 @@ static u8
 
 static HSD_Archive* HSD_SisLib_804D1110[5];
 SIS* HSD_SisLib_804D1124[5];
-s8 HSD_SisLib_804D6390[4] = { 0, 0, 0, 0 };
+extern const f32 HSD_SisLib_804DEAB0;
+extern const f32 HSD_SisLib_804DEAB4;
+extern const f32 HSD_SisLib_804DEAB8;
+extern const f32 HSD_SisLib_804DEABC;
+extern const f32 HSD_SisLib_804DEAC0;
+extern const f32 HSD_SisLib_804DEAC4;
+extern const f32 HSD_SisLib_804DEAC8;
+extern const f32 HSD_SisLib_804DEAF8;
+extern const f32 HSD_SisLib_804DEAFC;
 
-/// @todo Currently 99.40% match - remaining diffs are register allocation
-/// (HSD_SisLib_804D7970 ptr in r3 instead of r4) plus the "" literal pooling
-/// to HSD_SisLib_804D6390, both link/regalloc-resolved
+/// @todo Currently 99.40% match - remaining diff is register allocation
+/// (HSD_SisLib_804D7970 ptr in r3 instead of r4), regalloc-resolved
 /// a generic allocator used by multiple
 /// data types
 void* HSD_SisLib_803A5798(s32 size)
@@ -97,7 +104,7 @@ void* HSD_SisLib_803A5798(s32 size)
     alloc_cur = HSD_SisLib_804D7974;
     if (size == 0) {
         OSReport("ZERO byte alloc\n");
-        OSPanic("sislib.c", 0x3C, "");
+        OSPanic("sislib.c", 0x3C, HSD_SisLib_804D6390);
     }
     remainder = size % 4;
     if (remainder != 0) {
@@ -128,7 +135,7 @@ void* HSD_SisLib_803A5798(s32 size)
     }
     if (best == NULL) {
         OSReport("Memory Empty\n");
-        OSPanic("sislib.c", 0x56, "");
+        OSPanic("sislib.c", 0x56, HSD_SisLib_804D6390);
     }
 
     search = HSD_SisLib_804D7970;
@@ -145,7 +152,7 @@ void* HSD_SisLib_803A5798(s32 size)
                          (sizeof(sislib_UnkAllocData));
         if (remaining_size < 0) {
             OSReport("Memory Empty\n");
-            OSPanic("sislib.c", 0x5F, "");
+            OSPanic("sislib.c", 0x5F, HSD_SisLib_804D6390);
         }
 
         HSD_SisLib_804D7970 = (sislib_UnkAllocData*) (data_ptr + size);
@@ -226,6 +233,12 @@ void HSD_SisLib_803A594C(void* ptr)
         HSD_SisLib_804D7974 = alloc_cur->data_0;
     }
     alloc_cur->data_0 = NULL;
+    /// @-id shim (idiom 41/48): repays the @69 ""-pool death in
+    /// HSD_SisLib_803A5798 so the @189/@190 pins keep their numbers.
+    /// NB: the label id ticks at FUNCTION ENTRY, so it must live in a
+    /// function with no pinned literal creations (5798 holds @67/@68).
+    goto _sis_id_pad_0;
+_sis_id_pad_0:;
 }
 
 void HSD_SisLib_803A5A2C(void* ptr)
@@ -561,7 +574,8 @@ s32 HSD_SisLib_803A611C(int font_idx, HSD_GObj* parent_gobj, u16 class_id,
             HSD_CObj* cobj =
                 HSD_CObjLoadDesc((HSD_CObjDesc*) &HSD_SisLib_8040C4B8);
             if (cobj != NULL) {
-                HSD_CObjSetOrtho(cobj, 0.0F, -480.0F, 0.0F, 640.0F);
+                HSD_CObjSetOrtho(cobj, 0.0F, HSD_SisLib_804DEAB0, 0.0F,
+                                 640.0F);
                 {
                     u8 tmp = HSD_GObj_804D784B;
                     HSD_GObjObject_80390A70(entry->x4, tmp, cobj);
@@ -575,6 +589,9 @@ s32 HSD_SisLib_803A611C(int font_idx, HSD_GObj* parent_gobj, u16 class_id,
             }
         }
     }
+    /// @-id shim: repays the @263 (-480.0F) pool death (idiom 41/48).
+    goto _sis_id_pad_1;
+_sis_id_pad_1:;
     return count;
 }
 
@@ -584,7 +601,7 @@ void HSD_SisLib_803A62A0(s32 font_idx, char* archive_name, char* symbol_name)
     HSD_SisLib_804D1110[font_idx] = tmp;
     if (tmp == NULL) {
         OSReport("Cannot open archive %s.\n", archive_name);
-        OSPanic("sislib.c", 0x24A, "");
+        OSPanic("sislib.c", 0x24A, HSD_SisLib_804D6390);
     }
     {
         SIS* sis = HSD_ArchiveGetPublicAddress(HSD_SisLib_804D1110[font_idx],
@@ -592,7 +609,7 @@ void HSD_SisLib_803A62A0(s32 font_idx, char* archive_name, char* symbol_name)
         HSD_SisLib_804D1124[font_idx] = sis;
         if (sis == NULL) {
             OSReport("Cannot find symbol %s.\n", symbol_name);
-            OSPanic("sislib.c", 0x24F, "");
+            OSPanic("sislib.c", 0x24F, HSD_SisLib_804D6390);
         }
     }
 }
@@ -707,8 +724,9 @@ HSD_Text* HSD_SisLib_803A6754(int font_idx, s32 context_id)
     HSD_Text* text;
     HSD_Text* buffer;
 
-    text = HSD_SisLib_803A5ACC(font_idx, context_id, 0.0F, 0.0F, 0.0F, 640.0F,
-                               480.0F);
+    text = HSD_SisLib_803A5ACC(font_idx, context_id, HSD_SisLib_804DEAB8,
+                               HSD_SisLib_804DEAB8, HSD_SisLib_804DEAB8,
+                               HSD_SisLib_804DEABC, HSD_SisLib_804DEAC0);
     alloc = HSD_SisLib_803A5798(0x10);
     text->alloc_data = alloc;
     buffer = HSD_SisLib_803A5798(0x80);
@@ -722,6 +740,9 @@ HSD_Text* HSD_SisLib_803A6754(int font_idx, s32 context_id)
     *(&alloc->size + 1) = 0;
     HSD_SisLib_803A6368(text, 0);
     text->sis_buffer = (SIS*) alloc->data_1;
+    /// @-id shim: repays the @357 (480.0F) pool death (idiom 41/48).
+    goto _sis_id_pad_2;
+_sis_id_pad_2:;
     return text;
 }
 
@@ -955,9 +976,9 @@ int HSD_SisLib_803A6B98(HSD_Text* text, float x, float y, const char* fmt, ...)
     *(*cur)++ = text->text_color.b;
     *(*cur)++ = 0xE;
     *(*cur)++ = (u8) (s32) text->x34.x;
-    *(*cur)++ = (u8) (s32) (256.0F * text->x34.x);
+    *(*cur)++ = (u8) (s32) (HSD_SisLib_804DEAC4 * text->x34.x);
     *(*cur)++ = (u8) (s32) text->x34.y;
-    *(*cur)++ = (u8) (s32) (256.0F * text->x34.y);
+    *(*cur)++ = (u8) (s32) (HSD_SisLib_804DEAC4 * text->x34.y);
 
     copied_bytes = 0;
     if (encoded_len > 0) {
@@ -1260,9 +1281,9 @@ void HSD_SisLib_803A7548(HSD_Text* text, int entry_idx, float scale_x,
     if (entry != NULL) {
         scale_ptr = entry + 9;
         *++scale_ptr = (u8) scale_x;
-        scale_ptr[1] = (u8) (256.0F * scale_x);
+        scale_ptr[1] = (u8) (HSD_SisLib_804DEAC4 * scale_x);
         scale_ptr[2] = (u8) scale_y;
-        scale_ptr[3] = (u8) (256.0F * scale_y);
+        scale_ptr[3] = (u8) (HSD_SisLib_804DEAC4 * scale_y);
     }
 }
 
@@ -1489,16 +1510,18 @@ void HSD_SisLib_803A7684(HSD_Text* text, u8* cursor, u8 flags)
         }
         pos = text->x6C;
         text->x6C = pos + 1;
-        text->string_buffer[pos] = (s8) ((s32) (256.0F * text->x78.x) >> 8);
+        text->string_buffer[pos] =
+            (s8) ((s32) (HSD_SisLib_804DEAC8 * text->x78.x) >> 8);
         pos = text->x6C;
         text->x6C = pos + 1;
-        text->string_buffer[pos] = (s8) (256.0F * text->x78.x);
+        text->string_buffer[pos] = (s8) (HSD_SisLib_804DEAC8 * text->x78.x);
         pos = text->x6C;
         text->x6C = pos + 1;
-        text->string_buffer[pos] = (s8) ((s32) (256.0F * text->x78.y) >> 8);
+        text->string_buffer[pos] =
+            (s8) ((s32) (HSD_SisLib_804DEAC8 * text->x78.y) >> 8);
         pos = text->x6C;
         text->x6C = pos + 1;
-        text->string_buffer[pos] = (s8) (256.0F * text->x78.y);
+        text->string_buffer[pos] = (s8) (HSD_SisLib_804DEAC8 * text->x78.y);
         pos = text->x6C;
         text->x6C = pos + 1;
         text->string_buffer[pos] = (s8) flags;
@@ -1590,16 +1613,18 @@ void HSD_SisLib_803A7684(HSD_Text* text, u8* cursor, u8 flags)
         }
         pos = text->x6C;
         text->x6C = pos + 1;
-        text->string_buffer[pos] = (s8) ((s32) (256.0F * text->x80.x) >> 8);
+        text->string_buffer[pos] =
+            (s8) ((s32) (HSD_SisLib_804DEAC8 * text->x80.x) >> 8);
         pos = text->x6C;
         text->x6C = pos + 1;
-        text->string_buffer[pos] = (s8) (256.0F * text->x80.x);
+        text->string_buffer[pos] = (s8) (HSD_SisLib_804DEAC8 * text->x80.x);
         pos = text->x6C;
         text->x6C = pos + 1;
-        text->string_buffer[pos] = (s8) ((s32) (256.0F * text->x80.y) >> 8);
+        text->string_buffer[pos] =
+            (s8) ((s32) (HSD_SisLib_804DEAC8 * text->x80.y) >> 8);
         pos = text->x6C;
         text->x6C = pos + 1;
-        text->string_buffer[pos] = (s8) (256.0F * text->x80.y);
+        text->string_buffer[pos] = (s8) (HSD_SisLib_804DEAC8 * text->x80.y);
         pos = text->x6C;
         text->x6C = pos + 1;
         text->string_buffer[pos] = (s8) flags;
@@ -1859,9 +1884,10 @@ void HSD_SisLib_803A84BC(HSD_GObj* gobj, int pass)
             HSD_CObjGetViewingMtx(HSD_CObjGetCurrent(), (MtxPtr)&m);
         } else {
             GXSetZMode(0U, 0U, 0U);
-            GXSetViewport(0.0F, 0.0F, 640.0F, 480.0F, 0.0F, 1.0F);
+            GXSetViewport(0.0F, 0.0F, 640.0F, HSD_SisLib_804DEAF8, 0.0F, 1.0F);
             GXSetScissor(0, 0, 0x280, 0x1E0);
-            MTXOrtho((MtxPtr)&m, 0.0F, -480.0F, 0.0F, 640.0F, 0.0F, 2.0F);
+            MTXOrtho((MtxPtr) &m, 0.0F, HSD_SisLib_804DEAFC, 0.0F, 640.0F,
+                     0.0F, 2.0F);
             GXSetProjection((MtxPtr)&m, 0);
             m[0][0] = 1.0F;
             m[0][1] = 0.0F;
@@ -2331,3 +2357,17 @@ void HSD_SisLib_803A947C(HSD_Archive* archive)
 {
     lbArchive_80016EFC(archive);
 }
+
+const f32 HSD_SisLib_804DEAB0 = -480.0F;
+const f32 HSD_SisLib_804DEAB4 = 640.0F;
+const f32 HSD_SisLib_804DEAB8 = 0.0F;
+const f32 HSD_SisLib_804DEABC = 640.0F;
+const f32 HSD_SisLib_804DEAC0 = 480.0F;
+const f32 HSD_SisLib_804DEAC4 = 256.0F;
+const f32 HSD_SisLib_804DEAC8 = 256.0F;
+const f32 HSD_SisLib_804DEAF8 = 480.0F;
+const f32 HSD_SisLib_804DEAFC = -480.0F;
+
+/// Fix-B positioned def (idiom 87): defined after all uses so the OSPanic
+/// sites emit named relocs; init blob placed past the last pinned @-id.
+char HSD_SisLib_804D6390[8] = "";

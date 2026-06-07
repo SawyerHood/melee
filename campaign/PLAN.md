@@ -142,27 +142,42 @@ scope:local→global flip in symbols.txt — dtk-shasum byte-PROVEN safe
 (narrows idiom-75's negative; see idiom 80). The wave-9 CE3F8/D08E8
 both-demand-offset-0 paradox is RESOLVED: D08E8 got its own TU base;
 13-symbol bss block + CF7E8 extern siblings verified intact.
-NEXT: gm_1601 — spec READY (wave-13 diagnosis, report-only:
-`campaign/scratch/gm1601_w13/cuts_gm1601.txt`): 2 cuts / 3 TUs
-(+0x110 family root cause byte-confirmed: gm_8016A164 target lis/addi
-lbl_8046B488 vs our ...bss.0, delta 0x110). SPLIT 1 (A|B): .text
-0x80169364 (fallback 0x801692E8) / .bss 0x8046B488 / .data 0x803D5620
-/ .rodata prefer section end 0x803B7A60 (TU-B likely empty) / .sbss
-0x804D65A0 / .sdata 0x804D3F67 / .sdata2 0x804DA288. SPLIT 2 (B|C):
-.text 0x8016A92C / .bss 0x8046B668 / .sdata2 0x804DA294. Land in
-reverse address order; keep check_bit clones with their TUs; expected
-recoveries fn_801695BC 70.2 / fn_80169A84 74.2 / gm_8016A164 99.5 /
-gm_8016A22C 74.1 / fn_8016A4C8 88.1 / gm_8016AC44 66.4. Then gm_18A5
+✅ **gm_1601 LANDED + COMMITTED (wave 15)** — 2 splits / 3 TUs,
+reverse address order, baseline 2cd6e2ad1: commit 3504f3639
+(gm_16A9.c, split B|C: .text 0x8016A92C / .bss 0x8046B668 / .sdata2
+0x804DA294 — all object boundaries; the 4B "gap_11" end is a real
+cut, dtk re-displays gap→pad; lbl_8046B668 → own TU at .bss offset
+0; gate 456 SAME / 2 UP / 0 DOWN) + commit 2226073a1 (gm_1693.c,
+split A|B: .text 0x80169364 — primary cut used, 0x801692E8 fallback
+NOT needed — / .bss 0x8046B488 / .sdata2 0x804DA288; the
+byte-confirmed +0x110 fold anchor lbl_8046B488 lands at offset 0;
+gate 455 SAME / 4 UP / 0 DOWN / 0 GONE/NEW). ALL gates PASS ×5
+checkpoints (DOL sha1 08e0bf20 + dtk OK + deps#3 + idempotence ×2 +
+ZERO @-pin drift + symbols.txt untouched, 371-line canary slice
+identical to baseline); 226 fns preserved (184+35+7).
+**gm_8016A164 99.50→100.00 EXACT**, gm_8016A22C →76.80, fn_8016A4C8
+→89.53, gm_8016AC44 →66.77, [.sdata2-0]→100 (TU-B pool byte-EXACT:
+1.0f/0.0f/−1.0f at 0/4/8); unit matched_code 63.369→63.659.
+PREDICTION CORRECTION: fn_801695BC 70.22 + fn_80169A84 74.20 did
+NOT recover — byte-diff shows pure S1 residuals with NO anchor rows
+(wave-13 recovery list overstated them). Src pattern: gm_1693.c
+carries its own lbl_8046B488_t struct copy — head TU field-accesses
+through fn_80169364()'s getter pointer so the def must be visible
+to BOTH TUs (idiom 89) — plus moved gm_80164840/gm_80169238
+noinline wrapper chains (idiom-83 per-TU clones). Artifacts:
+campaign/scratch/tu-split-gm1601/progress.txt. NEXT: gm_18A5
 (triad CONFIRMED wave 12 + SECFOLD 6 re-confirmed by the inversion
 sweep, proposed cuts incl. fallbacks in
 gm18a5_w12/LOG.txt: .text fn_80190ABC | fn_80196510; .bss lbl_804771B8
 | lbl_804799B8; .data lbl_803D9F80 | lbl_803DA0D0; .sdata ~0x804D4150 |
 0x804D4170; .sdata2 0x804DA6E8 | 0x804DA7E0 — each pends object-boundary
-+ simultaneous-partition verification). **Wave-14 status: split
-queue UNBLOCKED for wave 15** — gm_1601 front, then gm_18A5;
-serialize the split lands vs naming-11 AND the five uncommitted
-inversion trees (ftcoll/camera/toy/tydisplay/grvenom — tydisplay's
-tree includes a 4-line symbols.txt rename) at the wave boundary.
++ simultaneous-partition verification). **Wave-15 status: gm_1601
+DONE; gm_18A5 is now the queue front** — its cuts still pend
+object-boundary + simultaneous-partition verification (deliberately
+NOT executed in wave 15: outside the split executor's ownership
+grant, skipped per instructions); serialize the gm_18A5 land vs
+naming-12 AND the four uncommitted wave-15 inversion trees
+(sislib/lb_00F9/gmresult/grbigblue) at the wave boundary.
 DOL-safe for ALL
 NonMatching units. Caveat: land splits.txt + src halves together —
 splits-only temporarily drops the tail functions from report.json.
@@ -686,11 +701,22 @@ the rest of the queue):**
    = fadds swap-pair rows, C-UNREACHABLE — Fix-A framing was wrong;
    address-keyed renumber map) → tydisplay DONE (ALL 49 rows cleared,
    un_8031C1D0→100, ZERO @-drift) → grvenom DONE (28/30, 3 fns→100;
-   2 donor-keeper leftovers BY DESIGN, idiom 86). REMAINING
-   worklists: grbigblue 20 →
-   sislib 11 (our @264 serves TWO targets — dup-literal split) →
-   lb_00F9 8 (keep @328 alive for its @176 rows) → gmresult 5 →
-   gm_1832 3 NEW (@-budget). Jumptable rows (ftCo jtbl_803C5C70/BE8,
+   2 donor-keeper leftovers BY DESIGN, idiom 86). ✅ **Wave-15
+   EXECUTED the tail — sweep worklist heads ALL DONE**: grbigblue
+   (3 fns→100 + 9 UP, OK 432→439, LIT2EXT 20→13 all park-enumerated;
+   Fix-A renames UNAVAILABLE there — sqrtf weak-sym +0x10 shift
+   kills offset-pairing and ~40 @-pins name-pair on our numbering)
+   → sislib (3 fns→100, OK 148→158, LIT2EXT 11→1 donor-residue BY
+   DESIGN; the dup-640 split resolved per donor-keeper: kept the
+   611C+0xfc creation literal, 6754+0x18→ABC, and @264 RECLAIMED
+   its own number — no renumber queue) → lb_00F9 (3 fns→100, OK
+   377→382, LIT2EXT 8→3; @328 kept alive at .sdata2+0x14; unit
+   merges ≥4 TUs — lb_803BA1C0 = lbspdisplay.c string AND its
+   .data fold base) → gmresult (5→1 forced donor-keeper; target
+   lbl_804D3FB0 was the assert string "0", not an invented s8) →
+   gm_1832 (correct NULL result: its 3 rows are 0x4330 conversion
+   magic already objdiff-paired — analyzer-only, idiom 91; zero
+   compiles against its pins). Jumptable rows (ftCo jtbl_803C5C70/BE8,
    grmutecity) excluded as naming park. camera cm_80452C68 ×74 SHADOW
    = the old camera.static.h extern-flip package; gm_18A5 SECFOLD 6
    re-confirms its TU split. Re-run analyze.py on main/melee/lb/
@@ -835,6 +861,62 @@ the rest of the queue):**
    reloc-name-BLIND — a 49-row reloc debt scored 100 there. Gate all
    inversion/naming work on inversion-sweep analyze.py + check_fn /
    objdiff match_percent only.
+89. **gm_1601 SPLIT-EXEC PACK (wave 15)**: SHARED-STATIC.H SPLIT
+   PATTERN — when the head TU field-accesses a moved static through a
+   getter pointer, the struct def must stay visible to BOTH TUs
+   (restore in .static.h with a sync note + duplicate in the new TU;
+   incomplete-type compile error is the tell). Noinline wrapper
+   chains MOVE with their only caller (idiom-83 per-TU clones).
+   A 4-byte .sdata2 "gap_NN" can be a real object boundary — cutting
+   at its end is legal (dtk re-displays gap→pad, same bytes).
+   Re-verify wave-N "expected recovery" lists per-fn at byte level
+   before promising: 95BC/9A84 residuals were pure S1 (no anchor
+   rows) despite living in the +0x110 family. Project-level
+   report.json delta mid-wave is sibling in-flight flux — per-symbol
+   gates authoritative (extends 88).
+90. **⭐ LABEL IDS TICK AT FUNCTION ENTRY (refines 41/48; sislib +
+   gmresult, independently measured)**: label-shim @-ids bind at
+   function-label-numbering time, NOT lexical position — a goto-shim
+   placed AFTER two literal creations still renumbers them (sislib:
+   shim in 5798 shifted pinned @67/@68, moved to 594C → restored;
+   gmresult: shim stole id 880, not 882). Corollaries: a shim can
+   NEVER repay an id slot bracketed by two same-function literals →
+   donor-keeper is the only pin-safe option there (the residual row
+   is permanent; renaming the target sym → @N forbidden once src
+   extern-refs the name, idiom 75); place shims only in fns with NO
+   pinned creations; donor-keeper at the creation site + fn-entry
+   shim repayment of a same-statement sibling death reclaims the
+   entry's EXACT original @number (no renumber queue needed).
+   File-scope `char[8] = ""` init blob ticks +1 id — cure =
+   positioned Fix-B EOF def (idiom 87 extends to .sdata objects).
+91. **@-SYMS ARE RESOLVABLE-ANONYMOUS (refines 51; gmresult,
+   byte-proven)**: objdiff pairs our-side `@N` pool syms against
+   target NAMED syms by equal RESOLVED OFFSET (our @697 .sdata2+0x28
+   == tgt lbl_804DA560+0x28 ⇒ fn_8018504C scores 100.00 with 2
+   "mismatched" analyzer rows); the name+addend-only rule applies to
+   lbl-vs-lbl pairs. Such rows are ANALYZER-ONLY — extend
+   analyze.py's pairing emulation. Companion (lb_00F9): check_fn
+   flags identical-text `yellow@sda21` rows `~` that the analyzer
+   pairs — never count check_fn `~` without analyzer confirmation.
+92. **LIT2EXT COST TAXONOMY + GX-FIFO RANK + SOURCE-ORDER COMPARES
+   (extends 72/85/86; grbigblue/lb_00F9/sislib, measured)**:
+   inline-expansion arg-position extern f32 = +1 @id PER EXPANSION
+   (caller-body only — refines idiom-72's "0"; grbigblue +6 uniform
+   drift on 6 expansions, + GCSE f30). 0-id byte-exact classes:
+   compare-operand, call-arg, raw-ptr-store-after-call, chain-assign
+   (re-validated ×3 at 100; innermost-first store order, single
+   lfs), const-LEFT equality, direct extern in 2-use straight-line
+   GX args, multiply-operands feeding (u8)(s32) store conversions
+   (×12), triple same-value call-arg fans (one extern lfs, CSE
+   preserved). Extern compares follow SOURCE operand order while
+   literals canonicalize const-first — write the extern LEFT when
+   the target row is const-first. EXTERN-RANK FLIP extends to
+   GX-fifo multi-use: across GXWGFifo volatile stores a literal CSEs
+   into f2 (target-exact) while an extern mis-ranks in EVERY form
+   (direct=f3; named local stmt/in-arg=f4 — named webs rank after
+   ALL anonymous CSE webs; pre-branch def=f4+hoist), and pointer
+   loads DO CSE across fifo stores ⇒ the flip is pure RA rank, not
+   reload. Donor-keeper parks remain the standing cure (idiom 86).
 
 ### Experiment results (wave 3)
 
@@ -927,9 +1009,10 @@ the rest of the queue):**
 - **itcoll it_80270CD8**: FP attractor analysis complete; likely needs a
   shared static-inline helper for the stale-damage formula (cf. matched
   sibling it_80270E30). Worth ONE retry with the helper approach.
-- **gm_1601 +0x110 anchor-fold family** (gm_8016A164/A22C/A4C8/95BC/9A84/
-  AC44): unit merges ≥3 original TUs; constant-offset fns fold to merged
-  .bss base. UNPARK PATH: TU-split verdict section (≥2 cuts queued).
+- **gm_1601 +0x110 anchor-fold family — RESOLVED by the wave-15 split**:
+  gm_8016A164 →100 EXACT; A22C/A4C8/AC44 anchor rows gone (residuals now
+  ordinary S1/structural, see split report); 95BC/9A84 were never
+  anchor-blocked — pure S1 rotation, now in clean TU context (S1 queue).
 - **lbColl_800077A0 residual (4 rows)**: target has a dead 4-byte temp at
   frame 0x34 before sqrtf instance 1; 6 forms failed (PAD_STACK/trailing
   local/block volatile/warm-up call all wrong or shift @ids).
@@ -1125,9 +1208,153 @@ the rest of the queue):**
   ftcoll, tydisplay ×4 incl. B1FC/B328 .data layout d-forms — a full
   idiom-69 .data reconstruction would also fix B460; target byte map
   in tydisplay-w14/REPORT.md).
+- **Wave-15 inversion parks**: sislib SHADOW offset-0 ×6 + S1 parks
+  (5798 r3/r4, 594C coalesce, 67EC/70A0/7684/84BC structural) +
+  803A611C 99.95 donor residue BY DESIGN (its baseline 100 was
+  coincidental offset-pairing); lb_00F9 14638 f2/f3 swap
+  (pre-existing) + 14770 extern-rank singleton (4-probe ledger in
+  inversion-lb00F9-w15/progress.txt); gmresult fn_801857C4 li 0/1
+  reg swap (S1 rotation) + 1 permanent donor-keeper row (idiom-90
+  bracket; lbl_804D3FB0→@882 rename forbidden, idiom 75); grbigblue
+  13 enumerated rows — 2 donors BY DESIGN (801E57C0 = @204/@205
+  creation), 8 inline-setter args (+1 @id each + GCSE f30, idiom
+  92), 1 sqrtf-internal (math_ppc.h `x > 0.0f`), 2 extern-rank-flips
+  (8794 zero/range f29-f31 rotation, EF424 zero-above-LICM-doubles)
+  — plus LC parks (store-group alias-barrier load counts, bulk
+  multi-ref GCSE net-negative BAF8/D694/EEF00, B004 fval +1 id, CB50
+  header-inline arg) and S1/S3 carryovers (8A1C r29/r30, B004
+  bitfield+frame, CB50 stmw/rlwimi, EACE8 fnmsubs, structural
+  6C60/E398/EEF00); re-run analyze.py after 93D8/A05C structural
+  work. ftcoll [.sdata-0] stuck at 40.0 (naming-11 deviation):
+  sections byte-match at 100 but dtk tail pads (.sdata 8 vs 2,
+  .data 280 vs 276) + the 12B .sdata2 permutation penalize bracket
+  rows — unreachable from symbols.txt, pends the 7861C S1 crack.
 
 ## Session log
 
+- **2026-06-07 — Wave 15 (gm_1601 TU-split EXECUTED + inversion-tail
+  ×4 units + naming round 11) — 3 commits landed, HEAD 2226073a1;
+  idiom-72 sweep worklist heads ALL DONE; 13 fns→100 (1 split + 9
+  inversion + 3 naming).** ⭐ **TU-SPLIT gm_1601 LANDED + COMMITTED**
+  (2 splits / 3 TUs reverse-address: 3504f3639 gm_16A9.c B|C +
+  2226073a1 gm_1693.c A|B; verdict section updated with cuts/gates):
+  all gates PASS ×5 checkpoints, 226 fns preserved (184+35+7), zero
+  @-pin drift, symbols.txt canary-identical; **gm_8016A164 →100
+  EXACT**, [.sdata2-0]→100 (TU-B pool byte-EXACT), A22C→76.8 /
+  A4C8→89.5 / AC44→66.8; unit matched 63.369→63.659; PREDICTION
+  CORRECTION: 95BC/9A84 were pure S1 all along (no anchor rows);
+  idiom 89 (shared-static.h struct visibility, moved noinline
+  wrapper chains, gap→pad cut, sibling-flux gating). ⭐ **Inversion
+  tail EXECUTED (one owner per unit, src-only, all bytegated, trees
+  UNCOMMITTED)**: **sislib** — LIT2EXT 11→1 (residue BY DESIGN), OK
+  148→158, **3 fns→100** (803A62A0/6754/7548), 5798→99.54; all 4 LC
+  rows cleared; .sdata HSD_SisLib_804D6390 char[8] Fix-B
+  target-EXACT; dup-640 donor-keeper split — @264 RECLAIMED its own
+  number, @-pins ZERO net drift (4 pool deaths repaid by 3
+  goto-shims + 1 organic CSE tick); bytegate 34/34 byte-identical;
+  ⭐ idiom 90 discovered (label ids tick at FUNCTION ENTRY).
+  **lb_00F9** — LIT2EXT 8→3, OK 377→382, **3 fns→100**
+  (13C18/13D68/14014 via reversed chain-assign); 14638/149E0 rows
+  paired; 14770 REVERTED → donor-keeper park (extern-rank flip);
+  121FC pair queued naming-12; extern refs consumed 0 @ids ×5
+  (idiom 72 re-confirmed); 45-sym @-canary zero drift; unit merges
+  ≥4 TUs (fn_80013614 SECFOLD = low-prio split evidence).
+  **gmresult** — LIT2EXT 5→1 (forced donor-keeper, idiom-90
+  bracket); binary-proven: target lbl_804D3FB0 = assert string "0"
+  (.sdata, 0x2), ours had invented `static s8 = 0x30` — fixed via
+  static.h `char[] = "0"` + 4 sites through __assert/HSD_ASSERTMSG;
+  fn_80176A6C→99.85, OnEnter→99.25, [lbl_804D3FB0]→100; bytegate +
+  @-canary PASS; **gm_1832 = correct NULL result** (3 rows = 0x4330
+  magic, already objdiff-paired ⇒ ⭐ idiom 91; its load-bearing
+  @-pins never touched). **grbigblue** — LIT2EXT 20→13 (all
+  park-enumerated) + ~17 LC rows paired, OK 432→439, **3 fns→100**
+  (801E6904/801EAB50/801EF7D8) + 9 UP incl. binary-proven 801EC58C
+  `max_y = 0.0F`→grBb_804DB310 (-FLT_MAX sentinel); 71/71 @-syms
+  zero drift; Fix-A unavailable (sqrtf weak-sym +0x10 shift); idiom
+  92 cost taxonomy. **Naming-11 COMMITTED 10cffa882** (symbols.txt
+  only, +14/−14): ftcoll queue ALL 14 applied scope:local
+  (pin-verified pass1+pass2, 0 fails; cross-TU grep clean); gate
+  PASS at baseline/post-apply/no-op idempotence; per-unit snapshot
+  180 SAME / 42 UP / 0 DOWN / 0 GONE/NEW; **3 fns→100**
+  (ftColl_80078A2C/7ABD0/7BC90 — pool-permutation trio recovered by
+  name+addend pairing WITHOUT the 7861C crack) + 79AB0/79C70/79EA8/
+  7A06C up; all 12 w14 drops + @340 + @655 recovered; DEVIATION:
+  [.sdata-0] stayed 40.0 (dtk tail pads + 12B permutation — parked,
+  see wave-15 parks); camera Fix-A 3 SKIPPED — live src coordination
+  missing (EOF defs camera.c:4956-4958 + decls camera.static.h:
+  102-104 + live ref :3982) → PAIRED-EDIT queue; particle: nothing
+  unapplied (naming-10 complete; 3 blocked pins re-verified still
+  source-blocked → S1, sources untouched since b701858cc).
+  **NAMING-12 QUEUE**: gm_1693 Fix-A (address-keyed, value-verified,
+  cross-TU grep-clean; re-verify ids at land): lbl_804DA288→@588
+  (1.0f), lbl_804DA28C→@680 (0.0f), lbl_804DA290→@681 (−1.0f), all
+  scope:local; gmresult lbl_804DA560 (symbols.txt:31102) → @697
+  scope:local (idiom-54 dup-pin, 0x4330000080000000 ×3 value-
+  verified, grep-clean, idiom-80 byte-safe class; hygiene-grade —
+  clears 3 analyzer rows + 7 leftovers in 84138×1/84AB8×3/86634×3;
+  bonus verify lbl_804DA568 10.0f/+0x30 vs unpinned @793); lb_00F9
+  lbl_803BA1C0 (.data:0x803BA1C0) → @1084 (name-on-pool-string,
+  idiom 84/54; pairs lb_800121FC ×2) + @176 (.sdata2:0x804D7BA4) →
+  @328 dup-pin carryover (pairs 4 AT_RENUM + lb_8000FD48 ×2).
+  **PAIRED-EDIT items (symbols.txt + src must land as ONE
+  coordinated change each)**: camera cm_804D7E20→@274 (13 rows) /
+  cm_804D7E18→@272 (2 rows + camera.c:3982 `rand_dir =` ref
+  conversion) / cm_804D7E28→@297 (2 rows) — each = rename + EOF-def
+  delete + header-decl delete; + NAMEPAIR cm_803B73B8→
+  cm_WorldForward (pends pairing-emulation check, cf. idiom 91);
+  sislib OPTIONAL 1-row: HSD_SisLib_804DEAB4 (.sdata2:0x804DEAB4) →
+  @264 dup-pin + 1-line src deletion of the then-orphaned AB4 EOF
+  def (pairs 611C's last row →100; else residue stands by design).
+  **DO-NOT-RENAME (idiom 75, src-referenced/load-bearing)**:
+  lb_804D7C50/lb_804D7C70; grBb_804DB2F0/2F4/30C/310 (~30 OK rows).
+  Unworked naming-11 carryovers: toy renumber map (VALUE-KEYED
+  re-verify at land), tydisplay @1021 re-pin + un_80319EF0 map,
+  naming-10 blocked trio (pends particle S1), lbaudio unit-map
+  recompute, gm_1601 gm_80166378 idiom-54 dup-literal pins (now
+  separable post-split), optional jtbl→@ probe.
+  **SRC/RETRY QUEUE**: gm_1601 post-split S1 (clean TU context):
+  fn_801695BC + fn_80169A84 rotation class, gm_8016A22C 76.8 /
+  fn_8016A4C8 89.5 partials, gm_8016AC44 66.8 structural (TU-C);
+  .data-reconstruction agent now owns FOUR packages — sislib
+  8040CB00/8040CD40 (.sbss placeholders vs target initialized
+  0x240+0x3240 .data tables; fixes 84BC/8134 NAMEPAIR_LC), gmresult
+  idiom-69 (ours 0x198 vs tgt 0x580; lbl_803D6488/6558/6858
+  undefined our-side; anchor+0x410 displacement rows across 8
+  size-mismatched fns; + positioned .sdata pass — ours lacks
+  "P"/"%"/lbl_804D3FA8, lbl_804D3F8C wrongly .bss), particle head
+  strings + lbaudio package (carryovers); lb_00F9 low-prio TU-split
+  (fn_80013614 + dead @715 dup-string + lbl_803BA248 table at
+  +0xF8); carryovers unchanged: ftcoll 7861C pool-permutation probe,
+  camera 29CF8 f26 web, grvenom 80204F20 s32-field header verify,
+  particle S1 trio (1e-10 / f64 2.0 / π÷2), gm_18A5 95AF0
+  post-renumber; header queue: gm_1601.h:53/:157-159/:168,
+  TrainingModeState +0x114, lbaudio full_tree_with_pkg.patch WHOLE.
+  **SPLIT QUEUE**: gm_18A5 FRONT (cuts proposed gm18a5_w12/LOG.txt;
+  pends object-boundary + simultaneous-partition verification —
+  deliberately NOT executed wave 15, outside the executor's
+  ownership grant); serialize vs naming-12 + the four dirty
+  inversion trees at the wave boundary.
+  **WARNINGS**: (1) **mutex violated a FOURTH time** — naming-11
+  committed mid-wave under the live gm_1601 split executor
+  (range-disjoint, canary-proven no damage, but the wave-boundary
+  serialization rule remains unenforced — orchestrator MUST gate
+  it); (2) shared-build-dir refinement (grbigblue): a sibling's
+  ninja rebuilds build/GALE01/src/<unit>.o from YOUR in-flight
+  source — gate ONLY on campaign/scratch/build snapshots (cost one
+  false +6-drift diagnosis); (3) sibling-flux gating: with a broken
+  in-flight sibling source, `ninja <my .o>s build/GALE01/main.dol`
+  still gates correctly (NonMatching units link extracted objects);
+  full ninja once healed; (4) mwcc_sjis rejects non-ASCII comment
+  bytes (em-dash); (5) REPORT.md harness-block persists —
+  progress.txt is the durable record (tu-split-gm1601/,
+  sislib-inversion-w15/, inversion-lb00F9-w15/,
+  inversion-gmres-1832-w15/, grbigblue-inversion-w14/, naming11/);
+  (6) per-symbol gates authoritative over mid-wave report.json flux
+  (idioms 88/89). Idioms 89–92 added; +0x110 park RESOLVED. ~120
+  compiles + 4 full ninjas. Uncommitted src: sislib.c + sislib.h,
+  lb_00F9.c, gmresult.c + gmresult.static.h, grbigblue.c (+ stale
+  backlog.json — triage.py before wave 16); wave-14 trees were
+  committed pre-wave in 2cd6e2ad1.
 - **2026-06-07 — Wave 14 (grand-inversion EXECUTION ×5 units + naming
   round 10) — idiom-72's worklist head fully executed; 23 fns→100
   (18 src + 5 naming).** ⭐ Five inversion agents (one owner per unit,

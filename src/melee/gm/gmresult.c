@@ -1499,13 +1499,16 @@ void fn_80176A6C(void)
     gobj = GObj_Create(0x13U, 0x14U, 0U);
     if (gobj == NULL) {
         OSReport("Error : gobj dont\'t get (gmResultAddPanelCamera)\n");
+        /// @todo Donor-keeper (idiom 86): this first "0" is the @882 pool
+        /// creation site; converting it to lbl_804D3FB0 shifts pinned
+        /// @880/@881 (label shims number before in-function literals).
         HSD_ASSERT(0x662, 0);
     }
 
     cobj = HSD_CObjLoadDesc(lbl_8046DBE8.pnlsce->cameras->desc);
     if (cobj == NULL) {
         OSReport("Error : cobj dont\'t get (gmResultAddPanelCamera)\n");
-        HSD_ASSERT(0x668, 0);
+        HSD_ASSERTMSG(0x668, 0, lbl_804D3FB0);
     }
 
     HSD_GObjObject_80390A70(gobj, HSD_GObj_804D784B, cobj);
@@ -1833,12 +1836,12 @@ void gm_80177368_OnEnter(void* arg0_)
     temp_r3_2 = GObj_Create(0xB, 3, 0);
     if (temp_r3_2 == NULL) {
         OSReport("Error : gobj dont't get (gmResultAddLight)\n");
-        __assert("gmresult.c", 0x68C, "0");
+        __assert("gmresult.c", 0x68C, lbl_804D3FB0);
     }
     temp_r3_3 = lb_80011AC4(data->pnlsce->lights);
     if (temp_r3_3 == NULL) {
         OSReport("Error : lobj dont't get (gmResultAddLight)\n");
-        __assert("gmresult.c", 0x68F, "0");
+        __assert("gmresult.c", 0x68F, lbl_804D3FB0);
     }
     HSD_GObjObject_80390A70(temp_r3_2, (u8) HSD_GObj_804D784A, temp_r3_3);
     GObj_SetupGXLink(temp_r3_2, HSD_GObj_LObjCallback, 0xA, 0);
@@ -1846,7 +1849,7 @@ void gm_80177368_OnEnter(void* arg0_)
     data->x18 = temp_r3_4;
     if (temp_r3_4 == NULL) {
         OSReport("Error : gobj dont't get (gmResultAddModel)\n");
-        __assert("gmresult.c", 0x6A2, "0");
+        __assert("gmresult.c", 0x6A2, lbl_804D3FB0);
     }
     HSD_GObj_SetupProc(temp_r3_4, fn_80179350, 0);
     fn_80176F60();
