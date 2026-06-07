@@ -86,6 +86,22 @@ struct EventPriority {
     int priority;
 };
 
+// .bss (declaration order fixes the section layout)
+
+/* 4CE3F8 */ static PerfDispItem hsd_804CE3F8[6];
+/* 4CE728 */ static s32 hsd_804CE728[262];
+/* 4CEB40 */ static ParticleLogEntry hsd_804CEB40[0x100];
+/* 4CF740 */ static s32 hsd_804CF740[42];
+/* 4CF7E8 */ extern struct ParticleConsoleState hsd_804CF7E8;
+/* 4CF810 */ static struct ParticleScreenState hsd_804CF810;
+/* 4CF8E8 */ static u8 hsd_804CF8E8[0x1000];
+/* 4D08E8 */ static HSD_JObj* hsd_804D08E8[8];
+/* 4D0908 */ static void* hsd_804D0908[146];
+/* 4D0B50 */ static HSD_PSTexGroup** psTexGroupArray_804D0B50[65];
+/* 4D0C54 */ static int psNumCmdList_804D0C54[65];
+/* 4D0D58 */ static HSD_PSCmdList** psCmdListArray[65];
+/* 4D0E5C */ static u32* ptclref_804D0E5C[65];
+
 void DrawRectangle(f32 x_min, f32 y_min, f32 w, f32 h, GXColor* color)
 {
     f32 x_max;
@@ -913,8 +929,6 @@ void fn_80392A08(int mode, int scale, int enable)
 }
 #pragma pop
 
-PerfDispItem hsd_804CE3F8[6];
-
 static s32 lbl_804D6090 = -1;
 static s32 lbl_804D6094 = (s32) 0xFF0000FF;
 static s32 lbl_804D6098 = 0x00FF00FF;
@@ -1102,8 +1116,6 @@ u8 fn_80392CD8(char* caller)
     return err;
 }
 
-extern s32 hsd_804CE728[];
-
 void fn_80392E2C(s32 event_type)
 {
     s32 idx;
@@ -1114,9 +1126,6 @@ void fn_80392E2C(s32 event_type)
         hsd_804D7898 += 1;
     }
 }
-
-static ParticleLogEntry hsd_804CEB40[0x100];
-s32 hsd_804CF740[42];
 
 extern s32 hsd_804D78A8;
 extern s32 hsd_804D78AC;
@@ -1247,34 +1256,37 @@ void hsd_80392E80(void)
             break;
         }
     }
+
+    if (0) {}
 }
 
-// @TODO: Currently 99.75% match - BSS relocation encoding difference
 bool hsd_803931A4(s32 exi_channel)
 {
     s32 channel;
+    s32* p = hsd_804CF740;
     PAD_STACK(16);
 
+    p = (s32*) (u8*) p;
 
-    hsd_804CF740[0] = 0;
-    hsd_804CF740[1] = 0;
-    hsd_804CF740[2] = 0;
-    hsd_804CF740[3] = 0;
-    hsd_804CF740[4] = 0;
-    hsd_804CF740[5] = 0;
-    hsd_804CF740[6] = 0;
-    hsd_804CF740[7] = 0;
-    hsd_804CF740[8] = 0;
-    hsd_804CF740[9] = 0;
-    hsd_804CF740[10] = 0;
-    hsd_804CF740[11] = 0;
-    hsd_804CF740[12] = 0;
-    hsd_804CF740[13] = 0;
-    hsd_804CF740[14] = 0;
-    hsd_804CF740[15] = 0;
-    hsd_804CF740[0] = 1;
-    hsd_804CF740[8] = 1;
-    hsd_804CF740[15] = 1;
+    p[0] = 0;
+    p[1] = 0;
+    p[2] = 0;
+    p[3] = 0;
+    p[4] = 0;
+    p[5] = 0;
+    p[6] = 0;
+    p[7] = 0;
+    p[8] = 0;
+    p[9] = 0;
+    p[10] = 0;
+    p[11] = 0;
+    p[12] = 0;
+    p[13] = 0;
+    p[14] = 0;
+    p[15] = 0;
+    p[0] = 1;
+    p[8] = 1;
+    p[15] = 1;
 
     channel = exi_channel;
 
@@ -1768,6 +1780,7 @@ void hsd_80393EF4(int col_delta, int row_delta)
 {
     u32 byte_val;
     u32 buf_size;
+    int* p1C;
     u32 counter;
     u32 pos;
     u32 sum;
@@ -1778,6 +1791,8 @@ void hsd_80393EF4(int col_delta, int row_delta)
         return;
     }
 
+    p1C = &sp->x1C;
+    p1C = (int*) (u8*) p1C;
     buf_size = sp->buf_size;
 
     if ((u32) sp->x1C >= buf_size) {
@@ -1801,12 +1816,13 @@ void hsd_80393EF4(int col_delta, int row_delta)
         }
 
         sp->x18 += counter;
-        sp->x1C = pos;
+        *p1C = pos;
 
         if (col_delta >= 0) {
-            sp->x14 += col_delta;
-            if ((u32) sp->x14 > byte_val) {
-                sp->x14 = byte_val;
+            int* p14 = &sp->x14;
+            *p14 += col_delta;
+            if ((u32) *p14 > byte_val) {
+                *p14 = byte_val;
             }
         } else {
             if ((u32) sp->x14 > (u32) -col_delta) {
@@ -2662,17 +2678,20 @@ extern u8 lbl_8040B904[];
 void hsd_80395644(void)
 {
     void* saved;
-    void** p = &hsd_804CF810.x50;
+    struct ParticleScreenState* sp = &hsd_804CF810;
+    void** p;
     s32 val_x20;
     s32 val_x1C;
 
     PAD_STACK(16);
+    sp = (struct ParticleScreenState*) (u8*) sp;
+    p = &sp->x50;
     saved = *p;
     *p = lbl_8040AB20;
-    val_x20 = hsd_804CF810.x20;
-    val_x1C = hsd_804CF810.x1C;
-    hsd_804CF810.x4 = (val_x20 - 21) * 11 + 20;
-    hsd_804CF810.x8 = (hsd_804CF810.x40 - 40) - (val_x1C + 1) * 14;
+    val_x20 = sp->x20;
+    val_x1C = sp->x1C;
+    sp->x4 = (val_x20 - 21) * 11 + 20;
+    sp->x8 = (sp->x40 - 40) - (val_x1C + 1) * 14;
     if (hsd_804D78C8 >= 1) {
         hsd_80394434(lbl_8040B8AC);
     }
@@ -4159,8 +4178,6 @@ void* fn_80397814(void* arg)
     return NULL;
 }
 
-u8 hsd_804CF8E8[0x1000];
-
 void hsd_80397DA4(OSContext* ctx)
 {
     OSThread thread;
@@ -4471,8 +4488,6 @@ void hsd_803983A4(HSD_Generator* gen)
         }
     }
 }
-
-extern HSD_JObj* hsd_804D08E8[];
 
 // @TODO: Currently 96.40% match - lis hoisting and r29/r30 register swap
 void psInitDataBankLoad(int bank, int* cmdBank, int* texBank, u32* ref,
@@ -5202,7 +5217,7 @@ void* hsd_8039930C(void* pp_arg, void* prev_arg)
                     u8 bank = pp->bank;
                     u8 tgIdx = pp->texGroup;
 
-                    tga = psTexGroupArray[bank];
+                    tga = psTexGroupArray_804D0B50[bank];
                     texGrp = tga[tgIdx];
                     if (texGrp != NULL && texGrp->texTable != NULL) {
                         if (texGrp->texTable[pp->poseNum] != NULL) {
@@ -5416,14 +5431,14 @@ void* hsd_8039930C(void* pp_arg, void* prev_arg)
                         child = NULL;
                     } else if (bank >= 65) {
                         child = NULL;
-                    } else if (idx >= psNumCmdList[bank]) {
+                    } else if (idx >= psNumCmdList_804D0C54[bank]) {
                         child = NULL;
                     } else {
                         cl = psCmdListArray[bank][idx];
                         if (cl == NULL) {
                             child = NULL;
                         } else {
-                            tg = psTexGroupArray[bank][cl->texGroup];
+                            tg = psTexGroupArray_804D0B50[bank][cl->texGroup];
                             if (tg != NULL) {
                                 palflag = tg->palflag;
                             } else {
@@ -5472,14 +5487,14 @@ void* hsd_8039930C(void* pp_arg, void* prev_arg)
                         child = NULL;
                     } else if (bank >= 65) {
                         child = NULL;
-                    } else if (idx >= psNumCmdList[bank]) {
+                    } else if (idx >= psNumCmdList_804D0C54[bank]) {
                         child = NULL;
                     } else {
                         cl = psCmdListArray[bank][idx];
                         if (cl == NULL) {
                             child = NULL;
                         } else {
-                            tg = psTexGroupArray[bank][cl->texGroup];
+                            tg = psTexGroupArray_804D0B50[bank][cl->texGroup];
                             if (tg != NULL) {
                                 palflag = tg->palflag;
                             } else {
@@ -5766,14 +5781,14 @@ void* hsd_8039930C(void* pp_arg, void* prev_arg)
                         child = NULL;
                     } else if (bank >= 65) {
                         child = NULL;
-                    } else if (idx >= psNumCmdList[bank]) {
+                    } else if (idx >= psNumCmdList_804D0C54[bank]) {
                         child = NULL;
                     } else {
                         cl = psCmdListArray[bank][idx];
                         if (cl == NULL) {
                             child = NULL;
                         } else {
-                            tg = psTexGroupArray[bank][cl->texGroup];
+                            tg = psTexGroupArray_804D0B50[bank][cl->texGroup];
                             if (tg != NULL) {
                                 palflag = tg->palflag;
                             } else {
@@ -6058,14 +6073,14 @@ void* hsd_8039930C(void* pp_arg, void* prev_arg)
                         child = NULL;
                     } else if (bank >= 65) {
                         child = NULL;
-                    } else if (idx >= psNumCmdList[bank]) {
+                    } else if (idx >= psNumCmdList_804D0C54[bank]) {
                         child = NULL;
                     } else {
                         cl = psCmdListArray[bank][idx];
                         if (cl == NULL) {
                             child = NULL;
                         } else {
-                            tg = psTexGroupArray[bank][cl->texGroup];
+                            tg = psTexGroupArray_804D0B50[bank][cl->texGroup];
                             if (tg != NULL) {
                                 palflag = tg->palflag;
                             } else {
@@ -6120,14 +6135,14 @@ void* hsd_8039930C(void* pp_arg, void* prev_arg)
                         child = NULL;
                     } else if (bank >= 65) {
                         child = NULL;
-                    } else if (idx >= psNumCmdList[bank]) {
+                    } else if (idx >= psNumCmdList_804D0C54[bank]) {
                         child = NULL;
                     } else {
                         cl = psCmdListArray[bank][idx];
                         if (cl == NULL) {
                             child = NULL;
                         } else {
-                            tg = psTexGroupArray[bank][cl->texGroup];
+                            tg = psTexGroupArray_804D0B50[bank][cl->texGroup];
                             if (tg != NULL) {
                                 palflag = tg->palflag;
                             } else {
@@ -6356,7 +6371,7 @@ void* hsd_8039930C(void* pp_arg, void* prev_arg)
                         HSD_PSTexGroup** tga;
                         HSD_PSTexGroup* texGrp;
 
-                        tga = psTexGroupArray[bank];
+                        tga = psTexGroupArray_804D0B50[bank];
                         texGrp = tga[tgIdx];
                         if (texGrp != NULL && texGrp->texTable != NULL) {
                             if (texGrp->texTable[pp->poseNum] != NULL) {
@@ -7347,8 +7362,21 @@ void hsd_8039CEAC(u32 mask)
     }
 }
 
-// @TODO: Currently 96.59% match - instruction scheduling in address
-/// computation
+static char lbl_8040C010[] = "object.h";
+static char lbl_8040C01C[] = "HSD_OBJ(o)->ref_count != HSD_OBJ_NOREF";
+
+/* Duplicate of object.h ref_INC: this original TU emitted its own copies of
+ * the assert strings (lbl_8040C010/lbl_8040C01C). */
+static inline void ref_INC_dup2(void* o)
+{
+    if (o != NULL) {
+        HSD_OBJ(o)->ref_count++;
+        (HSD_OBJ(o)->ref_count != HSD_OBJ_NOREF)
+            ? ((void) 0)
+            : __assert(lbl_8040C010, 93, lbl_8040C01C);
+    }
+}
+
 void hsd_8039CF4C(s32 index, HSD_JObj* jobj)
 {
     if (index < 0 || index > 8) {
@@ -7356,14 +7384,16 @@ void hsd_8039CF4C(s32 index, HSD_JObj* jobj)
     }
 
     if (index != 0) {
-        HSD_JObj** p = &hsd_804D08E8[index];
-        HSD_JObj* old = *--p;
+        HSD_JObj** p = hsd_804D08E8;
+        HSD_JObj* old;
+        p += index;
+        old = *--p;
         if (old != jobj) {
             if (old != NULL) {
                 HSD_JObjUnref(jobj);
             }
             *p = jobj;
-            ref_INC(jobj);
+            ref_INC_dup2(jobj);
         }
     } else {
         s32 i;
@@ -7374,6 +7404,8 @@ void hsd_8039CF4C(s32 index, HSD_JObj* jobj)
             }
         }
     }
+
+    if (0) {}
 }
 
 void hsd_8039D048(void* particle)
@@ -7399,7 +7431,7 @@ void hsd_8039D0A0(HSD_Generator* gen)
 
     prev = NULL;
     idnum = gen->idnum;
-    head = (HSD_Particle**) &((void**) hsd_804D08E8)[8 + gen->linkNo];
+    head = (HSD_Particle**) &hsd_804D0908[gen->linkNo];
     prt = (HSD_Particle*) *head;
 
     while (prt != NULL) {
@@ -7433,8 +7465,7 @@ void hsd_8039D0A0(HSD_Generator* gen)
                 }
             }
 
-            HSD_ObjFree((HSD_ObjAllocData*) ((u8*) hsd_804D08E8 + 0x678),
-                        prt);
+            HSD_ObjFree(&hsd_804D0F60.alloc_data, prt);
             hsd_804D78E2--;
         } else {
             prev = prt;
@@ -8646,7 +8677,7 @@ HSD_Generator* hsd_8039F05C(s32 linkNo, s32 bank, s32 idx)
     if (linkNo >= 8) {
         return NULL;
     }
-    if (idx >= psNumCmdList[bank]) {
+    if (idx >= psNumCmdList_804D0C54[bank]) {
         return NULL;
     }
 
@@ -8699,7 +8730,7 @@ HSD_Generator* hsd_8039F05C(s32 linkNo, s32 bank, s32 idx)
             gen->count = HSD_Randf();
         }
 
-        tg = psTexGroupArray[bank][gen->texGroup];
+        tg = psTexGroupArray_804D0B50[bank][gen->texGroup];
         if (tg != NULL && tg->palnum != 0) {
             gen->kind |= 0x10;
         }
