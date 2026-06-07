@@ -1263,47 +1263,42 @@ void gm_801623FC(int arg0)
 
 s32 gm_8016247C(s32 arg0)
 {
-    u32 var_r4;
-    u32 var_r3;
-    u32 var_r28;
     u32 var_r29;
     u32* temp_r31;
     u32* temp_r5;
     u32* temp_r30_2;
     u32* temp_r3;
-    u32 temp_r0;
-    u32 temp_r0_2;
     s32 temp_r29 = *gmMainLib_8015CCF0();
     u32* temp_r30 = gmMainLib_8015CCFC();
-    s32 ret;
+    PAD_STACK(8);
 
     temp_r5 = &gmMainLib_8015EDBC()->x14;
 
-    var_r4 = MAX(-1U, *temp_r30 + arg0);
-    *temp_r30 = var_r4;
+    *temp_r30 =
+        (*temp_r30 + arg0 > 0xFFFFFFFFU) ? 0xFFFFFFFFU : *temp_r30 + arg0;
+    *temp_r5 = (*temp_r5 + arg0 > 0xFFFFFFFFU) ? 0xFFFFFFFFU : *temp_r5 + arg0;
 
-    var_r3 = MAX(-1U, *temp_r5 + arg0);
-    *temp_r5 = var_r3;
-
-    var_r28 = MIN(0x270FU, temp_r29 + arg0);
-    ret = (s32) var_r28;
-    var_r29 = var_r28;
+    arg0 = temp_r29 + arg0;
+    if ((u32) arg0 > 0x270FU) {
+        arg0 = 0x270FU;
+    }
+    var_r29 = arg0;
 
     temp_r30_2 = gmMainLib_8015CCF0();
     temp_r31 = gmMainLib_8015CCFC();
     temp_r3 = &gmMainLib_8015EDBC()->x14;
 
-    if (var_r28 > (u32) *temp_r31) {
-        *temp_r31 = var_r28;
+    if ((u32) arg0 > *temp_r31) {
+        *temp_r31 = arg0;
     }
-    if (var_r28 > (u32) *temp_r3) {
-        *temp_r3 = var_r28;
+    if ((u32) arg0 > *temp_r3) {
+        *temp_r3 = arg0;
     }
-    if (var_r28 > 0x270FU) {
+    if ((u32) arg0 > 0x270FU) {
         var_r29 = 0x270FU;
     }
     *temp_r30_2 = var_r29;
-    return (s32) ret;
+    return arg0;
 }
 
 void gm_80162574(u8 arg0, u8 arg1)
@@ -1341,7 +1336,7 @@ void gm_8016260C(u8 arg0, u8 arg1)
 
     if ((u8) (arg1 - 7) <= 1) {
         u32* p = gmMainLib_GetMatchResetCounter();
-        *p = MIN(*p + 1, 0xFFFFFFFFU);
+        *p = (*p + 1 > 0xFFFFFFFFU) ? 0xFFFFFFFFU : *p + 1;
         return;
     }
     if (gm_801A4310() == 0x1F) {
@@ -1358,7 +1353,7 @@ void gm_8016260C(u8 arg0, u8 arg1)
             counter = gmMainLib_GetCoinMatchTotal();
             {
                 struct gmm_retval_EDBC* q = gmMainLib_8015EDBC();
-                q->x4 = MIN(q->x4 + 1, 0xFFFFFFFFU);
+                q->x4 = (q->x4 + 1 > 0xFFFFFFFFU) ? 0xFFFFFFFFU : q->x4 + 1;
             }
             break;
         case 3:
@@ -1366,18 +1361,18 @@ void gm_8016260C(u8 arg0, u8 arg1)
             break;
         }
     }
-    *counter = MIN(*counter + 1, 0xFFFFFFFFU);
+    *counter = (*counter + 1 > 0xFFFFFFFFU) ? 0xFFFFFFFFU : *counter + 1;
     {
         struct gmm_retval_ED98* a = gmMainLib_8015ED98();
-        a->x0 = MIN(a->x0 + 1, 0xFFFFFFFFU);
+        a->x0 = (a->x0 + 1 > 0xFFFFFFFFU) ? 0xFFFFFFFFU : a->x0 + 1;
     }
     {
         struct gmm_retval_EDB0* b = gmMainLib_8015EDB0();
-        b->x0 = MIN((u32) b->x0 + 1, 0xFFFFFFFFU);
+        b->x0 = ((u32) b->x0 + 1 > 0xFFFFFFFFU) ? 0xFFFFFFFFU : (u32) b->x0 + 1;
     }
     {
         struct gmm_retval_EDBC* c = gmMainLib_8015EDBC();
-        c->x0 = MIN((u32) c->x0 + 1, 0xFFFFFFFFU);
+        c->x0 = ((u32) c->x0 + 1 > 0xFFFFFFFFU) ? 0xFFFFFFFFU : (u32) c->x0 + 1;
     }
 }
 
@@ -1467,14 +1462,18 @@ struct gmm_x1868_1A8_t* gm_80162A98(s32 arg0)
     u32 var_r31;
     s32* temp_r3_2 = gmMainLib_GetKOTotal();
 
-    *temp_r3_2 = MAX(*temp_r3_2 + arg0, -1U);
+    *temp_r3_2 = ((u32) (*temp_r3_2 + arg0) > (u32) -1)
+                     ? (u32) -1
+                     : (u32) (*temp_r3_2 + arg0);
 
-    var_r31 = MAX((u32) (arg0 + gmMainLib_8015EDBC()->xC), -1U);
-
+    var_r31 = ((u32) (arg0 + gmMainLib_8015EDBC()->xC) > (u32) -1)
+                  ? (u32) -1
+                  : (u32) (arg0 + gmMainLib_8015EDBC()->xC);
     gmMainLib_8015EDBC()->xC = var_r31;
 
-    var_r31 = MAX((u32) (arg0 + gmMainLib_8015EDC8()->x0), -1U);
-
+    var_r31 = ((u32) (arg0 + gmMainLib_8015EDC8()->x0) > (u32) -1)
+                  ? (u32) -1
+                  : (u32) (arg0 + gmMainLib_8015EDC8()->x0);
     temp_r3 = gmMainLib_8015EDC8();
     temp_r3->x0 = var_r31;
     return temp_r3;
@@ -2174,12 +2173,18 @@ bool fn_801642A0(void)
 }
 
 // RandomStageSwitch
+static inline bool gm_80164330_inline(s32 idx)
+{
+    if ((1 << (u16) idx) & gmMainLib_8015CC58()->stage_mask) {
+        return true;
+    }
+    return false;
+}
+
 bool gm_80164330(s32 arg0)
 {
     s32 total_stages_on;
-    struct gmm_x1CB0* temp_ret;
     s32 i;
-    u8 var_r0;
 
     if (gm_80164430(lbl_803B7808[(u8) arg0]) == 0) {
         return false;
@@ -2191,12 +2196,7 @@ bool gm_80164330(s32 arg0)
     total_stages_on = 0;
     i = 0;
     for (i = 0; i < 0x1D; i++) {
-        temp_ret = gmMainLib_8015CC58();
-        if (temp_ret->stage_mask & (1 << (u16) i)) {
-            var_r0 = 1;
-        } else {
-            var_r0 = 0;
-        }
+        u8 var_r0 = gm_80164330_inline(i);
         if (var_r0 != 0) {
             total_stages_on = 1;
         }
@@ -2204,10 +2204,7 @@ bool gm_80164330(s32 arg0)
     if (total_stages_on == 0) {
         OSReport("RandomStageSwitch All-Off!!!!!!!!!!!!!!!!!!!!!!!!!!\n");
     }
-    if ((1 << (u16) arg0) & gmMainLib_8015CC58()->stage_mask) {
-        return true;
-    }
-    return false;
+    return gm_80164330_inline(arg0);
 }
 
 bool gm_80164430(u16 arg0)
@@ -2377,34 +2374,27 @@ found_char:
 
 s32 gm_80164A0C(u8 arg0)
 {
-    s32 var_ctr;
-    s32 var_r3;
-    u16* temp_r31 = gmMainLib_8015ED8C();
-    u8 var_r0;
+    u16* char_unlock_mask;
+    u8 internal_id;
+    s32 i;
+    u8 unlock_idx;
 
-    // Selected character
-    u8 key = lbl_803B78C8[arg0].idx;
+    char_unlock_mask = gmMainLib_8015ED8C();
+    internal_id = lbl_803B78A4[(u8) arg0];
 
-    // These are 6 big, should the loop be over that somehow with var_r4 as i?
-    const struct lbl_803B78C8_0x6* var_r4 = lbl_803B78C8;
-    var_r3 = 0;
-    for (var_ctr = 0xB; var_ctr != 0; var_ctr -= 1) {
-        if (key == var_r4[1].idx) {
-            var_r3 = (s32) ((const u8*) lbl_803B75F8 + (var_r3 * 6));
-            var_r0 = *(u8*) (var_r3 + 0x2D0);
-            goto done;
+    for (i = 0; i < NUM_UNLOCKABLE_CHARACTERS; i++) {
+        if ((s32) internal_id == (s32) lbl_803B78C8[i].ckind) {
+            i = (s32) ((const u8*) lbl_803B75F8 + (i * 6));
+            unlock_idx = *(const u8*) (i + 0x2D0);
+            goto found;
         }
-        var_r4 += 6;
-        var_r3 += 1;
     }
+    unlock_idx = NUM_UNLOCKABLE_CHARACTERS;
 
-    var_r0 = 0xB;
-
-done:
-    if (var_r0 != 0xB) {
-        *temp_r31 &= (u16) ~(1ULL << var_r0);
+found:
+    if (unlock_idx != NUM_UNLOCKABLE_CHARACTERS) {
+        *char_unlock_mask &= ~(1LL << (s32) unlock_idx);
     }
-    return var_r3;
 }
 
 /// Are all unlockable characters unlocked?
@@ -2969,30 +2959,35 @@ void fn_80165E7C(MatchEnd* arg0)
     }
 }
 
+struct LoserNibbles {
+    u8 hi : 4;
+    u8 lo : 4;
+};
+
 s32 fn_80165FA4(MatchEnd* arg0)
 {
+    s32 i;
     s32 max_loser;
     s32 count;
-    s32 i;
     s32 j;
-    struct MatchTeamData* t;
 
     max_loser = 0;
     for (i = 0; i < 5; i++) {
-        t = &arg0->team_standings[i];
-        if (t->active != 0) {
+        if (arg0->team_standings[i].active != 0) {
             for (j = 0; j < 5; j++) {
-                if (j != i && arg0->team_standings[j].active != 0 &&
-                    (s32) t->score < (s32) arg0->team_standings[j].score) {
-                    t->is_big_loser += 1;
+                if (i != j && arg0->team_standings[j].active != 0 &&
+                    (s32) arg0->team_standings[i].score <
+                        (s32) arg0->team_standings[j].score)
+                {
+                    arg0->team_standings[i].is_big_loser += 1;
                 }
             }
-            if (max_loser < (s32) t->is_big_loser) {
-                max_loser = t->is_big_loser;
+            if (max_loser < (s32) arg0->team_standings[i].is_big_loser) {
+                max_loser = arg0->team_standings[i].is_big_loser;
             }
         }
     }
-    arg0->loser = (arg0->loser & ~0xF) | (max_loser & 0xF);
+    ((struct LoserNibbles*) &arg0->loser)->lo = max_loser;
     count = 0;
     for (j = 0; j < 5; j++) {
         if (arg0->team_standings[j].active != 0 &&
@@ -3352,8 +3347,7 @@ void fn_8016719C(s32 slot, s32 subchar)
     lbl_8046B6A0_t* match_info;
     s32 var_r30;
     s32 stage_id;
-    u8* temp_r4;
-    u8 temp_r3;
+    UnkFlagStruct* flags;
 
     match_info = gm_8016AE44();
     stage_id = gm_8016B004();
@@ -3373,7 +3367,7 @@ void fn_8016719C(s32 slot, s32 subchar)
     respawn_pos.x += offset.x;
     Player_SetSpawnPlatformPos(slot, &respawn_pos);
 
-    if (!(((u8) stage_info.unk8C.b0 >> 2U) & 1)) {
+    if (!stage_info.unk8C.b5) {
         Player_80032FA4(slot, var_r30);
         Player_SetSomePos(slot, &offset);
     }
@@ -3390,10 +3384,9 @@ void fn_8016719C(s32 slot, s32 subchar)
     Player_80032070(slot, subchar);
     if (subchar != 1) {
         ifStatus_802F6508(slot);
-        temp_r4 = (u8*) &match_info->FighterMatchInfo[slot].xC;
-        temp_r3 = *temp_r4;
-        if ((temp_r3 >> 7U) & 1) {
-            *temp_r4 &= 0x80;
+        flags = (UnkFlagStruct*) &match_info->FighterMatchInfo[slot].xC;
+        if (flags->b0) {
+            flags->b0 = 1;
             Camera_800310E8();
         }
     }
@@ -3652,7 +3645,7 @@ void gm_80167BC8(VsModeData* vs_data)
     struct gmm_x1CB0* prefs;
     s32 i;
     s8* handicap;
-    PAD_STACK(56);
+    PAD_STACK(72);
 
     rules = gmMainLib_8015CC34();
     prefs = gmMainLib_8015CC58();
@@ -3706,19 +3699,21 @@ void gm_80167BC8(VsModeData* vs_data)
                     *handicap; ///< @todo :: fix these to actually get the
                                ///< offensive and
                 // defensive ratios just not sure how to setup the structs
-                vs_data->data.players[i].x18 = lbl_803B7930[(u8) *handicap].x;
-                vs_data->data.players[i].x1C = lbl_803B7930[(u8) *handicap].y;
+                vs_data->data.players[i].x18 =
+                    lbl_803B7930[(u8) *handicap - 1].x;
+                vs_data->data.players[i].x1C =
+                    lbl_803B7930[(u8) *handicap - 1].y;
             } else {
                 vs_data->data.players[i].handicap = 5;
-                vs_data->data.players[i].x18 = 0.61f;
-                vs_data->data.players[i].x1C = 1.6393442f;
+                vs_data->data.players[i].x18 = lbl_803B7930[5 - 1].x;
+                vs_data->data.players[i].x1C = lbl_803B7930[5 - 1].y;
             }
             break;
         case 2:
             vs_data->data.players[i].x18 =
-                lbl_803B7930[(u8) vs_data->data.players[i].handicap].x;
+                lbl_803B7930[(u8) vs_data->data.players[i].handicap - 1].x;
             vs_data->data.players[i].x1C =
-                lbl_803B7930[(u8) vs_data->data.players[i].handicap].y;
+                lbl_803B7930[(u8) vs_data->data.players[i].handicap - 1].y;
             break;
         }
     }
@@ -3726,43 +3721,17 @@ void gm_80167BC8(VsModeData* vs_data)
     vs_data->data.rules.x1_7 = (rules->friendly_fire & 1);
     vs_data->data.rules.x30 = 0.1f * rules->damage_ratio;
     vs_data->data.rules.xB = (s8) prefs->item_freq;
-    prefs = gmMainLib_8015CC58(); ///< @todo :: some weird item copy thing that
-                                  ///< needs to be fixed
-    i = 0;
-    do {
-        if ((s32) lbl_803B7844[i] != 0x23) {
-            // prefs->item_mask = vs_data->data.rules.x20;
-            if ((prefs->item_mask & (1LL << i))) {
-                vs_data->data.rules.x20 |= (1LL << prefs->item_mask);
+    prefs = gmMainLib_8015CC58();
+    for (i = 0; i < 0x20; i++) {
+        int shift;
+        if ((shift = lbl_803B7844[(u8) i]) != 0x23) {
+            if (prefs->item_mask & (1LL << i)) {
+                vs_data->data.rules.x20 |= 1LL << shift;
             } else {
-                vs_data->data.rules.x20 &= ~(1LL << prefs->item_mask);
+                vs_data->data.rules.x20 &= ~(1LL << shift);
             }
         }
-    } while (i < 0x20);
-    // this is what decomp.py spits out
-    // temp_r31 = gmMainLib_8015CC58();
-    // var_r28_2 = 0;
-    // do {
-    //     if ((s32) lbl_803B75F8.pad_x24C[var_r28_2] != 0x23) {
-    //         __shl2i();
-    //         if ((((temp_r31->unkC & M2C_ERROR(/* Read from unset register
-    //         $r4 */)) ^ 0) | ((temp_r31->unk8 & M2C_ERROR(/* Read from unset
-    //         register $r3 */)) ^ 0)) != 0) {
-    //             __shl2i();
-    //             arg0->unk2C = (s32) (arg0->unk2C | M2C_ERROR(/* Read from
-    //             unset register $r4 */)); arg0->unk28 = (s32) (arg0->unk28 |
-    //             M2C_ERROR(/* Read from unset register $r3 */));
-    //         } else {
-    //             __shl2i();
-    //             arg0->unk2C = (s32) (arg0->unk2C & ~(M2C_ERROR(/* Read from
-    //             unset register $r4 */) | M2C_ERROR(/* Read from unset
-    //             register $r4 */))); arg0->unk28 = (s32) (arg0->unk28 &
-    //             ~(M2C_ERROR(/* Read from unset register $r3 */) |
-    //             M2C_ERROR(/* Read from unset register $r3 */)));
-    //         }
-    //     }
-    //     var_r28_2 += 1;
-    // } while (var_r28_2 < 0x20);
+    }
 
     switch (gmMainLib_8015ED30()) {
     case 1:
@@ -4822,9 +4791,9 @@ void fn_80169F50(s8 arg0, s8 arg1)
 {
     struct lbl_8046B488_t* gp = &lbl_8046B488;
     s32 i;
+    s8* p;
     s32 flag;
     s8 v;
-    s8* p;
 
     flag = 0;
     if (gp->x0 == 4) {
