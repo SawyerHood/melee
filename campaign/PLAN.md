@@ -134,6 +134,85 @@ reach 100% — check `rows` before assuming a C edit can finish a function.
    +N vs ours, the TYPE layout is wrong (predDC at +6, u8 triple first) —
    fix the header struct, not the code (won Y/U/V decoders).
 
+22. **RELOC-MATCH LAW (gm_18A5 proof: fn_80190520, fn_8018F71C)**: objdiff
+   pairs a reloc row iff name-equal OR resolved-section+offset-equal. ALL
+   layout/naming work reduces to satisfying one of the two.
+23. **@-ID CONSERVATION LAW (refines 20; gm_18A5/particle/lbcollision/mplib)**:
+   per-TU @ costs — extern f32 first-ref +1; sbss-int extern ref 0; named
+   static 0; CFG reshape ±N; literal→extern swap is id-safe only if another
+   user keeps the pool entry alive. Any net change BEFORE the last
+   symbols.txt-pinned @id breaks all later pins; drift past already-broken
+   rows is free. @NNN drift is recoverable at land time by renumbering the
+   unit's pins (tools/replace-symbols) — compute renumbers AFTER src lands.
+24. **CONST-FOLD KILLS NAMED .sdata2 RELOCS (lbcollision, byte-proven)**:
+   file-scope const float/f64 with visible initializer NEVER yields a named
+   reloc — refs pool anonymously, the defs are dead data (MWCC also drops
+   unreferenced `static const`, so no padding placeholders). Fix A: delete
+   defs, use literals, rename target syms → @NNN scope:local in symbols.txt.
+   Fix B (camera, 14 matches): extern-declare in the .static.h and DEFINE at
+   END of .c after all uses — refs then emit named relocs. Pick per-site.
+25. **EXTERN-CONST vs POOL-LITERAL DICHOTOMY (camera)**: extern f32 loads are
+   GCSE/hoisted (entry, high reg, CSE across BBs/calls, no LICM remat); pool
+   literals reload per-use into f0, LICM-cache in loops, remat after stores.
+   Read the target's load pattern per site. Multi-read extern-f32 swaps
+   regress where target reloads (gm_18A5 −2/−3 each); 1–2-read swaps safe.
+26. **NAMED-ANCHOR vs SECTION-FOLD (extends BSS rule; gm_18A5/particle/
+   gm_1601)**: multi-access constant-offset statics fold to merged-section
+   base (`...bss.0+N`). Named anchors via: (a) extern-flip the symbol at the
+   original TU's .bss base — must be UNDEFINED extern; a defined global still
+   folds (particle hsd_804CF7E8/D08E8); per-symbol net-judged: siblings
+   reading nearby statics through that anchor regress (lwzu-fold), partially
+   recoverable with base-ptr arithmetic off the extern; (b) struct-ptr hoist
+   `T* d8 = &sym;` for variable-indexed multi-field access ONLY — hoisting
+   constant-offset/single-&field sites regresses (gm_18A5); (c) variable-
+   indexed/address-taken access materializes the name for free. Units merging
+   several original TUs (gm_1601 +0x110 family) need a configure-level TU
+   split — out of agent scope.
+27. **HEADER-INLINE ASSERT-STRING DUP (particle, 4 matches)**: target wants a
+   named lbl_* string equal to a header inline's HSD_ASSERT literals ⇒ the
+   original TU had its own copy. File-local `static char lbl_X[]="...";` +
+   `static inline foo_dup()` clone calling `__assert(lbl_file,line,lbl_cond)`.
+   Zero @ids consumed — drift-free anywhere. Works only as pool REUSER; if
+   the swap removes the TU's pool-emitting literal it shifts ids (blocked).
+28. **CLAMP/TERNARY FAMILY (gm_1601 ×3, mplib ×4)**: u32 saturate =
+   `(x+1 > 0xFFFFFFFFU) ? 0xFFFFFFFFU : x+1` (preloads else-value; MIN()/
+   if-else misallocate). Do NOT CSE repeated `g()` calls a ternary
+   re-evaluates — target shows the extra `bl`s. `return x != -1 ? x : -1;`
+   moves the var off the r3 precolor and coalesces inline-result defs.
+   static-inline bool helpers: if/return body = no frame temp, ternary body
+   = +8; u64-typed named locals/returns cost 0x10/0x8 frame.
+29. **DECL/ORDER EXTENSIONS (extends 1/9/18)**: volatile scratch webs bind in
+   lexical decl order ascending from r3 (gm_1601); adjacent dependency-free
+   STATEMENT order drives fpr vreg assignment even with identical schedule
+   (lbColl 77A0); mutating a PARAM (vs `int copy = arg`) homes the entry copy
+   into the callee-saved reg so the first use reads it (mplib 53DA4/53ECC);
+   assignment-in-condition `(r5 = p->f) != -1` kills the lha+mr split before
+   a backedge; self-read index-as-address `i = (s32)(base + i*6)` rebinds the
+   loop counter to r3 (gm_80164A0C); a dead small-typed local in an
+   auto-inlined CALLEE reserves stack words in the CALLER's frame — fold it
+   into its use, standalone callee stays byte-identical (mpJointListAdd).
+30. **BITFIELD/INDEXING TELLS**: lone `rlwimi rD,rS,0,28,31` = u8:4 bitfield
+   write; `(x&0xF0)|(v&0xF)` always pre-masks (fn_80165FA4). Displacement-
+   only diffs on indexed loads (0x330 vs 0x338) = 1-indexed table
+   `tbl[idx-1].f`, not layout (gm_80167BC8). lhzu/lbzu/stbu fusion needs
+   direct indexed exprs `s->arr[i] op=`, not a hoisted element ptr (gm_18A5).
+31. **MSL sqrtf FINGERPRINT (lbcollision/camera)**: the inline's `volatile
+   float y` takes a 4-byte caller-frame slot per instance, below named
+   locals, in instantiation order — slot offsets fingerprint instance count/
+   order. `_half/_three` localstatics are const-folded dead data; named-const
+   reconstruction misallocates f4/f5. Naming-class, unreachable from C.
+32. **GXColor BY-VALUE (mplib)**: passed as pointer-to-copy; literal-init
+   locals pass their own address, but locals assigned from globals/array
+   elements get fresh compiler temps — named-local reconstruction of such
+   call sites fails. Our build pools arg-copy temps function-wide descending
+   below user locals; target shows per-block ascending — UNSOLVED gap.
+33. **CAMERA MICRO-SHAPES (win-evidenced)**: chained `a=b=c=LIT` loads into
+   the first assignee then fmr-chains (extern Z routes via temp); re-read
+   local right after a store schedules lbz+cmpwi early; block-scope
+   `T* t = &g.sub;` mixed with direct `g.sub.f` stores reproduces split
+   r30-direct/rN-pointer addressing; write zero/const on the LEFT of fcmpu
+   compares to match operand order.
+
 ### Experiment results (wave 3)
 
 - **BSS/sbss ordering rule (8-compile evidence)**: statics allocate at their
@@ -224,9 +303,36 @@ reach 100% — check `rows` before assuming a C edit can finish a function.
 - **itcoll it_80270CD8**: FP attractor analysis complete; likely needs a
   shared static-inline helper for the stale-damage formula (cf. matched
   sibling it_80270E30). Worth ONE retry with the helper approach.
+- **gm_1601 +0x110 anchor-fold family** (gm_8016A164/A22C/A4C8/95BC/9A84/
+  AC44): unit merges ≥3 original TUs; constant-offset fns fold to merged
+  .bss base. Needs configure-level TU split, not C edits.
+- **lbColl_800077A0 residual (4 rows)**: target has a dead 4-byte temp at
+  frame 0x34 before sqrtf instance 1; 6 forms failed (PAD_STACK/trailing
+  local/block volatile/warm-up call all wrong or shift @ids).
+- **Conversion magics (0x4330…) & jumptable_* names**: per-TU duplicate
+  copies / compiler-generated names, unreachable from C (re-confirmed
+  gm_18A5, particle, camera S32_TO_F32). Naming/diff-policy problem only.
+- **mplib arg-copy temp placement** (mpLib_80059E60): ours pools fn-wide
+  descending, target per-block ascending — emission rule uncracked.
 
 ## Session log
 
+- **2026-06-06 — Wave 7 (6 unit campaigns + naming round 4).** 12 new fn
+  matches in working tree (UNCOMMITTED src): gm_18A5 ×1, gm_1601 ×6,
+  particle ×8 (… see wave-7 report), mplib ×3, camera 14 restored-to-100 vs
+  controlled HEAD gate + 26 improved; lbcollision source half of const-fold
+  conversion landed byte-proven (needs 15 symbols.txt renames → +10 fns,
+  simulated). Naming round 4 committed 46e9da45b (branch campaign): 693
+  lines, ~931 rows, ~202 fns to fuzzy-100, 64 units, DOL OK; mpcoll 165→9
+  rows/60 fns. NEW idioms 22–33 added above. 6 binary-proven behavior fixes
+  toward DOL (GXColor yellow, memset 0x24, 1-indexed handicap tbl, mplib
+  line_id update, camera *1.0f no-op + C010 linear factor). Header-edit
+  queue: gm_18A5 ×3, ground.h Ground_801C5774 s16→s32. INCIDENTS: whole-tree
+  `git stash` race clobbered concurrent agents (stash@{0} 16:10:43 preserved
+  — verify before drop); run_unit.sh false-negative reverts good renames
+  (use campaign/scratch/run_unit2.sh, untracked); report.json confirmed
+  stale/lenient (no reloc-name penalty) — gate only with controlled
+  scratch compiles. RULE: never whole-tree git stash during a wave.
 - **2026-06-06 — Wave 6 (unit campaigns).** 8 agents, 1.87M tokens, 81min.
   16 fn wins + 2 data symbols: gm_1832 (8, BSS repack + include removal +
   literal-pool archaeology), gmregclear (5, proven >=4 merged original TUs,
