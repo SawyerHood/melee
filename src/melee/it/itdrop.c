@@ -12,6 +12,10 @@
 #include <baselib/gobj.h>
 #include <baselib/random.h>
 
+extern const f32 it_804DC6B8;
+extern const f32 it_804DC6BC;
+extern const f32 it_804DC6C0;
+
 ItemKind it_8026F3AC(void)
 {
     return it_8026C75C(&it_804A0E50);
@@ -45,6 +49,7 @@ bool it_8026F3D4(Item_GObj* item_gobj, struct it_8026F3D4_arg1_t* arg1,
     Item_GObj* spawned_item_gobj;
     s32 cnt;
     bool chk1;
+    f32 zero;
 
     spawned_item_gobj = NULL;
     chk1 = false;
@@ -53,6 +58,7 @@ bool it_8026F3D4(Item_GObj* item_gobj, struct it_8026F3D4_arg1_t* arg1,
     cnt = 0;
     item = item_gobj->user_data;
     cnt2 = 0;
+    zero = it_804DC6B8;
     for (cnt = 0; cnt < num; cnt++) {
         if ((new_var == 0) || (it_kind == -1)) {
             it_kind = it_8026C75C(&it_804A0E50);
@@ -65,7 +71,7 @@ bool it_8026F3D4(Item_GObj* item_gobj, struct it_8026F3D4_arg1_t* arg1,
         }
         spawned_item_gobj = it_8026F5C8(item_gobj, it_kind, &item->pos);
         if (spawned_item_gobj != NULL) {
-            sp24.x = sp24.y = sp24.z = 0.0f;
+            sp24.x = sp24.y = sp24.z = zero;
             it_8026F53C(spawned_item_gobj, &sp24, 0);
             chk1 = false;
             it_80274ED8();
@@ -93,9 +99,9 @@ void it_8026F53C(Item_GObj* item_gobj, Vec3* vel, bool chk)
 
     item = item_gobj->user_data;
     if (chk == false) {
-        vel->x = it_804D6D28->x54_float * (2.0f * (HSD_Randf() - 0.5f));
+        vel->x = it_804D6D28->x54_float * (it_804DC6BC * (HSD_Randf() - it_804DC6C0));
         vel->y = item->xCC_item_attr->x18;
-        vel->z = 0.0f;
+        vel->z = it_804DC6B8;
     }
     item->x40_vel = *vel;
 }
@@ -107,13 +113,13 @@ Item_GObj* it_8026F5C8(Item_GObj* item_gobj, ItemKind kind, Vec3* pos)
     PAD_STACK(12);
 
     spawn.kind = kind;
-    spawn.vel.z = 0.0f;
-    spawn.vel.y = 0.0f;
-    spawn.vel.x = 0.0f;
+    spawn.vel.z = it_804DC6B8;
+    spawn.vel.y = it_804DC6B8;
+    spawn.vel.x = it_804DC6B8;
     spawn.x3C_damage = 0;
     spawn.x44_flag.b0 = 1;
     spawn.prev_pos = *pos;
-    spawn.prev_pos.z = 0.0f;
+    spawn.prev_pos.z = it_804DC6B8;
     spawn.x40 = 0;
     spawn.facing_dir = it_8026B684(&spawn.prev_pos);
     if (item_gobj != NULL) {
@@ -149,9 +155,9 @@ Item_GObj* it_8026F6BC(Item_GObj* item_gobj, Vec3* arg1, Vec3* vel, bool chk)
     if (spawned_item_gobj != NULL) {
         spawned_item = spawned_item_gobj->user_data;
         if (chk == false) {
-            vel->x = it_804D6D28->x54_float * (2.0f * (HSD_Randf() - 0.5f));
+            vel->x = it_804D6D28->x54_float * (it_804DC6BC * (HSD_Randf() - it_804DC6C0));
             vel->y = spawned_item->xCC_item_attr->x18;
-            vel->z = 0.0f;
+            vel->z = it_804DC6B8;
         }
         spawned_item->x40_vel = *vel;
     }
@@ -176,9 +182,9 @@ Item_GObj* it_8026F7C8(Vec3* arg0, Vec3* vel, bool chk)
     if (spawned_item_gobj != NULL) {
         spawned_item = spawned_item_gobj->user_data;
         if (chk == false) {
-            vel->x = it_804D6D28->x54_float * (2.0f * (HSD_Randf() - 0.5f));
+            vel->x = it_804D6D28->x54_float * (it_804DC6BC * (HSD_Randf() - it_804DC6C0));
             vel->y = spawned_item->xCC_item_attr->x18;
-            vel->z = 0.0f;
+            vel->z = it_804DC6B8;
         }
         spawned_item->x40_vel = *vel;
         it_80274ED8();
@@ -200,10 +206,14 @@ bool it_8026F8B4(Item_GObj* item_gobj, Vec3* arg1, Vec3* arg2, bool chk)
     rand_int = HSD_Randi(it_804D6D28->x13C);
     rand_int += it_804D6D28->x140;
     if (chk == false) {
-        arg2->x = it_804D6D28->x54_float * (2.0f * (HSD_Randf() - 0.5f));
+        arg2->x = it_804D6D28->x54_float * (it_804DC6BC * (HSD_Randf() - it_804DC6C0));
         arg2->y = it_804D6D28->x144;
-        arg2->z = 0.0f;
+        arg2->z = it_804DC6B8;
     }
     it_802E5F00(item_gobj, arg1, arg2, rand_int);
     return true;
 }
+
+const f32 it_804DC6B8 = 0.0f;
+const f32 it_804DC6BC = 2.0f;
+const f32 it_804DC6C0 = 0.5f;

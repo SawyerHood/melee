@@ -156,6 +156,9 @@ reach 100% — check `rows` before assuming a C edit can finish a function.
    literals reload per-use into f0, LICM-cache in loops, remat after stores.
    Read the target's load pattern per site. Multi-read extern-f32 swaps
    regress where target reloads (gm_18A5 −2/−3 each); 1–2-read swaps safe.
+   NEGATIVE (itdrop F3D4): direct extern-f32 use INSIDE a loop kills the
+   LICM hoist (per-use f0 loads) — keep a preheader local copy
+   (`f32 zero; zero = ext;`); straight-line uses are byte-identical.
 26. **NAMED-ANCHOR vs SECTION-FOLD (extends BSS rule; gm_18A5/particle/
    gm_1601)**: multi-access constant-offset statics fold to merged-section
    base (`...bss.0+N`). Named anchors via: (a) extern-flip the symbol at the
@@ -212,6 +215,102 @@ reach 100% — check `rows` before assuming a C edit can finish a function.
    `T* t = &g.sub;` mixed with direct `g.sub.f` stores reproduces split
    r30-direct/rN-pointer addressing; write zero/const on the LEFT of fcmpu
    compares to match operand order.
+34. **PLUS-ZERO / CAST-ONLY PROP BLOCKER (gm_1832, 4 fn wins)**: `int q =
+   val + 0;` (init) or self-read `p = (T*)((u8*)p + 0);` / cast-only
+   `p = (T*)(u8*)p;` survives folding long enough to block copy-prop and
+   front-end CSE; emits ZERO instructions in low-pressure contexts, one
+   addi-0 under pressure. Companion DIV-RECOMPUTE TELL: target sharing ONLY
+   the mulhw between `x/K` in a condition and `(f32)(x/K)` in the branch
+   (duplicated srawi/srwi/add) ⇒ two div nodes reached ISel — feed the
+   second division a +0-copied operand (won 738/910/B3C).
+35. **EMBEDDED-LHS ASSIGN (ftCo_0A01 ×2, gm_1832 A000)**: `*(p = &X) =
+   call();` emits [bl; addi p; stw] with the store refolded to a
+   base-displacement; `X = call(); p = &X;` emits [bl; stw; addi].
+36. **NAMED-ANCHOR ADDENDA (extends 26)**: (d) blocked pointer `T* st =
+   &static_sym;` + idiom-34 blocker materializes sym@ha/@l in a
+   callee-saved reg with object-relative displacements (gm_1832 ×6 fns);
+   (e) struct-ptr hoist is an EXACT win when target shows small
+   displacements off one callee-saved anchor across calls — anchor reloc
+   pairs by resolved offset even while section-folded (gmregclear
+   fn_8017EE40 92.66→100). Neither form reaches true TU-split
+   constant-offset-only functions (fn_80188644 class, gm_1601 +0x110).
+37. **INLINE-HELPER EXTENSIONS (extends 6/7/28)**: (a) helper param feeding
+   the callee's arg slot precolors it — pass the loaded-pointer EXPR as the
+   param and the lwzx lands directly in r5, no addi copy (fn_80187AB4 100);
+   (b) a local assigned from a static-inline ADDRESS-RETURNING helper
+   (`return &arr[i];`) allocates ABOVE the strength-reduction roving IV;
+   plain `&arr[i]` allocates below in every decl/def permutation (ifcoget
+   un_802FF4FC/620 both →100); (c) inside an inline, `result = f; return
+   result;` reserves a caller frame slot, `return f;` doesn't (B3C −8
+   frame); (d) hand-expanded duplicate branch bodies = auto-inlined call to
+   a shared sibling defined before `#pragma dont_inline on` (lbaudio
+   fn_800253D8/56BC both →100); (e) replacing an open-coded section with
+   the TU's existing static-inline helper frees a named-local rank and
+   fixes inline-data color ties (ftCo AF78C).
+38. **PARENT-STRUCT MEMBER PATH (toy un_80307F64 +2.6)**: raw `*(T*)((u8*)
+   base + BIG + i*4)` arithmetic reserves a dead 4-byte frame slot per
+   distinct address temp AND ranks webs differently; a parent-struct cast
+   `((Parent*)sym)->sub.field[i]` emits identical instructions, zero
+   slots, and re-ranks param homes to the top. Struct-cast exprs through an
+   EXISTING pointer var's value CSE into that var regardless of statement
+   order (value numbering is position-independent) — only the
+   no-shared-node member-path form avoids it.
+39. **WEB-RANK RULES (extends 29; Toy_LoadLObjList 100, lbaudio 25E38)**:
+   long-web named locals take r31.. descending in decl order; ALL param
+   homed copies (incl. `T copy = param;` — coalesced, decl position
+   ignored) rank AFTER them, later-param first — to sink a pointer walk
+   below other homes, delete the cursor local and mutate the param.
+   Deleting named int locals in favor of direct field reads lets anonymous
+   CSE temps bind r8..r5 in creation order.
+40. **POINTER-WALK / SCHEDULE PINS (gmregclear)**: else-if chain over
+   consecutive bytes showing `addi rT,base,1 / lbz 0x1(base) / lbzu
+   0x1(rT) / lbz 0x1(rT)` = `*++q` walk; the walk var needs ≥2 defs incl. a
+   self-read or LICM hoists it pre-loop (tell: extra addi + li before the
+   loop). Reg-prop folding is BB-local: first post-increment load folds to
+   base-displacement, later ones read the register. Adjacent addi/lwz order
+   flips when an address expr is written fresh vs routed through the
+   already-declared pointer var (fn_80181598 →100); guarded-indexed
+   multi-pointer loops reserve 4 phantom frame words — bump-form
+   (`*a=-1; a++`) removes them (lbaudio 27AB0).
+41. **@-ID SHIM MENU + FRAME BANDS (extends 23/31; ftCo_0A01, measured)**:
+   per-TU @ costs — `do{}while(0)` (PAD_STACK) = 4 ids; `if (0) {}` = 2;
+   `goto L; L:` = 1; removing switch/goto/labels subtracts; the same shim
+   can measure differently inside dense control flow — re-verify on a
+   downstream canary @pin. Frame = three bands: named aggregates (decl
+   order, top) / scalar homes (4B each, position-independent) / instance
+   band (sqrtf volatile y, bottom). `UNUSED u8 pad[N]` decls fill the
+   aggregate band, PAD_STACK fills lower; NOTHING pads below instance
+   slots (dead-below-y targets unreachable — parked family).
+42. **CROSS-BB COPY-PROP LIMIT (ftCo AF78C 97.8→99.1)**: `T* o = *ptr;` in
+   a different BB from ptr's def is NOT folded to a direct displacement —
+   open-coding an auto-inlined callee through a caller-held pointer
+   reproduces `lwz rX, 0x0(rPtr)` and can re-rank the whole callee-saved
+   map.
+43. **BINARY TELLS (wave 8 pack)**: bgelr/blr with r3 clobbered and no mr =
+   prototype should be void (gm_80189CDC); not-taken branch jumping INTO
+   the lwz/addi/stw increment, returning pre-increment = unconditional
+   `return field++;` (fn_80181C80, semantic fix); caller-side clrlwi of a
+   callback result + `li r0,0` else-arm = callback returns int not u8
+   (gm_8017DB88); 4330 pattern WITHOUT xoris 0x8000 = (f32)(u32) source
+   (fn_80188EE8 ×6 — suspect struct field really u32); `if (++s->bf >= K)`
+   tests the just-stored byte reg, statement-then-test reloads
+   (fn_80187910); word-copy trichotomy: 24×-unroll = block-ptr indexed
+   loop / bl = memcpy / lwzu 8-byte loop = struct assign (lbaudio 27168);
+   empty-if/else carry = ternary with preloaded else value (27DF8);
+   `int x = (s8) call()` = one extsb web vs s8-typed remat (2785C);
+   ≥9-byte string literal forces .data pooling ("/audio/\0"). NEGATIVE:
+   never replace string literals with named char[] externs — literals pair
+   by address (ifcoget 364 100→87.3, reverted).
+44. **WEB-SPLIT SEARCH VAR (idiom-10 application; ifcoget 218 +13.7)**:
+   target `li r0,N` scratch web + `mr rC,r0` at the join = two C vars
+   (`found` scratch + `y = found;`); the copy survives copy-prop only
+   because a later `y = f(y)` reads y.
+45. **dtk SYNTHETIC-RELOC ROWS (toy)**: base+offset arithmetic landing on
+   another named symbol (`addi r5, r30, 0x438` → un_803FE150 =
+   un_803FDD18+0x438) gets a target-side-only synthetic reloc — unpairable
+   from C (compiled addi has no reloc); referencing the named extern
+   directly kills the base var and reshapes the fn (−20%). Diff-policy/
+   naming class, like conversion magics.
 
 ### Experiment results (wave 3)
 
@@ -314,9 +413,94 @@ reach 100% — check `rows` before assuming a C edit can finish a function.
   gm_18A5, particle, camera S32_TO_F32). Naming/diff-policy problem only.
 - **mplib arg-copy temp placement** (mpLib_80059E60): ours pools fn-wide
   descending, target per-block ascending — emission rule uncracked.
+- **f31/r30 ANONYMOUS-TEMP ATTRACTOR (toy ×3: un_803087F4/80310324/803109A0;
+  same family as mplib arg-copy)**: call-result copies consumed inside
+  inline expansions, merged multi-def FP vars, and SR roving pointers grab
+  the TOP free callee-saved reg; target wants BOTTOM (f27/r26). ~8 levers
+  failed (named temps, inline-body locals, wrapper, decl/def order,
+  init-at-decl, source-redef, assignment-in-condition).
+- **WEB-ASSIGNMENT-ORDER ROTATION (gmregclear gm_8017DB88/fn_8017D9C0/
+  fn_8017FF1C/fn_80181C80)**: param-block vs local-block placement/rotation
+  invariant to all decl/def/statement permutations (~20 probes). Decl order
+  only controls relative order WITHIN local groups. Needs a dedicated
+  enumeration agent before retry.
+- **ftCo_0A01 residuals**: B2790 webA/line_id r28↔r29 tie; B1478 inline-data
+  r28/r29 (derived LIFO free-stack model — ours pops most-recently-freed,
+  target implies different death order, lever unknown); AC5A0 dead 8B
+  between y and f2i temps; A9904/A9CB4 dead-below-y + `fadds f1,f1,f31`
+  canonical operand order (both source orders emit f31-first); A61D8
+  loop-group-vs-invariant coloring; AE7AC r4-vs-r7 pick + inverted mr/addi
+  param-homing pair.
+- **gm_1832 residuals**: fn_801851C0 r30/r31 LICM-temp swap (8 forms);
+  fn_80188550 + fn_80188644 TU-SPLIT-BLOCKED (proven: .bss anchor
+  lbl_80473700 = original-TU section+0x158; gm_1601 +0x110 family,
+  configure-level); fn_80189B88 tail zero-share (store-zero and return-zero
+  same vreg, 4 forms const-propped); fn_80187CF4 st/jobj/gobj cyclic perm
+  (identical source shape to matched fn_80187AB4 allocates differently).
+- **lbaudio_ax unsolved**: bss-vs-data anchor callee-saved rank swap
+  (26C04/27168/2838C); loop-counter-first volatile rotation (decl/def/init
+  all no-ops); ud/sp param-copy homing swap (25FAC, 5 levers); 26EBC u64
+  inline-result r3/r4 coalesce (expert inline-copy class).
+- **it_8026F3D4 (95.56)**: preheader lfs-after-volatile-stw — scheduler
+  canonicalizes every form to lfs-pairs-with-lis (~10 forms; idiom-15
+  singleton). **fn_802FF218 (94.33)**: y↔thing callee-saved swap + r6
+  arg-copy site, regalloc-resistant pair.
 
 ## Session log
 
+- **2026-06-06 — Wave 8 (6 unit campaigns + naming round 5).** 19 fn + 1
+  data matches (UNCOMMITTED src, 7 files dirty): gm_1832 ×10fn+1data
+  (plus-zero blockers, inline play helpers, @-pin realignment collateral;
+  unit 97.41→97.60), gmregclear ×3 (decl reorder, load-through-ptr,
+  struct-ptr hoist), ifcoget ×3 (un_804A1F58 repack to true 0x80 layout
+  {hdr 8B + 6×0x14 slots} — root-cause fix, resolves file TODO + memzero
+  hack), lbaudio_ax ×2 (auto-inline reconstruction of duplicated bodies),
+  toy ×1 (Toy_LoadLObjList — FIRST ty-module match). ftCo_0A01: 0 wins but
+  5 fns improved ~150 rows; its do{}while(0)/if(0)/goto shims are @-pin
+  LOAD-BEARING for 4 pinned siblings (replace only with a symbols.txt
+  renumber pass). Gates: 5 CLEAN/PASS zero-regression; gmregclear PASS
+  with 2 enumerated accepted drops (fn_801803FC/fn_80180630, bit-identical
+  to HEAD, pure @-drift pairing — renumber unit pins AFTER src lands per
+  idiom 23). 5 binary-proven deviations fixed toward DOL: gm_80189CDC
+  zero loop 25→27 words (cmpwi 0x1b proof); fn_80188EE8 (f32)(u32) convs;
+  fn_80181C80 unconditional `return x0++`; lbAudioAx_80027168 arr274[i] +
+  OOB descending [55]-scan → ascending prefix scan; fn_802FF218 OOB slot-0
+  header read → slot flag byte/score word. Naming round 5 committed
+  8b85bcfe0 (branch campaign): 608 lines, ~1032 rows, ~113 fns to
+  fuzzy-100, 47 units gated, DOL OK; lbcollision 157→0 rows (+10 fns),
+  synth 60→1, mnmain 38→1, mplib 50→2; project matched code
+  71.66%→71.72%. INFRA FINDING: ninja deps DB had LOST the split depfile
+  (`ninja -t deps build/GALE01/config.json` → #deps 0) — symbols.txt edits
+  silently never re-split and the DOL gate passed trivially; fix `touch
+  config/GALE01/config.yml && ninja`; VERIFY #deps ≠ 0 before every naming
+  round. Header/config queue (orchestrator): gm_1832.h:66 gm_80189CDC
+  return → void (bgelr-proven; check callers); gm/types.h:1037
+  char_data[25]+pad_6C[2] → char_data[27]; types.h anim_frames[39]/
+  menu_values[7] s32→u32 candidate; lbaudio_ax.static.h:242
+  offsets_arr_803BC4E4 add `= { 0 }` (.bss→.data, HIGH VALUE: measured
+  +0.4–+4.2 on 3 fns, 2838C 93.5→97.7); lbaudio sfx_remap [0x4A]→[0x4B]
+  low-confidence; gmregclear.h gm_8017DB88 arg6-8 callback ptrs u8→int
+  returns (+ gmclassic.c:707 cast); gmregclear struct merge lbl_80473594
+  into lbl_80472ED8+0x6BC (layout stream; bss layout unaffected);
+  splits.txt add `.sdata2 0x804DDC00–0x804DDC20` to melee/if/ifcoget.c
+  (fn_802FED14 → 100 with zero C changes). Naming round 6 queue: gm_1832
+  tail @-drift −1 (@1651-54/@1901-07 family) + @913→lbl_804DA648 +
+  @515/516 + @1074 TU-dup literals; gmregclear pin renumber (recovers the
+  2 accepted drops) + lbl_804DAxxx rows + .data layout restoration
+  (lbl_803D7AC0/85F0/8D08, layout stream); toy un_803FE150/E1E0
+  synthetic-reloc demotion policy + @288/@535/@938 vs un_804DDCxx
+  offset-pairing; lbaudio merge 6 bss syms into one 0x1F554 + .static.h
+  .data decl-order surgery; src-agent queue from skip-class diagnoses:
+  itdosei it_804DC878 extern (53 rows), ftcoll 13 names, ftCo dup-literal
+  units need idiom-24 Fix-B in src. Retry queue: gm_1832 fn_80185F5C
+  (same arg-reg signature as solved cluster); gmregclear web-rotation
+  needs enumeration agent first. WARNINGS: check_fn.py `--no-build` diffs
+  the stale CANONICAL object — never trust it after an edit (bit 2
+  agents); /tmp scripts clobbered between concurrent agents — use
+  campaign/scratch/<agent>/; report.json remains lenient (ED14 "100" was
+  really 99.79 — controlled scratch baselines only); backlog.json
+  stale-modified, left uncommitted. Idioms 34–45 + idiom-25 negative
+  added above.
 - **2026-06-06 — Wave 7 (6 unit campaigns + naming round 4).** 12 new fn
   matches in working tree (UNCOMMITTED src): gm_18A5 ×1, gm_1601 ×6,
   particle ×8 (… see wave-7 report), mplib ×3, camera 14 restored-to-100 vs
