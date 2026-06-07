@@ -25,6 +25,16 @@
 
 const Vec3 it_803B8640 = { 0 };
 
+/// The original TU pools 2.0F and 0.5F at the HEAD of .sdata2, before any
+/// function's literal creations, even though their only code uses are in
+/// itLinkBomb_Logic16_DmgReceived near the end of the TU. Bare literals at
+/// the use site would pool at the tail instead, so the values are defined
+/// here as the named objects dtk emits for them; the use site reads them
+/// via *(f32*)& to defeat const-propagation, which would otherwise re-pool
+/// anonymous duplicates (idiom 127b/c, flip-link law).
+const f32 it_804DCD38 = 2.0F;
+const f32 it_804DCD3C = 0.5F;
+
 ItemStateTable it_803F6888[] = {
     { 0, itLinkbomb_UnkMotion0_Anim, itLinkbomb_UnkMotion0_Phys, NULL },
     { 0, itLinkbomb_UnkMotion1_Anim, itLinkbomb_UnkMotion1_Phys,
@@ -620,7 +630,8 @@ bool itLinkBomb_Logic16_DmgReceived(Item_GObj* gobj)
                 item->facing_dir = -item->xCCC_incDamageDirection;
                 item->x40_vel.x = sa->x14 * item->facing_dir;
             } else {
-                temp_f1 = 2.0f * (HSD_Randf() - 0.5f);
+                temp_f1 = *(f32*) &it_804DCD38 *
+                          (HSD_Randf() - *(f32*) &it_804DCD3C);
                 item->x40_vel.x = sa->x14 * temp_f1;
                 // it_80272980(gobj, temp_f1);
                 it_80272980(gobj);
@@ -695,3 +706,11 @@ void it_8029FD84(Item_GObj* gobj, Item_GObj* arg1)
     }
     it_8026B894(gobj, arg1);
 }
+
+/// dtk emits the 4-byte alignment tail of this TU's .sdata2 as a named
+/// global (gap_11_804DCD64_sdata2). It must be defined in-TU for a
+/// byte-exact Matching link (flip-link law; same device as the quatlib
+/// gap_11_804DE764_sdata2 def). Zero bytes of code, never referenced;
+/// placed after all literal uses so it cannot disturb pool creation
+/// order (idiom 104 window).
+const f32 gap_11_804DCD64_sdata2 = 0.0F;

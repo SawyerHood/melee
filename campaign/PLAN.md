@@ -6,12 +6,14 @@ the end of every session.
 
 > **⭐⭐ ENDGAME METRIC (live since wave 18): LINKED Matching file count.**
 > Currently **842/1041 linked (42.80% code-complete)**, matched 72.20%,
-> fuzzy 97.59, HEAD b6674faf6. Flips #1-3 wave 18, #4 (hsd_40FF,
+> fuzzy 97.59, HEAD beb3bdc77. Flips #1-3 wave 18, #4 (hsd_40FF,
 > data-only) wave 19, **#5 (itdrop) at the wave-19 boundary
 > (d4fee40d1)**, **#6 (bytecode, ZERO src work) wave 20 (b6674faf6)** —
 > surfaced only by the en-masse importer-closure ranker (idiom 132).
-> Nearest flips: ftPr_SpecialN + itlinkbomb (0B .text, pool-order only),
-> then MSL/math 18B · gm_1BFA 20B (rotation w20 win) · quatlib 25B —
+> **THREE units sit FLIP-READY at the wave-21 close (uncommitted src)**:
+> ftPr_SpecialN + itlinkbomb (linkcheck hard rows NONE — pool-order
+> cracked, idioms 146/147) and MSL/math (linkcheck `[]` — logf →100,
+> idiom 143). Next tier: gm_1BFA 20B · grgreatbay 31B · itdraw 37B —
 > every stream ranks its work by "what unblocks the next flip".
 
 ## Ground rules
@@ -431,60 +433,78 @@ shasum + idempotence. **FLIP-GATE LAW (all streams)**: a flipped unit's
 ours-object is LOAD-BEARING — naming/recon/S1 gates must re-baseline the
 DOL sha, and any edit to a flipped TU must keep it whole-byte-exact.
 
-### ⭐ Ranked flip queue (wave-20 FULL-RANK sweep, live-linkcheck; flips #1-6 COMMITTED)
+### ⭐ Ranked flip queue (wave-21 results, live-linkcheck; flips #1-6 COMMITTED)
 
 **Flipped (6)**: gm_182F + plattack (51951826b) · ftchangeparam
 (4715a41d8) · hsd_40FF (ab2a4870d, data-only) · itdrop (d4fee40d1) ·
 bytecode (b6674faf6, zero src work). Importer closures all re-verified
 at flip time. Re-rank after every recon/S1 wave with
 `file-flip-w20/rank.py` (en-masse importer closure mandatory, idiom
-132 — top-10 cutoffs buried bytecode for ~2 waves).
+132 — top-10 cutoffs buried bytecode for ~2 waves; w20b re-run
+confirmed COMPLETE coverage: 197 ranked + 2 src-less data containers
+= all 199 NonMatching link inputs, zero latent zero-work flips left).
 
-1. **ftPr_SpecialN** — **0B .text** (unit fuzzy 100.000!): sole gap =
-   0.5f↔0.0f .sdata2 pool swap (+0x14↔+0x54) + 4 tracking relocs at
-   0x3cbc/0x3da0/0x4478/0x455c — idiom-120 pool-order src fix; the
-   cheapest flip-unblock in the queue (idiom 133 class) → src owner.
-2. **itlinkbomb** — **0B .text**: 2.0f/0.5f pool pair TAIL vs target
-   HEAD (idiom 120/122) + missing 4B zero tail + 47 tracking relocs →
-   src owner.
-3. **MSL/math** — **18B .text ONLY** (re-checked w20, unchanged):
-   residual = logf frame-layout immediates (target frame 0x28, exact
-   slot map known, fM/fm slot truth INVERTED vs source order; ~50 shape
-   probes). Best lines: (a) E18-class two-stmt h2_poly (insn-seq 100%,
-   +8B frame), (b) F3-class lone `float H` (FPR map 100%) — combine
-   with the array-decl-order law; flip-mslmath-w19/progress.txt. SIDE
-   ITEM (math_data.c owner): delete lines 82-83 — dead `__logf_C0/
-   C1_bits` defs, C1 hex 0x3EAA9F44 = binary-proven transcription
-   error for 0x3EAAAA36 — makes math_data.o byte-identical.
-4. **gm_1BFA** — **20B .text** (was 67B; ⭐ rotation-enum w20 win KEPT
-   in src): gm_801BFCFC 97.84→**99.28** via the load-bearing 13-decl
-   reorder + i2-declared-before-i1 (idioms 128/130; 10/13 webs fixed
-   incl. the BASE+w3 coalescence). Residual = ONE r27↔r28
-   transposition, PROVEN model-unreachable under L1+L3c (anchor-pair
-   deadlock, idiom 129 — full proof in rotation-enum-w20/REPORT.md).
-   Untried 1-compile ideas: block-scope var_r28 decl in loop1, for-init
-   comma, transient 14th r28-owning web, TU-global vreg test (dummy fns
-   prepended to probe TU). gm_801BFC60 →100 (idiom 124, w19).
-5. **quatlib** — **25B .text ONLY**: MatToQuat →100 (idiom 119),
-   .sdata2 byte-EQUAL (idioms 120/122; the 99.81 fuzzy is a pure
-   @165↔@166 NAME swap). Sole blocker: 8037EC4C FPR temp-pair swap
-   {f4,f3}↔{f6,f5}, VN-canonical rotation park (idiom 121) — re-judge
-   under the L1 cursor model.
-6. **itdraw** — 37B .text (src reverted byte-identical): best state =
-   two-caller-var shape, ONE global r28↔r29 transposition (99.26)
-   allocator tie-locked; re-attempt WITH idiom-130 chain steering + L1
-   cursor reasoning (rebuild recipe in flip-unblock-w19/progress.txt).
-7. **sobjlib** — 39B, single fn HSD_SObjLib_803A4A68 99.89/2692B (NEW
-   unworked S1 lead, w20 sweep).
-8. **grgreatbay** — 44B, 801F5460 97.30 + 801F63F4 96.72 (NEW unworked
-   S1 lead, w20 sweep).
+1. **ftPr_SpecialN — FLIP-READY (w21, uncommitted src)**: linkcheck
+   hard rows **NONE**; whole-object .text AND .sdata2 byte-exact vs
+   target. Pool swap cured src-side via named-def slot interleaving +
+   `*(f32*)&` cast reads + EOF 0.0F gap def (idioms 146/147/122).
+   Residual = 1 ALIGNFIX + 19 zero-importer EXPORT-MISSING (link-
+   neutral, idiom 110d). Flip gate to run: rank.py re-run + idiom
+   116/134 deadstrip audit + pgrep + full ninja + DOL sha + idempotence.
+2. **itlinkbomb — FLIP-READY (w21, uncommitted src)**: linkcheck hard
+   rows **NONE**; .text untouched byte-for-byte — top-of-file 2.0F/0.5F
+   defs un-rotated all 10 pool entries (47 relocs in one shot) + EOF
+   0.0F tail = size 0x30 EXACT. Residual = 3 ALIGNFIX + 14
+   zero-importer EXPORT-MISSING. Same flip gate as #1.
+3. **MSL/math — FLIP-READY (w21, uncommitted src)**: linkcheck **`[]`
+   LINK-CLEAN** — logf 99.80→**100.0000 MATCH** (the w19 ~50-probe park
+   SOLVED via the scope-overlay frame law, idiom 143: inline switch
+   head + outer decl band + case-block kept verbatim + lone `float H` +
+   `(float)` contraction blocker + `F32_BIT_CAST` reads). logf has
+   importers ⇒ idiom-134 covers data sections, no force_active. SIDE
+   ITEM still open (math_data.c owner): delete lines 82-83 — dead
+   `__logf_C0/C1_bits` defs, C1 hex 0x3EAA9F44 = binary-proven
+   transcription error for 0x3EAAAA36 — makes math_data.o
+   byte-identical.
+4. **gm_1BFA** — **20B .text, now SINGLE hard row** (w21:
+   EXPORT-MISSING gm_8049E558 cleared via static→global, idiom 139;
+   .text/.data/.bss byte-identical). gm_801BFCFC 99.28 residual = ONE
+   r27↔r28 transposition; w21 resolved ALL 4 queued ideas (A worse,
+   B/B2 no-op, C deadlocked, D falsified) + 23 decl perms — but
+   solve2.py proves the target map IS pure-L1-reachable (226 orders,
+   anchor AFTER w1): blocker is the processing SLOT (idiom 140); pends
+   a slot-inverter (p09/p10 anomaly = only observed mechanism).
+5. **grgreatbay** — 44B→**31B** (w21, uncommitted src):
+   **801F63F4 →100.00 MATCH** (SR-rover recon + predicted decl reorder
+   + chain-assign; idioms 149/150/33); 801F5460 97.30→**98.73** (idiom
+   34 self-reads; residual = ONE jobj/gp r29↔r31 transposition,
+   slot-law park) + 499C 2 rows (helper structure right, idiom-153 8B
+   charge blocks) + 4300 synthetic-reloc 0B (idiom 45).
+6. **itdraw** — 37B .text (src reverted byte-identical): the lost w19
+   99.26 uniform state REBUILT + recipe saved
+   (cs-law-w21/itdraw_V7_99.2628.c) — pure global r28↔r29; ALL
+   idiom-130 levers inert; target = comp1 processed LAST (slot law,
+   idiom 140) ⇒ pends the same slot-inverter as gm_1BFA. GPR-side: L1
+   applies (NOT the FPR variant).
+7. **sobjlib** — 39B, HSD_SObjLib_803A4A68 99.89 — parked w21 with
+   mechanism gains: target frame = one descending per-site stream of
+   [arg-copy above staging] groups, reproduced EXACTLY by 11 local
+   static-inline GX wrappers (prototype in s1-flip-w21 scratch) but the
+   stream bottom-pins at 0xc — the 0x28 dead-bottom fill is the
+   cobj/lbColl parked family; FPR trio = idiom-121 rotation.
+8. **quatlib** — 25B .text ONLY, **DEMOTED below the workable tier**
+   (w21): EC4C FPR pair swap is C-UNREACHABLE-class with mechanism
+   proof (idiom 145; E1/E2 fingerprint probes in
+   cslaw-parks-w21/progress.txt) — every C path to the cross-statement
+   anonymous y-half lifetime is closed. Do not re-attempt from C.
 9. Tail: itpikachuthunder 21B + 10B .sdata2 + 3 reloc · lbmemory 79B +
-   2 reloc · ftmetal −0x10 + 20 reloc. **lb_00CE stays DEMOTED** (24B
-   but dead-creator pool head, C-unreachable — idiom 118; D148 12-block
-   shape 99.06 → S1 rotation). **gm_16A9** refuted-easy (w19: real
-   codegen + non-restorable .sdata2 shift). **ifprize** 34B + 12 reloc
-   + 4B .data tail = REAL content. **ftCo_Shouldered** 8B mid-.text
-   insertion + non-weak .sdata2 surplus = real.
+   2 reloc · ftmetal −0x10 + 20 reloc · 3-hard tier (vi0501, ifprize,
+   lbshadow, leak, itkyasarin). **lb_00CE stays DEMOTED** (24B
+   but dead-creator pool head, C-unreachable — idioms 118/148; D148
+   12-block shape 99.06 → S1 rotation). **gm_16A9** refuted-easy (w19:
+   real codegen + non-restorable .sdata2 shift). **ifprize** 34B + 12
+   reloc + 4B .data tail = REAL content. **ftCo_Shouldered** 8B
+   mid-.text insertion + non-weak .sdata2 surplus = real.
 
 Family follow-ups (wave-17 list re-ranked by wave-18 results): gm_180A
 next-best in the gmregclear family (only fn_80180C60 98.17 blocks);
@@ -530,15 +550,50 @@ order-search; full text in rotation-enum-w20/REPORT.md.
   standalone replica colors DIFFERENTLY from the in-TU original
   (static-vs-extern flips maps; PAD_STACK inert) — probes give LAWS,
   not byte answers; final probing must run on the real unit.
+  **W21 SHARPENING (idiom 142)**: L5 sensitivity is linkage/symbol
+  context ONLY — function TU-position and vreg counters falsified
+  (1-3 dummy fns incl. a 15-CS-web monster prepended → coloring
+  byte-identical; extern-buf reshape is what moves maps).
 
-**Practice**: re-judge every parked "rotation family" under L1-L5 before
-burning compiles. Rotation queue: gm_801BFCFC pair-inverter (4 untried
-1-compile ideas in the flip queue) · it_8026EECC from the 99.26
-two-var state WITH idiom-130 + L1 cursor reasoning · quatlib EC4C FPR
-pair · lb_8000D148 · lbaudio 27488 entry-exchange (exact target map in
-lbaudio-s1-w20/progress.txt) + 27DF8 r0/r4 · 69A84/DAD4/gmregclear
-carryovers. Falsified-on-real-fn list (do not re-probe): named-base
-packages (94.28/97.90/97.65), variable merges (96.75/98.03).
+**⭐ W21 SLOT-LAW REFINEMENT (idiom 140, supersedes the "anchor-pair
+decl-UNREACHABLE" framing of L3c/129)**: solve2.py order-reconstruction
+shows one-transposition park targets ARE pure-L1-consistent — gm_801BFCFC
+has 226 valid orders with the anchor processed AFTER w1; itdraw's target
+processes comp1 LAST. The blocker is the processing SLOT, not the choice
+rule. Decl order, comma/for-init, block scope, variable splits, inline
+decl/definition order, and TU position are ALL slot-inert (23+ perms +
+4 queued ideas resolved w21). The class pends a SLOT-INVERTER; the
+p09/p10 probe anomaly is the only observed mechanism — next probe:
+vary statement forms between walker init and loop head on a
+real-fn-shaped probe. The 226-order corpus (cs-law-w21/solve2.py) is
+the spec — cross-check new reg maps against it before burning compiles.
+
+**⭐ FPR-LAW VERDICT (w21 — L1 does NOT transfer to FPRs; idiom 145)**:
+volatile FPR expression temps = fresh VIRGIN regs DESCENDING from the
+highest free volatile, in IR creation (statement) order — NO cursor, NO
+dirty-first. Adjacent result fadds coalesces dest=src2. Named
+single-def multi-use f32 webs → ascending band f7+ (overflow CS f31);
+named MULTI-def f32 webs → L3-promoted ahead of loads (idiom 131
+transfers to FPR named webs, closing the staging route). Consequence:
+quatlib EC4C's cross-statement anonymous y-half lifetime is
+C-UNREACHABLE (E1/E2 fingerprint proof, cslaw-parks-w21/progress.txt) —
+single-use copies VN-forward (121), multi-use/multi-def named webs
+band/promote. FPR pair parks are a DIFFERENT mechanism from GPR cursor
+parks: itdraw's r28↔r29 tie is GPR-side (L1 + slot law apply); DAD4 /
+sobjlib FPR trio / EC4C are the FPR family.
+
+**Practice**: re-judge every parked "rotation family" under L1-L5 + the
+slot law + the FPR variant before burning compiles. Rotation queue:
+slot-inverter mechanism probe (p09/p10, real-fn-shaped) — unlocks BOTH
+gm_801BFCFC AND itdraw (V7 recipe = one copy once it exists) ·
+grgreatbay 5460 r29↔r31 transposition (same class) · lb_8000D148 ·
+lbaudio 27488 entry-exchange (exact target map in
+lbaudio-s1-w20/progress.txt) + 27DF8 r0/r4 · 69A84/gmregclear
+carryovers. CURSOR-SIM FIRST at ≤7 webs (idiom 150: hand-simulate
+L1+L2 before probing — first fully-predicted S1 win at grgreatbay
+63F4). Falsified-on-real-fn list (do not re-probe): named-base
+packages (94.28/97.90/97.65), variable merges (96.75/98.03), quatlib
+EC4C any-C-form, gm_801BFCFC decl-perm space.
 
 ## Validated playbook (update after every session)
 
@@ -1609,6 +1664,96 @@ packages (94.28/97.90/97.65), variable merges (96.75/98.03).
    27648)**: large loop-bearing plain globals do NOT depth-0
    auto-inline (bl emitted) — the depth-0 exception holds only for
    small callees.
+139. **EXPORT-SCOPE SOURCE FIX (extends 120/133; gm_1BFA w21,
+   byte-proven)**: EXPORT-MISSING row + symbols.txt scope:global ⇒
+   the decomp wrongly made it `static` — drop the static; sections
+   stay byte-identical (only .comment moves) and the row clears free.
+   Audit ALL importer-cleared EXPORT-MISSING rows against symbols.txt
+   scope.
+140. **ANCHOR-PAIR IS A SLOT LAW (refines 129; cs-law w21,
+   solve2.py)**: one-transposition rotation parks are pure-L1-REACHABLE
+   (gm_801BFCFC: 226 consistent orders with anchor AFTER w1; itdraw:
+   comp1 processed last) — the blocker is the processing SLOT. Decl
+   order, comma/for-init, block scope, variable splits, inline
+   decl/definition order, TU position are ALL slot-inert. Pends a
+   slot-inverter (p09/p10 anomaly = only observed mechanism).
+141. **TAIL-MERGE TRAP (extends 73/83; itdraw V6 47.59)**:
+   byte-identical sibling expansions from ONE static inline get
+   cross-jumped (MWCC tail-merges them) — duplicated target code must
+   stay duplicated in source.
+142. **TU-POSITION FALSIFIED FOR REGALLOC (sharpens L5; cs-law w21)**:
+   L5 sensitivity is linkage/symbol context, never function position
+   or vreg counters — prepending 1-3 dummy fns (incl. a 15-CS-web
+   monster) leaves coloring byte-identical; an extern-buf reshape
+   moves it.
+143. **SCOPE-OVERLAY FRAME LAW (extends 127d/e; logf →100, real+
+   synthetic probes)**: sibling-scope locals OVERLAY one unified
+   lexical top-down frame band (scalars+aggregates together — refines
+   127e's separate-bands claim); a case-block local hides 12B (cast-
+   init: 4B home + 8B cast staging) / 4B (copy-class init) / 0B
+   (inline use) of frame depending on init class — frame diffs can
+   come from a DIFFERENT scope than the visible slots. An inline
+   switch-head cast read front-end-CSEs a case-local cast-init down
+   to copy-class (12B→4B). Companion: address-taken u32 scalar pair
+   pins int webs (127f).
+144. **ALIAS-CLASS SCHEDULING EDGES (extends 127; logf probes)**:
+   local ARRAY stores carry may-alias edges against global loads
+   (scheduler orders them); scalar and cast-pointer-to-local stores
+   do NOT — array-vs-scalar staging choice is a zero-byte scheduling
+   lever.
+145. **FPR TEMP-POOL LAW — L1 DOES NOT TRANSFER (quatlib EC4C
+   mechanism proof; closes the park)**: volatile FPR expression temps
+   = fresh VIRGIN regs descending from highest free volatile in IR
+   creation (statement) order, no cursor/dirty-first; adjacent result
+   fadds coalesces dest=src2; named single-def multi-use f32 →
+   ascending band f7+ (overflow CS f31); named multi-def f32 →
+   L3-promoted ahead of loads (131 transfers to FPR named webs).
+   Cross-statement anonymous y-half lifetimes are C-unreachable
+   (single-use copies VN-forward per 121; named webs band/promote).
+   See FPR-LAW VERDICT in the rotation section.
+146. **NAMED-DEF POOL-SLOT INTERLEAVING (extends 122/127b, closes
+   118's mid-pool gap; ftPr_SpecialN + itlinkbomb, byte-proven)**:
+   file-scope `const f32` defs emit into .sdata2 at their LEXICAL
+   position INTERLEAVED with anonymous pool literals in creation
+   order — between-fns def lands between those fns' pool windows,
+   top-of-file at HEAD before all pool literals, EOF at tail.
+   FLIP-grade pool-position creator: zero .text, named export
+   restored free.
+147. **FLOAT CONST-PROP CAST CURE (extends 127b to floats, narrows
+   127c)**: a visible-init const f32 referenced by NAME folds to an
+   anonymous pool DUP under melee `-str reuse` too; `*(f32*)&sym`
+   re-type read defeats the fold with byte-identical lfs (volatile
+   NOT required — both probed). 146+147 together retarget any
+   literal's pool slot to any lexical point.
+148. **DEAD-CREATOR DEATH IS UNIVERSAL PRE-POOLING (extends 118)**:
+   fully-dead locals AND param-gated inline branches folded
+   post-substitution both die PRE-pooling — no anonymous dead creator
+   exists from C; idiom 146/147 is the only flip-grade pool-position
+   route (mechanism behind lb_00CE's C-unreachable verdict).
+149. **SR-ROVER RECON TELL (grgreatbay 63F4 →100)**: decomp loops of
+   the form `arr[off/K]` + `off += K` are decompiler-INVENTED —
+   direct `arr[i]` lets MWCC create the target's strength-reduction
+   rovers, incl. the `addi rR,rI,0` rover-init of a known-zero i
+   (not a user copy) and hit-branch `slwi` recomputes.
+150. **CURSOR-SIM PREDICTIVE AT ≤7 WEBS (grgreatbay 63F4)**:
+   hand-simulating idiom-128 L1+L2 over the decl order predicted a
+   full 4-CS-reg map BEFORE compiling (first fully-predicted S1 win)
+   — simulate before probing.
+151. **MUTATION-DEMOTION IS NON-COMPOSITIONAL (refines 34; grgreatbay
+   5460)**: idiom-34 self-read demotions do NOT compose across
+   subsets — a `+0` form dissolves where the cast form acts; probe
+   the exact subset, never extrapolate from singles.
+152. **PER-SITE INLINE-AGGREGATE STREAM (extends 31/41/49; sobjlib
+   mechanism)**: expanded-inline aggregates + arg copies form
+   bottom-band per-site groups — one descending stream of [arg-copy
+   above staging] per call site in instantiation order; reproducible
+   with local static-inline wrappers, but the stream bottom-pins
+   (dead-bottom fill below it = the cobj/lbColl parked family).
+153. **CALL-BEARING INLINE 8B CHARGE — FIELD-CONFIRMED (extends 49;
+   grgreatbay 499C)**: a call-bearing helper reproduced the target's
+   two Vec3 slots exactly but paid +0x10 frame; depth-2 re-routing
+   does NOT drop the 8B charge (the depth-2 hole-kill of idiom 49 is
+   sqrtf-hole-specific).
 
 ### Experiment results (wave 3)
 
@@ -1767,16 +1912,18 @@ packages (94.28/97.90/97.65), variable merges (96.75/98.03).
   extern read (idiom 117) breaks lfs-pairs-with-lis; itdrop flip enabler.
   **fn_802FF218 (94.33)**: y↔thing callee-saved swap + r6
   arg-copy site, regalloc-resistant pair.
-- **Wave-19 parks (rotation-enumeration agent queue)**: gm_801BFCFC
-  97.84-capped whole-fn CS permutation (~50 rows; target reg map +
-  load-bearing two-statement r26 self-read init in flip-unblock-w19/
-  progress.txt); it_8026EECC allocator-tie ONE-transposition state
-  (99.26 recipe in progress.txt; unit reverted to baseline); quatlib
-  8037EC4C FPR temp-pair swap (idiom-121 VN-canonical, 6 forms);
-  lb_8000D148 fresh-reg rotation (true shape at 99.06 documented,
-  reverted); MSL logf 18B frame-layout (NOT rotation — slot-map class,
-  best lines in flip-mslmath-w19/progress.txt). lb_00CE pool head =
-  DEFINITIVE dead-creator park (idiom 118; do not re-attempt for flips).
+- **Wave-19 parks (updated wave 21)**: gm_801BFCFC residual r27↔r28
+  transposition = slot-law park (idiom 140; ALL 4 queued ideas + 23
+  decl perms resolved w21 — pends a slot-inverter); it_8026EECC
+  allocator-tie ONE-transposition state — V7 99.26 recipe REBUILT +
+  saved (cs-law-w21/itdraw_V7_99.2628.c), all idiom-130 levers inert,
+  same slot-inverter class (GPR-side, L1 applies); ~~quatlib 8037EC4C~~
+  PARKED DEFINITIVE w21 with mechanism proof (idiom 145 — do NOT
+  re-attempt from C); lb_8000D148 fresh-reg rotation (true shape at
+  99.06 documented, reverted); ~~MSL logf 18B~~ **WON wave 21 →100.0000
+  MATCH** (scope-overlay frame law, idiom 143 — MSL/math link-clean).
+  lb_00CE pool head = DEFINITIVE dead-creator park (idioms 118/148; do
+  not re-attempt for flips).
 - **gm_18A5 wave-9 parks**: fn_8018E46C lwz/neg pair-order attractor (16
   rows, 6 levers — anonymous-temp attractor family; arg-reshuffles drift
   @991→@992); fn_801977AC single lwz/mr schedule row (6 levers; matched
@@ -1971,6 +2118,96 @@ packages (94.28/97.90/97.65), variable merges (96.75/98.03).
 
 ## Session log
 
+- **2026-06-07 — Wave 21 (⭐⭐ THREE UNITS MADE FLIP-READY: ftPr_SpecialN
+  + itlinkbomb pool-order CRACKED + MSL/math logf →100; ⭐ FPR-LAW +
+  SLOT-LAW verdicts; grgreatbay 44B→31B w/ 63F4 →100; quatlib EC4C
+  parked DEFINITIVE) — 0 commits (no grant); HEAD beb3bdc77 (= the
+  wave-20 settle commit absorbing naming-15 + gm_1BFA + lbaudio);
+  project unchanged 842/1041 (42.80%) but the NEXT THREE FLIPS sit
+  gated-and-ready in uncommitted src; 2 NEW exact matches (logf,
+  grGreatBay_801F63F4) + gm_1BFA EXPORT row cleared; ~145+ unit
+  compiles + ~5 full-ninja gates, all DOL sha1 08e0bf20 EXACT.**
+  ⭐⭐ **POOL-ORDER FLIP-UNBLOCKER**: ftPr_SpecialN AND itlinkbomb
+  linkcheck hard rows **NONE** — whole-object .text + .sdata2
+  byte-exact vs target (itlinkbomb .text untouched byte-for-byte).
+  Mechanism: file-scope `const f32` defs emit at their LEXICAL slot
+  interleaved with the anonymous pool (⭐ idiom 146) + `*(f32*)&sym`
+  cast reads defeat the float const-prop pool-dup fold, volatile NOT
+  required (⭐ idiom 147) + EOF 0.0F gap defs (122); dead-creator death
+  proven universal pre-pooling (148 — mechanism behind lb_00CE).
+  Residual EXPORT-MISSING ×33 importer-closure-cleared across ALL link
+  inputs; 10 probes + 4 check_fn canaries; durable
+  pool-order-w20/progress.txt. ⭐⭐ **logf SOLVED → MSL/math LINK-CLEAN**
+  (the w19 ~50-probe park; ~49 compiles): root cause = SCOPE-OVERLAY
+  FRAME LAW (⭐ idiom 143) — the case-block's local hides 12B/4B/0B of
+  frame by init class, absorbed invisibly by baseline's float band;
+  winning shape = inline switch head + outer decl band + case-EXP_MASK
+  verbatim + lone `float H` + `(float)` contraction blocker +
+  F32_BIT_CAST reads; check_fn direct AND --ninja 100.0000, linkcheck
+  `[]`, DOL EXACT ×2 + idempotence. Companions: unified lexical frame
+  band refines 127e; alias-class scheduling edges (144); synthetic
+  harness w/ real MSL cflags in cslaw-parks-w21/. ⭐ **FPR-LAW VERDICT
+  (idiom 145, new rotation-section subsection)**: L1 does NOT transfer
+  to FPRs — volatile FPR temps are virgin-DESCENDING in creation order
+  (no cursor/dirty-first), fadds coalesces dest=src2, named single-def
+  multi-use f32 → ascending band f7+, multi-def → L3-promoted (131
+  transfers); quatlib EC4C thereby C-UNREACHABLE with mechanism proof
+  (E1/E2 fingerprints) — **parked DEFINITIVE, demoted in the flip
+  queue, file reverted byte-exact**. ⭐ **SLOT-LAW VERDICT (idiom 140,
+  refines 129)**: solve2.py proves one-transposition park targets ARE
+  pure-L1-reachable (gm_801BFCFC 226 consistent orders, anchor AFTER
+  w1; itdraw comp1-last) — blocker is the processing SLOT; ALL 4
+  queued gm ideas resolved (A worse / B no-op / C deadlocked / D
+  TU-position FALSIFIED, idiom 142) + 23 decl perms capped 99.2812;
+  pends a slot-inverter (p09/p10 = only observed mechanism, probe
+  queued). **gm_1BFA now SINGLE-hard-row 20B**: EXPORT-MISSING
+  gm_8049E558 cleared via static→global (⭐ idiom 139 — audit all
+  importer-cleared EXPORT rows against symbols.txt scope; sections
+  byte-identical). **itdraw**: lost w19 99.26 uniform state REBUILT +
+  recipe saved (itdraw_V7_99.2628.c — one copy once a slot-inverter
+  exists); V6 shared-switch inline 47.59 = tail-merge trap (141); src
+  reverted byte-identical. ⭐ **S1 grgreatbay 44B→31B**:
+  **801F63F4 96.72→100.00 MATCH** — decompiler-invented `off/4` loops
+  → direct `arr[i]` SR-rovers (⭐ idiom 149) + an idiom-128
+  hand-simulation that PREDICTED the full 4-CS map pre-compile (⭐
+  idiom 150, first predictive S1 win) + chain-assign (33); 801F5460
+  97.30→**98.73** (idiom-34 self-reads; residual r29↔r31 = slot-law
+  class; mutation demotion non-compositional, 151). **sobjlib parked
+  w/ mechanism**: target frame = per-site inline-aggregate stream
+  (152), 11-helper prototype reproduces it but bottom-pins at 0xc —
+  cobj/lbColl dead-bottom family; reverted byte-identical;
+  call-bearing-inline 8B charge field-confirmed (153, blocks 499C).
+  **Flip-exec settle pass (w20b)**: zero flips (pre-unblocker
+  linkcheck), rank.py coverage COMPLETE (197 + 2 src-less = all 199),
+  flip-ready set was EMPTY — the latent zero-work pool is exhausted;
+  every future flip needs src work, exactly what this wave delivered.
+  **STALE-BASELINE FIND (s1 gate)**: grGreatBay_801F4300 99.9231 +
+  801F499C 99.9898 are PRE-EXISTING at HEAD (stash-proven) — recorded
+  baselines stale, backlog re-triage queued. **QUEUES**: flip executor
+  = commit the 3 src wins, then full flip gates #7-9 (ftPr_SpecialN,
+  itlinkbomb, MSL/math: rank.py re-run + 116/134 deadstrip audit +
+  pgrep + ninja + DOL sha + idempotence ×2, ONE AT A TIME at the
+  boundary per build-race law); rotation/slot = p09/p10 slot-inverter
+  probe (unlocks gm_1BFA + itdraw + grgreatbay 5460); math_data.c:82-83
+  deletion (side item, DOL-neutral); naming: quatlib @165↔@166 +
+  lbaudio 6-sym merge carryovers; backlog re-triage (triage.py +
+  grgreatbay pair). **WAVE BOUNDARY**: dirty = ftPr_SpecialN.c,
+  itlinkbomb.c, MSL/math.c, gm_1BFA.c, grgreatbay.c (wins kept,
+  uncommitted — no grant) + stale backlog.json; serialize commits →
+  triage.py → full configure + ninja + dtk shasum over the settled
+  tree → THEN flips. **WARNINGS**: (1) idiom-number collision ×4
+  streams AGAIN (all self-assigned in the 137-143 range) — final
+  numbers 139-153 assigned here; agents MUST cite candidates only;
+  (2) build-race law HELD ×5 streams (pgrep idle before every gate;
+  no full ninja for NonMatching-only edits); (3) sibling-dirt
+  attribution clean ×5 (DOL byte-exact over dirt on every gate);
+  (4) durable records held ×5 (pool-order-w20/, cslaw-parks-w21/,
+  cs-law-w21/, s1-flip-w21/, file-flip-w20b/); (5) stale recorded
+  baselines are a real hazard — two grgreatbay "100s" were not
+  (idiom-103-style re-derive at gate time applies to BASELINES too).
+  Idioms 139-153 added; FPR-LAW + SLOT-LAW verdict subsections opened
+  in the rotation section; flip queue re-ranked (3 FLIP-READY at top,
+  quatlib demoted to #8).
 - **2026-06-07 — Wave 20 (⭐⭐ FLIP #6 bytecode ZERO-src-work + full-rank
   flip sweep + ⭐ ROTATION CHOICE-LAW SOLVED (gm_1BFA 67B→20B) + lbaudio
   S1 close + hsd_40FF recon verification; naming-15 IN FLIGHT at close)

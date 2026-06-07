@@ -240,6 +240,15 @@ void ftPr_SpecialS_8013DC64(HSD_GObj* gobj)
     fp->x21F8 = ftPr_SpecialN_8014222C;
 }
 
+/// The original TU pools 0.5F at this slot (between the literal creations
+/// of ftPr_SpecialS_8013DC64 and ftPr_SpecialS_8013DD54) even though its
+/// only code uses are in the two Release_Coll functions far below. A bare
+/// literal at the use site would pool at the .sdata2 tail instead, so the
+/// value is defined here as the named object dtk emits for it; the use
+/// site reads it via *(f32*)& to defeat const-propagation, which would
+/// otherwise re-pool an anonymous duplicate (idiom 127b/c, flip-link law).
+const f32 ftPr_Init_804D9C54 = 0.5F;
+
 static inline void playRollSFX(HSD_GObj* gobj)
 {
     Fighter* fp = GET_FIGHTER(gobj);
@@ -1130,8 +1139,8 @@ static inline void wallBounceEffect(HSD_GObj* gobj, Fighter* fp, f32 dir,
     } else {
         pos->x -= ABS(fp2->coll_data.ecb.left.x);
     }
-    pos->y +=
-        0.5f * ABS(fp2->coll_data.ecb.top.y + fp2->coll_data.ecb.bottom.y);
+    pos->y += *(f32*) &ftPr_Init_804D9C54 *
+              ABS(fp2->coll_data.ecb.top.y + fp2->coll_data.ecb.bottom.y);
     efSync_Spawn(0x406, gobj, pos, angle);
     Camera_80030E44(3, pos);
     ftCommon_8007EBAC(fp2, 0xC, 0xA);
@@ -1452,3 +1461,11 @@ void ftPr_SpecialN_8014222C(HSD_GObj* gobj)
     fp->mv.pr.specialn.x34.x = -fp->mv.pr.specialn.x34.x;
     fp->mv.pr.specialn.x34.y = -fp->mv.pr.specialn.x34.y;
 }
+
+/// dtk emits the 4-byte alignment tail of this TU's .sdata2 as a named
+/// global (gap_11_804D9C94_sdata2). It must be defined in-TU for a
+/// byte-exact Matching link (flip-link law; same device as the quatlib
+/// gap_11_804DE764_sdata2 def). Zero bytes of code, never referenced;
+/// placed after all literal uses so it cannot disturb pool creation
+/// order (idiom 104 window).
+const f32 gap_11_804D9C94_sdata2 = 0.0F;

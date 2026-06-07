@@ -522,6 +522,11 @@ void grGreatBay_801F5460(Ground_GObj* gobj)
     HSD_JObj* jobj = gobj->hsd_obj;
     Ground* gp = GET_GROUND(gobj);
 
+    /* Zero-instruction regalloc blockers (idiom 34): promote jobj+gobj to
+     * multi-def webs so the gobj home takes r30 as in the target.
+     * Residual = one r29/r31 jobj-gp transposition (idiom-129 park). */
+    jobj = (HSD_JObj*) (u8*) jobj;
+    gobj = (Ground_GObj*) (u8*) gobj;
     Ground_801C2ED0(jobj, gp->map_id);
     gp->xC_callback = NULL;
     mpJointSetCb1(5, gp, grGreatBay_801F5914);
@@ -966,7 +971,7 @@ bool grGreatBay_801F63F4(Ground_GObj* gobj)
     s32 padding;
     SpawnItem spawn;
     HSD_JObj* jobj;
-    s32 total, rand, i, offset;
+    s32 total, i, rand;
     s32 selected;
     PAD_STACK(4);
 
@@ -985,13 +990,11 @@ bool grGreatBay_801F63F4(Ground_GObj* gobj)
     }
 
     total = 0;
-    offset = 0;
     for (i = 0; i < 10; i++) {
-        s16 item_id = grGb_804D69E0.x0->items[offset / 4].kind;
+        s16 item_id = grGb_804D69E0.x0->items[i].kind;
         if (item_id != -1 && it_8026D324(item_id)) {
-            total += grGb_804D69E0.x0->items[offset / 4].weight;
+            total += grGb_804D69E0.x0->items[i].weight;
         }
-        offset += 4;
     }
 
     if (total == 0) {
@@ -1001,17 +1004,15 @@ bool grGreatBay_801F63F4(Ground_GObj* gobj)
     selected = -1;
     rand = ZRANDI(total);
 
-    offset = 0;
     for (i = 0; i < 10; i++) {
-        s16 item_id = grGb_804D69E0.x0->items[offset / 4].kind;
+        s16 item_id = grGb_804D69E0.x0->items[i].kind;
         if (item_id != -1 && it_8026D324(item_id)) {
-            rand -= grGb_804D69E0.x0->items[offset / 4].weight;
+            rand -= grGb_804D69E0.x0->items[i].weight;
             if (rand < 0) {
                 selected = grGb_804D69E0.x0->items[i].kind;
                 break;
             }
         }
-        offset += 4;
     }
     if (selected == -1) {
         return true;
@@ -1019,8 +1020,7 @@ bool grGreatBay_801F63F4(Ground_GObj* gobj)
 
     spawn = grGb_803B81D4;
     spawn.kind = selected;
-    spawn.prev_pos = pos;
-    spawn.pos = spawn.prev_pos;
+    spawn.pos = spawn.prev_pos = pos;
     Item_80268B18(&spawn);
     return true;
 }

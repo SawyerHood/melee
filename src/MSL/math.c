@@ -63,13 +63,28 @@ from the target .sdata2)
 table, then computes `H = h * 1/y = h * 1/1.m` using another lookup table for
 `1/1.m`.
 */
+/// Frame layout is load-bearing (target frame 0x28; byte-matched):
+/// - The switch head must be the INLINE expression (a named exp_bits local
+///   plus the case-block raw_x cast-init would charge 12B of hidden frame
+///   slots; with the inline head the case-local front-end-CSEs to a 4B
+///   copy-class home at 0xc).
+/// - Decl order [raw_fm, raw_fM, coef] maps top-down to fm@0x1c, fM@0x18,
+///   coef@0x10-0x17 (homed scalars and aggregates share one lexical
+///   top-down band below the 8B int->f64 conversion slot at 0x20).
+/// - coef must stay a u32 ARRAY: array stores carry may-alias-with-global
+///   scheduling edges that pin the target's store/load order at function
+///   top; the address-taken raw_fm/raw_fM SCALAR pair keeps the int webs
+///   at r6/r5/r7/r8 (deleting it shifts them all down one).
+/// - H is the only named float (unhomed here); the other coefficients are
+///   read inline. The (float) cast blocks fmadds contraction of
+///   H + (H*H)*poly at zero frame cost.
 float logf(float x)
 {
-    u32 exp_bits = *(u32*) &x & EXP_MASK;
-
-    switch (exp_bits) {
+    switch (*(u32*) &x & EXP_MASK) {
     default: /* x is normal */
     {
+        u32 raw_fm;
+        u32 raw_fM;
         u32 coef[2];
         u32 mant_bits;
         u32 raw_x;
@@ -84,29 +99,22 @@ float logf(float x)
         m = F32_HIGH_MANTISSA_BITS(raw_x);
 
         if (F32_LOW_MANTISSA_BITS(raw_x)) {
-            u32 raw_fm = (raw_x & 0x7F0000) | EXP_ZERO;
-            u32 raw_fM = mant_bits | EXP_ZERO;
-            float C1;
             float H;
-            float C0;
-            float new_var;
-            float poly;
-            float h2_poly;
+
+            raw_fm = (raw_x & 0x7F0000) | EXP_ZERO;
+            raw_fM = mant_bits | EXP_ZERO;
 
             if (raw_x & 0x8000) {
                 raw_fm += 0x10000;
                 m += 1;
             }
 
-            C1 = *(float*) &coef[1];
             H = F32_BIT_CAST(raw_fM) - F32_BIT_CAST(raw_fm);
             H = H * __one_over_F[m];
-            C0 = *(float*) &coef[0];
 
-            new_var = H * H;
-            poly = H * C1 + C0;
-            h2_poly = new_var * poly;
-            return (LN2 * E + __ln_F[m]) + (H + h2_poly);
+            return (LN2 * E + __ln_F[m]) +
+                   (H + (float) ((H * H) * (H * F32_BIT_CAST(coef[1]) +
+                                            F32_BIT_CAST(coef[0]))));
         }
         return LN2 * E + __ln_F[m];
     }

@@ -155,7 +155,10 @@ s32** gm_801BFC60(int arg0, s32 arg1, int arg2, s32 arg3, void** arg4)
 }
 #pragma pop
 
-static u8 gm_8049E558[0x170];
+/// @remarks non-static: the target object exports this symbol (symbols.txt
+/// scope:global; linkcheck EXPORT-MISSING row clears with the global def).
+/// .text/.data/.bss stay byte-identical either way.
+u8 gm_8049E558[0x170];
 
 /// @remarks the declaration order below is load-bearing for register
 /// allocation (rotation-enum-w20): it produces the target callee-saved web
