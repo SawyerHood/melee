@@ -30,6 +30,11 @@ the end of every session.
   report.json. Re-run after each session; classes are audit-validated (v2.1).
 - Per-function verification is NOT sufficient: gate = function at 100% →
   whole-unit objdiff clean (no sibling regressions) → full ninja DOL check.
+- **Durable reports (wave-10 lesson)**: agents MUST stream findings to
+  `campaign/scratch/<agent>/REPORT.md` incrementally as they work — the
+  orchestrator return path is NOT reliable. Wave 10 lost all six agent
+  reports when the wave died; the only surviving artifacts were baseline
+  snapshots, so every probe result from ~75 min of agent time was lost.
 
 ## Backlog (triage v2.1, audit-validated)
 
@@ -48,6 +53,14 @@ Functions whose mismatches are partly `naming` rows need the S5 config fix to
 reach 100% — check `rows` before assuming a C edit can finish a function.
 
 ## ⭐ TU-SPLIT VERDICT (wave 9 experiment — PROVEN, ready to land)
+
+> **EXECUTION STATUS (wave 10, 2026-06-06): NOT LANDED — wave aborted.**
+> The gm_1884 execution agent died mid-flight after snapping its baseline
+> (`campaign/scratch/tu-split-exec/pre_gm_1832.json`); splits.txt/
+> configure.py/gm_1832.c were touched then restored, `src/melee/gm/gm_1884.c`
+> was never created, nothing committed. Repo verified clean at 7fc5d64d5,
+> DOL sha1 PASS. The verdict below is unchanged and the trio recipe is
+> still the next land — gm_1884 stays at the FRONT of the split queue.
 
 splits.txt CAN express target-side TU splits and CANNOT break the DOL
 (`tools/project.py add_unit()` links the *extracted* object for NonMatching/
@@ -621,6 +634,33 @@ tail functions from report.json.
 
 ## Session log
 
+- **2026-06-06 — Wave 10 (ABORTED — zero results, zero losses).** 6 agents
+  launched ~20:21 (tu-split exec gm_1884; unit campaigns gm_18A5, mplib,
+  ftCo_0A01, lbaudio_ax; naming round 7); ALL six reports returned null —
+  the wave died by ~20:35 before any agent reported. Forensics from scratch:
+  tu-split exec snapped `tu-split-exec/pre_gm_1832.json` only (split never
+  applied; gm_1884.c never created); mplib agent got furthest — ~14 probe
+  variants on mpLibLoad in `mplib_w10/v/` (split/rev/cast-self/+0/comma/
+  init-decl/chain forms), outcomes unrecorded; gm_18A5 + ftCo_0A01 +
+  lbaudio_ax + naming-7 only snapped baselines (`agent_gm18A5_w10/`,
+  `ftco0a01_w10/`, `lbaudio_start_w10.txt`, `naming7/`). All src/config
+  touches (configure.py, splits.txt, gm_1832.c, mplib.c+.static.h,
+  ftCo_0A01.c, lbaudio_ax.c) were restored — tree verified clean at
+  7fc5d64d5, DOL sha1 PASS (08e0bf20). NO wins, NO new idioms, NO commits;
+  parked list unchanged. ENTIRE wave-9 queue carries over unworked:
+  TU-split gm_1884 trio land (front of queue) → gmregclear → gm_1601 →
+  particle → gm_18A5; wave-9 header-edit queue (TmUnkMenuData, gm_1601.h
+  ×4, mplib.static.h [0x80], TrainingModeState +0x114 split) still
+  pending; naming-7 queue (mplib renumber @4595/@4596 + VtxIds 4-way +
+  D80D4/D8 locals; gm_18A5 lbl_804DAxxx→@NNN incl. @357 conflict pick;
+  particle renames + dead-string .data) still pending; retry queue
+  (particle fn_80394DF4 comma-form) still pending. WARNINGS: (1) null-
+  report failure mode is real — durable-report rule added to
+  Infrastructure; mandate `campaign/scratch/<agent>/REPORT.md` written
+  incrementally; (2) touched-then-reverted files leave misleading mtimes —
+  gate any "what changed" tooling on `git status`, not mtime; (3) mplib
+  mpLibLoad probe matrix must be re-run — variants preserved in
+  `mplib_w10/v/` + harness `probe2.py`, only the OUTPUTS were lost.
 - **2026-06-06 — Wave 9 (5 unit campaigns + TU-split experiment + naming
   round 6).** 9 fn wins + ~12 data/section symbols (UNCOMMITTED src; only
   each agent's own unit files touched, all headers verified-then-reverted):
