@@ -269,7 +269,7 @@ static const s16 lbl_803B7A00[] = {
 };
 /* 46B378 */ static struct lbl_8046B378_t lbl_8046B378;
 /* 46B488 */ static struct lbl_8046B488_t lbl_8046B488;
-/* 46B668 */ static struct lbl_8046B668_t lbl_8046B668;
+/* lbl_8046B668 moved to gm_16A9.c (its original TU) */
 /* 4D6598 */ static s8 lbl_804D6598;
 /* 4D659A */ static u16 lbl_804D659A;
 #endif
