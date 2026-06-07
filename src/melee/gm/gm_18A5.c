@@ -2530,6 +2530,11 @@ void fn_80190ABC(int mode)
 
 #pragma push
 #pragma dont_inline on
+extern f32 lbl_804DA6D8; // 4.5f
+extern f32 lbl_804DA6DC; // 130.0f
+extern f32 lbl_804DA6E0; // -278.0f
+extern f32 lbl_804DA6E4; // 255.0f
+
 void gm_80190EA4(void)
 {
     int i;
@@ -2552,9 +2557,11 @@ void gm_80190EA4(void)
     if (gm_804771C4.match_type == 0) {
         TmData* tmdata = gm_8018F634();
         fn_8018EC7C();
-        fn_8018E618(tmdata->entrants, 4.5f, 1);
-        fn_80190480(130.0f);
-        fn_80190520(-278.0f, 255.0f, 0.0f);
+        fn_8018E618(tmdata->entrants, lbl_804DA6D8, 1);
+        fn_80190480(lbl_804DA6DC);
+        fn_80190520(lbl_804DA6E0, lbl_804DA6E4, 0.0f);
+        if (0) {} // @-pin shim (+2): EA4 literal->extern swap, see gm18a5_w12
+        if (0) {} // @-pin shim (+2)
     }
     tmdata->x20 = 0;
 
@@ -3041,8 +3048,8 @@ void fn_80191CA4(HSD_GObj* gobj)
     fn_8019044C(jobj, (f32) lbl_804D6658);
 }
 
-extern f32 lbl_804DA734; // 666.0f
 extern f32 lbl_804DA738; // 12.8f
+extern f32 lbl_804DA734; // 666.0f
 extern f32 lbl_804DA73C; // 2.62f
 extern f32 lbl_804DA740; // 0.1f
 extern f32 lbl_804DA744; // 201.0f
@@ -3165,9 +3172,11 @@ void fn_80191FD4(HSD_GObj* gobj)
         slot = lbl_804799B8.x2 + lbl_804799B8.x3;
 
         if ((u8) tm->x37[slot].x4 != 0) {
-            fn_8019044C(sibling, 201.0f);
+            fn_8019044C(sibling, lbl_804DA744);
             return;
         }
+        goto pad_label; // @-pin shim (+1): 201.0f -> lbl_804DA744 swap
+pad_label:;
 
         fn_8019044C(sibling, fn_8018F71C((s32) tm->x37[slot].x2,
                                          (s32) tm->x37[slot].x6));
@@ -3193,7 +3202,7 @@ void fn_80191FD4(HSD_GObj* gobj)
         return;
     }
 
-    fn_8018FF9C(jobj, 0.9f, 0.9f, 666.0f);
+    fn_8018FF9C(jobj, 0.9f, 0.9f, lbl_804DA734);
     if (jobj == NULL) {
         child = NULL;
     } else {
@@ -3574,31 +3583,33 @@ void fn_80192E6C(void)
         gobj = fn_8019035C(1, lbl_804D6650->models[8], 0, 0x1A, 2, 1,
                            fn_80191D38, 0.0f);
         fn_8018FDC4((HSD_JObj*) gobj->hsd_obj, -12.300001f, 12.800008f,
-                    666.0f);
+                    lbl_804DA734);
         fn_8018FBD8((void*) gobj, i);
 
         gobj = fn_8019035C(1, lbl_804D6650->models[3], 0, 0x1A, 2, 1,
                            fn_80191E9C, 0.0f);
         jobj = (HSD_JObj*) gobj->hsd_obj;
         HSD_JObjSetFlagsAll(jobj, 0x10U);
-        fn_8018FDC4(jobj, -12.300001f, 666.0f, 666.0f);
+        fn_8018FDC4(jobj, -12.300001f, lbl_804DA734, lbl_804DA734);
         fn_8018FBD8((void*) gobj, i);
     }
 
-    for (j = 0; j <= 0x19; j++) {
+    j = 0; // @-pin shim (-1): while-form pays the lbl_804DA734 CSE temp id
+    while (j <= 0x19) {
         new_var2 = (f32) j;
         gobj = fn_8019035C(1, lbl_804D6650->models[9], 0, 0x1A, 2, 1,
                            (void (*)(HSD_GObj*)) fn_80191FD4, new_var2);
         jobj = (HSD_JObj*) gobj->hsd_obj;
         new_var3 = jobj;
         if (j != 0x19) {
-            fn_8018FF9C(new_var3, 0.65f, 0.66f, 666.0f);
+            fn_8018FF9C(new_var3, 0.65f, 0.66f, lbl_804DA734);
             fn_8018FDC4(new_var3, (6.0f * (f32) (j % 5)) + -3.0f,
                         -((4.500006f * (f32) (new_var = j / 5)) - 2.3f), 0.2f);
         } else {
             fn_8018FDC4(new_var3, -1.0f, 10.099993f, 0.2f);
         }
         fn_8018FBD8((void*) gobj, j);
+        j++;
     }
 
     fn_8019035C(1, lbl_804D6650->models[1], 0, 0x1A, 2, 1, fn_80192690, 0.0f);
@@ -3723,7 +3734,6 @@ void fn_80193308(void)
 }
 
 extern u8 lbl_803D9F80[];
-extern f32 lbl_804DA6E8; // 0.0f
 
 #pragma push
 #pragma dont_inline on
@@ -3740,9 +3750,9 @@ void fn_801935B8(void)
     fn_80193308();
     fn_8019027C(lbl_804D664C->lights);
     fn_8019035C(0, lbl_804D664C->models[5], 0, 0x1A, 2, 1, fn_801910E0,
-                lbl_804DA6E8);
+                0.0f);
     fn_8019035C(0, lbl_804D664C->models[4], 0, 0x1A, 2, 1, fn_80191154,
-                lbl_804DA6E8);
+                0.0f);
     fn_80192BB0();
     fn_80192E6C();
     gobj = GObj_Create(0xE, 0x1A, 0);
@@ -3859,10 +3869,6 @@ void fn_801937C4(s32* arg0, u32 arg1, u32 arg2)
     }
 }
 
-extern f32 lbl_804DA6D8; // 4.5f
-extern f32 lbl_804DA6DC; // 130.0f
-extern f32 lbl_804DA6E0; // -278.0f
-extern f32 lbl_804DA6E4; // 255.0f
 
 void fn_80193B58(s32* arg0, u32 arg1, u32 arg2)
 {
@@ -4006,7 +4012,7 @@ post:
             fn_8018EC7C();
             fn_8018E618(tm->entrants, lbl_804DA6D8, 1);
             fn_80190480(lbl_804DA6DC);
-            fn_80190520(lbl_804DA6E0, lbl_804DA6E4, lbl_804DA6E8);
+            fn_80190520(lbl_804DA6E0, lbl_804DA6E4, 0.0f);
         }
     } else if (arg2 & 0x200) {
         lbAudioAx_80024030(0);
@@ -4116,7 +4122,7 @@ void fn_80193FCC(s32* arg0, u32 arg1, u32 arg2)
             fn_8018EC7C();
             fn_8018E618(tm->entrants, lbl_804DA6D8, 1);
             fn_80190480(lbl_804DA6DC);
-            fn_80190520(lbl_804DA6E0, lbl_804DA6E4, lbl_804DA6E8);
+            fn_80190520(lbl_804DA6E0, lbl_804DA6E4, 0.0f);
         }
     } else if (arg1 & 0x80002) {
         if (*mt != 0) {
@@ -4196,7 +4202,7 @@ void fn_80193FCC(s32* arg0, u32 arg1, u32 arg2)
             fn_8018EC7C();
             fn_8018E618(tm->entrants, lbl_804DA6D8, 1);
             fn_80190480(lbl_804DA6DC);
-            fn_80190520(lbl_804DA6E0, lbl_804DA6E4, lbl_804DA6E8);
+            fn_80190520(lbl_804DA6E0, lbl_804DA6E4, 0.0f);
         }
     }
 
@@ -4700,7 +4706,7 @@ void fn_80194F30(s32* state_ptr, u32 buttons, u32 trigger)
                 fn_8018EC7C();
                 fn_8018E618(tmdata->entrants, lbl_804DA6D8, 1);
                 fn_80190480(lbl_804DA6DC);
-                fn_80190520(lbl_804DA6E0, lbl_804DA6E4, lbl_804DA6E8);
+                fn_80190520(lbl_804DA6E0, lbl_804DA6E4, 0.0f);
             }
         } else {
             lbl_804799B8.x1 = 0;
@@ -6459,6 +6465,13 @@ void fn_80198BA0(void)
 /// @todo Currently 99.63% match - permuter couldn't improve (instruction
 /// scheduling)
 /// Initializes tournament mode text displays.
+extern f32 lbl_804DA82C; // 0.054945f
+extern f32 lbl_804DA830; // 0.08f
+extern f32 lbl_804DA834; // 320.0f
+extern f32 lbl_804DA838; // 250.0f
+extern f32 lbl_804DA83C; // 1.5f
+extern f32 lbl_804DA840; // 80.0f
+
 #pragma push
 #pragma auto_inline off
 void fn_80198C60(void)
@@ -6471,27 +6484,25 @@ void fn_80198C60(void)
     td = gm_8018F634();
     td->x524[2] = HSD_SisLib_803A6754(0, (s32) lbl_804D663C);
     text = td->x524[2];
-    text->font_size.x = 0.054945F;
-    text->font_size.y = 0.08F;
+    text->font_size.x = lbl_804DA82C;
+    text->font_size.y = lbl_804DA830;
     td->x524[2]->default_alignment = 1;
     td->x524[2]->default_kerning = 1;
 
     td->x524[3] = HSD_SisLib_803A6754(0, (s32) lbl_804D663C);
     td->x524[3]->default_alignment = 1;
     td->x524[3]->default_kerning = 1;
-    HSD_SisLib_803A6B98(td->x524[3], 320.0F, 250.0F, "    ");
-    HSD_SisLib_803A7548(td->x524[3], 0, 1.5F, 1.5F);
+    goto pad_label_a; // @-pin shims (+2): five literal->extern swaps keep the
+pad_label_a:;        // "    " string pinned at @3652
+    goto pad_label_b;
+pad_label_b:;
+    HSD_SisLib_803A6B98(td->x524[3], lbl_804DA834, lbl_804DA838, "    ");
+    HSD_SisLib_803A7548(td->x524[3], 0, lbl_804DA83C, lbl_804DA83C);
 }
 #pragma pop
 
 extern SceneDesc* lbl_804D666C;
 extern f32 lbl_804DA808; // 0.0f
-extern f32 lbl_804DA82C; // 0.054945f
-extern f32 lbl_804DA830; // 0.08f
-extern f32 lbl_804DA834; // (float)
-extern f32 lbl_804DA838; // 250.0f
-extern f32 lbl_804DA83C; // 1.5f
-extern f32 lbl_804DA840; // (float)
 
 /// Initializes the scene rendering components for the gm_18A5 game mode.
 void fn_80198D18(void)
@@ -6827,7 +6838,8 @@ void fn_80199AF0(void)
     fn_801902F0((int) gobj);
     fn_8019027C(lbl_804D666C->lights);
     fn_8019035C(0, lbl_804D666C->models[5], 0, 0x1A, 2, 1, fn_80196DBC, 0.0f);
-    fn_8019035C(0, lbl_804D666C->models[4], 0, 0x1A, 2, 1, fn_80196E30, 80.0f);
+    fn_8019035C(0, lbl_804D666C->models[4], 0, 0x1A, 2, 1, fn_80196E30,
+                lbl_804DA840);
 
     fn_80198C60();
 

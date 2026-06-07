@@ -199,11 +199,13 @@ static inline void lbAudioAx_BusyWait(void)
     s32 j;
     s32 k;
     s32 total;
+    s32 bound;
+    bound = 9;
     total = 0;
     for (j = total; j < 0x3E8; j++) {
         for (k = 0; k < 0x3E8; k++) {
             accum = 0;
-            for (n = accum; n < 9; n++) {
+            for (n = accum; n < bound; n++) {
                 accum += n;
             }
             total += accum;
@@ -222,22 +224,24 @@ s32 lbAudioAx_800233EC(s32 arg0)
 
         if (slot != 0xD) {
             if (slot < 0xD) {
-                if (slot < 0xC) {
-                    if (slot < 6) {
-                        goto ret;
-                    }
-                } else {
+                if (slot >= 0xC) {
                     goto ret;
                 }
-            } else if (slot < 0x20) {
-                if (slot < 0xF) {
-                    goto ret;
+                if (slot >= 6) {
+                    goto scan;
                 }
-            } else {
                 goto ret;
             }
+            if (slot >= 0x20) {
+                goto ret;
+            }
+            if (slot >= 0xF) {
+                goto scan;
+            }
+            goto ret;
         }
 
+    scan:
         {
             int* p = (int*) (base + 0x13A4);
             for (i = 0; i < 0x4A; i++, p += 2) {
@@ -262,6 +266,9 @@ s32 lbAudioAx_800233EC(s32 arg0)
                 return ((int(*)[2]) (base + 0x13A4))[i][0];
             }
         }
+    }
+
+    if (0) {
     }
 
 ret:
@@ -396,6 +403,7 @@ s32 lbAudioAx_80023B24(s32 arg0)
     lbAudioAx_PoolAlloc* st = &lbl_80433710;
     char* base = lbl_803BB300;
     s32 off;
+    char* dst;
     s32 slot;
 
     slot = lbAudioAx_FindSlot(arg0);
@@ -430,8 +438,9 @@ s32 lbAudioAx_80023B24(s32 arg0)
             }
 
             {
-                strcpy(lbl_803BB340 + lbl_804D38D0,
-                       *(char**) (base + 0x9FC + (u32) slot * 4));
+                dst = base + lbl_804D38D0;
+                dst = dst + 0x40;
+                strcpy(dst, ((char**) (base + 0x9FC))[slot]);
             }
             st->x354[slot] = HSD_SynthSFXLoad(base + 0x40, 2, 0, 0);
             HSD_SynthSFXWaitForLoadCompletion(lb_800195D0);
@@ -2234,6 +2243,7 @@ void lbAudioAx_80027168(void)
     lbAudioAx_PoolAlloc* st = &lbl_80433710;
     s32 count;
     int i;
+    static int dead[10] = { 0 };
 
     {
         s8(*arr5d0)[4] = s32_arr_803BB5D0;
@@ -2643,12 +2653,12 @@ void lbAudioAx_8002838C(void)
 
     AXDriver_8038E37C(AXDRIVER_AUX_REVERB_STD, &rvbStd);
     rvbStd.time = 1.88f;
-    HSD_ASSERT(0xF6E, HSD_AudioGetAuxHeapSize(AXDRIVER_AUX_REVERB_STD, &rvbStd) < 53*1024);
+    HSD_ASSERT(0xF6E, HSD_AudioGetAuxHeapSize(2, &rvbStd) < 53*1024);
 
     AXDriver_8038E30C(0, 2, &rvbStd, st->x554, 0xD400);
 
     AXDriver_8038E37C(AXDRIVER_AUX_DELAY, &delay);
-    HSD_ASSERT(0xF72, HSD_AudioGetAuxHeapSize(AXDRIVER_AUX_REVERB_STD, &delay) < 71*1024);
+    HSD_ASSERT(0xF72, HSD_AudioGetAuxHeapSize(2, &delay) < 71*1024);
 
     AXDriver_8038E30C(1, 4, &delay, st->xD954, 0x11C00);
 
@@ -2814,7 +2824,7 @@ s32 lbAudioAx_80028690(void)
 
     {
         int i;
-        for (i = 0; i < 17; i++) {
+        for (i = 0; i <= 16; i++) {
             lbl_80433710.x2C[i] = 0x83D60;
             lbl_80433710.x70[i] = 0;
         }

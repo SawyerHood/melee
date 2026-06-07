@@ -32,6 +32,6 @@ static struct {
 /* 4D64DC */ static s32 mpLib_804D64DC;
 /* 4D64E0 */ static s32 mpLib_804D64E0;
 /* 4D64E4 */ static s32 mpLib_804D64E4;
-/* 458888 */ static Vec3 mpLib_80458888[0x200];
+/* 458888 */ static Vec3 mpLib_80458888[0x80];
 
 #endif

@@ -55,8 +55,8 @@ reach 100% — check `rows` before assuming a C edit can finish a function.
 ## ⭐ TU-SPLIT VERDICT (wave 9 experiment — PROVEN, ready to land)
 
 > **EXECUTION STATUS (wave 11, 2026-06-06): ✅ LANDED — SUCCESS, ZERO
-> deviations from the wave-9 proof.** The gm_1832/gm_1884 trio is in the
-> working tree (uncommitted, cleanly separable: splits.txt 7 cuts +
+> deviations from the wave-9 proof; committed 268945dce.** The
+> gm_1832/gm_1884 trio (splits.txt 7 cuts +
 > configure.py:972 `Object(NonMatching, "melee/gm/gm_1884.c")` +
 > gm_1832.c trimmed to lines 1–1894 + gm_1884.c = wave-9 prototype
 > verbatim; NO header edits needed). All four gates PASS: DOL OK + dtk
@@ -103,13 +103,34 @@ gm_80473814 boundary, header queue). One web reshape to re-solve post-split
 exp report. **Detection tell**: target ha/lo fold-anchor = unit-internal
 .bss/.data symbol at NONZERO section offset while ours anchors `...bss.0`
 with uniformly shifted d-offsets. **Split queue**: ✅ gm_1884 LANDED
-(wave 11); NEXT: gmregclear (3 cuts: TU bases lbl_804706C0/lbl_80472E48/
-lbl_80472ED8), gm_1601 (≥2 cuts, +0x110 family), particle (CE3F8 AND
-D08E8 both demand section offset 0), gm_18A5 (triad blueprint:
-771C4/799B8; obsoletes the wave-9 extern-flip package; wave-11 d-form
-evidence reconfirms split as the only complete fix). DOL-safe for ALL
+(wave 11, committed 268945dce); ✅ **gmregclear LANDED + COMMITTED
+(wave 12)** — 3 splits / 4 TUs, commits 64f0dedfb (gm_182F.c) +
+e079c36ff (gm_181A.c) + 831a72891 (gm_180A.c), every-section constraint
+0 violations over 245 refs, all gates PASS each split (DOL OK + dtk
+shasum + deps#3 + 107 fns preserved 80+10+15+2 + idempotence), project
+matched 72.028→**72.042**, gm_182F unit fuzzy 100.0; anchors
+gm_80181998 99.46→**100.00 EXACT**, fn_80180C60 98.07 (E48-fold addi
+removed), fn_80181E18 ~16 d-forms fixed (display dip 92.66→92.08 is
+all-or-nothing row scoring over byte-strictly-better code; residual =
+pre-existing rotation park), gm_80182174 +3 d-forms, all other moved fns
+byte-IDENTICAL; @-pin renumber map (address-keyed) in
+`campaign/scratch/tu-split-gmregclear/REPORT.md` → naming-9 queue.
+**Skipped deliberately**: gmregclear part0 merges ≥4 more original TUs
+(@847/@849/@294/@295/@550 dup-literal evidence) — anchors already match
+via offset-0 shadow/hoist idioms; new cuts would move named-anchor
+statics to offset 0 (idiom-46 shadow) and REGRESS 100% fns; interior
+boundaries underdetermined. NEXT: gm_1601 (≥2 cuts, +0x110 family),
+particle (CE3F8 AND D08E8 both demand section offset 0), gm_18A5
+(triad CONFIRMED wave 12, proposed cuts incl. fallbacks in
+gm18a5_w12/LOG.txt: .text fn_80190ABC | fn_80196510; .bss lbl_804771B8
+| lbl_804799B8; .data lbl_803D9F80 | lbl_803DA0D0; .sdata ~0x804D4150 |
+0x804D4170; .sdata2 0x804DA6E8 | 0x804DA7E0 — each pends object-boundary
++ simultaneous-partition verification). DOL-safe for ALL
 NonMatching units. Caveat: land splits.txt + src halves together —
 splits-only temporarily drops the tail functions from report.json.
+**Recipe refinement (wave 12)**: land multi-cut splits ONE AT A TIME in
+REVERSE address order so each new TU's .bss base finalizes immediately
+(no transient wrong-base states; head keeps its base throughout).
 
 **EXECUTION RECIPE (wave-11 validated end-to-end on gm_1884 — use for
 the rest of the queue):**
@@ -574,6 +595,73 @@ the rest of the queue):**
    NEGATIVE (B2790/A3908): MWCC folds `if(c) goto L; stmt; L:`,
    do-while-break, and two-goto forms back to inverted-bne — the
    beq/beq/b dead-b layout is unreachable from these shapes.
+67. **VARIABLE-BOUND GUARD FOLD (lbaudio B24)**: an inner loop with a
+   variable bound (`s32 bound; bound = 9; … n < bound`) folds the
+   redundant zero-trip top guard while keeping register unroll guards; a
+   literal bound emits the guard; do-while retargets the unroller to the
+   outer loop.
+68. **IDIOM-59 MECHANISM (lbaudio B24, resolves the rank-swap mystery)**:
+   a SECOND same-section symbol ref in a function causes section-fold +
+   anchor r30/r31 rank flip; removing the second ref (route through a
+   fn-scope self-read ptr, idiom 62-style blocker) restores the named
+   single-symbol anchor AND the target rank. Decl/def order are no-ops.
+69. **.DATA = ONE SOURCE-POSITION STREAM (extends 51; lbaudio, byte-
+   proven)**: named statics, non-static globals, string pool, jumptables
+   and localstatics all emit into .data interleaved in SOURCE position —
+   entire sections are byte-reconstructable by decl placement alone
+   (lbaudio 0x1818-byte .data byte-identical under the w12 package).
+70. **TENTATIVE-ARRAY TELL (lbaudio)**: MWCC rejects `static T x[];`
+   tentative + later initialized def — any early-visible late-emitted
+   array in the target was a NON-STATIC GLOBAL (def in .c + extern in
+   .static.h).
+71. **ZERO-REGION = POINTER TABLE (lbaudio)**: all-zero target .data
+   regions covered by addend-0 relocs are pointer tables (reloc storage),
+   not padding — reconstruct as fnptr/objptr tables placed by source
+   position.
+72. **⭐ RELOC-FORM DICTATES SOURCE FORM — "GRAND INVERSION" (gm_18A5,
+   byte-proven via .rela.text index resolution, tool tusplit2.py)**:
+   target reloc form per site is LAW — @-target ⇒ pool literal in C;
+   lbl-target ⇒ named extern ref in C. The naming-8 SRC-FIRST direction
+   (extern→literal) was wrong for every lbl-target case; literal→extern
+   pairs rows IMMEDIATELY with no symbols.txt change and deletes
+   artifact @-dups. Dup @-names break objdump name-keying — resolve
+   targets by .rela symbol INDEX, not name. @-costs measured: extern-f32
+   single-ref/stmt = 0 ids (idiom-23 "+1" REFUTED for this shape);
+   double-ref in one stmt = +1 CSE temp; single ref in loop = +1 LICM
+   temp iff bound at loop entry before the loop's first pool creation
+   (multi-BB webs = 0 — not fully modeled, ALWAYS canary); for→while =
+   −1 (j-loop) yet 0 (i-loop) — idiom-41 context-dependence reconfirmed;
+   literal→extern where the value dies = −1 at the old creation site.
+73. **PRAGMA-AT-CALLEE (ftCo A2718 →100)**: `#pragma dont_inline on`
+   wrapped around a CALLEE's definition suppresses its auto-inline at
+   all call sites while leaving the caller free to expand its own static
+   inlines — the per-original-TU tool when one merged-TU function needs
+   both a `bl` sibling call and same-TU inline expansions. Loop-bearing
+   functions never auto-inline (pragma on them is dead weight).
+74. **EXPANSION r0-DIAMOND (extends 55; ftCo A2718)**: lone
+   `if (static_inline_returning_bool(...))` materializes li r0,0/1 per
+   return site + `cmpwi r0,0`; early-return body (`if (!a) return false;
+   if (b && c) return true; return false;`) puts a separate li-0 on the
+   !a path; `&&`-to-named-variable instead lowers incrementally into a
+   callee-saved reg (never the diamond); two expansion results combined
+   with `||` produce the shared `li r3,1` cross-jump tail. @-costs:
+   2-if helper expansion ≈ +4; while+`&&`-condition vs for+continue-ifs
+   = −3; nested-if vs `&&` inside an inline body = +3; idiom-50's
+   "+2/conditional-arm local" appears REVERSE-SIGNED for hoisted
+   comma-init arm locals (2nd counterexample — refine before relying).
+75. **NEGATIVES (wave 12)**: idiom-37b address-returning inline helper
+   does NOT reach r0+mr address-materialization attractors (mplib
+   DrawCrosses, exact no-op); idiom-66 scope limit — CFG-form
+   restructuring of preceding/consuming regions does NOT flip
+   schedule-def-order rotations (mpLibLoad ×3 loop-form flips; the lever
+   is web-STRUCTURE change, not loop form; rotation invariant to decl
+   order, def order, grouping, +0 blockers, and decl-order permutations
+   — new axis, all exact no-ops); changing scope:local↔global on
+   split-range symbols.txt entries CHANGES LINKED DOL BYTES (dtk shasum
+   FAIL) — dtk's cross-unit promotion suffix `@NNN_ADDR` rows are
+   config-unreachable PERMANENT accepted drops (fn_80188EE8 ×8);
+   renaming a target lbl_* that our src still extern-references breaks
+   every paired row through it — convert src first (Grand Inversion).
 
 ### Experiment results (wave 3)
 
@@ -687,12 +775,26 @@ the rest of the queue):**
   fn_8017FF1C/fn_80181C80)**: param-block vs local-block placement/rotation
   invariant to all decl/def/statement permutations (~20 probes). Decl order
   only controls relative order WITHIN local groups. Needs a dedicated
-  enumeration agent before retry.
+  enumeration agent before retry. Post-split (wave 12): fn_80181E18's
+  residual is now ONLY this family — d-form/fold rows all fixed by the
+  gm_181A split.
+- **ftCo FY-PROP family (NEW wave-12 park; caps A6A98 ≈96.1 / A6D2C
+  ≈95.6)**: a float copy of an escaped stack aggregate's field
+  (`fy = floor_pos.y` after `&floor_pos` passed to a call) is
+  copy-propagated to per-use reloads. NOT blocked by separate-statement
+  def, (f32) self-cast (folded), (f32)(f64) round-trip (emits code), or
+  inline-return getter. Only proven in-unit blocker = A4768's shape: the
+  source aggregate is REDEFINED after the copy. Target holds fx/fy in
+  f28/f27 (+1 FPR save, frame +0x10). Wave-13 theory: add a second def
+  of the aggregate.
 - **ftCo_0A01 residuals**: B2790 webA/line_id r28↔r29 tie (wave 11: +4
   more failed levers — helper-param direct pass, single-var web,
   result-named, line_id-decl-first; stays parked); ~~B1478 inline-data
   r28/r29~~ **WON wave 11 →100** (idiom 66 helper swap; the LIFO
-  free-stack model's lever was the preceding region); AC5A0 dead 8B
+  free-stack model's lever was the preceding region); ~~A2718~~ **WON
+  wave 12 →100 EXACT** (idiom 73/74 package); A6A98/A6D2C → FY-PROP
+  park family (above); A6FC4 root cause = full FPR map rotation (@471
+  at f31 vs our f21) + 1 extra GPR; AC5A0 dead 8B
   between y and f2i temps; A9904/A9CB4 dead-below-y + `fadds f1,f1,f31`
   canonical operand order (both source orders emit f31-first); A61D8
   loop-group-vs-invariant coloring; AE7AC r4-vs-r7 pick + inverted mr/addi
@@ -761,8 +863,14 @@ the rest of the queue):**
   ptr-reassoc attractor (idiom 62, 8 forms enumerated); **fn_80195AF0
   98.07 ACHIEVABLE but reverted to 94.79** — winning package costs +3
   @ids breaking 9 landed pins (@3025/@3027/@3028/@3554-6/@3652…) —
-  RE-APPLY AFTER the next naming renumber; exact text preserved in
-  `campaign/scratch/gm18a5_w11/my_gm_18A5.c` + LOG; fn_8019175C residual
+  RE-APPLY AFTER the next naming renumber (naming-8 renumbered NOTHING
+  at @3025+, still blocked); exact text preserved in
+  `campaign/scratch/gm18a5_w11/my_gm_18A5.c` + LOG; NEW wave-12 park:
+  fn_80192E6C 99.96 residual = lbl_804DA738/75C rows — extern-swap
+  blocked (i-loop LICM temp steals pinned @2114-slot; while-form
+  doesn't pay it); cures for a dedicated agent: PAD_STACK↔unused-decl
+  rebalance, idiom-24 Fix-B EOF defs (untested, risks named-paired
+  100s), or the TU split (post-split both styles natural); fn_8019175C residual
   jobjs 0x10-vs-0xc dead-word placement (instance-band hole family);
   gm_801905F0 residual inlined fn_8018F410 addi emission order
   (inline-copy class); fn_80192758/fn_8019249C post-call lwz/mr schedule
@@ -772,8 +880,15 @@ the rest of the queue):**
 - **mplib wave-11 parks**: mpLib_DrawCrosses (98.47) r0+mr addi attractor
   — 16 forms enumerated incl. the re-run wave-10 matrix (a–l) + 3 new
   walker/indexed/direct-static probes; proves no cross-BB CSE of static
-  addresses (rover re-materializes locally); re-test after the
-  mplib.static.h [0x80] header lands. mpLib_DrawSnapping (99.98) = 2
+  addresses (rover re-materializes locally); ~~re-test after the
+  mplib.static.h [0x80] header lands~~ wave-12 post-header retest DONE:
+  NO change; +2 more probes (idiom-37b chained = exact no-op,
+  helper+split = 97.29 reshape) — attractor now ~18 forms strong, park
+  FINAL. mpLibLoad rotation park strengthened wave 12: 13 more probes
+  (loop-form flips, +0 blockers, def grouping, decl-order permutations)
+  all exact no-ops or ±1 @id; named-anchor form 97.95 REJECT; assignment
+  = final-schedule def-order descending. All 38 remaining mplib <100 are
+  parked classes; no naming rows left in unit. mpLib_DrawSnapping (99.98) = 2
   GXColor arg-copy slots 0xC low; 10-pt PAD_STACK sweep confirms idiom-41
   "nothing pads below instance slots" — current (0x30,0x40) is optimal.
   mpLib_80059554 (99.26) NEW schedule-sink sub-family: target hoists
@@ -781,15 +896,106 @@ the rest of the queue):**
   [lha;cmpwi;mtctr]; fresh-web = exact no-op ⇒ NOT a re-def split.
   mpLibLoad residual 9 rows = temp_r28/29/30 stack-ptr rotation (B1478
   LIFO-death family; def-reorder verified no-op).
-- **lbaudio_ax wave-11 residuals**: B24 non-memory `+0x40` arg rows (~4,
-  idiom-58 no-cure); fn_80023254 (84.15) LICM-hoist of shift block
-  unsolved; fn_800268B4 (87.26) rover r0+mr attractor; 269AC rotation /
-  27488 u64-coalesce / 2785C / 27AB0 data-layout / 267B0 header-blocked —
-  all probes reverted; pooled-string offset rows (0x1768 vs 0x1790
-  family) blocked on the .data reconstruction agent.
+- **lbaudio_ax wave-11 residuals (updated wave 12)**: B24 →98.79 (idiom
+  58/67/68 cures landed); residual = synthetic-reloc symbol-subdivision
+  rows ONLY (naming class: lbl_80433A64/B44, lbl_804D3870/74, gap_07_* —
+  needs the bss 6-sym merge); 233EC 95.00 — ~50-row r3/r4 web swap =
+  rotation family, parked (8 probes, all exact no-ops); 28690 97.81 —
+  frame +8 + leftover-rover anchor parked (idiom-40 phantom family, ~14
+  probes, bisection-proven owner = x2C/x70 loop); fn_80023254 LICM-hoist
+  unsolved; fn_800268B4 rover r0+mr; 269AC rotation / 27488 u64-coalesce
+  / 2785C — probes reverted; pooled-string offset rows now resolved by
+  the wave-12 .data package (land `lbaudio_w12/full_tree_with_pkg.patch`
+  WHOLE — flags_arr alone is net-negative).
 
 ## Session log
 
+- **2026-06-06/07 — Wave 12 (gmregclear TU-split + 4 unit campaigns +
+  naming round 8) — first wave with TWO config commits landed
+  mid-flight.** ⭐ **TU-SPLIT gmregclear LANDED + COMMITTED** (3 splits /
+  4 TUs: 64f0dedfb gm_182F.c, e079c36ff gm_181A.c, 831a72891 gm_180A.c —
+  landed one at a time in REVERSE address order, recipe refined; verdict
+  section updated): every-section constraint 0 violations/245 refs, all
+  gates PASS per split (DOL+shasum+deps#3+107 fns preserved+idempotence;
+  s1 242S/1U/1D, s2 235/2/1, s3 199/4/2, 0 GONE/NEW), project matched
+  72.028→**72.042**, gm_80181998 →**100 EXACT**, fn_80180C60 98.07,
+  fn_80181E18 ~16 d-forms fixed (rotation park is now its only
+  blocker); part0 further cuts deliberately SKIPPED (would regress
+  offset-0-shadow 100s). **Naming-8 COMMITTED d47c7b618** (symbols.txt
+  only): 80 rows eliminated, 16 fns→fuzzy-100 (gm_1884 renumber map
+  applied+extended — 8 of 10 split DOWNs back to exactly 100; lbaudio
+  2392C; gm_18A5 +7), zero regressions, DOL+shasum every checkpoint;
+  project 97.52% fuzzy / 72.04% matched. Unit wins (UNCOMMITTED src,
+  one file per agent): **ftCo_0A01 ×1 EXACT** — A2718 79.81→**100**
+  (NEW idioms 73/74: pragma moved to CALLEE A1F98 + ONETT static-inline
+  r0-diamond + while-walk −3 ids + pad swap); A6A98 89.5→96.1 / A6D2C
+  88.9→95.6 (FY-PROP park found), A2C80 +0.6; gate 4 UP / 29 "DOWN"
+  ALL verified pure @N→@N+4 reloc drift (~65 compiles). **gm_18A5** —
+  ⭐ GRAND INVERSION law (idiom 72): naming-8's SRC-FIRST direction was
+  backwards for every lbl-target site; literal→extern conversions won
+  gm_80190EA4→**100** + fn_80198C60→**100** + 7 more UP (9 UP/0 fn
+  DOWN, 173→175@100, sdata2 −36B toward target; CANCELS most of the
+  gm_18A5 naming-9 queue; TU-split triad cuts proposed; mid-wave rebase
+  forced by the two commits landing under it; ~35 compiles).
+  **lbaudio_ax** — B24 95.72→98.79 (idioms 67/68; residual now naming-
+  class only), 233EC→95.00, 28690→97.81 (+2 binary-proven HSD_ASSERT
+  literal fixes), 2392C→**100** (wave-11 accepted drop healed in src),
+  27168/27AB0/[.data-0] up via dead-static pool stand-in; ⭐ **.data
+  RECONSTRUCTION PACKAGE byte-PERFECT** — whole 0x1818-byte .data
+  byte-identical to DOL, syms@100 246→290, DOL-gated, then REVERTED per
+  header rule; land `lbaudio_w12/full_tree_with_pkg.patch` WHOLE
+  (flags_arr alone is net-negative); gate 8 UP / 0 fn DOWN (~78
+  compiles; idioms 69–71). **mplib** — approved header edit LANDED
+  (mplib.static.h:35 [0x200]→[0x80]; mpLib_80458888 50→**100**, exactly
+  1 move/0 drift over 338 syms — queue item CLEARED); DrawCrosses
+  post-header retest no-change (park FINAL ~18 forms), mpLibLoad +13
+  probes all no-ops (park strengthened, idiom-75 negatives); unit has
+  NO naming rows left, all 38 <100 parked (~35 compiles).
+  **HEADER QUEUE (updates)**: ✅ mplib.static.h [0x80] LANDED;
+  gm/types.h:802 TmUnkMenuData `u16 x9; u16 xB;` RE-VERIFIED on current
+  tree (fn_80194F30 99.76→99.90; x37[].xC zero users) — still pending;
+  lbaudio: land full_tree_with_pkg.patch whole — SUPERSEDES the
+  offsets_arr `={0}`+decl-order-surgery item AND byte-PROVES the
+  wave-8 sfx_remap [0x4A]→[0x4B] sentinel; TrainingModeState +0x114
+  split still pending; optional ftCo_800A1F98 prototype swap
+  (float y, int x) NOT needed (A2718 is 100 without it).
+  **NAMING-9 QUEUE**: gmregclear split renumber (address-keyed map in
+  tu-split-gmregclear/REPORT.md: gm_182F @2166-68→@245-247 + @298→@249;
+  gm_180A @1170→@449 @674→@450 @1684/85→@451/452 @298→@454; gm_181A
+  empty; head pins unchanged; idiom-54 dup copies at head addresses
+  keep existing pins); ftCo_0A01 uniform @N→@N+4 renumber for the 34
+  listed pins from @997 (recovers all 22 dropped 100s incl. canaries
+  B0918@5205/B101C@5350 — verify per-pin, sdata2 shared across units);
+  gm_18A5 CANCEL 6D8-E4→@1601-04, 82C-840 six-pack, 734/738/75C
+  (Grand Inversion landed these src-side; @1896 gone); only the
+  @2089+2 bulk renumber remains (contingent on the 95AF0 package);
+  lbaudio @1921/@1923/@1925/@1922 → str_main/pokemon/nr_title/
+  nr_name_ssm + lbl_803BCA24 pairing decision when the package lands;
+  fn_80188EE8 ×8 promotion-suffix rows = PERMANENT accepted drops
+  (idiom-75: scope flips change DOL bytes).
+  **RETRY QUEUE**: gm_18A5 fn_80195AF0 package (STILL blocked —
+  naming-8 touched nothing at @3025+); ftCo A3908/A4038 dedicated
+  @-budget session (post-renumber, now more attractive); ftCo wave-13:
+  A6A98/A6D2C aggregate-redef probe + A6FC4 FPR-rotation; particle
+  fn_80394DF4 comma-form (4th carry-over); particle .data
+  reconstruction agent — lbaudio package PROVES the method (idioms
+  69–71); SPLIT QUEUE NEXT: gm_1601, particle, gm_18A5 (cuts proposed).
+  **WARNINGS**: (1) **naming/split-vs-src MUTEX violated TWICE** —
+  naming-8 AND the gmregclear split committed mid-wave under running
+  src agents (gm_18A5 rebased via controlled HEAD-src-vs-new-target
+  gate; split agent re-verified all gates post-naming-8; no damage, by
+  luck of range-disjointness) — wave-level mutex MUST be enforced by
+  the orchestrator, not agent vigilance; (2) ftCo-style all-DOWN gates
+  can be 100% benign @-drift — enumerate per-row before reacting,
+  renumber before the next wave's baselines; (3) `match_percent`-only
+  gating reconfirmed (3rd wave); (4) mplib harness still blocks
+  REPORT.md (progress.txt is the durable record, naming-7 precedent);
+  (5) display scores can DROP on byte-strictly-better code
+  (fn_80181E18 92.66→92.08, all-or-nothing row scoring) — byte-compare
+  anchors with cmpfn.py before judging splits. Idioms 67–75 added;
+  idiom-23/41/48/50 cost-model caveats logged in 72/74. ~250 compiles
+  total. Uncommitted src: ftCo_0A01.c, gm_18A5.c, lbaudio_ax.c,
+  mplib.static.h (+ stale backlog.json).
 - **2026-06-06 — Wave 11 (TU-split execution + 4 unit campaigns + naming
   round 7) — the wave-10 queue, fully recovered.** ⭐ **TU-SPLIT
   gm_1832/gm_1884 trio LANDED** (uncommitted working tree; verdict
