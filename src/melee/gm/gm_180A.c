@@ -5,7 +5,6 @@
 
 #include "baselib/forward.h"
 
-#include <math_ppc.h>
 #include <dolphin/gx.h>
 #include <sysdolphin/baselib/aobj.h>
 #include <sysdolphin/baselib/controller.h>
@@ -113,7 +112,15 @@ void fn_80180C14(HSD_GObj* gobj)
     }
 }
 
+/* data-recon w18: full .sbss block in target order (0x804D65C8..0x804D65DC).
+ * lbl_804D65C8 and lbl_804D65D8 were undefined externs - defined in-TU
+ * (single-TU refs). Statics emit at decl point => target sbss layout exact.
+ * dtk size 0x8 on lbl_804D65D8 is gap-inclusive (4B align pad, idiom 101). */
+static HSD_Archive* lbl_804D65C8;
+static DynamicModelDesc** lbl_804D65CC;
+static DynamicModelDesc** lbl_804D65D0;
 static s32 lbl_804D65D4;
+static s32 lbl_804D65D8;
 
 void fn_80180C60(HSD_GObj* arg0)
 {
@@ -271,8 +278,6 @@ void fn_80180C60(HSD_GObj* arg0)
     }
 }
 
-extern s32 lbl_804D65D8;
-
 void fn_80181598(void)
 {
     typedef struct {
@@ -326,10 +331,6 @@ void fn_80181598(void)
         }
     }
 }
-
-static DynamicModelDesc** lbl_804D65CC;
-static DynamicModelDesc** lbl_804D65D0;
-extern HSD_Archive* lbl_804D65C8;
 
 void fn_80181708(void)
 {

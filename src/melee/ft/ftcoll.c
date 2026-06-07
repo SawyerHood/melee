@@ -191,7 +191,7 @@ float ftColl_800765F0(Fighter* fp, Fighter_GObj* victim, float arg2)
     return arg2 * fp->dmg.x182c_behavior;
 }
 
-static int getEnvDmg(float dmg)
+static inline int getEnvDmg(float dmg)
 {
     if (dmg) {
         if ((int) dmg) {
@@ -914,6 +914,21 @@ void ftColl_80077688(Item* item, HitCapsule* hurt, Fighter* fp, Vec3* pos,
     efSync_Spawn(0x41C, NULL, &hurt->hurt_coll_pos);
 }
 
+/// Binary-proven reconstruction (never called): the original had an
+/// equivalent helper here that was fully inlined into the knockback-decay
+/// functions (ftColl_80079AB0 family) and its out-of-line copy stripped
+/// from the final binary. Compiling its definition at this position pools
+/// the u32-to-f32 conversion magic (0x4330000000000000) at .sdata2+0x28,
+/// which reproduces the target literal-pool order byte-exactly. Without
+/// it, the magic pools at +0x30 (first live conversion in
+/// ftColl_80079AB0) and the pool tail is permuted. Do not call it and do
+/// not move it: pool position binds to this definition slot.
+/// Evidence: campaign/scratch/datarecon-ftcoll-w18/REPORT.md
+static f32 deadConvertU32(u32 x)
+{
+    return (f32) x;
+}
+
 void ftColl_80077970(Item* item, HitCapsule* hit1, Fighter* fp,
                      HitCapsule* hit2)
 {
@@ -1320,25 +1335,23 @@ void ftColl_80078538(Fighter_GObj* gobj, Vec3* pos, u32 dmg, float ignored,
 }
 
 void ftColl_8007861C(Fighter_GObj* arg0, Fighter_GObj* gobj, int arg2,
-                     int arg3, int arg4, UNK_T arg5, int arg6, UNK_T arg7,
+                     int arg3, int arg4, UNK_T arg5, u16 arg6, UNK_T arg7,
                      int arg8)
 {
     Fighter* attacker;
-    Fighter* victim = GET_FIGHTER(gobj);
-    s32 grounded = 0;
+    Fighter* victim;
+    s32 grounded;
+    int ply;
+    PAD_STACK(8);
 
-    if (arg0 != NULL) {
-        attacker = arg0->user_data;
-    } else {
-        attacker = NULL;
-    }
+    attacker = (arg0 != NULL) ? arg0->user_data : NULL;
+
+    victim = GET_FIGHTER(gobj);
+    grounded = 0;
+    ply = victim->dmg.x18c4_source_ply;
 
     if (attacker != NULL) {
-        if (attacker == victim) {
-            victim->dmg.x18C0 = 0;
-        } else {
-            victim->dmg.x18C0 = attacker->x8_spawnNum;
-        }
+        victim->dmg.x18C0 = (attacker == victim) ? 0 : attacker->x8_spawnNum;
         victim->dmg.x18c4_source_ply = attacker->player_id;
         victim->dmg.x18C8 = -1;
         victim->x221F_b5 = attacker->x221F_b4;
@@ -1354,8 +1367,7 @@ void ftColl_8007861C(Fighter_GObj* arg0, Fighter_GObj* gobj, int arg2,
     if (arg7 != NULL && ((s32*) arg7)[2] == 0) {
         grounded = 1;
     }
-    pl_80038144(arg0, gobj, arg4, arg5, arg6, grounded,
-                victim->dmg.x18c4_source_ply);
+    pl_80038144(arg0, gobj, arg4, arg5, arg6, grounded, ply);
 }
 
 void ftColl_80078710(Fighter_GObj* arg0, Fighter_GObj* arg1, UNK_T arg2)

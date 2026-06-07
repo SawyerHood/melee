@@ -220,130 +220,81 @@ void fn_80169574(ssize_t size, s8* buf)
     buf[size] = -2;
 }
 
+static inline s32 fn_801695BC_count(u8 x)
+{
+    return x;
+}
+
 s32 fn_801695BC(u8 arg0, u8 arg1, u8 arg2, u8* arg3, u8* arg4)
 {
     u8 sp1C[0x0C];
-    s32 temp_r3_2;
-    s32 var_ctr_2;
-    s32 var_r28;
-    s32 var_r28_2;
-    s32 var_r7_2;
-    s32 var_r8;
-    s8 temp_r0;
-    s8 temp_r3_3;
-    s8 temp_r4;
-    s8 temp_r4_3;
-    s8 temp_r5;
-    s8 var_r7;
-    u32 var_ctr;
-    u8 temp_r0_2;
-    u8 temp_r3;
-    u8 temp_r3_4;
-    u8* temp_r4_2;
-    u8* temp_r6;
-    u8* var_r27;
-    u8* var_r3;
-    u8* var_r3_2;
-    u8* var_r6;
-    u8* temp_r27;
+    u8 raw;
+    s32 n;
+    u8* q;
+    s32 i;
+    s32 i2;
+    s32 j;
+    s8* pa;
+    s32 k;
+    u8* qs;
+    u8 t;
+    s32 t2;
 
-    temp_r3 = gm_80169238_noinline(arg0);
-    if ((s8) arg0 != 0x21) {
-        var_r7 = 0;
-        if (temp_r3 > 0) {
-            temp_r3_2 = (s32) temp_r3 - 8;
-            if ((s32) temp_r3 > 8) {
-                var_ctr = (u32) (temp_r3_2 + 7) >> 3;
-                var_r6 = &sp1C[0];
-                if (temp_r3_2 > 0) {
-                    do {
-                        var_r6[0] = (u8) var_r7;
-                        var_r6[1] = (u8) (var_r7 + 1);
-                        temp_r5 = var_r7 + 4;
-                        var_r6[2] = (u8) (var_r7 + 2);
-                        temp_r4 = var_r7 + 5;
-                        temp_r3_3 = var_r7 + 6;
-                        var_r6[3] = (u8) (var_r7 + 3);
-                        temp_r0 = var_r7 + 7;
-                        var_r7 += 8;
-                        var_r6[4] = (u8) temp_r5;
-                        var_r6[5] = (u8) temp_r4;
-                        var_r6[6] = (u8) temp_r3_3;
-                        var_r6[7] = (u8) temp_r0;
-                        var_r6 += 8;
-                        var_ctr -= 1;
-                    } while (var_ctr != 0);
-                }
-            }
-            var_r3_2 = &sp1C[var_r7];
-            var_ctr_2 = (s32) temp_r3 - (s32) var_r7;
-            if ((s32) var_r7 < (s32) temp_r3) {
-                do {
-                    *var_r3_2 = (u8) var_r7;
-                    var_r3_2 += 1;
-                    var_r7 += 1;
-                    var_ctr_2 -= 1;
-                } while (var_ctr_2 != 0);
-            }
-        }
-
-        if (arg1 == (s8) arg0) {
-            sp1C[(s8) arg2] = 0xFF;
-        }
-
-        var_r27 = &sp1C[0];
-        var_r28 = 0;
-    loop_12:
-        if (var_r28 < (s32) temp_r3) {
-            temp_r4_2 = &sp1C[HSD_Randi((s32) temp_r3)];
-            temp_r3_4 = *temp_r4_2;
-            var_r28 += 1;
-            *temp_r4_2 = *var_r27;
-            *var_r27 = temp_r3_4;
-            var_r27 += 1;
-            goto loop_12;
-        }
-
-        var_r3 = arg3;
-        var_r8 = 0;
-        var_r7_2 = 0;
-    loop_19:
-        temp_r6 = &arg4[var_r7_2];
-        if ((s8) *temp_r6 != -2) {
-            if ((s8) arg0 == (s8) *var_r3) {
-                if ((s8) sp1C[var_r8 % temp_r3] == -1) {
-                    var_r8 += 1;
-                }
-                temp_r0_2 = sp1C[var_r8 % temp_r3];
-                var_r8 += 1;
-                *temp_r6 = temp_r0_2;
-            }
-            var_r7_2 += 1;
-            var_r3 += 1;
-            goto loop_19;
-        }
-
-        var_r28_2 = 1;
-    loop_26:
-        temp_r27 = &arg4[var_r28_2];
-        if ((s8) temp_r27[0] != -2) {
-            var_r3 = &arg3[var_r28_2];
-            if (((s8) arg0 == (s8) var_r3[0]) &&
-                ((s8) arg0 == (s8) var_r3[-1]))
-            {
-                var_r3 = (u8*) HSD_Randi(2);
-                if (var_r3 != NULL) {
-                    temp_r4_3 = (s8) temp_r27[0];
-                    temp_r27[0] = temp_r27[-1];
-                    temp_r27[-1] = (u8) temp_r4_3;
-                }
-            }
-            var_r28_2 += 1;
-            goto loop_26;
-        }
-        return (s32) var_r3;
+    raw = gm_80169238_noinline(arg0);
+    if ((s8) arg0 == 0x21) {
+        /* No value on this path in the original: it falls out with
+         * gm_80169238's result still in r3 (binary tell: beq straight to
+         * the epilogue, no copy). m2c invented `return (s32) temp_r3;`. */
+        return;
     }
-    return (s32) temp_r3;
+    {
+        n = fn_801695BC_count(raw);
+        for (i = 0; i < n; i++) {
+            sp1C[i] = (s8) i;
+        }
+
+        if ((s8) arg1 == (s8) arg0) {
+            ((s8*) sp1C)[(s8) arg2] = -1;
+        }
+
+        for (i2 = 0; i2 < n; i2++) {
+            qs = &sp1C[HSD_Randi(n)];
+            t = *qs;
+            *qs = sp1C[i2];
+            sp1C[i2] = t;
+        }
+
+        q = arg3;
+        j = 0;
+        i = 0;
+        while ((s8) arg4[i] != -2) {
+            if ((s8) arg0 == (s8) *q) {
+                if ((s8) sp1C[j % n] == -1) {
+                    j += 1;
+                }
+                t = sp1C[j % n];
+                j += 1;
+                arg4[i] = t;
+            }
+            i += 1;
+            q += 1;
+        }
+
+        k = 1;
+        while (*(pa = (s8*) &arg4[k]) != -2) {
+            q = &arg3[k];
+            if (((s8) arg0 == (s8) q[0]) && ((s8) arg0 == (s8) q[-1])) {
+                q = (u8*) HSD_Randi(2);
+                if ((s32) q != 0) {
+                    t2 = (s8) pa[0];
+                    pa[0] = pa[-1];
+                    pa[-1] = t2;
+                }
+            }
+            k += 1;
+        }
+        return (s32) q;
+    }
 }
 
 #pragma push
@@ -437,20 +388,27 @@ void fn_80169900(u8 arg0, struct lbl_8046B488_t* arg1, s8* arg2, s8* arg3)
 
 long fn_80169A84(u8 arg0, s8* arg1, s8* arg2)
 {
-    s32 i;
-    s32 count;
     s8* base;
-    s8* p;
-    s8* q;
     s8* dst;
+    s8* p;
+    s8* arr;
+    s32 i2;
     s8* src;
+    s8* q;
+    s8* pp;
+    s32 i;
+    s32 j;
+    s32 count;
     u8 tmp;
-    s8 result;
+    s8 c;
 
     base = (s8*) &lbl_8046B488;
-    if ((s32) arg0 == 1) {
+    switch (arg0) {
+    case 1:
+        arr = base + 0x1C0;
+
         i = 0;
-        p = base + 0x1C0;
+        p = arr;
         do {
             if (i != 4 && gm_80164840_noinline((u8) i) != 0) {
                 *p = i;
@@ -461,54 +419,52 @@ long fn_80169A84(u8 arg0, s8* arg1, s8* arg2)
             p += 1;
         } while (i < 0x1A);
 
-        i = 0;
-        p = base + 0x1C0;
+        i2 = 0;
+        p = arr;
         do {
             q = base + HSD_Randi(0x1B);
             tmp = q[0x1C0];
-            i += 1;
+            i2 += 1;
             q[0x1C0] = (u8) *p;
             *p = tmp;
             p += 1;
-        } while (i < 0x1A);
+        } while (i2 < 0x1A);
 
         count = 0;
-        p = base + 0x1C0;
-        i = 0xD;
-        do {
-            if ((s8) p[0] != -1) {
+        j = 0;
+        while (j < 0xD) {
+            if (*arr != -1) {
                 count += 1;
                 if (count > 0x10) {
-                    p[0] = -1;
+                    *arr = -1;
                 }
             }
-            if ((s8) p[1] != -1) {
+            if (*++arr != -1) {
                 count += 1;
                 if (count > 0x10) {
-                    p[1] = -1;
+                    *arr = -1;
                 }
             }
-            p += 2;
-            i -= 1;
-        } while (i != 0);
+            arr++;
+            j++;
+        }
 
         dst = arg1;
         src = arg2;
         i = 0;
         while ((s8) *src != -2) {
-            while ((s8) base[i + 0x1C0] == -1) {
+            while ((c = (s8) (pp = (s8*) ((u8*) (base + i) + 0))[0x1C0]) ==
+                   -1)
+            {
                 i = (i + 1) % 27;
             }
-            result = Player_800325C8((CharacterKind) (s8) base[i + 0x1C0], 0);
-            *dst = result;
+            *dst = Player_800325C8((CharacterKind) c, 0);
             i += 1;
             src += 1;
             dst += 1;
         }
-        return (s32) result;
-    } else if ((s8) arg0 >= 1) {
-        return (s32) base;
-    } else if ((s8) arg0 >= 0) {
+        break;
+    case 0:
         dst = arg1;
         src = arg2;
         while ((s8) *src != -2) {
@@ -516,10 +472,10 @@ long fn_80169A84(u8 arg0, s8* arg1, s8* arg2)
             src += 1;
             dst += 1;
         }
-        return (s32) src;
-    } else {
-        return (s32) base;
+        break;
     }
+    /* No return statements in the original: every arm falls out (m2c
+     * invented returns of base/src/result; target r3 holds stale values). */
 }
 
 void fn_80169C54(s8 arg0, s8 arg1)

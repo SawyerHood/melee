@@ -1488,6 +1488,7 @@ void fn_801935B8(void)
     HSD_GObj* gobj;
     HSD_Fog* fog;
     s32 i;
+    u8* table = lbl_803D9F80;
 
     tm = gm_8018F634();
     fn_8018FBE0(0, 0, 0, 5, 5, 0x3e7, 3);
@@ -1514,7 +1515,7 @@ void fn_801935B8(void)
     for (i = 0; i < 6; i++) {
         lbl_804799B8.pad2[i] = 0xa;
         lbl_804799B8.pad2[i + 6] = 0;
-        (&tm->match_type)[i] = lbl_803D9F80[0x40 + i * 2];
+        (&tm->match_type)[i] = table[0x40 + i * 2];
     }
 
     lbl_804799B8.x1 = 0;

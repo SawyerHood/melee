@@ -4,6 +4,11 @@ Fork-based experiment to drive doldecomp/melee from ~97.4% fuzzy / 64% matched
 bytes toward 100%. This file is the persistent campaign state — update it at
 the end of every session.
 
+> **⭐⭐ ENDGAME METRIC (live since wave 18): LINKED Matching file count.**
+> Currently **839/1041 linked (42.62%)**, matched 72.15%, fuzzy 97.59, HEAD
+> 4715a41d8. The FIRST FLIPS landed wave 18 (see FIRST FLIP VERDICT below) —
+> every stream now ranks its work by "what unblocks the next flip".
+
 ## Ground rules
 
 - This is a fork: `config/` and `configure.py` edits ARE allowed (unlike
@@ -245,7 +250,7 @@ the rest of the queue):**
    unit's address ranges (wave 11 was safe only because naming-7's edits
    were all mplib-range).
 
-## ⭐ DATA-RECON VERDICT (wave-16 pilot — PROVEN; wave-17 SCALED ×2 TUs)
+## ⭐ DATA-RECON VERDICT (w16 pilot PROVEN; w17 ×2 TUs; w18 ×2 more + FLIP-ENABLER)
 
 Dead/placeholder .data IS reconstructable from target bytes at near-zero
 @-id cost: numeric brace-init arrays consume **0 @-ids at any position**
@@ -305,45 +310,107 @@ gmresult idiom-69 package (ours 0x198 vs tgt
 tydisplay B1FC/B328/B460 idiom-69 map (tydisplay-w14/REPORT.md);
 ftcoll [.sdata-0] dtk-tail park stands.
 
-## ⭐ FLIP CANDIDATES (NEW wave 17 — first Object(NonMatching→Matching) targets)
+**⭐ WAVE-18 SCALE ×2 (ftcoll + gmregclear family; trees UNCOMMITTED
+except gm_182F.c which rode flip commit 51951826b)**:
+- **ftcoll** (durable: datarecon-ftcoll-w18/REPORT.md): [.sdata2-0]
+  81.25→**100.00 byte-IDENTICAL** — the w14 permutation park CRACKED:
+  the u32→f32 magic (4330... +0x28) is pooled by a fully-inlined,
+  linker-DEADSTRIPPED static helper; an UNCALLED `static f32` helper
+  redefined at the original lexical slot pools the orphan at its
+  DEFINITION slot — zero text change to all 77 fns (idiom 111, extends
+  105). Bonus **ftColl_8007861C 79.44→100.00 MATCH** (entry-read
+  `victim->dmg.x18c4_source_ply` semantic-bug fix + ternary x18C0 +
+  arg6 int→u16 in ftcoll.h + diamond-init/ternary-demotion webs +
+  PAD_STACK(8)); getEnvDmg ours-only park DISSOLVED — w14's
+  "structural" park was a missing `static inline` (idiom 112).
+  Unreachable-bytes ledger CLOSED (.data 4B + .sdata 6B = dtk tail
+  pads only; .sdata2 zero). 17 value-verified renames → naming-15
+  (SERIALIZE vs any ftcoll edit). .text leftovers enumerated → S1
+  (77C60 frame+8, 7BE3C missing u32 conversion, decay FPR rotations).
+- **gmregclear family** (gm_182F/gm_181A/gm_180A/head; durable:
+  datarecon-gmregclear-w18/progress.txt): gm_182F made whole-byte-exact
+  (math_ppc.h ballast kill, idiom 114a + in-TU `u8 lbl_804D65E8;` .sbss
+  def) → **FLIP-ENABLED and FLIPPED**; gm_181A [.data-0]
+  missing→**99.81** (u8[0x480] table + 7 byte-proven-dead kumite
+  strings — reached ONLY via `addi rX,rBase,0x480..`, ZERO relocs;
+  .text byte-IDENTICAL); gm_180A [.sdata2-0] 80→**100** + lbl_804D65C8
+  family .sbss ×4→100; head [.data-0] 6.28→**96.15** (2 typed stage
+  tables, 0 relocs) + .rodata defined (93.33) + **whole .bss layout
+  target-exact 10/10** via 2 binary-proven size fixes (gmClassic_
+  80472AF8 u8[0x110]→StartMeleeData 0x138; lbl_80472CB0 →0x78 prefix
+  struct). Head's single DOWN (fn_801803FC −0.85) root-caused
+  C-unreachable (idiom 63; baseline "match" was an offset-0 shadow).
+  Head gate 171 SAME / 10 UP / 1 DOWN; full ninja DOL sha1 EXACT.
+- **SCALE QUEUE re-rank (flip-aligned, front first)**: **hsd_40FF
+  DATA-ONLY 0x20bc0 recon package (idiom-98 class) = +1 LINKED FILE
+  with zero code work** (flip queue #10); head NAMING+SRC paired
+  package (early-inline @1427-29 string-trio reconstruction,
+  particle-E80 class — recovers most of [.data-0]'s last 3.85pp);
+  particle E80 string package; dead cluster AB00..ADC4; BAF0/BC3C;
+  gmresult idiom-69 package; tydisplay map. gmallstar future flip
+  needs gmClassic_80472AF8 static→global (noted in-source).
 
-Flip = configure.py `Object(Matching, ...)`: ninja then links OUR compiled
-object instead of the extracted one — requires the whole TU byte-exact
-(every fn AND every data section content-exact; dtk tail-pad/gap display
-rows are score artifacts but the linked bytes must still come out
-identical — gate a flip ONLY with full ninja + `main.dol: OK` + dtk
-shasum). This finally settles the long-open S5 question / pre-session-2
-experiment #2 ("are naming-only functions already byte-correct in a
-linked Matching unit?"). Ranked by measured gap:
+## ⭐⭐ FIRST FLIP VERDICT (wave 18 — ACHIEVED ×3, COMMITTED; THE ENDGAME METRIC)
 
-1. **gm_182F.c** (gmregclear split TU, wave 12) — unit fuzzy 100.0 since
-   landing. CHEAPEST PROBE: zero src work needed if clean; but fuzzy is
-   reloc-name-BLIND (idiom 88) — run inversion-sweep analyze.py +
-   per-symbol objdiff match_percent first, then attempt the flip. If it
-   links, the flip recipe is proven for the whole campaign.
-2. **hsd_39D1.c** (generator.c TU, 15 fns) — after the wave-17 S1 run:
-   only 2 fns below 100 (DAD4 99.34 FPR-rotation park; 9F05C 99.54
-   frame +8 + fmr copy-survival singleton); [.sdata2-0] **100.00**,
-   extab 100, [.data-0] 97.91, extabindex 99.64; naming-14 hygiene
-   renames address-keyed and ready (incl. unblocked @2723/π-2 pins).
-   Gap to flip: crack 2 parked S1 rotations (gmregclear family — needs
-   the dedicated rotation-enumeration agent) + .data residual.
-3. **gm_190A.c** (TU-B, 41 fns) — naming-13 (16 fns→100) + recon +
-   OnEnter→100 leave an enumerated sub-100 set: fn_801935B8 98.59
-   (single r28-r30 decl rotation, S1), fn_80192E6C 99.96 (byte-load-
-   bearing park), fn_80190ABC/fn_80191240 (re-routed S1) + a few 99.x
-   partials; [.data-0] 94.84 / [.sdata2-0] 86.18 are content-exact
-   with dtk gap-tail parks (5B/4B) — verify gap bytes survive a
-   Matching link before counting them as blockers.
-4. **gm_1965.c** (TU-C, 39 fns) — [.data-0] 99.91 byte-identical and
-   39 data syms at 100, but 5 S1 bodies + 5 structural tails
-   (985D4/98824/98EBC/99AF0/9B458 91-99) + .sdata2 interleave
-   permutation park — a wave or two behind gm_190A.
-   Far tier: mplib (all 38 <100 = parked classes), tydisplay/ftcoll/
-   sislib (structural + park residuals). Action for wave 18: run the
-   gm_182F analyze.py probe + flip experiment FIRST (information is
-   nearly free), and route S1 rotation work at hsd_39D1/gm_190A — the
-   two units where every remaining row is enumerated.
+**The flip recipe is PROVEN.** Wave 18 flipped the first three units to
+`Object(Matching, ...)` — ninja links OUR compiled objects into the DOL,
+byte-proven: sha1 08e0bf20… IDENTICAL + dtk OK through 6 full ninja
+passes including a mid-gate naming-14 symbols.txt re-split (idiom-79
+rewrite observed, none in flipped ranges); main.elf link-edge verified
+consuming `build/GALE01/src/<unit>.o` for all three; PASS ×3 +
+idempotence ×3. Commits: **51951826b** (melee/gm/gm_182F.c — one
+recon-supplied .sbss def — + melee/pl/plattack.c, ZERO src work) +
+**4715a41d8** (melee/ft/ftchangeparam.c, ZERO src work). Project
+836→**839/1041 linked (42.35→42.62%)**, matched 72.13→**72.15%**, fuzzy
+97.58→97.59.
+
+**Settled questions (byte-proven at link; full pack = idiom 110)**:
+- ⭐ **S5 / pre-session-2 experiment #2 ANSWERED: naming-only functions
+  ARE byte-correct in a linked Matching unit** — ftchangeparam linked
+  byte-exact carrying 219 LIT2EXT + 6 SHADOW rows. AT_RENUM/NAMEPAIR/
+  LIT2EXT rows are link-IRRELEVANT at equal resolved offsets; Grand
+  Inversion / naming is SCORE work, not byte work, for flips.
+- dtk gap-tail parks SURVIVE a Matching link: short .sbss tails restore
+  via the next contribution's align=8 (gm_182F, plattack) and short zero
+  .data tails via the next object's alignment zero-fill (ftchangeparam)
+  — answers the queued gm_190A question: its 5B/4B parks are NOT flip
+  blockers.
+- `_half/_three` weak .sdata2 surplus is linker-stripped AND compacted
+  (extends idiom 49 to link-proven).
+- Renamed/missing target-named local exports are link-neutral iff zero
+  importers across all 1041 link inputs (verified per-symbol).
+
+**GATE INSTRUMENT**: `campaign/scratch/file-flip-w18/linkcheck.py`
+(resolved-reloc equality + weak-exempt + ALIGNFIX + export-importer
+closure) — gate flips with it, NOT fuzzy/analyzer counts (extends the
+idiom-88 hard rule to flips). Then full ninja + `main.dol: OK` + dtk
+shasum + idempotence. **FLIP-GATE LAW (all streams)**: a flipped unit's
+ours-object is LOAD-BEARING — naming/recon/S1 gates must re-baseline the
+DOL sha, and any edit to a flipped TU must keep it whole-byte-exact.
+
+### Ranked flip queue (linkcheck-verified wave 18; exports importer-cleared)
+
+1. **itdrop** — 8B .text + 2 reloc rows (the parked idiom-25 F3D4 site)
+   + ALIGNFIX; the F3D4 2-row park now GATES a flip → S1 front.
+2. **gm_1BFA** — 80B .text, one structural fn.
+3. **itdraw** — 37B .text, one fn.
+4. **quatlib** — 45B .text + 16B .sdata2 + 6 reloc.
+5. **lb_00CE** — 24B .text + 52B .sdata2 + 26 resolved-UNEQUAL relocs.
+6. **gm_16A9** — −4B .text + one 4B .sdata2 gap-pad def.
+7. **MSL/math** — 18B .text + 9 reloc + `__float_nan/huge` positioned defs.
+8. **ifprize** — 34B .text + 12 reloc + 4B .data tail.
+9. **ftCo_Shouldered** — 8B mid-.text insertion (3 EXPORT-MOVED +8).
+10. **hsd_40FF** — DATA-ONLY 0x20bc0 recon package (idiom-98 class) =
+    +1 linked file with ZERO code work → data-recon stream front.
+
+Family follow-ups (wave-17 list re-ranked by wave-18 results): gm_180A
+next-best in the gmregclear family (only fn_80180C60 98.17 blocks);
+gm_181A pends 3 S1 fns; hsd_39D1 pends 2 S1 rotation parks (DAD4/9F05C);
+gm_190A's enumerated set shrank (935B8 →100 wave 18; gap-tail parks
+cleared by ALIGNFIX — re-rank with linkcheck.py: E6C byte-load-bearing
+park + 90ABC/91240 remain); gm_1965 a wave behind; gmallstar pends
+gmClassic_80472AF8 static→global. Re-run
+`file-flip-w18/rank_raw.txt` regeneration after each recon/S1 wave.
 
 ## Validated playbook (update after every session)
 
@@ -1197,6 +1264,79 @@ linked Matching unit?"). Ranked by measured gap:
    = explicit empty `case N: break;`. LAW: never sed shared tokens
    TU-wide (a sibling's `sed PAD_STACK(8)→(4)` clobbered a matched
    fn's pad — self-caught by the unit gate).
+110. **⭐ FLIP-LINK LAW PACK (file-flip w18; byte-proven through 6
+   full ninja passes)**: (a) WEAK-STRIP — `_half/_three` weak .sdata2
+   surplus is linker-stripped AND compacted (GXPixel ours=tgt+0x20
+   Matching precedent + fresh flip; extends 49 to link-proven); (b)
+   ALIGNFIX-NOBITS — short .sbss tail (0x1/0x2 vs 0x8) restores via
+   the next contribution's align=8; (c) ALIGNFIX-PROGBITS — short
+   zero .data tail (0x75 vs 0x78) restores via the next object's
+   alignment zero-fill ⇒ dtk gap-tail parks SURVIVE a Matching link;
+   (d) EXPORT-NEUTRALITY — renamed/missing target-named local exports
+   are link-neutral iff ZERO importers across all 1041 link inputs;
+   (e) AT_RENUM/NAMEPAIR/LIT2EXT/SHADOW rows are link-IRRELEVANT at
+   equal resolved offsets (ftchangeparam linked byte-exact carrying
+   219 LIT2EXT + 6 SHADOW rows) — naming-only fns ARE byte-correct in
+   a linked Matching unit; gate flips with linkcheck.py
+   (resolved-reloc equality + weak-exempt + ALIGNFIX + export
+   closure), never fuzzy/analyzer counts.
+111. **DEADSTRIPPED-INLINE POOL-ORPHAN RECON (extends 105; ftcoll
+   [.sdata2-0] →100)**: a target pool literal first reloc'd LATE but
+   pooled EARLY = created by a fully-inlined, linker-deadstripped
+   static helper — reconstruct as an UNCALLED static helper at the
+   original lexical slot containing ONLY the orphan literal (flag
+   in-source as permanent ours-only ballast; zero text change to all
+   sibling fns). Laws: pool/def namespaces are DISJOINT (closes the
+   Fix-B route — +0x28 is pool, not def); MWCC has NO post-codegen
+   branch folding (multiply-assigned and single-assigned-zero guards
+   both EMIT); post-return code dies PRE-pooling.
+112. **MISSING-`inline` PARK DISSOLVER + DIAMOND-INIT RANK (ftcoll)**:
+   an ours-only out-of-line copy of a helper = missing `static
+   inline` (w14's "structural" getEnvDmg park dissolved; all 8
+   expansion sites byte-identical, zero gate movement). Diamond-init
+   webs outrank first-decl webs; a ternary init DEMOTES a web to
+   volatile-class rank (new S1 lever); decl/init decoupling composes;
+   one-call-at-end fns take the idiom-108 call-free CS-choice.
+113. **S1 ROTATION LEVER PACK (w18: gm_190A 935B8 →100 in 1 probe;
+   gm_1693 695BC →100 full rewrite)**: (a) idiom-98 entry capture
+   `u8* table = lbl_X;` works as an S1 lever — flips a data/bss
+   anchor r29↔r30 tie + the coupled tail counter/walker pair; (b)
+   rolled fill `for` auto-unrolls ×8 (do-while KILLS the unroller);
+   (c) inline-identity-helper `n = helper(raw)` lands `clrlwi.`
+   directly in the CS home fused with the loop guard (plain assign =
+   r0+mr attractor); (d) NO return statement — m2c invents them; any
+   returned var costs a CS home + mr; (e) call-result redefine
+   `q=(u8*)f(); if((s32)q!=0)` kills call-crossing (cast gives signed
+   cmpwi); (f) `switch(u8)` = exact beq/bge median tree incl. the
+   dead <0 branch — if-chains range-fold (extends 109e); (g)
+   `*arr/*++arr/arr++` lbzu pair-walk + counted-while → mtctr/bdnz;
+   per-loop `p = arr` anchor copies; (h) `(s8)pa[0]` typed load kills
+   a dead extsb; `((s8*)sp)[i] = -1` = li −1; (i) blocked-pointer-in-
+   condition reproduces add/lbz-disp + single extsb. Residual class:
+   just-freed-reg chain rotations (69A84 parked-at-best 94.26 →
+   rotation-enumeration agent).
+114. **gmregclear-FAMILY RECON PACK (w18)**: (a) MERE INCLUSION of
+   math_ppc.h emits the 16B _half/_three .sdata2 ballast even with
+   ZERO sqrtf use — removal = −4 @-ids (safe ONLY in pin-free/
+   offset-pairing TUs; KEPT in head deliberately, 60 pins); (b) head
+   .data = 4 original-TU blocks, each 8-aligned — inter-TU 4B pads
+   are C-unreachable (struct align 2, zero filler possible); (c) dtk
+   pad-inclusive sizing extends to .sdata @-strings (content
+   byte-IDENTICAL rows are display-class); (d) typed struct-array
+   brace-init = 0 @-ids (extends 98 to typed aggregates; MWCC aligns
+   struct arrays by member, string-pool entries by 4); (e)
+   byte-proven-dead data tell: target reaches a region ONLY via
+   `addi rX,rBase,BIG` with ZERO relocs ⇒ dead strings/table tail;
+   (f) an undefined extern cannot link Matching — in-TU def required
+   (the gm_182F flip enabler).
+115. **NAMING-CHAIN ACCOUNTING (naming-14)**: (a) stale-id 3rd live
+   catch — queue tail ids drift by land time; ONLY same-session live
+   derivation is safe (extends 99/103); (b) pairwise-colliding rename
+   sets apply collision-free in section-address-ASCENDING order
+   (.sdata2 before .data — each new name freed by an earlier pin;
+   20/20 zero transient dups); (c) name-keyed snapshot accounting
+   LIES on rename chains (8 phantom rows incl. a None→100 shown as
+   DOWN) — use value/address-keyed accounting when names are reused.
 
 ### Experiment results (wave 3)
 
@@ -1252,9 +1392,10 @@ linked Matching unit?"). Ranked by measured gap:
   scheduling cases. MIN-macro operand flips, mr-vs-addi, fmr-chain ordering.
 - **S5 config/naming** (cuts across ~150+ fns): name anonymous `@NNN` sdata2
   literals and `...bss.N` symbols in `config/GALE01/symbols.txt`. Fork-legal.
-  OPEN QUESTION (answer before scaling): are naming-only functions already
-  byte-correct in a linked Matching unit? If yes, S5 is bookkeeping that
-  unlocks fuzzy-100 gates; if no, it changes layout. Test on one unit first.
+  ✅ OPEN QUESTION ANSWERED (wave 18, byte-proven at link): naming-only
+  functions ARE byte-correct in a linked Matching unit (ftchangeparam flip
+  carried 219 LIT2EXT rows) — S5 is bookkeeping/score work that unlocks
+  gates, NEVER byte work for flips (idiom 110e).
 - **S6 hard tail** (11 fns): THPDec.c cluster (5, in extern/, sbss-vs-bss
   placement + Huffman struct access), grZebes_801DA0C4 (static table copy —
   mechanical), HSD_CObjGetLeftVector (de-inline roll2upvec; 104 extra rows
@@ -1269,10 +1410,9 @@ linked Matching unit?"). Ranked by measured gap:
 1. **MWCC BSS ordering rule**: empirically swap two statics in a scratch
    copy of particle.c, rebuild, observe .o symbol order. Declaration order
    alone does NOT explain observed order (verified). Blocks ~137 anon_bss fns.
-2. **Naming-only byte-correctness**: pick a unit whose only remaining diffs
-   are naming rows; flip to Matching in configure.py, rebuild, see if the
-   DOL check still passes. Settles the S5 question and the real termination
-   criterion.
+2. ✅ **Naming-only byte-correctness — SETTLED wave 18**: three flips
+   committed (51951826b + 4715a41d8); naming rows are link-irrelevant at
+   equal resolved offsets. See FIRST FLIP VERDICT + idiom 110.
 3. Re-validate one S1 win end-to-end (edit → 100% → unit clean → DOL OK →
    commit) to prove the full loop before fanning out.
 
@@ -1293,6 +1433,10 @@ linked Matching unit?"). Ranked by measured gap:
   gm_8016A164 →100 EXACT; A22C/A4C8/AC44 anchor rows gone (residuals now
   ordinary S1/structural, see split report); 95BC/9A84 were never
   anchor-blocked — pure S1 rotation, now in clean TU context (S1 queue).
+  Wave 18: **fn_801695BC →100 WON** (idiom-113 full rewrite, 16 compiles);
+  fn_80169A84 74.20→**94.26 parked-at-best** (shape-exact; ~18 residual
+  rows = entry lis-temp r6-vs-r3, loop-B i2/p2 2-cycle, dead IV
+  kept-with-CTR, loop-D just-freed-reg chain → rotation-enumeration agent).
 - **lbColl_800077A0 residual (4 rows)**: target has a dead 4-byte temp at
   frame 0x34 before sqrtf instance 1; 6 forms failed (PAD_STACK/trailing
   local/block volatile/warm-up call all wrong or shift @ids).
@@ -1545,6 +1689,101 @@ linked Matching unit?"). Ranked by measured gap:
 
 ## Session log
 
+- **2026-06-07 — Wave 18 (⭐⭐ FIRST FLIPS ×3 COMMITTED + data-recon
+  ftcoll + gmregclear family + naming round 14 + S1 rotation ×2 wins)
+  — 3 commits (633eda23d naming-14 → 51951826b flips 1+2 →
+  4715a41d8 flip 3), HEAD 4715a41d8; project 836→**839/1041 linked
+  (42.35→42.62%)**, matched 72.13→**72.15%**, fuzzy 97.58→97.59;
+  3 NEW exact matches (ftColl_8007861C, fn_801935B8, fn_801695BC) +
+  2 section rows →100 byte-IDENTICAL; ~225 compiles + ~30 ninja
+  gates.** ⭐⭐ **FIRST FLIPS — THE ENDGAME METRIC IS LIVE** (verdict
+  section rewritten at top): gm_182F (recon-supplied 1-line .sbss
+  def) + plattack (ZERO work) + ftchangeparam (ZERO work) flipped
+  `Object(Matching)`; DOL sha1 08e0bf20… IDENTICAL + dtk OK through
+  6 full ninja passes incl. a mid-gate naming-14 symbols.txt
+  re-split; PASS ×3 + idempotence ×3; main.elf link-edge verified
+  consuming our objects ×3. **Settles S5 / pre-session-2 experiment
+  #2**: naming-only fns ARE byte-correct in a linked Matching unit
+  (ftchangeparam carried 219 LIT2EXT + 6 SHADOW rows); dtk gap-tail
+  parks SURVIVE the link (ALIGNFIX — gm_190A 5B/4B parks are NOT
+  blockers); weak _half/_three stripped+compacted; export-neutrality
+  iff zero importers (idiom 110). New instrument
+  `file-flip-w18/linkcheck.py` — flips gate on it, not fuzzy.
+  Next-10 flip queue ranked (itdrop front — its F3D4 2-row park now
+  GATES a flip; hsd_40FF = data-only +1 file). ⭐ **DATA-RECON
+  ftcoll** (UNCOMMITTED; ~22 compiles): [.sdata2-0] 81.25→**100.00
+  byte-IDENTICAL** — w14 permutation park CRACKED via the
+  deadstripped-inline pool-orphan helper (idiom 111); bonus
+  **ftColl_8007861C 79.44→100.00 MATCH** (entry-read source_ply
+  semantic bug + ternary x18C0 + arg6 int→u16 ftcoll.h + diamond-
+  init webs + PAD_STACK(8)); getEnvDmg park DISSOLVED (missing
+  `static inline`, idiom 112); unreachable-bytes ledger CLOSED;
+  gate 2 UP / 0 DOWN over 91 rows; 17 value-verified renames →
+  naming-15 (serialize vs ftcoll edits); .text leftovers → S1.
+  ⭐ **DATA-RECON gmregclear family** (~18 compiles; gm_182F rode the
+  flip commit, rest UNCOMMITTED): gm_182F whole-byte-exact
+  (math_ppc.h ballast kill + u8 lbl_804D65E8 def) → FLIP-ENABLED;
+  gm_181A [.data-0] →**99.81** (u8[0x480] table + 7 proven-dead
+  strings; .text byte-IDENTICAL); gm_180A [.sdata2-0] →**100** +
+  .sbss ×4→100; head [.data-0] 6.28→**96.15** + .rodata 93.33 +
+  **.bss layout 10/10 target-exact** (2 binary-proven size fixes:
+  gmClassic_80472AF8→StartMeleeData 0x138, lbl_80472CB0→0x78);
+  head gate 171 SAME / 10 UP / 1 DOWN (root-caused C-unreachable,
+  idiom 63); idiom 114. **NAMING-14 COMMITTED 633eda23d**
+  (symbols.txt only, +22/−22): gm_1965 extras CONFIRMED
+  @3554→@697 / @3555→@698 (stale in-flight @701/@703 AND the n13-era
+  @696 guess both REFUTED live); hsd_39D1 hygiene 20 incl. UNBLOCKED
+  **@2723→@678 (f64 2.0)** + **lbl_804DE9E8→@681 (π/2)**, 2 live
+  stale-id corrections (@849/@850→@850/@851); gm_190A re-check:
+  ZERO renames needed (61/61 pins re-verified); gm_1965 6 UP,
+  hsd_39D1 1 UP; ALL gates PASS (per-rename DOL ×22 + value-verify
+  22/22 ×2 + byte-gate + idempotence 22/22); idiom 115. **S1
+  ROTATION** (gm_190A.c + gm_1693.c UNCOMMITTED, ~42 compiles):
+  **fn_801935B8 →100.00 MATCH** (1 probe — idiom-98 entry capture
+  as S1 lever) + **fn_801695BC 70.22→100.00 MATCH** (16-compile
+  rewrite: rolled fill for + inline-identity-helper + no-returns +
+  call-result redefine + indexed shuffle) + fn_80169A84
+  74.20→**94.26 parked-at-best**; idiom 113; gates 0 sibling drift
+  both units, gm_190A symtab byte-identical; gm_190A's "only gap to
+  100" CLOSED — 95AF0/90ABC/91240 were outside the grant.
+  **NAMING-15 QUEUE** (stale-id policy: re-derive ALL ids live at
+  land): ftcoll 17 value-verified renames (@338→@336 family +
+  @1520→@773 magic — SERIALIZE vs any ftcoll edit); gm_1693 Fix-A
+  trio RE-DERIVED **@571/@663/@664** (pool drift −17 from the S1
+  rewrite; supersedes the naming-12 @588/@680/@681 values); gm_182F
+  AT_RENUM 12 (@245→@241 family — link-MOOT post-flip, renumber at
+  leisure, must keep the flipped TU byte-exact); plattack
+  unk_804D6480→lbl_804D6480 optional display fix; carryovers
+  unworked (hsd_3983 map, hsd_804D0908 subdivision, lbaudio B24
+  6-sym merge + 28690 @722→@721, sislib C564/@69↔@70/@264
+  paired-edits, particle lbl_8040A93C, naming-12 remainder minus
+  the superseded gm_1693 trio, toy/tydisplay/gm_1601 maps, camera
+  NAMEPAIR). **SRC/RETRY QUEUE re-rank (flip-aligned)**: itdrop
+  F3D4 park retry GATES flip #1 (S1 front); gm_180A fn_80180C60
+  98.17 = last blocker of the family's next flip; gm_181A 3 S1 fns;
+  hsd_39D1 DAD4/9F05C rotation parks; gm_190A remainder
+  (95AF0 re-apply, 90ABC, 91240); ftcoll .text leftovers (77C60
+  frame+8 early-ply-load family, 7BE3C missing u32 conversion,
+  decay FPR rotations ×4 + 8 more); rotation-enumeration agent now
+  owns 69A84 + DAD4 + gmregclear-family parks; data-recon front =
+  hsd_40FF data-only flip package, then head NAMING+SRC paired
+  package. **WAVE BOUNDARY**: 7 files dirty (ftcoll.c/.h, gm_1693.c,
+  gm_180A.c, gm_181A.c, gm_190A.c, gmregclear.c + stale
+  backlog.json — triage.py before wave 19); full configure + ninja +
+  dtk shasum over the dirty trees before ANY commit. **WARNINGS**:
+  (1) **mutex violated #8** — 5 agents live on shared trees again;
+  flip gates survived only via per-gate file re-hashing +
+  hash-stable sibling verification; S1's end-of-session full ninja
+  rebuilt the shared build dir under siblings (DOL still exact) —
+  wave-boundary serialization STILL unenforced, and post-flip the
+  stakes are higher (ours objects are load-bearing); (2) REPORT.md
+  harness-block ×4 (gmregclear-w18 — progress.txt is the durable
+  record); (3) name-keyed snapshot accounting lies on rename chains
+  (idiom 115c — one sibling mid-flight edit nearly mis-attributed as
+  a naming UP, correctly excluded); (4) commit hygiene held:
+  explicit pathspec + staging-verified-empty (idiom 97e applied).
+  Idioms 110-115 added; FIRST FLIP VERDICT section opened (replaces
+  flip-candidates); endgame-metric banner added at top.
 - **2026-06-07 — Wave 17 (naming round 13 + data-recon SCALE ×2 TUs +
   types.h tails adjudicated + gm_18A5 S1 + hsd_39D1 S1) — 1 commit
   (naming-13 d17be7f73), HEAD d17be7f73; 2 NEW exact matches + 26
