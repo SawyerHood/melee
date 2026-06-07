@@ -146,9 +146,29 @@ typedef struct BracketEntry {
     /* 0xDA */ u8 padDA[0xDC - 0xDA];
 } BracketEntry;
 
+struct Lbl804799B8_t {
+    u8 x0;
+    u8 x1;
+    u8 x2;
+    u8 x3;
+    u8 x4;
+    u8 x5;
+    u8 x6;
+    u8 x7;
+    u8 x8;
+    u8 x9;
+    u8 xA;
+    u8 xB;
+    u16 xC_counter;
+    u8 xE;
+    u8 xF;
+    u8 pad2[0x10];
+};
+static struct Lbl804799B8_t lbl_804799B8;
+
 static BracketEntry lbl_80473AB8[0x40];
 
-TmData gm_804771C4;
+extern TmData gm_804771C4;
 
 static struct lbl_803D9D20_t {
     /*  +0 */ u8 x0[0x59];

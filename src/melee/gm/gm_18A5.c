@@ -139,11 +139,12 @@ void fn_8018A514(int count, float val)
 
 void fn_8018A970(int arg0)
 {
+    BracketEntry* entries = (BracketEntry*) ((u8*) lbl_80473AB8 + 0);
     int i;
     for (i = 0; i < 0x40; i++) {
-        if (lbl_80473AB8[i].x0 != 0) {
+        if (entries[i].x0 != 0) {
             HSD_GObj* gobj = GObj_Create(0xE, 0x1B, 0);
-            gobj->user_data = &lbl_80473AB8[i];
+            gobj->user_data = &entries[i];
             if (i == 0) {
                 HSD_GObj_SetupProc(gobj, fn_8018B090, 0);
             }
@@ -153,15 +154,15 @@ void fn_8018A970(int arg0)
 
     if (arg0 < 9) {
         if (arg0 == 1) {
-            lbl_80473AB8[5].x5E = 1;
+            entries[5].x5E = 1;
         } else if (arg0 == 3) {
-            lbl_80473AB8[10].x32 = 1;
-            lbl_80473AB8[11].x5E = 1;
+            entries[10].x32 = 1;
+            entries[11].x5E = 1;
         } else if (arg0 == 5) {
-            lbl_80473AB8[23].x5E = 1;
+            entries[23].x5E = 1;
         } else if (arg0 == 7) {
-            lbl_80473AB8[46].x5E = 1;
-            lbl_80473AB8[47].x5E = 1;
+            entries[46].x5E = 1;
+            entries[47].x5E = 1;
         }
     }
 }
@@ -2280,6 +2281,7 @@ static inline int gm_801905F0_inline0(int c_kind)
 void gm_801905F0(StartMeleeData* arg0)
 {
     u8 _padA[8];
+    TmData* tmd = (TmData*) ((u8*) &gm_804771C4 + 0);
     GameRules* temp_r31 = gmMainLib_8015CC34();
     int i;
     TmVsData sp18;
@@ -2287,7 +2289,7 @@ void gm_801905F0(StartMeleeData* arg0)
     gm_80168FC4();
     gm_80167A64(&arg0->rules);
     arg0->rules.is_teams = false;
-    arg0->rules.xE = gm_804771C4.x28;
+    arg0->rules.xE = tmd->x28;
     fn_801640B0(&arg0->rules.x20);
     arg0->rules.x0_0 = temp_r31->mode;
     if (temp_r31->mode != 1) {
@@ -2343,7 +2345,7 @@ void gm_801905F0(StartMeleeData* arg0)
     } else {
         arg0->rules.x2_4 = true;
     }
-    if (temp_r31->score_display != 0 && !arg0->rules.x0_3) {
+    if (temp_r31->score_display != 0 && !arg0->rules.x0_0) {
         arg0->rules.x3_0 = true;
     } else {
         arg0->rules.x3_0 = false;
@@ -2351,32 +2353,32 @@ void gm_801905F0(StartMeleeData* arg0)
     gm_80167A14(arg0->players);
 
     for (i = 0; i < 4; i++) {
-        if (i < gm_804771C4.x30) {
+        if (i < tmd->x30) {
             arg0->players[i].x20 = 1.0f;
-            arg0->players[i].xA = (u8) MIN(gm_804771C4.x4B8[i].x6, 0x78);
-            if (gm_804771C4.x4B8[i].x2 != 0) {
+            arg0->players[i].xA = (u8) MIN(tmd->x4B8[i].x6, 0x78);
+            if (tmd->x4B8[i].x2 != 0) {
                 arg0->players[i].c_kind = gm_801905F0_inline0(fn_8018F410());
                 arg0->players[i].color =
                     HSD_Randi(gm_80169238(arg0->players[i].c_kind));
             } else {
                 arg0->players[i].c_kind =
-                    gm_801905F0_inline0(gm_804771C4.x4B8[i].x1);
-                arg0->players[i].color = gm_804771C4.x4B8[i].x3;
+                    gm_801905F0_inline0(tmd->x4B8[i].x1);
+                arg0->players[i].color = tmd->x4B8[i].x3;
             }
-            arg0->players[i].slot_type = gm_804771C4.x4B8[i].x0;
+            arg0->players[i].slot_type = tmd->x4B8[i].x0;
             arg0->players[i].stocks = temp_r31->stock_count;
             arg0->players[i].sub_color = 0;
             arg0->players[i].team = 0xFF;
             arg0->players[i].xC_b0 = gm_801677F8(i, arg0->players[i].xA);
-            if (gm_804771C4.x4B8[i].x0 == 1) {
+            if (tmd->x4B8[i].x0 == 1) {
                 arg0->players[i].xC_b0 = false;
             }
             arg0->players[i].xE = 4;
-            arg0->players[i].cpu_level = gm_804771C4.x4B8[i].x4;
+            arg0->players[i].cpu_level = tmd->x4B8[i].x4;
             arg0->players[i].x12 = 0;
             if (gmMainLib_8015CC34()->handicap != 0) {
-                arg0->players[i].x18 = fn_8016419C(gm_804771C4.x4B8[i].x5);
-                arg0->players[i].x1C = fn_801641B4(gm_804771C4.x4B8[i].x5);
+                arg0->players[i].x18 = fn_8016419C(tmd->x4B8[i].x5);
+                arg0->players[i].x1C = fn_801641B4(tmd->x4B8[i].x5);
             } else {
                 arg0->players[i].x18 = arg0->players[i].x1C = 1.0F;
             }
@@ -2394,26 +2396,6 @@ void gm_801905F0(StartMeleeData* arg0)
 
     fn_8019EF08(&sp18);
 }
-
-struct Lbl804799B8_t {
-    u8 x0;
-    u8 x1;
-    u8 x2;
-    u8 x3;
-    u8 x4;
-    u8 x5;
-    u8 x6;
-    u8 x7;
-    u8 x8;
-    u8 x9;
-    u8 xA;
-    u8 xB;
-    u16 xC_counter;
-    u8 xE;
-    u8 xF;
-    u8 pad2[0x10];
-};
-static struct Lbl804799B8_t lbl_804799B8;
 
 extern u8 lbl_803D9F80[];
 extern f32 lbl_804DA6FC; // 143.0f
@@ -2993,16 +2975,16 @@ void fn_80191A54(HSD_GObj* gobj)
     HSD_MObjAnim(child->u.dobj->mobj);
 }
 
-static u8 lbl_804799B8_data[0x40];
-
 /// Updates button highlight animation based on current menu option.
+/// @note timers points into lbl_804799B8 (binary-proven: the DOL reads
+///       lbl_804799B8+0xA; there is no separate 0x40-byte array).
 void fn_80191B5C(void* gobj)
 {
     u8* timers;
     TmData* tm;
     HSD_JObj* jobj;
 
-    timers = lbl_804799B8_data;
+    timers = &lbl_804799B8.x0;
     tm = gm_8018F634();
     jobj = (HSD_JObj*) ((HSD_GObj*) gobj)->hsd_obj;
 
@@ -3429,8 +3411,8 @@ extern s32 lbl_804D665C;
 #pragma inline_depth(0)
 s32 fn_80192938(void)
 {
-    TmData* tm;
     s32 i;
+    TmData* tm;
     s32 j;
     s32 start;
     s32 a, b;
@@ -3453,23 +3435,23 @@ s32 fn_80192938(void)
     }
 
     for (i = 0; i < 0x40; i++) {
-        tm->x37[i].x4 = 0;
-        tm->x37[i].xB = (u8) i;
+        tm->x37[i].x5 = 0;
+        tm->x37[i].xD = (u8) i;
 
         if ((u8) gmMainLib_8015CC34()->handicap == 1) {
             if ((s32) gm_804771C4.match_type == 0) {
                 gmMainLib_8015CC34()->handicap = 0;
-                tm->x37[i].x1 = 9;
+                tm->x37[i].x2 = 9;
             } else {
-                tm->x37[i].x1 = 5;
+                tm->x37[i].x2 = 5;
             }
         } else {
-            tm->x37[i].x1 = 9;
+            tm->x37[i].x2 = 9;
         }
 
-        tm->x37[i].x2 = fn_8018F410();
-        tm->x37[i].x6 = HSD_Randi(
-            (s32) gm_80169238(fn_8018F6FC((enum CSSIconHud) tm->x37[i].x2)));
+        tm->x37[i].x3 = fn_8018F410();
+        tm->x37[i].x7 = HSD_Randi(
+            (s32) gm_80169238(fn_8018F6FC((enum CSSIconHud) tm->x37[i].x3)));
 
         if (i < (s32) tm->x2E) {
             ((u8*) &tm->x37[i])[-1] = 1;
@@ -3482,9 +3464,9 @@ s32 fn_80192938(void)
                 if (((s32) gm_804771C4.match_type == 0) &&
                     ((s32) tm->cpu_level == 0))
                 {
-                    tm->x37[i].x0 = HSD_Randi(9) + 1;
+                    tm->x37[i].x1 = HSD_Randi(9) + 1;
                 } else {
-                    tm->x37[i].x0 = (u8) tm->cpu_level;
+                    tm->x37[i].x1 = (u8) tm->cpu_level;
                 }
             }
         } else {
@@ -3507,9 +3489,9 @@ s32 fn_80192938(void)
         for (j = 0; j < 0x3E8; j++) {
             a = start + HSD_Randi(tm->x2E - start);
             b = start + HSD_Randi(tm->x2E - start);
-            tmp = tm->x37[a].xB;
-            tm->x37[a].xB = tm->x37[b].xB;
-            tm->x37[b].xB = tmp;
+            tmp = tm->x37[a].xD;
+            tm->x37[a].xD = tm->x37[b].xD;
+            tm->x37[b].xD = tmp;
         }
     }
 
@@ -3784,16 +3766,16 @@ void fn_801935B8(void)
 
 void fn_801937C4(s32* arg0, u32 arg1, u32 arg2)
 {
-    u8* table;
+    u8* table = lbl_803D9F80;
     s32 idx;
     s32* ptr;
     s32 val;
     u8* entry;
 
+    table = (u8*) table + 0;
     if (arg1 & 0x40001) {
         lbAudioAx_80024030(2);
         lbl_804799B8.x7 = 5;
-        table = lbl_803D9F80;
         idx = arg0[0];
         entry = table + (idx << 1) + (gm_804771C4.match_type != 0);
         ptr = arg0 + idx;
@@ -3806,7 +3788,6 @@ void fn_801937C4(s32* arg0, u32 arg1, u32 arg2)
     } else if (arg1 & 0x80002) {
         lbAudioAx_80024030(2);
         lbl_804799B8.x8 = 5;
-        table = lbl_803D9F80;
         idx = arg0[0];
         entry = table + (idx << 1) + (gm_804771C4.match_type != 0);
         ptr = arg0 + idx;
@@ -3833,7 +3814,6 @@ void fn_801937C4(s32* arg0, u32 arg1, u32 arg2)
         s32* dp;
 
         lbAudioAx_80024030(1);
-        table = lbl_803D9F80;
         idx = arg0[0];
         arg0[0] = idx + 1;
         idx = arg0[0];
@@ -4398,16 +4378,16 @@ end:
 /// @todo Currently 87.58% match - permuter couldn't improve
 void fn_801949B4(s32* arg0, u32 arg1, u32 arg2)
 {
-    u8* table;
+    u8* table = lbl_803D9F80;
     s32 idx;
     s32* ptr;
     s32 val;
     u8* entry;
 
+    table = (u8*) table + 0;
     if (arg1 & 0x40001) {
         lbAudioAx_80024030(2);
         lbl_804799B8.x7 = 5;
-        table = lbl_803D9F80;
 
         idx = *arg0;
         ptr = arg0 + idx;
@@ -4422,7 +4402,6 @@ void fn_801949B4(s32* arg0, u32 arg1, u32 arg2)
     } else if (arg1 & 0x80002) {
         lbAudioAx_80024030(2);
         lbl_804799B8.x8 = 5;
-        table = lbl_803D9F80;
 
         idx = *arg0;
         ptr = arg0 + idx;
@@ -5331,51 +5310,52 @@ void fn_801965C4(void)
 /// Randomly assigns bracket positions for tournament seeding.
 void fn_80196684(s32 bracket_idx)
 {
-    s32 rand_val = HSD_Randi(lbl_80473AB8[bracket_idx].x51 +
-                             lbl_80473AB8[bracket_idx].x7D +
-                             lbl_80473AB8[bracket_idx].xA9);
+    BracketEntry* entries = (BracketEntry*) ((u8*) lbl_80473AB8 + 0);
+    s32 rand_val = HSD_Randi(entries[bracket_idx].x51 +
+                             entries[bracket_idx].x7D +
+                             entries[bracket_idx].xA9);
 
-    if (rand_val < (s32) lbl_80473AB8[bracket_idx].x51) {
-        lbl_80473AB8[bracket_idx].x4C = 0;
-        if (HSD_Randi(lbl_80473AB8[bracket_idx].x7D +
-                      lbl_80473AB8[bracket_idx].xA9) <
-            (s32) lbl_80473AB8[bracket_idx].x7D)
+    if (rand_val < (s32) entries[bracket_idx].x51) {
+        entries[bracket_idx].x4C = 0;
+        if (HSD_Randi(entries[bracket_idx].x7D +
+                      entries[bracket_idx].xA9) <
+            (s32) entries[bracket_idx].x7D)
         {
-            lbl_80473AB8[bracket_idx].x78 = 1;
-            lbl_80473AB8[bracket_idx].xA4 = 2;
+            entries[bracket_idx].x78 = 1;
+            entries[bracket_idx].xA4 = 2;
             return;
         }
-        lbl_80473AB8[bracket_idx].x78 = 2;
-        lbl_80473AB8[bracket_idx].xA4 = 1;
+        entries[bracket_idx].x78 = 2;
+        entries[bracket_idx].xA4 = 1;
         return;
     }
     if (rand_val <
-        (s32) (lbl_80473AB8[bracket_idx].x51 + lbl_80473AB8[bracket_idx].x7D))
+        (s32) (entries[bracket_idx].x51 + entries[bracket_idx].x7D))
     {
-        lbl_80473AB8[bracket_idx].x78 = 0;
-        if (HSD_Randi(lbl_80473AB8[bracket_idx].x51 +
-                      lbl_80473AB8[bracket_idx].xA9) <
-            (s32) lbl_80473AB8[bracket_idx].x51)
+        entries[bracket_idx].x78 = 0;
+        if (HSD_Randi(entries[bracket_idx].x51 +
+                      entries[bracket_idx].xA9) <
+            (s32) entries[bracket_idx].x51)
         {
-            lbl_80473AB8[bracket_idx].x4C = 1;
-            lbl_80473AB8[bracket_idx].xA4 = 2;
+            entries[bracket_idx].x4C = 1;
+            entries[bracket_idx].xA4 = 2;
             return;
         }
-        lbl_80473AB8[bracket_idx].x4C = 2;
-        lbl_80473AB8[bracket_idx].xA4 = 1;
+        entries[bracket_idx].x4C = 2;
+        entries[bracket_idx].xA4 = 1;
         return;
     }
-    lbl_80473AB8[bracket_idx].xA4 = 0;
-    if (HSD_Randi(lbl_80473AB8[bracket_idx].x51 +
-                  lbl_80473AB8[bracket_idx].x7D) <
-        (s32) lbl_80473AB8[bracket_idx].x51)
+    entries[bracket_idx].xA4 = 0;
+    if (HSD_Randi(entries[bracket_idx].x51 +
+                  entries[bracket_idx].x7D) <
+        (s32) entries[bracket_idx].x51)
     {
-        lbl_80473AB8[bracket_idx].x4C = 1;
-        lbl_80473AB8[bracket_idx].x78 = 2;
+        entries[bracket_idx].x4C = 1;
+        entries[bracket_idx].x78 = 2;
         return;
     }
-    lbl_80473AB8[bracket_idx].x4C = 2;
-    lbl_80473AB8[bracket_idx].x78 = 1;
+    entries[bracket_idx].x4C = 2;
+    entries[bracket_idx].x78 = 1;
 }
 
 void fn_801967E0(s32 arg0)
