@@ -2138,12 +2138,19 @@ melee/gm/gm_1884.c:
 	.sdata2     start:0x804DA608 end:0x804DA650
 
 melee/gm/gm_18A5.c:
-	.text       start:0x8018A514 end:0x8019B8C4
-	.data       start:0x803D9D20 end:0x803DA2E0
-	.bss        start:0x80473AB8 end:0x80479A58
-	.sdata      start:0x804D4158 end:0x804D41B8
+	.text       start:0x8018A514 end:0x80196510
+	.data       start:0x803D9D20 end:0x803DA0D0
+	.bss        start:0x80473AB8 end:0x804799D8
+	.sdata      start:0x804D4158 end:0x804D4190
 	.sbss       start:0x804D6630 end:0x804D6660
-	.sdata2     start:0x804DA650 end:0x804DA878
+	.sdata2     start:0x804DA650 end:0x804DA7E0
+
+melee/gm/gm_1965.c:
+	.text       start:0x80196510 end:0x8019B8C4
+	.data       start:0x803DA0D0 end:0x803DA2E0
+	.bss        start:0x804799D8 end:0x80479A58
+	.sdata      start:0x804D4190 end:0x804D41B8
+	.sdata2     start:0x804DA7E0 end:0x804DA878
 
 melee/gm/gmtou.c:
 	.text       start:0x8019B8C4 end:0x8019EFC4

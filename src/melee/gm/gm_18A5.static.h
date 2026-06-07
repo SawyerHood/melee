@@ -3,8 +3,7 @@
 #include <melee/gm/types.h>
 #include <melee/sc/types.h>
 
-static s32 lbl_804D4190 = 0xFFFFFFFF;
-static s32 lbl_804D4194 = -1;
+// lbl_804D4190 / lbl_804D4194 moved to gm_1965.c (TU split).
 
 HSD_Archive* lbl_804D6638;
 HSD_Archive* lbl_804D6640;
@@ -225,13 +224,4 @@ struct {
     int x0, x4, x8;
 } lbl_803D9F0C = { -1, -1, -1 };
 
-struct lbl_803DA0D0_t {
-    /* 0x00 */ u8 icon_model_map[0x18];
-    /* 0x18 */ u8 pad_0x18[0x1E - 0x18];
-    /* 0x1E */ u8 rank_thresholds[32][6];
-    /* 0xDE */ u8 pad_0xDE[0xE0 - 0xDE];
-    /* 0xE0 */ f32 bounce_y[41];
-}; /* size = 0x184 */
-STATIC_ASSERT(sizeof(struct lbl_803DA0D0_t) == 0x184);
-
-extern struct lbl_803DA0D0_t lbl_803DA0D0;
+// struct lbl_803DA0D0_t + extern lbl_803DA0D0 moved to gm_1965.c (TU split).
