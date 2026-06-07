@@ -15,6 +15,9 @@
 #define NUM_UNLOCKABLE_CHARACTERS 11
 #define NUM_UNLOCKABLE_STAGES 11
 
+/* NB: gm_1693.c (the symbol's original TU) carries its own copy of this
+ * struct def; gm_1601.c still needs the complete type (field access through
+ * fn_80169364()'s pointer in gm_801674C4). Keep the two defs in sync. */
 struct lbl_8046B488_t {
     /* 0x000 */ s8 x0;
     /* 0x001 */ s8 x1;
@@ -98,8 +101,7 @@ struct ResultAnimEntry {
 /* 166A8C */ static f32 fn_80166A8C(Vec3*, Vec3*);
 /* 166CBC */ static u8 fn_80166CBC(struct fn_80166CBC_arg0_t* arg0,
                                    ssize_t index);
-/* 1693A8 */ static s32 fn_801693A8(void);
-/* 16A1E4 */ static s32 fn_8016A1E4(void);
+/* fn_801693A8 / fn_8016A1E4 moved to gm_1693.c (their original TU) */
 
 /* 3B75F8 */ static const float lbl_803B75F8[] = {
     0.95, 0.8, 1, 0.65, 1,    1,   1, 1, 1,   1, 1, 1, 1, 1, 0.67, 1, 1,
@@ -268,7 +270,7 @@ static const s16 lbl_803B7A00[] = {
     0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0x0000, 0x0000,
 };
 /* 46B378 */ static struct lbl_8046B378_t lbl_8046B378;
-/* 46B488 */ static struct lbl_8046B488_t lbl_8046B488;
+/* lbl_8046B488 moved to gm_1693.c (its original TU) */
 /* lbl_8046B668 moved to gm_16A9.c (its original TU) */
 /* 4D6598 */ static s8 lbl_804D6598;
 /* 4D659A */ static u16 lbl_804D659A;
