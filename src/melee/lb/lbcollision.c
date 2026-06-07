@@ -38,23 +38,6 @@ static GXColor lbColl_804D36C8 = { 0, 0x80, 0x80, 0x80 };
 static GXColor lbColl_804D36D4 = { 0, 0x80, 0xFF, 0x80 };
 static GXColor lbColl_804D36D8 = { 0, 0x40, 0x80, 0x80 };
 
-/// .sdata2
-float const lbColl_804D79F0 = 1e-5;
-float const lbColl_804D79F4 = -1e-5;
-float const lbColl_804D79F8 = 0;
-f64 const lbColl_804D7A00 = 1;
-float const lbColl_804D7A08 = 1;
-f64 const lbColl_804D7A10 = 0;
-f64 const lbColl_804D7A18 = 0.5;
-f64 const lbColl_804D7A20 = 3.0;
-float const lbColl_804D7A28 = 2;
-float const lbColl_804D7A2C = 4;
-float const lbColl_804D7A30 = M_PI;
-float const lbColl_804D7A34 = 20;
-float const lbColl_804D7A38 = 3;
-float const lbColl_804D7A3C = 0.5;
-float const lbColl_804D7A40 = 5;
-
 /// .data
 int lbColl_803B9880[] = {
     0x00083D60, 0x00083D60, 0x00083D60, 0x0000005B, 0x0000005A, 0x00000059,
@@ -262,10 +245,10 @@ float lbColl_80005EBC(const Vec3* arg0, const Vec3* arg1, const Vec3* arg2,
     d1_dot_d2 = d1.x * d2.x + d1.y * d2.y + d1.z * d2.z;
 
     scale = -d1_dot_d2 / d1_dot_d1;
-    if (scale > lbColl_804D7A00) {
-        scale = lbColl_804D7A08;
-    } else if (scale < lbColl_804D7A10) {
-        scale = lbColl_804D79F8;
+    if (scale > 1.0) {
+        scale = 1.0f;
+    } else if (scale < 0.0) {
+        scale = 0.0f;
     }
 
     x = d1.x * scale + sp50.x - arg2->x;
@@ -301,10 +284,10 @@ float lbColl_80005FC0(Vec3* arg0, Vec3* arg1, Vec3* arg2, float* arg3)
     d1_dot_d2 = d1.x * d2.x + d1.y * d2.y;
 
     scale = -d1_dot_d2 / d1_dot_d1;
-    if (scale > lbColl_804D7A00) {
-        scale = lbColl_804D7A08;
-    } else if (scale < lbColl_804D7A10) {
-        scale = lbColl_804D79F8;
+    if (scale > 1.0) {
+        scale = 1.0f;
+    } else if (scale < 0.0) {
+        scale = 0.0f;
     }
 
     x = d1.x * scale + sp50.x - arg2->x;
@@ -488,23 +471,23 @@ int lbColl_80006094(Vec3* arg0, Vec3* arg1, Vec3* arg2, Vec3* arg3, Vec3* arg4,
                             float temp_f1_2 = -temp_f11 / temp_f3_5;
                             arg4_scl = temp_f1_2;
 
-                            if (temp_f1_2 > lbColl_804D7A00) {
-                                arg4_scl = lbColl_804D7A08;
-                            } else if (arg4_scl < lbColl_804D7A10) {
-                                arg4_scl = lbColl_804D79F8;
+                            if (temp_f1_2 > 1.0) {
+                                arg4_scl = 1.0f;
+                            } else if (arg4_scl < 0.0) {
+                                arg4_scl = 0.0f;
                             }
                         }
                     }
                 } else {
                     if (approximatelyZero(temp_f10)) {
                         float temp_f9 =
-                            (lbColl_804D7A18 * temp_f22 + arg5_offset.y);
+                            (0.5 * temp_f22 + arg5_offset.y);
                         float temp_f7_2 =
-                            (lbColl_804D7A18 * temp_f23 + arg5_offset.x);
+                            (0.5 * temp_f23 + arg5_offset.x);
                         float temp_f10_2 = arg4_offset.y - temp_f9;
                         float temp_f11_2 = temp_f1 - temp_f9;
                         float temp_f8_2 =
-                            lbColl_804D7A18 * arg5_offset_base + arg5_offset.z;
+                            0.5 * arg5_offset_base + arg5_offset.z;
                         float temp_f3_6 = arg4_offset.x - temp_f7_2;
                         float temp_f9_2 = arg1_x - temp_f7_2;
                         float arg4_offset_z = arg4_offset.z - temp_f8_2;
@@ -538,10 +521,10 @@ int lbColl_80006094(Vec3* arg0, Vec3* arg1, Vec3* arg2, Vec3* arg3, Vec3* arg4,
                                 var_f2 = -dot / ((temp_f9_3 * temp_f9_3) +
                                                  ((temp_f7_4 * temp_f7_4) +
                                                   (temp_f8_3 * temp_f8_3)));
-                                if (var_f2 > lbColl_804D7A00) {
-                                    var_f2 = lbColl_804D7A08;
-                                } else if (var_f2 < lbColl_804D7A10) {
-                                    var_f2 = lbColl_804D79F8;
+                                if (var_f2 > 1.0) {
+                                    var_f2 = 1.0f;
+                                } else if (var_f2 < 0.0) {
+                                    var_f2 = 0.0f;
                                 }
                                 arg5_scl = var_f2;
                             }
@@ -574,12 +557,12 @@ int lbColl_80006094(Vec3* arg0, Vec3* arg1, Vec3* arg2, Vec3* arg3, Vec3* arg4,
                                                  ((temp_f9_4 * temp_f9_4) +
                                                   (temp_f10_3 * temp_f10_3)));
 
-                                            if (var_f2_2 > lbColl_804D7A00) {
-                                                var_f2_2 = lbColl_804D7A08;
+                                            if (var_f2_2 > 1.0) {
+                                                var_f2_2 = 1.0f;
                                             } else if (var_f2_2 <
-                                                       lbColl_804D7A10)
+                                                       0.0)
                                             {
-                                                var_f2_2 = lbColl_804D79F8;
+                                                var_f2_2 = 0.0f;
                                             }
 
                                             arg5_scl = var_f2_2;
@@ -596,34 +579,34 @@ int lbColl_80006094(Vec3* arg0, Vec3* arg1, Vec3* arg2, Vec3* arg3, Vec3* arg4,
                             ((temp_f3_5 * temp_f12) - (temp_f8 * temp_f11)) /
                             temp_f10;
                         arg4_scl = temp_f1_3;
-                        if (temp_f1_3 > lbColl_804D7A00 ||
-                            arg4_scl < lbColl_804D7A10 ||
-                            arg5_scl > lbColl_804D7A00 ||
-                            arg5_scl < lbColl_804D7A10)
+                        if (temp_f1_3 > 1.0 ||
+                            arg4_scl < 0.0 ||
+                            arg5_scl > 1.0 ||
+                            arg5_scl < 0.0)
                         {
                             float var_f18;
                             float var_f19;
                             float var_f1;
                             float spA4;
 
-                            if (arg4_scl < lbColl_804D7A10) {
-                                var_f19 = lbColl_804D79F8;
+                            if (arg4_scl < 0.0) {
+                                var_f19 = 0.0f;
                                 var_f18 =
                                     lbColl_80005EBC(arg2, arg3, arg0, &spA4);
                             } else {
-                                var_f19 = lbColl_804D7A08;
+                                var_f19 = 1.0f;
                                 var_f18 =
                                     lbColl_80005EBC(arg2, arg3, arg1, &spA4);
                             }
 
                             {
                                 float spA0;
-                                if (arg5_scl < lbColl_804D7A10) {
-                                    arg5_scl = lbColl_804D79F8;
+                                if (arg5_scl < 0.0) {
+                                    arg5_scl = 0.0f;
                                     var_f1 = lbColl_80005EBC(arg0, arg1, arg2,
                                                              &spA0);
                                 } else {
-                                    arg5_scl = lbColl_804D7A08;
+                                    arg5_scl = 1.0f;
                                     var_f1 = lbColl_80005EBC(arg0, arg1, arg3,
                                                              &spA0);
                                 }
@@ -778,17 +761,17 @@ bool lbColl_800067F8(Vec3* a, Vec3* b, Vec3* c, Vec3* d, Vec3* e, Vec3* f,
                                     scl_f = 0.0f;
                                     temp_f1_2 = -dot2_diff_ba_ac / sqdist2_ba;
                                     scl_e = temp_f1_2;
-                                    if (temp_f1_2 > lbColl_804D7A00) {
-                                        scl_e = lbColl_804D7A08;
-                                    } else if (scl_e < lbColl_804D7A10) {
-                                        scl_e = lbColl_804D79F8;
+                                    if (temp_f1_2 > 1.0) {
+                                        scl_e = 1.0f;
+                                    } else if (scl_e < 0.0) {
+                                        scl_e = 0.0f;
                                     }
                                 }
                             } else if (approximatelyZero(determinant)) {
                                 float temp_f7_2 =
-                                    lbColl_804D7A18 * diff_dc_y + c1.y;
+                                    0.5 * diff_dc_y + c1.y;
                                 float temp_f5_2 =
-                                    lbColl_804D7A18 * diff_dc_x + c1.x;
+                                    0.5 * diff_dc_x + c1.x;
                                 float temp_f6_2 = a1.y - temp_f7_2;
                                 float temp_f7_3 = b_y - temp_f7_2;
                                 {
@@ -827,12 +810,12 @@ bool lbColl_800067F8(Vec3* a, Vec3* b, Vec3* c, Vec3* d, Vec3* e, Vec3* f,
                                                        temp_f8_2)));
                                             }
                                         }
-                                        if (temp_scl_f > lbColl_804D7A00) {
-                                            temp_scl_f = lbColl_804D7A08;
+                                        if (temp_scl_f > 1.0) {
+                                            temp_scl_f = 1.0f;
                                         } else if (temp_scl_f <
-                                                   lbColl_804D7A10)
+                                                   0.0)
                                         {
-                                            temp_scl_f = lbColl_804D79F8;
+                                            temp_scl_f = 0.0f;
                                         }
                                         scl_f = temp_scl_f;
                                     } else {
@@ -871,16 +854,16 @@ bool lbColl_800067F8(Vec3* a, Vec3* b, Vec3* c, Vec3* d, Vec3* e, Vec3* f,
                                                               (diff_dc_y1 *
                                                                diff_dc_y1)));
                                                         if (var_f2_2 >
-                                                            lbColl_804D7A00)
+                                                            1.0)
                                                         {
                                                             var_f2_2 =
-                                                                lbColl_804D7A08;
+                                                                1.0f;
                                                         } else if (
                                                             var_f2_2 <
-                                                            lbColl_804D7A10)
+                                                            0.0)
                                                         {
                                                             var_f2_2 =
-                                                                lbColl_804D79F8;
+                                                                0.0f;
                                                         }
                                                         scl_f = var_f2_2;
                                                     }
@@ -898,21 +881,21 @@ bool lbColl_800067F8(Vec3* a, Vec3* b, Vec3* c, Vec3* d, Vec3* e, Vec3* f,
                                          (dot2_diff_ba_dc * dot2_diff_ba_ac)) /
                                         determinant;
                                 scl_e = temp_f1_3;
-                                if ((temp_f1_3 > lbColl_804D7A00) ||
-                                    (scl_e < lbColl_804D7A10) ||
-                                    (scl_f > lbColl_804D7A00) ||
-                                    (scl_f < lbColl_804D7A10))
+                                if ((temp_f1_3 > 1.0) ||
+                                    (scl_e < 0.0) ||
+                                    (scl_f > 1.0) ||
+                                    (scl_f < 0.0))
                                 {
                                     float out0;
                                     float temp_scl_e;
                                     float result0;
                                     {
-                                        if (scl_e < lbColl_804D7A10) {
-                                            temp_scl_e = lbColl_804D79F8;
+                                        if (scl_e < 0.0) {
+                                            temp_scl_e = 0.0f;
                                             result0 = lbColl_80005FC0(c, d, a,
                                                                       &out0);
                                         } else {
-                                            temp_scl_e = lbColl_804D7A08;
+                                            temp_scl_e = 1.0f;
                                             result0 = lbColl_80005FC0(c, d, b,
                                                                       &out0);
                                         }
@@ -920,12 +903,12 @@ bool lbColl_800067F8(Vec3* a, Vec3* b, Vec3* c, Vec3* d, Vec3* e, Vec3* f,
                                     {
                                         float result1;
                                         float out1;
-                                        if (scl_f < lbColl_804D7A10) {
-                                            scl_f = lbColl_804D79F8;
+                                        if (scl_f < 0.0) {
+                                            scl_f = 0.0f;
                                             result1 = lbColl_80005FC0(a, b, c,
                                                                       &out1);
                                         } else {
-                                            scl_f = lbColl_804D7A08;
+                                            scl_f = 1.0f;
                                             result1 = lbColl_80005FC0(a, b, d,
                                                                       &out1);
                                         }
@@ -1174,7 +1157,7 @@ block_39:
      * several `hit_param = 1.0` / `hurt_param = 1.0` branches below. The
      * variable name is a borrow from the unused-after-broadphase-rejection
      * slot. */
-    hit_start_min_z = lbColl_804D7A08;
+    hit_start_min_z = 1.0f;
     hurt_len_sq = (hurt_delta_x * hurt_delta_x) + hurt_len_sq;
     segment_dot = (hit_delta.z * hurt_delta_z) + segment_dot;
     hurt_len_sq = (hurt_delta_z * hurt_delta_z) + hurt_len_sq;
@@ -1189,33 +1172,33 @@ block_39:
     hit_start_dot = (hit_delta.z * start_delta_z) + hit_start_dot;
     hurt_start_dot = (hurt_delta_z * start_delta_z) + hurt_start_dot;
     closest_denom = (hit_len_sq * hurt_len_sq) - (segment_dot * segment_dot);
-    if ((hurt_len_sq < lbColl_804D79F0) && (hurt_len_sq > lbColl_804D79F4)) {
+    if ((hurt_len_sq < 1e-5f) && (hurt_len_sq > -1e-5f)) {
         is_hurt_segment_degenerate = 1;
     } else {
         is_hurt_segment_degenerate = 0;
     }
     if (is_hurt_segment_degenerate != 0) {
-        if ((hit_len_sq < lbColl_804D79F0) && (hit_len_sq > lbColl_804D79F4)) {
+        if ((hit_len_sq < 1e-5f) && (hit_len_sq > -1e-5f)) {
             is_hit_segment_degenerate = 1;
         } else {
             is_hit_segment_degenerate = 0;
         }
         if (is_hit_segment_degenerate != 0) {
-            hit_param = lbColl_804D79F8;
+            hit_param = 0.0f;
             hurt_param = hit_param;
         } else {
-            hurt_param = lbColl_804D79F8;
+            hurt_param = 0.0f;
             projected_hit_param = -hit_start_dot / hit_len_sq;
             hit_param = projected_hit_param;
-            if (projected_hit_param > lbColl_804D7A00) {
+            if (projected_hit_param > 1.0) {
                 hit_param = hit_start_min_z;
-            } else if (hit_param < lbColl_804D7A10) {
+            } else if (hit_param < 0.0) {
                 hit_param = hurt_param;
             }
         }
     } else {
-        if ((closest_denom < lbColl_804D79F0) &&
-            (closest_denom > lbColl_804D79F4))
+        if ((closest_denom < 1e-5f) &&
+            (closest_denom > -1e-5f))
         {
             is_parallel = 1;
         } else {
@@ -1224,12 +1207,12 @@ block_39:
         if (is_parallel != 0) {
             // For parallel axes, project the hit endpoint nearer the hurt
             // midpoint.
-            hurt_mid_y = (float) ((lbColl_804D7A18 * (f64) hurt_delta_y) +
+            hurt_mid_y = (float) ((0.5 * (f64) hurt_delta_y) +
                                   (f64) hurt_start_copy.y);
-            hurt_mid_x = (float) ((lbColl_804D7A18 * (f64) hurt_delta_x) +
+            hurt_mid_x = (float) ((0.5 * (f64) hurt_delta_x) +
                                   (f64) hurt_start_copy.x);
             hit_start_mid_y = hit_start_copy.y - hurt_mid_y;
-            hurt_mid_z = (float) ((lbColl_804D7A18 * (f64) hurt_delta_z) +
+            hurt_mid_z = (float) ((0.5 * (f64) hurt_delta_z) +
                                   (f64) hurt_start_copy.z);
             hit_end_mid_y = hit_end->y - hurt_mid_y;
             hit_start_mid_x = hit_start_copy.x - hurt_mid_x;
@@ -1247,7 +1230,7 @@ block_39:
                 Vec3 d1;
                 Vec3 c3;
                 c3 = *hurt_start;
-                hit_param = lbColl_804D79F8;
+                hit_param = 0.0f;
                 d1.x = hurt_end_x - hurt_start->x;
                 d1.y = hurt_end_y - hurt_start->y;
                 d1.z = hurt_end_z - hurt_start->z;
@@ -1262,9 +1245,9 @@ block_39:
                         -dot /
                         ((d1.z * d1.z) + (hit_end_mid_x + (d1.y * d1.y)));
                 }
-                if (hurt_param_from_hit_start > lbColl_804D7A00) {
+                if (hurt_param_from_hit_start > 1.0) {
                     hurt_param_from_hit_start = hit_start_min_z;
-                } else if (hurt_param_from_hit_start < lbColl_804D7A10) {
+                } else if (hurt_param_from_hit_start < 0.0) {
                     hurt_param_from_hit_start = hit_param;
                 }
                 hurt_param = hurt_param_from_hit_start;
@@ -1287,10 +1270,10 @@ block_39:
                         -dot /
                         ((d1.z * d1.z) + ((d1.x * d1.x) + (d1.y * d1.y)));
                 }
-                if (hurt_param_from_hit_end > lbColl_804D7A00) {
+                if (hurt_param_from_hit_end > 1.0) {
                     hurt_param_from_hit_end = hit_param;
-                } else if (hurt_param_from_hit_end < lbColl_804D7A10) {
-                    hurt_param_from_hit_end = lbColl_804D79F8;
+                } else if (hurt_param_from_hit_end < 0.0) {
+                    hurt_param_from_hit_end = 0.0f;
                 }
                 hurt_param = hurt_param_from_hit_end;
             }
@@ -1302,10 +1285,10 @@ block_39:
             hurt_param = ((hit_len_sq * hurt_start_dot) -
                           (segment_dot * hit_start_dot)) /
                          closest_denom;
-            if ((hit_param_candidate > lbColl_804D7A00) ||
-                (hit_param < lbColl_804D7A10) ||
-                (hurt_param > lbColl_804D7A00) ||
-                (hurt_param < lbColl_804D7A10))
+            if ((hit_param_candidate > 1.0) ||
+                (hit_param < 0.0) ||
+                (hurt_param > 1.0) ||
+                (hurt_param < 0.0))
             {
                 float hit_endpoint_dist_sq;
                 float hit_endpoint_param;
@@ -1314,8 +1297,8 @@ block_39:
 
                 // If the unconstrained solution leaves either segment, compare
                 // the nearest endpoint projection from each axis.
-                if (hit_param < lbColl_804D7A10) {
-                    hit_endpoint_param = lbColl_804D79F8;
+                if (hit_param < 0.0) {
+                    hit_endpoint_param = 0.0f;
                     hit_endpoint_dist_sq =
                         lbColl_80005EBC(hurt_start, hurt_end, hit_start,
                                         &candidate_hurt_param);
@@ -1324,8 +1307,8 @@ block_39:
                     hit_endpoint_dist_sq = lbColl_80005EBC(
                         hurt_start, hurt_end, hit_end, &candidate_hurt_param);
                 }
-                if (hurt_param < lbColl_804D7A10) {
-                    hurt_endpoint_param = lbColl_804D79F8;
+                if (hurt_param < 0.0) {
+                    hurt_endpoint_param = 0.0f;
                     hurt_endpoint_dist_sq = lbColl_80005EBC(
                         hit_start, hit_end, hurt_start, &candidate_hit_param);
                 } else {
@@ -1355,29 +1338,29 @@ block_39:
     closest_dist_sq = (closest_delta_z * closest_delta_z) +
                       ((closest_delta_x * closest_delta_x) +
                        (closest_delta_y * closest_delta_y));
-    if (closest_dist_sq > lbColl_804D79F8) {
+    if (closest_dist_sq > 0.0f) {
         volatile float sp38;
 
         closest_rsqrt_estimate = __frsqrte(closest_dist_sq);
         closest_rsqrt_step1 =
-            lbColl_804D7A18 * closest_rsqrt_estimate *
+            0.5 * closest_rsqrt_estimate *
             -(((f64) closest_dist_sq *
                (closest_rsqrt_estimate * closest_rsqrt_estimate)) -
-              lbColl_804D7A20);
-        closest_rsqrt_step2 = lbColl_804D7A18 * closest_rsqrt_step1 *
+              3.0);
+        closest_rsqrt_step2 = 0.5 * closest_rsqrt_step1 *
                               -(((f64) closest_dist_sq *
                                  (closest_rsqrt_step1 * closest_rsqrt_step1)) -
-                                lbColl_804D7A20);
+                                3.0);
         sp38 = (float) ((f64) closest_dist_sq *
-                        (lbColl_804D7A18 * closest_rsqrt_step2 *
+                        (0.5 * closest_rsqrt_step2 *
                          -(((f64) closest_dist_sq *
                             (closest_rsqrt_step2 * closest_rsqrt_step2)) -
-                           lbColl_804D7A20)));
+                           3.0)));
         closest_dist = sp38;
     } else {
         closest_dist = closest_dist_sq;
     }
-    if ((closest_dist < lbColl_804D79F0) && (closest_dist > lbColl_804D79F4)) {
+    if ((closest_dist < 1e-5f) && (closest_dist > -1e-5f)) {
         is_zero_distance = 1;
     } else {
         is_zero_distance = 0;
@@ -1398,23 +1381,23 @@ block_39:
     local_dist_sq =
         (local_delta_z * local_delta_z) +
         ((local_delta_x * local_delta_x) + (local_delta_y * local_delta_y));
-    if (local_dist_sq > lbColl_804D79F8) {
+    if (local_dist_sq > 0.0f) {
         volatile float sp34;
 
         local_rsqrt_estimate = __frsqrte(local_dist_sq);
-        local_rsqrt_step1 = lbColl_804D7A18 * local_rsqrt_estimate *
+        local_rsqrt_step1 = 0.5 * local_rsqrt_estimate *
                             -(((f64) local_dist_sq *
                                (local_rsqrt_estimate * local_rsqrt_estimate)) -
-                              lbColl_804D7A20);
+                              3.0);
         local_rsqrt_step2 =
-            lbColl_804D7A18 * local_rsqrt_step1 *
+            0.5 * local_rsqrt_step1 *
             -(((f64) local_dist_sq * (local_rsqrt_step1 * local_rsqrt_step1)) -
-              lbColl_804D7A20);
+              3.0);
         sp34 = (float) ((f64) local_dist_sq *
-                        (lbColl_804D7A18 * local_rsqrt_step2 *
+                        (0.5 * local_rsqrt_step2 *
                          -(((f64) local_dist_sq *
                             (local_rsqrt_step2 * local_rsqrt_step2)) -
-                           lbColl_804D7A20)));
+                           3.0)));
         local_dist = sp34;
     } else {
         local_dist = local_dist_sq;
@@ -1482,12 +1465,12 @@ void lbColl_800077A0(Vec3* a, MtxPtr arg1, Vec3* b, Vec3* c, Vec3* d, Vec3* e,
 
         offset_dist = dist + dist_offset;
 
-        dot_diff_cb = diff_cb.x * diff_cb.x + diff_cb.y * diff_cb.y +
-                      diff_cb.z * diff_cb.z;
-
         diff_ba.x = b->x - a->x;
         diff_ba.y = b->y - a->y;
         diff_ba.z = b->z - a->z;
+
+        dot_diff_cb = diff_cb.x * diff_cb.x + diff_cb.y * diff_cb.y +
+                      diff_cb.z * diff_cb.z;
 
         if (nearzero(dot_diff_cb)) {
             scl = 0.0f;
@@ -1572,7 +1555,7 @@ bool lbColl_80007BCC(HitCapsule* arg0, HitResult* shield_hit, void* arg2,
     }
     if (arg3 != 0) {
         arg0->hurt_coll_pos = shield_hit->pos;
-        arg0->coll_distance = lbColl_804D79F8;
+        arg0->coll_distance = 0.0f;
         return 1;
     }
     if (arg2 != NULL) {
@@ -1600,7 +1583,7 @@ bool lbColl_80007BCC(HitCapsule* arg0, HitResult* shield_hit, void* arg2,
                            &arg0->coll_distance,  // out_overlap
                            var_f1,                // hit_radius
                            shield_hit->size,      // hurt_radius
-                           lbColl_804D7A34 * arg5 // broadphase_scale
+                           20.0f * arg5 // broadphase_scale
     );
 }
 
@@ -1662,7 +1645,7 @@ bool lbColl_80007ECC(HitCapsule* arg0, HurtCapsule* arg1, Mtx arg2,
         return lbColl_80006E58(
             &arg0->x58, &arg0->x4C, &arg1->a_pos, &arg1->b_pos, &sp70, &sp64,
             var_r9, &arg0->hurt_coll_pos, &arg0->coll_distance, var_f1,
-            arg1->scale, lbColl_804D7A38 * hurt_scl_y);
+            arg1->scale, 3.0f * hurt_scl_y);
     }
     return 0;
 }
@@ -1710,7 +1693,7 @@ bool lbColl_8000805C(HitCapsule* arg0, HurtCapsule* arg1, Mtx arg2, s32 arg3,
         return lbColl_80006E58(&arg0->x58, &arg0->x4C, &arg1->a_pos,
                                &arg1->b_pos, &sp74, &sp68, var_r9,
                                &arg0->hurt_coll_pos, &arg0->coll_distance,
-                               var_f1, arg1->scale, lbColl_804D7A38 * arg5);
+                               var_f1, arg1->scale, 3.0f * arg5);
     }
     return 0;
 }
