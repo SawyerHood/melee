@@ -157,21 +157,25 @@ s32** gm_801BFC60(int arg0, s32 arg1, int arg2, s32 arg3, void** arg4)
 
 static u8 gm_8049E558[0x170];
 
+/// @remarks the declaration order below is load-bearing for register
+/// allocation (rotation-enum-w20): it produces the target callee-saved web
+/// map except one r27/r28 transposition (anchor vs walker chain, 20B).
+/// Do not alphabetize or regroup these declarations.
 void gm_801BFCFC(GameScene* arg0)
 {
-    s32 var_r27_2;
-    s32 var_r30;
-    u32 var_r25;
-    u32 var_r25_2;
+    u8* var_r28;
     u32 var_r28_3;
     u32* temp_r29;
     u32* temp_r29_2;
     u8* var_r26;
     u8* var_r27;
-    u8* var_r28;
     u8* var_r28_2;
     s32** temp_r3;
     void** var_r31;
+    s32 var_r27_2;
+    s32 var_r30;
+    u32 var_r25_2;
+    u32 var_r25;
 
     PAD_STACK(8);
 

@@ -2419,9 +2419,12 @@ void lbAudioAx_80027168(void)
 
 s32 fn_80027488(void)
 {
-    int* b = lbl_80433984;
-    int* a = lbl_804338A4;
+    int* a;
+    int* b;
     int i;
+
+    b = lbl_80433984;
+    a = lbl_804338A4;
 
     for (i = 0; i < 55; i++) {
         if (a[i] == 1 && b[i] == -1) {
@@ -2430,29 +2433,23 @@ s32 fn_80027488(void)
     }
 
     for (i = 0; i < 55; i++) {
-        if (a[i] == 1 && b[i] == 1) {
-            b[i] = 2;
+        if (*a == 1 && *b == 1) {
+            *b = 2;
         }
+        a++;
+        b++;
     }
 
     return 0;
 }
 
-void lbAudioAx_80027648(void)
+static inline s32 fn_80027488_scan(void)
 {
     int i;
-    s32 result;
 
-    goto first;
-
-wait:
-    HSD_SynthSFXWaitForLoadCompletion(lb_800195D0);
-
-first:
     for (i = 0; i < 55; i++) {
         if (lbl_804338A4[i] == 1 && lbl_80433984[i] == -1) {
-            result = 1;
-            goto check;
+            return 1;
         }
     }
 
@@ -2461,10 +2458,19 @@ first:
             lbl_80433984[i] = 2;
         }
     }
-    result = 0;
 
-check:
-    if (result == 1) {
+    return 0;
+}
+
+void lbAudioAx_80027648(void)
+{
+    goto first;
+
+wait:
+    HSD_SynthSFXWaitForLoadCompletion(lb_800195D0);
+
+first:
+    if (fn_80027488_scan() == 1) {
         goto wait;
     }
 }

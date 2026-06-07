@@ -340,24 +340,6 @@
    "severity": "near_miss"
   },
   {
-   "name": "MatToQuat",
-   "unit": "main/sysdolphin/baselib/quatlib",
-   "vaddr": "0x8037E708",
-   "size": 1056,
-   "fuzzy": 99.92,
-   "class": "layout",
-   "rows": {
-    "layout": 20
-   },
-   "severity": "near_miss",
-   "scratch": {
-    "pct": 70.83,
-    "id": "a9Elq",
-    "author": "r-burns",
-    "n_scratches": 1
-   }
-  },
-  {
    "name": "mpLibLoad",
    "unit": "main/melee/mp/mplib",
    "vaddr": "0x8004D288",
@@ -654,8 +636,7 @@
    "fuzzy": 99.8,
    "class": "layout",
    "rows": {
-    "layout": 18,
-    "other_arg": 5
+    "layout": 18
    },
    "severity": "near_miss",
    "scratch": {
@@ -3660,6 +3641,18 @@
    "rows": {
     "regalloc": 25,
     "gap": 2
+   },
+   "severity": "near_miss"
+  },
+  {
+   "name": "gm_801BFCFC",
+   "unit": "main/melee/gm/gm_1BFA",
+   "vaddr": "0x801BFCFC",
+   "size": 640,
+   "fuzzy": 97.84,
+   "class": "regalloc",
+   "rows": {
+    "regalloc": 57
    },
    "severity": "near_miss"
   },
@@ -6732,18 +6725,6 @@
    "severity": "near_miss"
   },
   {
-   "name": "it_8026F3D4",
-   "unit": "main/melee/it/itdrop",
-   "vaddr": "0x8026F3D4",
-   "size": 360,
-   "fuzzy": 95.56,
-   "class": "codegen",
-   "rows": {
-    "gap": 4
-   },
-   "severity": "near_miss"
-  },
-  {
    "name": "un_80307470",
    "unit": "main/melee/ty/toy",
    "vaddr": "0x80307470",
@@ -7899,20 +7880,6 @@
     "mnemonic": 35,
     "gap": 158,
     "other_arg": 14
-   },
-   "severity": "near_miss"
-  },
-  {
-   "name": "gm_801BFCFC",
-   "unit": "main/melee/gm/gm_1BFA",
-   "vaddr": "0x801BFCFC",
-   "size": 640,
-   "fuzzy": 94.19,
-   "class": "codegen",
-   "rows": {
-    "regalloc": 54,
-    "mnemonic": 3,
-    "gap": 4
    },
    "severity": "near_miss"
   },
