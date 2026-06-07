@@ -48,7 +48,7 @@
 };
 
 /* 3BCB9C */ static f32 cm_803BCB9C[5] = { 0.0f, 1.5f, 1.32f, 1.16f, 1.0f };
-/* 3BCBB0 */ static s8 cm_803BCBB0[0x20] = "couldn't get CmSubject struct.\n";
+/* 3BCBB0 */ static char cm_803BCBB0[0x20] = "couldn't get CmSubject struct.\n";
 /* 3BCBD0 */ static char cm_803BCBD0[0xB] = "camera.c";
 /* 3BCBDC */ static char cm_803BCBDC[0x1B] = "fov_u<MTXDegToRad(90.0F)";
 /* 3BCBF8 */ static char cm_803BCBF8[0x1B] = "fov_d<MTXDegToRad(90.0F)";
@@ -93,57 +93,56 @@
 /* 4D3938 */ static char cm_804D3938[0x8] = "0";
 
 /// sdata2
-/* 4D7E00 */ float const cm_804D7E00 = -3.4028235E+38f;
-/* 4D7E04 */ float const cm_804D7E04 = 1.0f;
-/* 4D7E08 */ float const cm_804D7E08 = 0.1f;     // near clip
-/* 4D7E10 */ float const cm_804D7E0C = 16384.0f; // far clip
-/* 4D7E10 */ float const cm_804D7E10 = -1.0f;
-/* 4D7E14 */ float const cm_804D7E14 = 0.0f;
-/* 4D7E18 */ double const cm_804D7E18 = 1.0f;
-/* 4D7E20 */ double const cm_804D7E20 = 4503601774854144.0f;
-/* 4D7E28 */ float const cm_804D7E28 = 0.64999998f;
-/* 4D7E2C */ float const cm_804D7E2C = 0.34999999f;
-/* 4D7E30 */ float const cm_804D7E30 = 0.5f;
-/* 4D7E34 */ float const cm_804D7E34 = -0.5f;
-/* 4D7E38 */ float const cm_804D7E38 = 3.4028235E+38f;
-/* 4D7E3C */ float const cm_804D7E3C = 40.0f;
-/* 4D7E40 */ float const cm_804D7E40 = 80.0f;
-/* 4D7E44 */ float const cm_804D7E44 = 5000.0f;
-/* 4D7E48 */ float const cm_804D7E48 = 4920.0f;
-/* 4D7E4C */ float const cm_804D7E4C = 10.0f;
-/* 4D7E50 */ float const cm_804D7E50 = 390.0f;
-/* 4D7E54 */ float const cm_804D7E54 = 99999.0f;
-/* 4D7E58 */ float const cm_804D7E58 = 0.000099999997f;
-/* 4D7E5C */ float const cm_804D7E5C = 1000.0f;
-/* 4D7E60 */ float const cm_804D7E60 = 0.017453292f; // deg2rad
-/* 4D7E64 */ float const cm_804D7E64 = 1.5707964f;   // rad2deg
-/* 4D7E68 */ float const cm_804D7E68 = 0.001f;
-/* 4D7E6C */ float const cm_804D7E6C = -0.001f;
-/* 4D7E70 */ float const cm_804D7E70 = 30.0f;
-/* 4D7E74 */ float const cm_804D7E74 = 0.85f;
-/* 4D7E78 */ double const cm_804D7E78 = 0.5f;
-/* 4D7E80 */ double const cm_804D7E80 = 3.0f;
-/* 4D7E88 */ float const cm_804D7E88 = 0.999f;
-/* 4D7E8C */ float const cm_804D7E8C = -0.999f;
-/* 4D7E90 */ float const cm_804D7E90 = 5.0f;
-/* 4D7E94 */ float const cm_804D7E94 = 20.0f;
-/* 4D7E98 */ float const cm_804D7E98 = 3.0f;
-/* 4D7EA0 */ double const cm_804D7EA0 = 0.125f;
-/* 4D7EA8 */ float const cm_804D7EA8 = 2.0f;
-/* 4D7EAC */ float const cm_804D7EAC = 2000.0f;
-/* 4D7EB0 */ float const cm_804D7EB0 = -2000.0f;
-/* 4D7EB8 */ double const cm_804D7EB8 = -1.0f;
-/* 4D7EC0 */ float const cm_804D7EC0 = 4.0f;
-/* 4D7EC8 */ f64 const cm_804D7EC8 = M_PI / 8;
-/* 4D7ED0 */ f64 const cm_804D7ED0 = M_PI / 16;
-/* 4D7ED8 */ f64 const cm_804D7ED8 = M_TAU;
-/* 4D7EE0 */ f64 const cm_804D7EE0 = M_PI;
-/* 4D7EE8 */ f64 const cm_804D7EE8 = 0.0001f;
-/* 4D7EF0 */ double const cm_804D7EF0 = 0.0f;
-/* 4D7EF8 */ float const cm_804D7EF8 = 8.5070587E+37f;
-/* 4D7EFC */ float const cm_804D7EFC = -8.5070587E+37f;
-/* 4D7F00 */ float const cm_804D7F00 = 2.1474836E+9f;
-/* 4D7F04 */ float const cm_804D7F04 = -2.1474836E+9f;
-/* 4D7F08 */ float const cm_804D7F08 = 10000.0f;
-
+/* 4D7E00 */ extern f32 const cm_804D7E00;
+/* 4D7E04 */ extern f32 const cm_804D7E04;
+/* 4D7E08 */ extern f32 const cm_804D7E08;     // near clip
+/* 4D7E10 */ extern f32 const cm_804D7E0C; // far clip
+/* 4D7E10 */ extern f32 const cm_804D7E10;
+/* 4D7E14 */ extern f32 const cm_804D7E14;
+/* 4D7E18 */ extern f64 const cm_804D7E18;
+/* 4D7E20 */ extern f64 const cm_804D7E20;
+/* 4D7E28 */ extern f32 const cm_804D7E28;
+/* 4D7E2C */ extern f32 const cm_804D7E2C;
+/* 4D7E30 */ extern f32 const cm_804D7E30;
+/* 4D7E34 */ extern f32 const cm_804D7E34;
+/* 4D7E38 */ extern f32 const cm_804D7E38;
+/* 4D7E3C */ extern f32 const cm_804D7E3C;
+/* 4D7E40 */ extern f32 const cm_804D7E40;
+/* 4D7E44 */ extern f32 const cm_804D7E44;
+/* 4D7E48 */ extern f32 const cm_804D7E48;
+/* 4D7E4C */ extern f32 const cm_804D7E4C;
+/* 4D7E50 */ extern f32 const cm_804D7E50;
+/* 4D7E54 */ extern f32 const cm_804D7E54;
+/* 4D7E58 */ extern f32 const cm_804D7E58;
+/* 4D7E5C */ extern f32 const cm_804D7E5C;
+/* 4D7E60 */ extern f32 const cm_804D7E60; // deg2rad
+/* 4D7E64 */ extern f32 const cm_804D7E64;   // rad2deg
+/* 4D7E68 */ extern f32 const cm_804D7E68;
+/* 4D7E6C */ extern f32 const cm_804D7E6C;
+/* 4D7E70 */ extern f32 const cm_804D7E70;
+/* 4D7E74 */ extern f32 const cm_804D7E74;
+/* 4D7E78 */ extern f64 const cm_804D7E78;
+/* 4D7E80 */ extern f64 const cm_804D7E80;
+/* 4D7E88 */ extern f32 const cm_804D7E88;
+/* 4D7E8C */ extern f32 const cm_804D7E8C;
+/* 4D7E90 */ extern f32 const cm_804D7E90;
+/* 4D7E94 */ extern f32 const cm_804D7E94;
+/* 4D7E98 */ extern f32 const cm_804D7E98;
+/* 4D7EA0 */ extern f64 const cm_804D7EA0;
+/* 4D7EA8 */ extern f32 const cm_804D7EA8;
+/* 4D7EAC */ extern f32 const cm_804D7EAC;
+/* 4D7EB0 */ extern f32 const cm_804D7EB0;
+/* 4D7EB8 */ extern f64 const cm_804D7EB8;
+/* 4D7EC0 */ extern f32 const cm_804D7EC0;
+/* 4D7EC8 */ extern f64 const cm_804D7EC8;
+/* 4D7ED0 */ extern f64 const cm_804D7ED0;
+/* 4D7ED8 */ extern f64 const cm_804D7ED8;
+/* 4D7EE0 */ extern f64 const cm_804D7EE0;
+/* 4D7EE8 */ extern f64 const cm_804D7EE8;
+/* 4D7EF0 */ extern f64 const cm_804D7EF0;
+/* 4D7EF8 */ extern f32 const cm_804D7EF8;
+/* 4D7EFC */ extern f32 const cm_804D7EFC;
+/* 4D7F00 */ extern f32 const cm_804D7F00;
+/* 4D7F04 */ extern f32 const cm_804D7F04;
+/* 4D7F08 */ extern f32 const cm_804D7F08;
 #endif
