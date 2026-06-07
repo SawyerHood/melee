@@ -33,7 +33,7 @@
 #include <melee/pl/player.h>
 #include <melee/sc/types.h>
 
-/// @file gm_1965.c — original translation-unit boundary restored from
+/// @file gm_1965.c -- original translation-unit boundary restored from
 /// gm_18A5.c (TU split; .text 0x80196510..0x8019B8C4).
 
 // Keep in sync with the BracketEntry definition in gm_18A5.static.h.
