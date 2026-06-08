@@ -784,7 +784,6 @@ s32 gm_801BBB64(void)
     struct EventData* ev = &gmMainLib_804D3EE0->unk_530;
     struct gm_804D6900_t** pp;
     s32 idx = gmMainLib_804D3EE0->unk_530.unk_535;
-    s8* p;
     void* cd;
     u8* inner;
     s32 var_r3;
@@ -796,34 +795,30 @@ s32 gm_801BBB64(void)
     }
     pp = &gm_804D6900[idx];
     ev->x48 = (InternalStageId) *(u16*) ((u8*) (*pp)->x8 + 6);
-    p = (*pp)->x14;
-    if (p != NULL) {
-        ev->x4C[0] = *(u8*) p;
-        ev->x50[0] = ((u8*) p)[3];
+    if ((*pp)->x14 != NULL) {
+        ev->x4C[0] = *(u8*) (*pp)->x14;
+        ev->x50[0] = ((u8*) (*pp)->x14)[3];
     } else {
         ev->x4C[0] = 0x21;
         ev->x50[0] = 0;
     }
-    p = (*pp)->x18;
-    if (p != NULL) {
-        ev->x4C[1] = *(u8*) p;
-        ev->x50[1] = ((u8*) p)[3];
+    if ((*pp)->x18 != NULL) {
+        ev->x4C[1] = *(u8*) (*pp)->x18;
+        ev->x50[1] = ((u8*) (*pp)->x18)[3];
     } else {
         ev->x4C[1] = 0x21;
         ev->x50[1] = 0;
     }
-    p = *(s8**) ((u8*) *pp + 0x1C);
-    if (p != NULL) {
-        ev->x4C[2] = *p;
-        ev->x50[2] = ((u8*) p)[3];
+    if (*(s8**) ((u8*) *pp + 0x1C) != NULL) {
+        ev->x4C[2] = **(s8**) ((u8*) *pp + 0x1C);
+        ev->x50[2] = (*(u8**) ((u8*) *pp + 0x1C))[3];
     } else {
         ev->x4C[2] = 0x21;
         ev->x50[2] = 0;
     }
-    p = *(s8**) ((u8*) *pp + 0x20);
-    if (p != NULL) {
-        ev->x4C[3] = *p;
-        ev->x50[3] = ((u8*) p)[3];
+    if (*(s8**) ((u8*) *pp + 0x20) != NULL) {
+        ev->x4C[3] = **(s8**) ((u8*) *pp + 0x20);
+        ev->x50[3] = (*(u8**) ((u8*) *pp + 0x20))[3];
     } else {
         ev->x4C[3] = 0x21;
         ev->x50[3] = 0;

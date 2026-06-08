@@ -52,19 +52,55 @@ typedef struct UnkX {
     HSD_JObj* x54_jobj[4];
 } UnkX; // HudIndex
 
+/* data-recon w32b: .sdata head = two color endpoint quads (dtk splits them
+ * 1B+3B; byte-packed defs reproduce the boundaries). */
+/* u8[3] arrays 4-align (w32b probe) -- two u8[4] quads are the packed
+ * spelling; lbl_804D57A9/AD stay dtk byte-split artifacts. */
+u8 ifStatus_804D57A8[4] = { 0xFF, 0xFF, 0xFF, 0xFF };
+u8 ifStatus_804D57AC[4] = { 0x50, 0x00, 0x00, 0xFF };
+
+/* data-recon w32b: idiom-258/299 volatile pool sequencer. Target .data head
+ * pools DmgNum/DmgMrk BEFORE their creator fn compiles, and the .sdata2
+ * stream violates first-use order both ways -- an uncalled TU-top creator is
+ * the only C-reachable arrangement (mwld deadstrips it at link). Order below
+ * == target byte order exactly. */
+static f64 ifStatus_PoolSequencer(void)
+{
+    char* volatile s0 = "DmgNum_scene_models";
+    char* volatile s1 = "DmgMrk_scene_models";
+    volatile f32 f00 = 1.0f;
+    volatile f32 f01 = 0.0f;
+    volatile f32 f02 = 2.0f;
+    volatile f64 d00 = 4503599627370496.0;
+    volatile f64 d01 = 4503601774854144.0;
+    volatile f32 f03 = 300.0f;
+    volatile f32 f04 = 100.0f;
+    volatile f32 f05 = 0.5069f;
+    volatile f32 f06 = 0.6083f;
+    volatile f32 f07 = 0.3041f;
+    volatile f32 f08 = 1.2165f;
+    volatile f32 f09 = 0.811f;
+    volatile f32 f10 = 0.1014f;
+    volatile f32 f11 = 1.5207f;
+    volatile f32 f12 = -100.0f;
+    volatile f32 f13 = 0.2028f;
+    volatile f32 f14 = 0.5f;
+    volatile f32 f15 = 0.65f;
+    volatile f32 f16 = 0.1f;
+    volatile f32 f17 = 0.25f;
+    return f00 + f01 + f02 + d00 + d01 + f03 + f04 + f05 + f06 + f07 + f08 +
+           f09 + f10 + f11 + f12 + f13 + f14 + f15 + f16 + f17 + s0[0] + s1[0];
+}
+
+/* named zero read by ifStatus_802F6EA4 (266 braced-zero array cure; the
+ * target slot is 8-aligned after the pool tail) */
+#if defined(__MWERKS__) && !defined(M2CTX)
+__declspec(section ".sdata2")
+#endif
+f32 ifStatus_804DDAA8[1] ATTRIBUTE_ALIGN(8) = { 0 };
+
 /* 2F491C */ static void ifStatus_PercentOnDeathAnimationThink(UnkX* value,
-                                                               s32, s32);
-/* 3F9628 */ Element_803F9628 ifStatus_803F9628[8] = {
-    { NULL, 0, if_802F74D0, 0x7C860U, 8, 0, { 0 }, 0, NULL, NULL, 0, 0 },
-    { NULL, 0, if_802F73C4, 0xC351U, 0, 0, { 0 }, 0, NULL, NULL, 0, 0 },
-    { NULL, 0, if_802F74D0, 0x7C85EU, 0, 0, { 0 }, 0, NULL, NULL, 0, 0 },
-    { NULL, 0, if_802F73C4, 0x7C85DU, 0, 0, { 0 }, 0, NULL, NULL, 0, 0 },
-    { NULL, 0, if_802F73C4, 0x7C857U, 10, 0, { 0 }, 0, NULL, NULL, 0, 0 },
-    { NULL, 0, if_802F74D0, 0x7C855U, 8, 0, { 0 }, 0, NULL, NULL, 0, 0 },
-    { NULL, 0, if_802F74D0, 0x9C48U, 0, 0, { 0 }, 0, NULL, NULL, 0, 0 },
-    { NULL, 0, if_802F74D0, 0x9C46U, 0, 0, { 0 }, 0, NULL, NULL, 0, 0 },
-};
-/* 3F9768 */ static char ifStatus_ScInfCntStr[] = "ScInfCnt_scene_models";
+                                                                s32, s32);
 /* 4D6D60 */ static u8 ifStatus_804D6D60;
 /* 4D6D61 */ static s8 ifStatus_804D6D61;
 
@@ -276,9 +312,6 @@ void ifStatus_802F4B84(IfDamageState* state, s32 is_stamina)
     PAD_STACK(8);
 }
 
-/* Color endpoints for damage percentage interpolation (extern from .sdata2) */
-extern u8 ifStatus_804D57A8; /* Start color (low damage) */
-extern u8 ifStatus_804D57AC; /* End color (high damage) */
 
 void ifStatus_802F4EDC(HSD_GObj* gobj)
 {
@@ -446,15 +479,15 @@ void ifStatus_802F4EDC(HSD_GObj* gobj)
                 clamped_damage = 0;
             }
             factor = 1.0F - ((f32) clamped_damage / 100.0F);
-            color.r = (s8) (factor * (f32) ((&ifStatus_804D57AC)[0] -
-                                            (&ifStatus_804D57A8)[0]) +
-                            (f32) (&ifStatus_804D57A8)[0]);
-            color.g = (s8) (factor * (f32) ((&ifStatus_804D57AC)[1] -
-                                            (&ifStatus_804D57A8)[1]) +
-                            (f32) (&ifStatus_804D57A8)[1]);
-            color.b = (s8) (factor * (f32) ((&ifStatus_804D57AC)[2] -
-                                            (&ifStatus_804D57A8)[2]) +
-                            (f32) (&ifStatus_804D57A8)[2]);
+            color.r = (s8) (factor * (f32) (ifStatus_804D57AC[0] -
+                                            ifStatus_804D57A8[0]) +
+                            (f32) ifStatus_804D57A8[0]);
+            color.g = (s8) (factor * (f32) (ifStatus_804D57AC[1] -
+                                            ifStatus_804D57A8[1]) +
+                            (f32) ifStatus_804D57A8[1]);
+            color.b = (s8) (factor * (f32) (ifStatus_804D57AC[2] -
+                                            ifStatus_804D57A8[2]) +
+                            (f32) ifStatus_804D57A8[2]);
             color.a = 255;
         } else {
             /* Normal mode: 0-300% range */
@@ -465,15 +498,15 @@ void ifStatus_802F4EDC(HSD_GObj* gobj)
                 clamped_damage = 0;
             }
             factor = (f32) clamped_damage / 300.0F;
-            color.r = (s8) (factor * (f32) ((&ifStatus_804D57AC)[0] -
-                                            (&ifStatus_804D57A8)[0]) +
-                            (f32) (&ifStatus_804D57A8)[0]);
-            color.g = (s8) (factor * (f32) ((&ifStatus_804D57AC)[1] -
-                                            (&ifStatus_804D57A8)[1]) +
-                            (f32) (&ifStatus_804D57A8)[1]);
-            color.b = (s8) (factor * (f32) ((&ifStatus_804D57AC)[2] -
-                                            (&ifStatus_804D57A8)[2]) +
-                            (f32) (&ifStatus_804D57A8)[2]);
+            color.r = (s8) (factor * (f32) (ifStatus_804D57AC[0] -
+                                            ifStatus_804D57A8[0]) +
+                            (f32) ifStatus_804D57A8[0]);
+            color.g = (s8) (factor * (f32) (ifStatus_804D57AC[1] -
+                                            ifStatus_804D57A8[1]) +
+                            (f32) ifStatus_804D57A8[1]);
+            color.b = (s8) (factor * (f32) (ifStatus_804D57AC[2] -
+                                            ifStatus_804D57A8[2]) +
+                            (f32) ifStatus_804D57A8[2]);
             color.a = 255;
         }
 
@@ -840,6 +873,18 @@ void ifStatus_802F61FC(IfDamageState* state, s32 player_idx)
     mobj->mat->diffuse.b = color.b;
 }
 
+/* 3F9628 */ Element_803F9628 ifStatus_803F9628[8] = {
+    { NULL, 0, if_802F74D0, 0x7C860U, 8, 0, { 0 }, 0, NULL, NULL, 0, 0 },
+    { NULL, 0, if_802F73C4, 0xC351U, 0, 0, { 0 }, 0, NULL, NULL, 0, 0 },
+    { NULL, 0, if_802F74D0, 0x7C85EU, 0, 0, { 0 }, 0, NULL, NULL, 0, 0 },
+    { NULL, 0, if_802F73C4, 0x7C85DU, 0, 0, { 0 }, 0, NULL, NULL, 0, 0 },
+    { NULL, 0, if_802F73C4, 0x7C857U, 10, 0, { 0 }, 0, NULL, NULL, 0, 0 },
+    { NULL, 0, if_802F74D0, 0x7C855U, 8, 0, { 0 }, 0, NULL, NULL, 0, 0 },
+    { NULL, 0, if_802F74D0, 0x9C48U, 0, 0, { 0 }, 0, NULL, NULL, 0, 0 },
+    { NULL, 0, if_802F74D0, 0x9C46U, 0, 0, { 0 }, 0, NULL, NULL, 0, 0 },
+};
+static char ifStatus_ScInfCntStr[] = "ScInfCnt_scene_models";
+
 void ifStatus_802F6508(s32 arg0)
 {
     IfDamageState* hud_player;
@@ -1192,7 +1237,7 @@ void ifStatus_802F6EA4(int arg0, int arg1, int arg2, int arg3, Event arg4,
             HSD_GObj_SetupProc(gobj, e->x8, 0);
         }
         lb_8000C0E8(jobj, 0, e->x14);
-        HSD_JObjReqAnimAll(jobj, 0.0f);
+        HSD_JObjReqAnimAll(jobj, ifStatus_804DDAA8[0]);
         HSD_JObjAnimAll(jobj);
         e->x12.x0 = 0;
         e->x12.x1 = 0;
@@ -1257,17 +1302,18 @@ void ifStatus_802F7134(void)
     DynamicModelDesc** volatile models;
     int i;
 
+    Element_803F9628* e = ifStatus_803F9628;
+
     for (i = 0; i < 8; i++) {
-        ifStatus_803F9628[i].x0 = NULL;
-        ifStatus_803F9628[i].x4 = 0;
+        e[i].x0 = NULL;
+        e[i].x4 = 0;
     }
 
     archive = ifAll_802F3690();
-    lbArchive_LoadSections(*archive, (void**) &models, ifStatus_ScInfCntStr,
-                           0);
+    lbArchive_LoadSections(*archive, (void**) &models, (char*) (e + 8), 0);
 
     for (i = 0; i < 8; i++) {
-        ifStatus_803F9628[i].x14 = models[i];
+        e[i].x14 = models[i];
     }
 }
 
@@ -1282,3 +1328,4 @@ void ifStatus_802F7220(void)
         }
     }
 }
+

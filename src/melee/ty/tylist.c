@@ -204,17 +204,23 @@ char* un_80312834(char* buf, u32 num)
     return buf;
 }
 
-extern f32 un_804DDE28;
-extern f32 un_804DDE2C;
-extern f32 un_804DDE30;
-extern f32 un_804DDE34;
-extern f32 un_804DDE38;
-extern f32 un_804DDE3C;
-extern f32 un_804DDE40;
-extern f32 un_804DDE44;
-extern f32 un_804DDE48;
-extern f32 un_804DDE4C;
-extern f32 un_804DDE50;
+/* tylist string table (data-recon w32b): target .data 0x190 = these four
+ * global defs ONLY; consumers index via base+offset (strs) or by name.
+ * Sizes/embedded NULs reproduce every dtk pad byte. */
+char un_803FE880[0x50] = "Pos : %f, %f,%f\n\0\0\0\0"
+                         "WinSize = %f, %f\n\0\0\0"
+                         "WinScale = %f, %f\n\0\0"
+                         "FontSize = %f, %f\n";
+char un_803FE8D0[] = "ToyFigureListMarkN_Top_joint";
+char un_803FE8F0[] = "tylist.c";
+char un_803FE8FC[0x114] = "*** Can't Get Public Address!(tyList Model)\n\0\0\0\0"
+                          "ToyFigurePanel_listpos01_joint\0\0"
+                          "ToyFigureListBase_Top_joint\0"
+                          "ToyFigureListBase_Top_matanim_joint\0"
+                          "ToyFigureListBaseend_Top_joint\0\0"
+                          "ToyFigureListCursor_Top_joint\0\0\0"
+                          "*** BG data aren't being loaded!\n\0\0\0"
+                          "ScMenFigure_scene_lights";
 
 extern GXColor lb_804D3760;
 extern GXColor lb_804D3764;
@@ -275,9 +281,9 @@ void un_80312904(void* arg0, s8 arg1)
         return;
     }
 
-    f30 = HSD_JObjGetTranslationX(row->jobj) - un_804DDE28;
+    f30 = HSD_JObjGetTranslationX(row->jobj) - 6.5f;
     f29 = (-row->x30 - HSD_JObjGetTranslationY(state->gobj->hsd_obj)) -
-          un_804DDE2C;
+          0.41f;
     f31 = HSD_JObjGetTranslationZ(state->gobj->hsd_obj);
 
     if (arg1 != 0x63) {
@@ -295,16 +301,16 @@ void un_80312904(void* arg0, s8 arg1)
     row->text0->pos_x = f30;
     row->text0->pos_y = f29;
     row->text0->pos_z = f31;
-    row->text0->font_size.x = un_804DDE30;
-    row->text0->font_size.y = un_804DDE34;
+    row->text0->font_size.x = 0.028f;
+    row->text0->font_size.y = 0.029f;
     row->text0->default_kerning = 1;
     HSD_SisLib_803A6368(row->text0, un_80308354(row->idx));
 
-    row->text1->pos_x = un_804DDE38 + f30;
+    row->text1->pos_x = 14.7f + f30;
     row->text1->pos_y = f29;
     row->text1->pos_z = f31;
-    row->text1->font_size.x = un_804DDE30;
-    row->text1->font_size.y = un_804DDE34;
+    row->text1->font_size.x = 0.028f;
+    row->text1->font_size.y = 0.029f;
     HSD_SisLib_803A6368(row->text1, 0x13B);
 
     digits = ((u8**) ((char*) HSD_SisLib_804D1124[0] + 0x4B8))[row->x28];
@@ -312,11 +318,11 @@ void un_80312904(void* arg0, s8 arg1)
 
     row->text2->default_alignment = 2;
     row->text2->default_kerning = 1;
-    row->text2->pos_x = un_804DDE3C + f30;
+    row->text2->pos_x = 10.5f + f30;
     row->text2->pos_y = f29;
     row->text2->pos_z = f31;
-    row->text2->font_size.x = un_804DDE40;
-    row->text2->font_size.y = un_804DDE34;
+    row->text2->font_size.x = 0.038f;
+    row->text2->font_size.y = 0.029f;
     HSD_SisLib_803A6368(row->text2, row->x28 + 0x12E);
 }
 
@@ -358,7 +364,7 @@ void un_80312BAC(TyListState* state, s8 arg1)
     if (jobj != NULL) {
         f32 y = row->x30;
         if (jobj == NULL) {
-            __assert(&un_804D5A78, 0x3B3, &un_804D5A80);
+            __assert("jobj.h", 0x3B3, "jobj");
         }
         jobj->translate.y = y;
         if (!(jobj->flags & 0x02000000)) {
@@ -366,7 +372,7 @@ void un_80312BAC(TyListState* state, s8 arg1)
                 goto done_first_dirty;
             }
             if (jobj == NULL) {
-                __assert(&un_804D5A78, 0x234, &un_804D5A80);
+                __assert("jobj.h", 0x234, "jobj");
             }
             {
                 u32 flags = jobj->flags;
@@ -393,7 +399,7 @@ done_first_dirty:
             if (jobj2 != NULL) {
                 f32 y = row->x30;
                 if (jobj2 == NULL) {
-                    __assert(&un_804D5A78, 0x3B3, &un_804D5A80);
+                    __assert("jobj.h", 0x3B3, "jobj");
                 }
                 jobj2->translate.y = y;
                 if (!(jobj2->flags & 0x02000000)) {
@@ -401,7 +407,7 @@ done_first_dirty:
                         goto done_inner_dirty;
                     }
                     if (jobj2 == NULL) {
-                        __assert(&un_804D5A78, 0x234, &un_804D5A80);
+                        __assert("jobj.h", 0x234, "jobj");
                     }
                     {
                         u32 flags = jobj2->flags;
@@ -428,11 +434,11 @@ done_first_dirty:
     while (i < 3) {
         HSD_JObj* anim_jobj = *((HSD_JObj**) ((u8*) archive + i * 4 + 0x18));
         if (i == (s8) state->x29B) {
-            HSD_JObjReqAnim(anim_jobj, un_804DDE44);
+            HSD_JObjReqAnim(anim_jobj, 1.0f);
         } else {
-            HSD_JObjReqAnim(anim_jobj, un_804DDE48);
+            HSD_JObjReqAnim(anim_jobj, 0.0f);
         }
-        HSD_AObjSetRate(anim_jobj->u.dobj->mobj->tobj->aobj, un_804DDE48);
+        HSD_AObjSetRate(anim_jobj->u.dobj->mobj->tobj->aobj, 0.0f);
         HSD_JObjAnim(anim_jobj);
         i++;
     }
@@ -448,9 +454,9 @@ void un_80312E88(TyListArg* arg, float delta)
 
     arg->x30 = arg->x30 + delta;
 
-    if (un_804DDE4C == delta) {
+    if (999.0f == delta) {
         arg->x30 = arg->x2C;
-    } else if (delta < un_804DDE48) {
+    } else if (delta < 0.0f) {
         if (arg->x30 < arg->x2C) {
             arg->x30 = arg->x2C;
         }
@@ -498,7 +504,7 @@ s32 un_8031305C(void* a, TyListState* state, s8 movedFlag)
     if (i) {
         delta = state->x2A4;
         if ((s8) state->x2A1 == 0) {
-            delta *= un_804DDE50;
+            delta *= -1.0f;
         }
         entry = state->entries;
         i = 0;
@@ -517,7 +523,7 @@ s32 un_8031305C(void* a, TyListState* state, s8 movedFlag)
             i = 0;
             entry = state->entries;
             while (i < (s8) state->entryCount) {
-                un_80312E88(entry, un_804DDE4C);
+                un_80312E88(entry, 999.0f);
                 if ((s8) state->x2A1 == 0) {
                     entry->x24 = (s8) (entry->x24 - 1);
                     if (entry->x24 < -1) {
@@ -619,9 +625,15 @@ void un_80313464(TyListArg* arg)
 
     if (un_80304924(val) != 0) {
         arg->jobjs[1] = un_80313508(((TyListState*) data)->gobj, un_803FE8D0,
-                                    un_804DDE60, arg->x30, un_804DDE48);
+                                    -8.4f, arg->x30, 0.0f);
     }
 }
+
+/* NOTE (data-recon w32b, idiom 92): the != compares below need the named
+ * extern read -- literal 0.0f canonicalizes const-first in fcmpu and breaks
+ * the matched operand order. The pool 0.0 stays anonymous (minted by
+ * un_80312BAC); this import resolves to the same address at link. */
+extern f32 un_804DDE48;
 
 HSD_JObj* un_80313508(void* parent, void* symbol, float x, float y, float z)
 {
@@ -723,7 +735,7 @@ void un_80313774(void)
     state->gobj =
         (HSD_GObj*) un_80313508(NULL, strs + 0xAC, 0.0f, 0.0f, 0.0f);
     root_jobj = (HSD_JObj*) state->gobj;
-    HSD_ASSERTMSG(0x3E1, root_jobj != NULL, "jobj");
+    (root_jobj != NULL) ? ((void) 0) : __assert("jobj.h", 0x3E1, "jobj");
 
     step = 5.11f - root_jobj->translate.y;
     pos = -step;
@@ -788,21 +800,7 @@ void un_80313774(void)
 
 extern s32 un_804D6EE8;
 extern s32 un_804D6EEC;
-extern f32 un_804DDE44;
-extern f32 un_804DDE48;
-extern f32 un_804DDE50;
-extern f32 un_804DDE68;
-extern f32 un_804DDE78;
-extern f32 un_804DDE7C;
-extern f32 un_804DDE80;
-extern f32 un_804DDE84;
-extern f32 un_804DDE88;
-extern f32 un_804DDE8C;
-extern f32 un_804DDE90;
-extern f32 un_804DDE94;
-extern f32 un_804DDE98;
 extern char un_803FE5E8[];
-extern char un_804D5A88[3];
 
 void un_80312BAC(TyListState* state, s8 arg1);
 
@@ -852,24 +850,24 @@ void fn_80313BD8(HSD_GObj* gobj)
     /* Fall-through label: block_17 */
     f30 = un_80305D00();
     f31 = un_80305DB0();
-    if (f30 < un_804DDE78) {
+    if (f30 < -0.8f) {
         g[0x12] = g[0x12] + 1;
-        f30 = un_804DDE50;
-        f31 = un_804DDE48;
-    } else if (f30 > un_804DDE7C) {
+        f30 = -1.0f;
+        f31 = 0.0f;
+    } else if (f30 > 0.8f) {
         g[0x12] = g[0x12] + 1;
-        f30 = un_804DDE44;
-        f31 = un_804DDE48;
-    } else if (f31 < un_804DDE80 || (un_80305C44() & 4)) {
+        f30 = 1.0f;
+        f31 = 0.0f;
+    } else if (f31 < -0.6f || (un_80305C44() & 4)) {
         g[0x12] = g[0x12] + 1;
-        f30 = un_804DDE48;
-        f31 = un_804DDE44;
-    } else if (f31 > un_804DDE84 || (un_80305C44() & 8)) {
+        f30 = 0.0f;
+        f31 = 1.0f;
+    } else if (f31 > 0.6f || (un_80305C44() & 8)) {
         g[0x12] = g[0x12] + 1;
-        f30 = un_804DDE48;
-        f31 = un_804DDE50;
+        f30 = 0.0f;
+        f31 = -1.0f;
     } else {
-        f31 = un_804DDE48;
+        f31 = 0.0f;
         g[0xF] = 0;
         f30 = f31;
         g[0x12] = 0;
@@ -917,7 +915,7 @@ void fn_80313BD8(HSD_GObj* gobj)
         g[0xF] = 0;
     }
 
-    if ((f30 < un_804DDE48 && f30 != (f32) (s8) g[0x10]) ||
+    if ((f30 < 0.0f && f30 != (f32) (s8) g[0x10]) ||
         (un_80305B88() & 0x41))
     {
         g[0x10] = (s8) f30;
@@ -930,7 +928,7 @@ void fn_80313BD8(HSD_GObj* gobj)
         return;
     }
 
-    if ((f30 > un_804DDE48 && f30 != (f32) (s8) g[0x10]) ||
+    if ((f30 > 0.0f && f30 != (f32) (s8) g[0x10]) ||
         (un_80305B88() & 0x22))
     {
         g[0x10] = (s8) f30;
@@ -978,7 +976,7 @@ void fn_80313BD8(HSD_GObj* gobj)
         }
     }
 
-    if (f31 == un_804DDE48) {
+    if (f31 == 0.0f) {
         return;
     }
     if ((s8) g[0xF] != 0) {
@@ -1036,7 +1034,7 @@ void fn_80313BD8(HSD_GObj* gobj)
         un_80312904(p, state->entryCount);
     }
     HSD_JObjSetFlagsAll(state->jobj, 0x10);
-    if (f31 > un_804DDE48) {
+    if (f31 > 0.0f) {
         un_80313358(state, 1, 6, 0);
     } else {
         un_80313358(state, 1, 6, 1);
@@ -1063,12 +1061,12 @@ void fn_8031438C(HSD_GObj* arg0)
         if (entry->x16 > 1) {
             for (i = 0; i < 3; i++) {
                 if (i == (s8) state->x29B) {
-                    HSD_JObjReqAnim(archive->jobjs[i], un_804DDE44);
+                    HSD_JObjReqAnim(archive->jobjs[i], 1.0f);
                 } else {
-                    HSD_JObjReqAnim(archive->jobjs[i], un_804DDE48);
+                    HSD_JObjReqAnim(archive->jobjs[i], 0.0f);
                 }
                 HSD_AObjSetRate(archive->jobjs[0]->u.dobj->mobj->tobj->aobj,
-                                un_804DDE48);
+                                0.0f);
             }
             HSD_JObjAnimAll((HSD_JObj*) archive->x0[10]);
         } else {
@@ -1078,14 +1076,14 @@ void fn_8031438C(HSD_GObj* arg0)
                 wait_data->x20 = 0x42100000;
             }
             state->x290 = HSD_SisLib_803A6754(3, un_804D6EEC);
-            state->x290->pos_z = un_804DDE68;
+            state->x290->pos_z = 17.2f;
             new_var = state->x290;
-            state->x290->font_size.x = un_804DDE40;
-            new_var->font_size.y = un_804DDE34;
+            state->x290->font_size.x = 0.038f;
+            new_var->font_size.y = 0.029f;
             state->x290->default_kerning = 1;
             state->x290->default_alignment = (double) 2;
-            HSD_SisLib_803A6B98(state->x290, un_804DDE88, un_804DDE8C,
-                                un_804D5A88, un_GetTrophyTotal());
+            HSD_SisLib_803A6B98(state->x290, 290.0f, 320.0f,
+                                "%d", un_GetTrophyTotal());
         }
         entry->x16--;
         return;
@@ -1138,13 +1136,13 @@ void un_8031457C(void)
         HSD_GObjObject_80390A70(entry->x4, HSD_GObj_804D784B, cobj);
         GObj_SetupGXLinkMax(entry->x4, (GObj_RenderFunc) fn_80314504, 0);
         entry->x4->gxlink_prios = 0x0210000000000000ULL;
-        interest.x = un_804DDE90;
-        interest.y = un_804DDE94;
-        interest.z = un_804DDE48;
+        interest.x = 1.1f;
+        interest.y = -0.24f;
+        interest.z = 0.0f;
         HSD_CObjSetInterest(cobj, &interest);
-        eye.x = un_804DDE90;
-        eye.y = un_804DDE94;
-        eye.z = un_804DDE98;
+        eye.x = 1.1f;
+        eye.y = -0.24f;
+        eye.z = 40.05963134765625f;
         HSD_CObjSetEyePosition(cobj, &eye);
         viewport.xmin = 0x76;
         viewport.xmax = 0x230;
@@ -1186,7 +1184,7 @@ void un_803147C4(void)
 
     if (archive->data == NULL) {
         OSReport(strs + 0x14C);
-        OSPanic(strs + 0x70, 0x636, un_804D5A8C);
+        OSPanic(strs + 0x70, 0x636, "");
     }
 
     jobj = HSD_ArchiveGetPublicAddress(archive->data, strs + 0x170);

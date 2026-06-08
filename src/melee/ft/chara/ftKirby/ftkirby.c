@@ -2643,7 +2643,7 @@ extern char ftKb_Init_803CB368[];
 extern char ftKb_Init_803CB380[];
 extern Fighter_CostumeStrings ftKb_Init_803CB3A0[];
 extern Fighter_CostumeStrings* ftKb_Init_803CB3E8[];
-extern s8 ftKb_Init_803CB46C[FTKIND_MAX];
+extern u8 ftKb_Init_803CB46C[FTKIND_MAX];
 extern bool ftKb_Init_803CB490[];
 extern char ftKb_Init_803CB510[];
 extern char ftKb_Init_803CB52C[];
@@ -2919,28 +2919,34 @@ void ftKb_SpecialN_800EED50(s32 arg0, s32 arg1)
     if (arg0 != -1 && arg0 != 4) {
         ftKirby_CopyName* copy = &ftKb_Init_803CA9D0[arg0];
         if (copy->filename != NULL) {
-            HSD_Archive** entry = &((HSD_Archive**) &ft_80459B88)[arg0];
-            if (*entry == NULL) {
-                lbArchive_80017040(NULL, copy->filename, entry, copy->name, 0);
+            if (((HSD_Archive**) &ft_80459B88)[arg0] == NULL) {
+                lbArchive_80017040(NULL, copy->filename,
+                                   &((HSD_Archive**) &ft_80459B88)[arg0],
+                                   copy->name, 0);
             }
         }
         {
-            Fighter_CostumeStrings* costumes = ftKb_Init_803CB3E8[arg0];
-            if (costumes != NULL) {
-                struct {
-                    HSD_Joint* joint;
-                    HSD_MatAnimJoint* matanim;
-                }* item = (void*) ftKb_Init_803C9FC8[arg0];
-                item = &item[arg1];
+            struct UnkJointPair {
+                HSD_Joint* joint;
+                HSD_MatAnimJoint* matanim;
+            }* item;
+            if (ftKb_Init_803CB3E8[arg0] != NULL) {
+                item = &((struct UnkJointPair*) (void*)
+                             ftKb_Init_803C9FC8[arg0])[arg1];
                 if (item->joint == NULL) {
-                    Fighter_CostumeStrings* cs = &costumes[arg1];
-                    if (cs->matanim_joint_name != NULL) {
-                        lbArchive_80017040(NULL, cs->dat_filename, item,
-                                           cs->joint_name, &item->matanim,
-                                           cs->matanim_joint_name, 0);
+                    if (ftKb_Init_803CB3E8[arg0][arg1].matanim_joint_name !=
+                        NULL) {
+                        lbArchive_80017040(
+                            NULL, ftKb_Init_803CB3E8[arg0][arg1].dat_filename,
+                            item, ftKb_Init_803CB3E8[arg0][arg1].joint_name,
+                            &item->matanim,
+                            ftKb_Init_803CB3E8[arg0][arg1].matanim_joint_name,
+                            0);
                     } else {
-                        lbArchive_80017040(NULL, cs->dat_filename, item,
-                                           cs->joint_name, 0);
+                        lbArchive_80017040(
+                            NULL, ftKb_Init_803CB3E8[arg0][arg1].dat_filename,
+                            item, ftKb_Init_803CB3E8[arg0][arg1].joint_name,
+                            0);
                         item->matanim = NULL;
                     }
                 }
@@ -4619,7 +4625,7 @@ Fighter_CostumeStrings* ftKb_Init_803CB3E8[] = {
     NULL,
 };
 
-s8 ftKb_Init_803CB46C[FTKIND_MAX] = {
+u8 ftKb_Init_803CB46C[FTKIND_MAX] = {
     32, 33, 38, 39, -1, 41, 35, 21, 42, 45, 46, 46, 36, 34, 40, 43, 44,
     37, 20, 21, 35, 32, 33, 36, -1, 47, 48, -1, -1, -1, -1, -1, -1,
 };

@@ -563,11 +563,12 @@ void gm_801A9630(void)
     HSD_JObj* jobj;
     HSD_JObj* child;
     HSD_JObj* target;
+    u32 ii;
     s32 i;
     PAD_STACK(8);
 
-    for (i = 0; i < 0x1A; i++) {
-        gm_80480A00[i] = NULL;
+    for (ii = 0; ii < 0x1A; ii++) {
+        gm_80480A00[ii] = NULL;
     }
 
     gm_804D67C4 = 0xB4;

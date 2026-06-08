@@ -8,7 +8,8 @@
 #include <baselib/debug.h>
 #include <baselib/memory.h>
 
-/* 3B73E8 */ mpIsland_Palette mpIsland_TerrainPalette = { {
+/* 3B73E8 */ __declspec(section ".rodata") mpIsland_Palette
+    mpIsland_TerrainPalette = { {
     { mp_Terrain_Rock, { 0x80, 0x60, 0x60, 0xFF } },
     { mp_Terrain_Grass, { 0x40, 0xFF, 0x40, 0xFF } },
     { mp_Terrain_Dirt, { 0xC0, 0x60, 0x60, 0xFF } },
@@ -76,7 +77,7 @@ void mpIsland_8005A728(void)
     prev = NULL;
     if (count) {
         line_idx = map->floor_start;
-        z_val = mpIsland_804D8158;
+        z_val = *(volatile const float*) &mpIsland_804D8158;
         while (count != 0) {
             mpisp = HSD_MemAlloc(0x2C);
             HSD_ASSERT(62, mpisp);
@@ -144,7 +145,7 @@ void mpIsland_8005A728(void)
     count = map->ceiling_count;
     if (count) {
         line_idx = map->ceiling_start;
-        z_val = mpIsland_804D8158;
+        z_val = *(volatile const float*) &mpIsland_804D8158;
         for (; count != 0;) {
             mpisp = HSD_MemAlloc(0x2C);
             HSD_ASSERT(0x3E, mpisp);
@@ -246,7 +247,8 @@ mp_UnkStruct0* mpIsland_8005AB54(int surface_idx)
 mp_UnkStruct0* mpIsland_8005AC14(Vec3* arg0, float arg1)
 {
     int i;
-    if (mpCheckFloor(arg0->x, arg0->y, arg0->x, arg0->y + arg1, 0.0F, NULL, &i,
+    if (mpCheckFloor(arg0->x, arg0->y, arg0->x, arg0->y + arg1,
+                     *(volatile const float*) &mpIsland_804D8158, NULL, &i,
                      NULL, NULL, -1, -1, -1, NULL, NULL))
     {
         return mpIsland_8005AB54(i);
@@ -323,7 +325,7 @@ void mpIsland_8005AE1C(mp_UnkStruct0** arg0, mp_UnkStruct0** arg1, int arg2,
     vtx = mpGetGroundCollVtx();
     cur = *arg0;
     end = arg2 + arg3;
-    z_val = mpIsland_804D8158;
+    z_val = *(volatile const float*) &mpIsland_804D8158;
 
     goto loop1_check;
 loop1_body:
@@ -374,7 +376,7 @@ loop1_check:
     }
 
     cur = *arg1;
-    z_val = mpIsland_804D8158;
+    z_val = *(volatile const float*) &mpIsland_804D8158;
 
     goto loop2_check;
 loop2_body:
@@ -477,7 +479,7 @@ void mpIsland_8005B004(mp_UnkStruct0** arg0, mp_UnkStruct0** arg1, int arg2,
     lines = mpGetGroundCollLine();
     vtx = mpGetGroundCollVtx();
     inner = joints->inner;
-    z_val = mpIsland_804D8158;
+    z_val = *(volatile const float*) &mpIsland_804D8158;
 
     line_idx = inner->dynamic_start;
     end_total = inner->dynamic_start + inner->dynamic_count;
