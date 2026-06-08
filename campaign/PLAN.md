@@ -5,37 +5,50 @@ bytes toward 100%. This file is the persistent campaign state — update it at
 the end of every session.
 
 > **⭐⭐ ENDGAME METRIC (live since wave 18): LINKED Matching file count.**
-> Currently **851/1041 linked** (43.87%; matched 72.54%, fuzzy 97.60%),
-> HEAD 43973db87.
+> Currently **851/1041 linked** (43.87%; matched 72.52%, fuzzy 97.59%),
+> HEAD aa5934853 (report.json regenerated post-w27; DOL sha 08e0bf20
+> re-verified EXACT, build idle).
 > Flips #1-3 wave 18, #4 (hsd_40FF, data-only) wave 19, #5 (itdrop)
 > wave-19 boundary, #6 (bytecode, ZERO src work) wave 20, #7-9
 > (MSL/math + ftPr_SpecialN + itlinkbomb) 0c6fe90d1 at the wave-21→22
 > boundary, #10-13 wave 23 (ftmetal d711d02b2 · ftdevice 3084bc2f4 ·
 > itwstar b31fdd544 · ftkirbyspecialfox 53d7181ae), #14 ifprize
 > 783ae7006 (w24→25 boundary), **#15 gm_1BFA COMMITTED 43973db87
-> (w25→26 boundary)**. W26 = W-AUDIT + PARK-DISSOLUTION wave:
-> ⭐⭐ the w25 "W-AUDIT the parked siblings" directive EXECUTED and
-> **CLOSED-NEGATIVE GAME-WIDE** — every parked slot-law fn audits to
-> current W = target W = 0 (read-only census + 2 byte-probes on the
-> only constructible injection, causally inert; idioms 212/213); all
-> parks stand on their non-W mechanisms; rotation-queue item 2
-> RETIRED. ⭐⭐ **PARKS DISSOLVED THIS WAVE: 1 — itdraw 37B→3B** (kept
-> edit): the w24 "np-late phase question" was ROVER ANONYMIZATION
-> (idiom 215), not W or phase; residual ONE web, joint with lbmemory
-> 15320 old-first via the **count/v26 model — now the top open
-> order-law item (cracks BOTH)**. ⭐ S1: **itmewtwoshadowball
-> it_802C4D10 →100.0000 MATCH** (void→s32 re-type, idiom 214; kept
-> edit) + itarwinglaser →99.48/99.05 (7 rows left); itnessyoyo ×2
-> parked w/ mechanisms. ⭐ Data-recon ×3 (kept edits): gmresultplayer
-> .data 1.03→**99.93** + .rodata MISSING→**100** + .sdata →97.87;
-> soundtest .sdata 14.13→**95.22** + .data 2.50→58.03; particle
-> .data →81.47. Cheapest flips: if_2FC93 (zero .text) then plbonus
-> (deadstrip audit) then itdraw 3B (importer-cleared, pends count/v26)
-> + itmewtwoshadowball (pends .data recon). Idiom-number collision ×3
-> streams AGAIN — **finals 212-225 assigned in the playbook; briefs
-> MUST carry the current highest (now 225)**. Full strategic census
-> (w25 classify2, w26-annotated) lives in the FLIP VERDICT section;
-> every stream ranks its work by "what unblocks the next flip".
+> (w25→26 boundary)**. W26 (commit 8e467af5b) = W-AUDIT
+> CLOSED-NEGATIVE game-wide + itdraw 37B→3B + data-recon ×3 (see
+> session log). **W27 (commit aa5934853; NO new flips — rank2 pass-1
+> FLIP-READY pool EMPTY at baseline 8e467af5b, DOL sha 08e0bf20
+> EXACT)**: ⭐⭐ **count/v26 promotion laws CAUSALLY PINNED (idioms
+> 226-229)** — the S-relative joint model fit ALL 75 archived rows
+> with unique fixpoints yet FALSIFIED on a fresh 5-loop/12-web body
+> (corpus-fit intension trap, 229); the causal laws are **absolute
+> before-form bars K_tail=5 / K_count=2** (W additive 1:1 — the w25
+> W-bar hypothesis is CLOSED: real as a bar term, dead as a park
+> lever since all parks sit at W=0 per 212; idiom 226),
+> **interferer-prefix v26 gating** (227) and **universal winner-band
+> rescue seeding** (228). NEXT: apply 226-228 to itdraw's last web
+> (3B → flip-eligible) + lbmemory 15320 old-first. ⭐ S1 ×2 streams:
+> gm_801A4014 97.86→**99.38** (two-named-walker preheader 230 +
+> goto-threading orphan 231; committed); **ft_80089B08
+> 97.81→98.28 via BINARY-PROVEN 5-arg prototype** (target loads a
+> 3rd float at both lbBgFlash_80020E38 sites; idiom-204 TU-local
+> proto, zero @-drift; committed); PARKED-WITH-PROOF: itlinkarrow
+> UnkMotion1_Anim 99.51 (nested-expansion order, 234) ·
+> ftCo_DamageFall 91.83 (4-web param-lead rotation, 194/191 family)
+> · grzakogenerator ×3 + vi0501 + gm_1A3F P1/P2 (r0-mode family,
+> 233). ⭐ Data-recon ×3 committed: toy .data 4.08→**100.0**
+> byte-identical (synthetic split-boundary jumptable, 235) + .rodata
+> →**100**; grpura .data 41.34→**99.9** + .sdata2 →**100** CONTENT
+> (pool-twin law, 236); mnnamenew partial (stream record truncated).
+> Cheapest flips: if_2FC93 (zero .text) then plbonus (deadstrip
+> audit) then itdraw 3B (importer-cleared, pends 226-228
+> application) + itmewtwoshadowball (.text CONTENT row GONE in w27
+> rank; pends .data recon). Idiom-number collision AGAIN (both s1
+> streams self-assigned 226-229) — **finals 226-236 assigned in the
+> playbook; briefs MUST carry the current highest (now 236)**. Full
+> strategic census (w25 classify2, w26/w27-annotated) lives in the
+> FLIP VERDICT section; every stream ranks its work by "what
+> unblocks the next flip".
 
 ## Ground rules
 
@@ -428,7 +441,33 @@ technique generalizes) + @-drift root-cause; gmresultplayer .sdata2
 itmewtwoshadowball [.data-0] 7.78 (unblocks its flip). New laws
 landed as idioms 221-225.
 
-## ⭐⭐ FLIP VERDICT (w18 ×3 + w19 ×2 + w20 ×1 + w21/22 boundary ×3 + w23 ×4 + w24/25 boundary ×1 = 14 FLIPS COMMITTED; THE ENDGAME METRIC)
+**⭐ WAVE-27 SCALE ×3 (toy + grpura + mnnamenew; COMMITTED aa5934853;
+durable: datarecon-scale-w27/progress.txt — truncated before unit 3's
+entry)**: picked as the 3 largest initialized-data gaps from fresh
+rankdata.py (toy 3268B · grpura 2907B · mnnamenew 2203B). **toy**
+.data 4.08→**100.0 BYTE-IDENTICAL** (2920B incl. the synthetic @992
+jumptable of EXTERNAL un_80304B94 via `(u8*)fn+off` static void*
+table — idiom 235) + .rodata MISSING→**100.0** (328B const defs + 14
+toy.h extern-const edits; 16-TU sibling gate ALL IDENTICAL incl.
+FLIPPED ifprize) + .sdata →93.3 stream-gated (content exact to 0x31,
+7B dtk tail pad = ALIGNFIX soft) + .sdata2 →84.9 (idiom-147 u32
+cast-cure PROVEN; 40B head/mid interleave PARKED = S1-pool class);
+ours-extra .bss section ELIMINATED. Gate: fn bytegate ALL identical,
+0 DOWNs, 16 UPs, 5 new fn-100s, @627/@657 zero drift. **grpura**
+.data 41.34→**99.9** (VtxMapEntry[44] + 0x800 u64 texture array →100
+per the w16 8-align law; residual @516 9B assert-__FILE__ pool,
+S1-coupled, PARKED) + .sdata2 83.3→**100.0 CONTENT via NAMED-DEF
+DELETION** (idiom 236) + .sbss static→global (139); grpura.h
+[42]→[44]. Gate: only grPura_802125F0 masked +0.02 UP. **mnnamenew**
+PARTIAL (stream record truncated post-crash; landed in aa5934853 —
+mnn_cells.c/mnn_tables.c staging in scratch; current report.json:
+.sdata 99.78 · .sdata2 100 · .sbss 100 · .data 60.07 · .rodata 85.71
+— finish pass queued). ⚠ report.json canonical section scores differ
+from stream scratch-gate numbers on dtk-pad sections (toy .sdata/
+.data) — judge recon completion by bytegate + linkcheck rows, not
+report percentages.
+
+## ⭐⭐ FLIP VERDICT (w18 ×3 + w19 ×2 + w20 ×1 + w21/22 boundary ×3 + w23 ×4 + w24/25 boundary ×1 + w25/26 boundary ×1 = 15 FLIPS COMMITTED; THE ENDGAME METRIC)
 
 **The flip recipe is PROVEN.** Wave 18 flipped the first three units to
 `Object(Matching, ...)` — ninja links OUR compiled objects into the DOL,
@@ -546,6 +585,26 @@ W26 exec ran configure + full ninja + idempotence at the boundary
 pass — 4 streams closed with kept edits uncommitted (itdraw ·
 itmewtwoshadowball · itarwinglaser · gmresultplayer/particle/
 soundtest); flip + commit sweep pends grant + boundary DOL gate.
+**The w26 kept edits COMMITTED 8e467af5b at the w26→27 boundary.**
+
+**WAVE-27 EXEC (file-flip-w27/progress.txt + rank2_pass1.txt;
+configure.py untouched — NO flips this wave)**: baseline gate PASS at
+8e467af5b (pgrep hard-guard idle → configure `--no-warn-error` → full
+ninja ZERO recompiles → DOL sha1 08e0bf20 EXACT). rank2 pass-1
+(idiom-176-aware, en-masse importer closure over all 1041 link
+inputs): **FLIP-READY pool EMPTY**. hard=1 queue heads (CONTENT:.text
+only): **itdraw 3B** (w26 dissolution CONFIRMED in rank; soft rows
+besides) · gmopening 12B · itpikachuthunder 17B · quatlib 25B ·
+sobjlib 27B · grgreatbay 29B · lbmemory 34B. W26 sheds CONFIRMED in
+rank rows: itmewtwoshadowball CONTENT:.text GONE (5 hard left, all
+.data recon); gmresultplayer MISSING:.rodata GONE + SIZE:.data/.sdata
+→ soft ALIGNFIX (29 hard left). Deadstrip pre-audits (116/134) PASS
+for both possible clears: itdraw (.text kept via it_8026EECC ×7
+importers, no force_active needed; 5 zero-importer exports benign)
+and itmewtwoshadowball (16 imported exports; .data recon still
+0x16 vs 0x138). Executor stood by for end-of-wave flip pass per
+build-race law (3 sibling streams live in-tree); wave closed with the
+src commit aa5934853 and no flip — re-run rank2 pass-2 next wave.
 
 **GATE INSTRUMENT**: `campaign/scratch/file-flip-w18/linkcheck.py`
 (resolved-reloc equality + weak-exempt + ALIGNFIX + export-importer
@@ -575,15 +634,19 @@ moves it: gm_1BFA **FLIPPED #15 (43973db87)**; itdraw park
 MISSING:.rodata + SIZE:.data hard rows when the w26 recon lands.
 Queue heads by .text bytes (w26): **itdraw 3B** < gmopening 12B <
 itpika 17B < quatlib 25B < sobjlib 27B < grgreatbay 29B <
-lbmemory 34B; sole zero-.text unit = if_2FC93.
+lbmemory 34B; sole zero-.text unit = if_2FC93. **w27 rank2 pass-1
+CONFIRMS the queue in link rows** (all heads hard=1 CONTENT:.text;
+w26 sheds verified; pool EMPTY) and the **count/v26 lever is now a
+LAW SET (idioms 226-228, causally pinned)** — the PARK-CONFIRMED
+bucket's sole open lever became an application task.
 
 | class | n | meaning / members |
 |---|---|---|
 | HEADER-OWNED | 0 | ~~gm_1BFA 20B~~ — w25 CRACKED via TU-local subword prototype (idioms 204/205); **w26: FLIPPED #15, COMMITTED 43973db87 — bucket EMPTY** |
-| PARK-CONFIRMED | 3 | grgreatbay 29B · lbmemory 34B · **itdraw 3B (w26 DISSOLVED from 37B — rover anonymization, idiom 215; kept edit; residual ONE web)** — mechanism-proven order parks. **w26: the w25 W-AUDIT directive is EXECUTED and CLOSED-NEGATIVE for the ENTIRE park set** (read-only census `file-flip-w26/waudit_census.txt` + waudit-w26 byte-probes: current W = target W = 0 everywhere, all subword traffic load-fed/literal = W-inert, idioms 212/213). Sole open lever = count/v26 model (joint-solves itdraw's last web + lbmemory 15320 old-first) |
+| PARK-CONFIRMED | 3 | grgreatbay 29B · lbmemory 34B · **itdraw 3B (w26 DISSOLVED from 37B — rover anonymization, idiom 215; kept edit; residual ONE web)** — mechanism-proven order parks. **w26: the w25 W-AUDIT directive is EXECUTED and CLOSED-NEGATIVE for the ENTIRE park set** (read-only census `file-flip-w26/waudit_census.txt` + waudit-w26 byte-probes: current W = target W = 0 everywhere, all subword traffic load-fed/literal = W-inert, idioms 212/213). Sole open lever = count/v26 model (joint-solves itdraw's last web + lbmemory 15320 old-first) — **w27: the model is CRACKED-CAUSAL (idioms 226-228: absolute bars K_tail=5/K_count=2 + interferer-prefix gate + rescue seeding); APPLICATION to the real fns is the open task** |
 | FPR-PARK | 1 | sobjlib 27B — FPR trio/band-mirror joint park (183-186/156) |
 | L1P-PENDING | 2 | **w25: BOTH RUN, bucket now EMPTY of pending work** — gmopening 12B → PARK-CONFIRMED (intra-anchor chain LIFO, idiom 206; ~50 forms falsified; cleanest low-pressure order-law specimen) · itpikachuthunder 17B DF8 → DEMOTED to BLOCKED-class (163-vs-160 closure, idiom 208) |
-| S1-SMALL+DATA | 4 | vi0501 41B · ft_0852 · ifcoget **23B (was 34B)** — w25 park RE-CONFIRMED, 2 new walls (idiom 207) · itmewtwoshadowball **w26: it_802C4D10 →100.0000 MATCH (void→s32 re-type, idiom 214; kept edit), .text done — pends [.data-0] 7.78 recon only** |
+| S1-SMALL+DATA | 4 | vi0501 41B — **w27 PARKED w/ mechanism (un_8031D9F8 98.83; r0-mode family, idiom 233; src byte-reverted)** · ft_0852 · ifcoget **23B (was 34B)** — w25 park RE-CONFIRMED, 2 new walls (idiom 207) · itmewtwoshadowball **w26: it_802C4D10 →100.0000 MATCH (void→s32 re-type, idiom 214; kept edit), .text done — pends [.data-0] 7.78 recon only; w27 rank: CONTENT:.text row GONE** |
 | S1-MED+DATA | 6 | lbshadow 126B · leak 78B · itkyasarin 83B · vi0502 64B · textdraw 144B · ftmaterial 123B |
 | CODEGEN+DATA | 1 | efsync — 4844B same-size .text, schedule/mnemonic. plbonus is flip-near here post-w25: .text likely byte-exact after setFlag deadstrip (idiom-176 audit) + ~21 EXPORT-MISSING data rows (solved recon class) |
 | DATA-RECON | 1 | **if_2FC93 — ZERO .text work, solved recon class = cheapest flip after gm_1BFA** |
@@ -597,9 +660,13 @@ track (negative, game-wide) — the **count/v26 model class is now the
 SOLE open lever** for the PARK-CONFIRMED units, and it joint-solves
 itdraw's last web with lbmemory 15320's old-first; the endgame then
 runs through the 60-unit STRUCT-NEAR band before the 106-unit deep
-tail.
+tail. **w27: that lever is now LAW (226-228) — first application
+targets: itdraw arm-2 pre-switch ip web (r28↔r29, 3 rows) and
+lbmemory 15320 old-first; compute each web's absolute before-bar +
+interferer prefix on the real fn, then derive the decl perm /
+rescue-seed that flips the winner band.**
 
-### ⭐ Ranked flip queue (w26 state; flips #1-15 COMMITTED)
+### ⭐ Ranked flip queue (w27 state; flips #1-15 COMMITTED; w27 rank2 pass-1 FLIP-READY pool EMPTY)
 
 **Flipped (15)**: gm_182F + plattack (51951826b) · ftchangeparam
 (4715a41d8) · hsd_40FF (ab2a4870d, data-only) · itdrop (d4fee40d1) ·
@@ -613,7 +680,10 @@ flip time. Re-rank after every recon/S1 wave with `rank2.py`
 (idiom-176-aware; en-masse importer closure mandatory, idiom 132).
 W26 exec pass: baseline ninja gate PASS at 43973db87 + idempotence;
 end-of-wave flip pass STANDING BY pending stream settle (4 streams
-left kept edits uncommitted).
+left kept edits uncommitted; **committed 8e467af5b at the
+boundary**). W27 exec pass: baseline gate PASS at 8e467af5b (DOL sha
+08e0bf20 EXACT), rank2 pass-1 pool EMPTY, no flips; w27 src landed
+aa5934853 — pass-2 + flip sweep = next wave's first action.
 
 **⭐ REACHABILITY (w26 re-scan)**: gm_1BFA **FLIPPED #15**. Cheapest
 flip is now **if_2FC93** (zero .text — SIZE .rodata 0x10vs0x90 +
@@ -622,12 +692,14 @@ recon, the solved class), then **plbonus** (w25: fn_80039618 →100,
 .text likely byte-exact after the setFlag deadstrip audit; pends
 idiom-176 OURS-EXTRA gate + ~21 EXPORT-MISSING data-recon rows),
 then **itdraw** (w26: 3B CONTENT:.text, exports already
-importer-cleared — flip-eligible once count/v26 cracks the last
-web) and **itmewtwoshadowball** (.text 100 kept edit; pends [.data-0]
-7.78 recon). gmresultplayer sheds MISSING:.rodata + SIZE:.data hard
-rows once the w26 recon commits — re-run rank2 after any landing.
-EVERY other unit needs .text byte work; no HEADGAP-law candidates
-exist. W26 closed the W-AUDIT track — the count/v26 model is the
+importer-cleared; w27 rank-confirmed hard=1 — flip-eligible once
+idioms 226-228 crack the last web) and **itmewtwoshadowball** (.text
+CONTENT row GONE in w27 rank; pends [.data-0] 7.78 recon = 5 hard
+rows). gmresultplayer sheds CONFIRMED in w27 rank (MISSING:.rodata
+GONE, SIZE rows → soft ALIGNFIX; 29 hard left) — re-run rank2 after
+any landing. EVERY other unit needs .text byte work; no HEADGAP-law
+candidates exist. W26 closed the W-AUDIT track; **w27 turned the
+count/v26 model into causal law (226-228)** — application is the
 sole unlock for the remaining PARK-CONFIRMED units. Deadstrip
 pre-audits (116/134) PASS for all
 queue heads; configure.py line map staged in scratch/file-flip-w24/
@@ -741,9 +813,14 @@ rank2.py + classify2.py live in scratch/file-flip-w25/.
    web map recorded (park-dissolve-itlb-w26/REPORT.md: rotation
    {old,alloc,current,currentp}; target [old r31 FIRST … currentp
    r25 LAST]). 15320 old-first = the SAME open class as itdraw's
-   last web → count/v26 joint-solve cracks both.
-13. **itdraw** — **⭐ w26: PARK DISSOLVED 37B→3B in ONE hunk (kept
-   edit UNCOMMITTED in src/melee/it/itdraw.c)**. The w24 "np-late
+   last web → count/v26 joint-solve cracks both. **w27: the model is
+   now LAW (226-228) — compute old/alloc/current/currentp absolute
+   bars + interferer prefixes and seed the winner band; first
+   application target with itdraw.**
+13. **itdraw** — **⭐ w26: PARK DISSOLVED 37B→3B in ONE hunk
+   (committed 8e467af5b; w27 rank2 pass-1 confirms hard=1
+   CONTENT:.text:3B + deadstrip pre-audit PASS, no force_active
+   needed)**. The w24 "np-late
    phase question" was ROVER ANONYMIZATION (173/190 class), NOT W and
    NOT a promotion phase: replacing inline_1's invented
    `Vec3* new_pos = NULL; if (b7) new_pos = pos;` with the anonymous
@@ -759,7 +836,8 @@ rank2.py + classify2.py live in scratch/file-flip-w25/.
    importer-cleared). W-AUDIT closed-negative for the unit, BYTE-
    PROVEN ×2 (u16→u32 and u16→s32 16-site injections: caller inert,
    callees wrecked 100→90.71/89.14 — idioms 212/213/215). Do NOT
-   re-probe: V7/T2/T3/T6 forms, P1/P3/P6/P7/P8, e-series.
+   re-probe: V7/T2/T3/T6 forms, P1/P3/P6/P7/P8, e-series. **w27: the
+   joint-solve laws EXIST (226-228) — apply them here first.**
 14. Tail: 3-hard tier (vi0501, lbshadow, leak, itkyasarin).
    **lb_00CE stays DEMOTED** (dead-creator pool head, C-unreachable —
    idioms 118/148). **gm_16A9** refuted-easy (w19). **ftCo_Shouldered**
@@ -929,39 +1007,73 @@ sobjlib FPR-park · itpika DF8 BLOCKED per 208). Standing discipline:
 ascending-scan forced-precedence solves FIRST (derive OURS-forced
 and TARGET-forced orders, diff = minimal requirement; check it's
 confined to PERMUTABLE webs per idiom 191); at high pressure compute
-the promotion bars (idiom 200: eff vs K−W) — but **W-audits are now
-a zero-compile desk check** (only register-resident subword args at
+the promotion bars (**w27: use the CAUSAL laws 226-228 — absolute
+before-form bars + interferer-prefix gate + rescue seeding; the
+idiom-200 S-relative eff-form is archived-corpus-only, see 229**) —
+but **W-audits are now a zero-compile desk check** (only register-resident subword args at
 int-param sites can carry a discrepancy; skip load-fed/literal sites
 per 212; pin callee params from entry asm per 213); BEFORE any decl
 probe on a park residual, first audit for invented NULL-init
 conditional locals (rover anonymization, 215); for FPR fns hand-sim
-183/184 with q08b. Rotation queue (ranked): 1) **count/v26 model
-class — NOW TOP**: spill-benefit/range-size ratio with sequential
-exclusion, fit OFFLINE against the 63 archived lawmine rows (0
-compiles to start); cracks itdraw's last web (3B) + lbmemory 15320
-old-first JOINTLY; 2) ~~W-AUDIT the parked siblings~~ **DONE w26,
-CLOSED-NEGATIVE** (census + byte-probes; idioms 212/213 — retire);
-3) param-homing joint family (lbmemory FC8 + ftCo
-A61D8/AE7AC/B2790 + itnessyoyo BF800, w26) — pends the order law;
-4) i3-bump isolation (~4 probes; t5 proved weight-form over
-OR-form, c3arg falsified call-arg-0); 5) FPR family re-reads under
-183/184: DAD4 · hsd_39D1 9F05C · cobj/lbColl · lb_8000D148 ·
-lbaudio 27488 + 27DF8 · 69A84/gmregclear carryovers; 6) side-find
-for the tyfigupon owner: un_80316420 wants one named extsh web for
-arg0 (`s32 tmp = arg0;`, ~+0.7pp, untested). HAND-SIM FIRST at ≤7
-webs (idiom 150: simulate **L1' + decl order**). Falsified-on-
-real-fn list (do not re-probe the FORMS): named-base packages
-(94.28/97.90/97.65), variable merges (96.75/98.03), quatlib EC4C
-any-C-form, itdraw flat forms (T2/T3 — destruction-proven) + w26
-P6/P7/P8/e2/e12-e15 (incl. depth-2 nesting 219 + case-reorder 220),
-grgreatbay 5460 gp-mutations (17-probe closure), sobjlib trio
-spelling levers (11), gmopening ~50 forms (decl perms/naming/
-param-feed/promotions — w25), ifcoget dual-param + clamp-in-helper
-(VN-fold, 207), itpika DF8 163-promotion + ptr-laundering (208),
-plbonus `static inline` (210), **global toy.h re-type (205 — toy.h
-keeps (enum_t, bool), CLOSED)**, lbmemory f2-f5 (w26), itnessyoyo
-BF800 6 param-homing forms (local-copy/launder-init/forwarder —
-206-wall, w26), stack-field self-assign spellings (218, w26).
+183/184 with q08b. Rotation queue (ranked): 1) ~~count/v26 model
+fit~~ **DONE w27 — CRACKED-CAUSAL (idioms 226-229)**: joint
+S-relative model fit 75/75 archived rows then FALSIFIED on the
+fresh 5-loop/12-web body (lawmodel-w27/probelog.json, 10 probes
+B0-D1); causal laws = absolute before-form bars K_tail=5/K_count=2
+(+W 1:1; the w25 W-bar hypothesis CLOSED — real as a bar term,
+park-dead since all parks audit W=0 per 212) + interferer-prefix
+v26 gate + universal rescue seeding. **NEW item 1: APPLY 226-228 to
+itdraw's arm-2 ip web (3B → flip) + lbmemory 15320 old-first** —
+map each real-fn web's absolute prefix mass and interference set,
+then pick the decl perm / rescue seed that flips the winner band
+(reuse probegen2.py + the L1' solver as the harness); 2) ~~W-AUDIT
+the parked siblings~~ **DONE w26, CLOSED-NEGATIVE** (census +
+byte-probes; idioms 212/213 — retire); 3) param-homing joint family
+(lbmemory FC8 + ftCo A61D8/AE7AC/B2790 + itnessyoyo BF800, w26;
+**+ ftCo_DamageFall 80090594 4-web param-lead rotation, w27** —
+cleanest 4-web specimen) — pends the order law; 3b) **r0-mode
+family (idiom 233, w27)**: r0-vs-dirty anon-temp MODE enumeration —
+cracks gm_1A3F P2 + grzakogenerator ×3 + vi0501 jointly; 4) i3-bump
+isolation (~4 probes; t5 proved weight-form over OR-form, c3arg
+falsified call-arg-0; w27 fitcheck2 re-confirms archived weight-2);
+5) FPR family re-reads under 183/184: DAD4 · hsd_39D1 9F05C ·
+cobj/lbColl · lb_8000D148 · lbaudio 27488 + 27DF8 ·
+69A84/gmregclear carryovers; 6) side-find for the tyfigupon owner:
+un_80316420 wants one named extsh web for arg0 (`s32 tmp = arg0;`,
+~+0.7pp, untested); 7) side-probe (needs gm_1A45.h owner +
+cross-TU bytegate): gm_801A4CE0 proto u8→int re-type — the one
+UNTESTED lever on gm_1A3F P1. HAND-SIM FIRST at ≤7 webs (idiom 150:
+simulate **L1' + decl order**). Falsified-on-real-fn list (do not
+re-probe the FORMS): named-base packages (94.28/97.90/97.65),
+variable merges (96.75/98.03), quatlib EC4C any-C-form, itdraw flat
+forms (T2/T3 — destruction-proven) + w26 P6/P7/P8/e2/e12-e15 (incl.
+depth-2 nesting 219 + case-reorder 220), grgreatbay 5460
+gp-mutations (17-probe closure), sobjlib trio spelling levers (11),
+gmopening ~50 forms (decl perms/naming/param-feed/promotions —
+w25), ifcoget dual-param + clamp-in-helper (VN-fold, 207), itpika
+DF8 163-promotion + ptr-laundering (208), plbonus `static inline`
+(210), **global toy.h re-type (205 — toy.h keeps (enum_t, bool),
+CLOSED)**, lbmemory f2-f5 (w26), itnessyoyo BF800 6 param-homing
+forms (local-copy/launder-init/forwarder — 206-wall, w26),
+stack-field self-assign spellings (218, w26), **w27 additions**:
+gm_1A3F P1 ~10 probes (decl perms 191-pinned · decl-init 194-toggle
+· info-feed VN-folds · found+goto · getHandler wrappers ×2 ·
+static-inline · NULL decl-init DCE'd · anchor unification neutral) +
+P2 5 forms (named/anon phi · ternary +clrlwi ·
+assignment-in-condition byte-identical · unreachable-return DELETED
+per 232), itlinkarrow UnkMotion1 5 probes (block-local ≡
+expansion-named extends 125 · param-feed 187-inert · 34-launder
+demotes only 1 slot per 151/195 · full anonymization 95.10/133r —
+**anonymization needs CALL-FREE regions, bounds 215**),
+ftCo_DamageFall 4 probes (open-coded keeps fp-last + confirms 163's
++8B value-inline charge · void-inline ptr-param 0B-transparent
+extends 212 dying-src to POINTER params · split-decl indifferent ·
+**law-C plain-init toggle does NOT engage on a GLOBAL-read init**),
+ft_0892 residuals (sqrtf(EXPR) single-def fixes the f4 web but
+costs +8B frame vs sqrtf(VAR) · 109c ticks @-ids here · 93-spill in
+&& · call-bearing static-inline clones OVERLAY at 8B total extends
+143, first below-y lever narrows 41, dead callee-locals allocate
+NOTHING bounds 29).
 
 ## Validated playbook (update after every session)
 
@@ -2583,6 +2695,98 @@ BF800 6 param-homing forms (local-copy/launder-init/forwarder —
    (datarecon-w26; refines the w16 ≤8B law)**: the ≤8B C-unreachable
    rule does not extend upward — explicit all-zero init of a >8B
    struct lands in .data (BF70 {0}→full HSD_CameraDescFrustum).
+226. **⭐⭐ ABSOLUTE BEFORE-FORM PROMOTION BARS (lawmodel-w27;
+   supersedes 200's S-relative eff-form as the CAUSAL law; closes
+   the w25 W-bar hypothesis)**: a tail/count-class web promotes into
+   the winner band iff its ABSOLUTE weighted decl-prefix mass (real
+   named webs declared before it; replica i3 weight 2 re-confirmed
+   by fitcheck2; call-temps excluded) + W clears a fixed bar —
+   **K_tail=5, K_count=2**. W stays additive 1:1 (the archived
+   W=1/W=2 variant rows u2-u5/o1 fit ONLY with the +W term) — the
+   W-hypothesis is CLOSED: REAL as a bar term, DEAD as a park lever
+   (every park audits W=0 per 212). Causally pinned on a FRESH
+   5-loop/12-web body (probegen2.py; probes B0/A1-A5/B1/C1/C2/D1,
+   probelog.json) — not a corpus fit. Below-bar webs can still
+   promote via rescue seeding (228).
+227. **INTERFERER-PREFIX V26 GATING (lawmodel-w27)**: the v26 class
+   (long-range web spanning multiple loops) is not bar-governed —
+   it promotes iff its decl prefix contains webs that INTERFERE with
+   its live range; non-interferers contribute nothing. Causal pair
+   at the SAME decl position 1: A4 prefix {i2} (interferer) → IN vs
+   A5 prefix {i1} (non-interferer) → OUT; empty-prefix B0/B1/C1/C2
+   OUT; A1/A2/D1 IN. The archived "atom triggers" ({w2,i2,i4} /
+   {w2,i3,w3} before v26) were extensional shadows of this rule.
+228. **WINNER-BAND RESCUE SEEDING IS UNIVERSAL (lawmodel-w27)**: a
+   web below its 226-bar is RESCUED into the winner band when a web
+   it interferes with is already in the band — count promotes in
+   ALL 10 fresh probes including decl-0/prefix-0 (D1), seeded by the
+   always-promoting tail. Constructive lever for parks: seed the
+   band with an interfering winner instead of (or in addition to)
+   raising the target web's prefix mass.
+229. **⭐⭐ CORPUS-FIT INTENSION TRAP (lawmodel-w27; hardens 203 into
+   LAW)**: a model can fit EVERY archived row and still be
+   intension-wrong — the S-relative joint model (tail effB≥5 / count
+   lossAfter−W≤7 / v26 atom-triggers) fit 75/75 archived rows (63
+   labeled + 12 held-out W-variants) with UNIQUE fixpoints, then
+   falsified on the first fresh-shape body. Archived perms are
+   correlated; second offense after w25's B(i3). LAW: no
+   corpus-mined rule enters the playbook without fresh-body causal
+   probes on a NEW interference graph (203 discipline is MANDATORY,
+   not hygiene).
+230. **TWO-NAMED-WALKER PREHEADER ORDER (s1-w27; won gm_801A4014
+   97.86→99.38, committed aa5934853)**: to reproduce a target
+   preheader init order [li i / lbz curr / addi cur2 / addi cur]
+   inside an expanded scan inline: (a) hoist a named `u8 curr` decl
+   FIRST (kills the LICM-temp rotation); (b) declare a SECOND named
+   walker for the loop test (decl first of the walkers) and spell
+   the loop `for (i = 0; cur2->idx != 0xFF; cur2++, i++)`.
+231. **GOTO-THREADING ORPHAN = C-REACHABLE DEAD-B PAIR (s1-w27,
+   gm_1A3F; extends the 16/17 dead-branch family)**: a target
+   "missing dead b" pair is emitted when the original THREADS gotos:
+   `goto not_found;` + `out: return var;` + tail
+   `if (var != 0xFF) goto out;` — the hit-path direct return and the
+   tail goto-out thread through out's `b`, leaving the orphan
+   `b end` EMITTED.
+232. **UNREACHABLE-AFTER-GOTO IS DELETED (s1-w27, negative; bounds
+   96 and 231)**: MWCC DELETES statements unreachable after a goto —
+   an unreachable-return spelling emits NOTHING; dead-b
+   reconstruction must use REACHABLE threading (231), never
+   unreachable source.
+233. **BRANCH-SHADOW STORE-SETUP r0-MODE PARK FAMILY (s1-w27)**:
+   multi-def store-feeding phi temps where ascending-first-fit gives
+   ours r0 but the target shows r3 (or the call-result web processes
+   before the expansion-diamond web, r26↔r27) — both colorings
+   legal; 197/187-family MODE question, not decl-solvable. Members:
+   gm_1A3F P1 (14 rows) + P2 (5 rows) · the whole grzakogenerator
+   backlog (801CAC14/801CACB8/801CAEB0) · vi0501 un_8031D9F8.
+   Open lever: r0-vs-dirty anon-temp mode enumeration (cracks the
+   family jointly); one untested side-probe: gm_801A4CE0 u8→int
+   proto re-type (needs gm_1A45.h owner + cross-TU bytegate).
+234. **PARENT-INLINE WEB PROCESSES ABOVE NESTED-EXPANSION WEBS
+   (s1-w27, itlinkarrow UnkMotion1_Anim 99.51 PARKED-WITH-PROOF)**:
+   a parent inline's named web (decl-0 `Item* ip`) processes ABOVE
+   the nested expansions' webs in EVERY C spelling — caller
+   block-local ≡ expansion-named (extends 125), param-feed inert
+   (187), 34-launder demotes exactly ONE slot (single-mutation bound
+   151/195), and 215-style full anonymization EXPLODES (95.10/133r:
+   VN does NOT merge across HSD calls — **anonymization requires
+   CALL-FREE regions, bounds 215**). Only the target shows the
+   inverted order — 197-class mode park; joins the itdraw-3B/
+   count-v26 family.
+235. **SPLIT-BOUNDARY JUMPTABLE ORPHANS ARE C-RECONSTRUCTABLE
+   (datarecon-w27; toy .data 4.08→100.0 BYTE-IDENTICAL)**: a
+   jumptable whose owner fn landed in ANOTHER split unit can be
+   supplied as a synthetic `static void*` table of
+   `(u8*)extern_fn + offset` entries (toy @992 over EXTERNAL
+   un_80304B94) — bytes AND relocs match.
+236. **0-IMPORTER NAMED POOL TWINS: LEAVE UNDEFINED (datarecon-w27;
+   grpura .sdata2 83.3→100.0 CONTENT)**: when target-named slots are
+   already occupied BYTE-IDENTICALLY by our anonymous pool dups
+   (@519/520/563/564 = grPu_804DBA70..7C), defining the names
+   ANYWHERE adds duplicate bytes (147 dup law) and by-name
+   respelling regresses consumers (inline-arg const-vs-literal
+   codegen, probed −1.5/−2.2 and reverted) — leave them UNDEFINED,
+   converting one hard SIZE row into soft EXPORT-MISSING[0imp] rows.
 
 ### Experiment results (wave 3)
 
@@ -2993,6 +3197,110 @@ BF800 6 param-homing forms (local-copy/launder-init/forwarder —
 
 ## Session log
 
+- **2026-06-07 — Wave 27 (⭐⭐ COUNT/V26 PROMOTION LAWS CAUSALLY
+  PINNED — idioms 226-229 — + ft_0892 BINARY-PROVEN 5-arg proto +
+  gm_801A4014 →99.38 + data-recon ×3; COMMITTED aa5934853; NO new
+  flips — linked stays 851/1041 = 43.87%, matched 72.52%, fuzzy
+  97.59% per post-commit report.json)**. 5 streams (lawmodel ·
+  s1-grind4 depth · s1 breadth · datarecon-scale · file-flip exec) +
+  synthesize; baseline 8e467af5b (the w26 kept edits committed at the
+  boundary). ⚠ THE SYNTHESIZE AGENT DIED on an API error BEFORE
+  updating PLAN.md — this entry is the catch-up synthesis from the
+  durable records (lawmodel-w27/ artifacts + probelog.json ·
+  s1-grind4-w27/CLAIM.md + progress.txt · datarecon-scale-w27/
+  progress.txt (truncated) · file-flip-w27/progress.txt +
+  rank2_pass1.txt · commit aa5934853). DOL sha 08e0bf20 re-verified
+  EXACT at catch-up time; build idle; tree dirt = campaign/
+  backlog.json refresh only (post-commit, not the editor's).
+  ⭐⭐ **LAWMODEL (lawmodel-w27; dataset 0 compiles + 10 fresh-body
+  probes)**: assembled the 63-row labeled corpus (rotation-enum-w20 +
+  lawmine-w25 promo extraction) + 12 held-out W-variant rows; the
+  S-relative joint model (tail effB≥5 / count lossAfter−W≤7 / v26
+  atom-triggers) fit **75/75 with unique fixpoints** (joint2.py) —
+  then **FALSIFIED on the first fresh-shape body** (probegen2.py
+  5-loop/12-web, NOT a corpus perm): the causal laws are **absolute
+  before-form bars K_tail=5 / K_count=2** with W additive 1:1
+  (W-bar hypothesis CLOSED — real as a bar term, dead as a park
+  lever; archived W-variants fit only with +W) (226),
+  **interferer-prefix v26 gating** (A4-vs-A5 same-position causal
+  pair) (227), **universal winner-band rescue seeding** (D1: count
+  promotes at decl-0/prefix-0, seeded by tail) (228), and the
+  **corpus-fit intension trap** as standing law (second offense
+  after B(i3)) (229). APPLICATION to itdraw 3B + lbmemory 15320 did
+  NOT run — now rotation-queue item 1.
+  ⭐ **S1 DEPTH (s1-grind4-w27/CLAIM.md, ~75 compiles)**:
+  **gm_801A4014 97.8571→99.3831 KEPT+committed** — nextScene inline
+  rewritten via two-named-walker preheader order (230) +
+  goto-threading orphan dead-b (231); unit gate PASS (16 siblings
+  100). P1/P2 residuals (19 rows) parked → r0-mode family (233);
+  ~15 probes falsified incl. the unreachable-return negative (232).
+  grzakogenerator ×3 + vi0501 un_8031D9F8 PARKED w/ mechanisms
+  (same 233 family); srcs byte-reverted sha-verified.
+  ⭐ **S1 BREADTH (s1-grind4-w27/progress.txt, ~32 compiles)**:
+  **ft_80089B08 97.8084→98.2757 KEPT+committed — BINARY-PROVEN ARG
+  FIX**: target loads f3 = lbl_804D840C/lbl_804D8410 (.sdata2 named
+  externs) at BOTH lbBgFlash_80020E38 sites — the original prototype
+  took a THIRD float; fix = idiom-204 TU-local 5-arg proto (lbbgflash.h
+  include dropped, header untouched, zero @-drift, unit gate PASS).
+  Residual 20 rows mechanism-mapped (sqrt f4-web single-def costs +8B
+  frame — sqrtf(EXPR) vs sqrtf(VAR) frame charge differs by 8B;
+  y/PAD16 band mirror — first below-y lever found via call-bearing
+  static-inline whose sibling-scope clones OVERLAY at 8B total,
+  extends 143/narrows 41, dead callee-locals allocate NOTHING bounds
+  29; compare-then-home ×2 — 93-spill confirmed). **itlinkarrow
+  UnkMotion1_Anim 99.51 PARKED-WITH-PROOF** (234: parent-inline web
+  above nested-expansion webs in every C spelling; 5 probes;
+  anonymization needs CALL-FREE regions, bounds 215; src
+  byte-reverted). **ftCo_DamageFall 80090594 91.83 PARKED-WITH-
+  PROOF** (ONE 4-web rotation [fcp,ga,element,fp]→target fp-FIRST =
+  param-lead mode, 191/194/206 park family + 4 gap rows = dead
+  out-of-line calcShift, 176-benign; 4 probes falsified; W lever
+  inapplicable — W=0, dying-src transparency extends 212 to POINTER
+  params at 0B charge; plain-init law-C toggle does NOT engage on
+  GLOBAL-read inits; src byte-reverted sha 45d81faf). Joins the
+  param-homing joint family (queue item 3).
+  ⭐ **DATA-RECON ×3 (datarecon-scale-w27, committed)**: toy .data
+  4.08→**100.0 BYTE-IDENTICAL** (synthetic split-boundary jumptable,
+  235) + .rodata →**100.0** (16-TU toy.h gate ALL IDENTICAL incl
+  FLIPPED ifprize) + .sdata2 idiom-147 u32 cast-cure PROVEN;
+  grpura .data 41.34→**99.9** + .sdata2 →**100.0 CONTENT** via
+  named-def DELETION (236) + .sbss 139-fix; mnnamenew PARTIAL
+  (record truncated post-crash; .sdata 99.78/.sdata2 100/.sbss 100
+  landed, .data 60.07/.rodata 85.71 pend a finish pass). Gates:
+  fn bytegates identical, 0 DOWNs.
+  ⭐ **EXEC (file-flip-w27)**: baseline gate PASS at 8e467af5b
+  (full ninja zero recompiles, DOL sha 08e0bf20 EXACT); rank2 pass-1
+  **FLIP-READY pool EMPTY**; hard=1 heads itdraw 3B (w26 dissolution
+  CONFIRMED in rank) < gmopening 12B < itpika 17B < quatlib 25B <
+  sobjlib 27B < grgreatbay 29B < lbmemory 34B; w26 sheds confirmed
+  (itmewtwoshadowball CONTENT:.text GONE; gmresultplayer
+  .rodata/.data hard rows shed); deadstrip pre-audits PASS for
+  itdraw + itmewtwoshadowball. No flips; stood by per build-race
+  law; pass-2 + flip sweep = next wave.
+  **WARNINGS**: (1) idiom-number collision AGAIN — both s1 streams
+  self-labeled their candidates 226-229 while lawmodel's finals took
+  226-229 (per the aa5934853 commit message); **finals 226-236
+  assigned here** (lawmodel 226-229 · s1-depth 230-233 · itlinkarrow
+  234 · datarecon 235-236); briefs MUST carry the current highest
+  (now 236). (2) Synthesize died pre-PLAN-update — orchestrator must
+  treat PLAN.md catch-up as a first-class recovery task (this entry).
+  (3) datarecon's stream record truncated mid-unit-3 — durable
+  records must be written INCREMENTALLY (progress.txt per unit, not
+  at close). (4) report.json canonical section scores diverge from
+  scratch-gate numbers on dtk-pad sections — gate recon by bytegate +
+  linkcheck rows.
+  **QUEUES (ranked)**: (1) APPLY 226-228 to itdraw's arm-2 ip web
+  (3B → flip-eligible) + lbmemory 15320 old-first (reuse
+  probegen2.py + L1' solver as harness); (2) rank2 pass-2 + flip
+  sweep at next boundary (if_2FC93 → plbonus → itdraw →
+  itmewtwoshadowball as blockers clear); (3) r0-mode enumeration
+  (233: gm_1A3F P2 + grzakogenerator ×3 + vi0501 jointly); (4)
+  mnnamenew finish pass (.data/.rodata) + toy .sdata2 40B interleave
+  + grpura @516 assert-pool (S1-coupled); (5) S1 next unowned by
+  rows: ftCo_Bury 34r · lbheap 35r · itkusudama 36r; side-probe
+  gm_801A4CE0 u8→int (needs gm_1A45.h owner); (6) param-homing
+  family (+DamageFall) + i3-bump isolation + FPR 183/184 re-reads
+  (unchanged). Idioms 226-236 added.**
 - **2026-06-07 — Wave 26 (⭐⭐ W-AUDIT CLOSED-NEGATIVE GAME-WIDE +
   itdraw PARK DISSOLVED 37B→3B + itmewtwoshadowball →100 + data-recon
   ×3; FLIP #15 gm_1BFA COMMITTED 43973db87 at the w25→26 boundary —
