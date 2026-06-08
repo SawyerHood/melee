@@ -6,17 +6,19 @@ the end of every session.
 
 > **⭐⭐ ENDGAME METRIC (live since wave 18): LINKED Matching file count.**
 > Currently **874/1057 linked COMMITTED (47.10% complete code; matched
-> 72.87%, fuzzy 97.626; data 58.50% committed → 59.04% with the w31
-> kept edits in-tree)** at HEAD **e17787cfe (naming-16)**. Commit
+> 72.85%, fuzzy 97.636; data **59.45% COMMITTED**; matched fns
+> **18852/19829 = 95.07%**)** at HEAD **029c11e15 (wave 32)**. Commit
 > chain since the merge: **a76c460359 = W29 MERGE of upstream/master
 > ed970616e (25 commits), still NOT pushed** → f28cf5166 (w30
 > symbols-truth fix) → ec8fbdf41 (w30 rebalanced kept edits) →
 > **100d7e5d4 FLIP #16 grgreatbay** → **ded316a75 FLIP #17
-> groldyoshi** → e17787cfe (naming-16, 134 pins). DOL sha
-> 08e0bf20 EXACT at every gate, dtk OK, idempotence EXACT; **w31 kept
-> edits UNCOMMITTED pend grant** (gmresult.c/.static.h + gmclassic.c +
-> grbigblue.c · leak.c + gm_1A4C.c + ftkirby.c · ftCo_WarpStar.c +
-> ftCo_ItemThrow.c + item.h/item.c). Denominator 1041→1057 = upstream
+> groldyoshi** → e17787cfe (naming-16, 134 pins) → **720798909 (w31
+> kept edits GRANTED+COMMITTED: gmresult/gmclassic/grbigblue ·
+> leak/gm_1A4C/ftkirby · WarpStar/ItemThrow/item.h+c)** → 73b6ed2ba
+> (naming-17, 268 pins, naming rows 301→88) → **029c11e15 (wave 32:
+> all 9 lane files COMMITTED)**. DOL sha 08e0bf20 EXACT at every
+> gate, dtk OK, idempotence EXACT; sole working-tree dirt =
+> backlog.json (editor-owned, stale). Denominator 1041→1057 = upstream
 > resplit (18 kirby TUs
 > + crowdsfx/sfx_unk + 4 dtk filler data units; no real unit lost).
 > Flips #1-3 wave 18, #4 (hsd_40FF, data-only) wave 19, #5 (itdrop)
@@ -177,6 +179,35 @@ the end of every session.
 > 22B (NEW S1-SMALL+DATA) → gm_1A3F → gmopening; structural lb_0192
 > 65r → gm_16A9 83r → ft_0CDD 91r; dup-string pool-pair mechanism
 > hunt (2 fresh falsifications, sislib/particle/gm_1A4C class).
+> **W32 (3 streams, ALL COMMITTED — 720798909 w31-grant → 73b6ed2ba
+> naming-17 → 029c11e15 wave-32 HEAD)**: ⭐⭐ **MULTI-TU DUP-POOL
+> CLASS CRACKED** — ftCo_Attack100 is a pre-dtk-merge multi-TU band
+> with per-original-TU pool epochs; ALL-DEFS-at-slots + 3 true anon
+> mints layout (idiom 317) + const-prop/hoist ladder (318) →
+> .sdata2/.data BYTE-IDENTICAL, **36 fn NEW 100s in one unit** (gate
+> 162/47/5, kept DOWNs documented target-direction). ⭐⭐ Data-recon
+> ×6, **both w31 rank waves CLEARED** (rank_w32_post.txt): tylist
+> (IMPORT→LITERAL INVERSION first-of-class, 310; .data 0x190
+> BYTE-IDENTICAL, un_80313358 →100) · mnmainrule (.data 0xbd0
+> BYTE-IDENTICAL relocs 5/5; stringize rename fixed 2 sections) ·
+> ifstatus (first .data-string sequencer 315 + one-past-end arg 314;
+> **802F6EA4 + 802F7134 NEW MATCHES**) · mpisland (volatile-on-READ
+> law 321; **8005AC14 + 8005AE1C NEW MATCHES**) · itmewtwoshadowball
+> (ItemStateTable[18] one-shot, 54/54 relocs — last data rows GONE,
+> flip-near again). Data 59.04→**59.45% COMMITTED**. ⭐ S1 harvest:
+> **ftKb_SpecialN_800EEC34 + 800EED50 →100 MATCH ×2** (s8→u8
+> element re-type; named-local vs CSE-temp web, 324) · gm_801A9630
+> +1.46 (u32 zero-trip-guard fold, 322) · gm_801BBB64 +3.54
+> (pointer-chain re-deref, 323) · gm_1884 blocked on HEADER QUEUE
+> gm_16AE fn_8016B388 s16→int (fn-ptr-cast falsifier, 325). ⭐
+> naming-17 COMMITTED 73b6ed2ba (268 pins ×4 w31 units, rows 301→88,
+> +2 strict-100s, per-pin DOL-gated). Idioms **310-325 minted
+> (highest now 325)**. OURS-BIGGER sweep diagnosed ~170B of 1-line
+> cures (toy 32B declspec ×4-strings · ftNn_Init 64B + gm_18A5 0x70
+> dead-def deletes). NEXT: push the chain; recon rank gm_16F1 258B >
+> psdisp 254B > grrcruise 238B > mndiagram2 215B; ftCo .sdata2
+> ours-BIGGER family = 317/318 generalization sweep; naming-18
+> re-derive; exec re-rank (itmewtwoshadowball likely FLIP-READY).
 
 ## Ground rules
 
@@ -715,8 +746,8 @@ gmclassic 752B > grbigblue 594B > gm_1A4C 528B > leak 520B
 (park-listed, verify)~~ (**ALL CLEARED w31, incl. the gmresult
 idiom-69 package — see below**) > tylist 490B.
 
-**⭐⭐ WAVE-31 SCALE ×6 — TWO LANES, ZERO CLAIM COLLISION (all kept
-edits UNCOMMITTED pend grant; shared scratch dir
+**⭐⭐ WAVE-31 SCALE ×6 — TWO LANES, ZERO CLAIM COLLISION (kept
+edits COMMITTED 720798909 at the w32 boundary; shared scratch dir
 datarecon-scale-w31/ — progress.txt + progress_laneB.txt,
 cross-referenced)**: claimed the w30 rank heads on the identical
 exclusion basis; **both lanes' units ALL OFF THE GAP RANK** except
@@ -793,9 +824,92 @@ grbigblue uniform −1 · gm_1A4C sequencer+def renumber · ftkirby
 @223..region→@1075+ + 6 jtbl anons ↔ ftKb_Init_803CA0CC..2CC
 (re-derive AFTER these lanes commit); dup-string pool-pair
 mechanism hunt (0x10B here + ~70 @-ticks in particle); sweep other
-ours-BIGGER rows with recipe 294. **Next rank rows: tylist 490B >
+ours-BIGGER rows with recipe 294. ~~**Next rank rows: tylist 490B >
 mnmainrule 483B > ifstatus 336B > mpisland 324B**
-(soundtest/particle own-session exclusions stand).
+(soundtest/particle own-session exclusions stand)~~ (**ALL CLEARED
+w32 — see below**).
+
+**⭐⭐ WAVE-32 SCALE ×6 — TWO LANES, ZERO CLAIM COLLISION (ALL
+COMMITTED 029c11e15; durables: datarecon-scale-w32b/progress.txt +
+datarecon-scale-w32/progress.txt)**: claimed the w31 rank rows #1-6
+on the standing exclusion basis (soundtest/particle own-session);
+**all six units OFF THE GAP RANK** (rank_w32_post.txt, 891B + 1309B
+rank weight cleared); data 59.04→**59.45% COMMITTED**. **Lane E
+(w32b: tylist 490B · mnmainrule 483B · ifstatus 336B; ~31 compiles)**:
+**tylist — IMPORT→LITERAL INVERSION first-of-class (310, the INVERSE
+of the leak/gmresult import→def class)**: target stream order ==
+reloc first-use order across all 27 .sdata2 entries proves the un_*
+names are dtk pool artifacts — 26 extern f32s + 4 .sdata objects + 4
+.data string-blobs respelled as plain literals/global defs; .data
+0x9→**0x190 BYTE-IDENTICAL**, .sdata/.sdata2 content-exact
+(ALIGNFIX tails); **un_80313358 →100 NEW MATCH**; the idiom-92
+fcmpu CONST-FIRST tell (311) kept un_804DDE48 extern at exactly 3
+sites (un_80313508 stays 100-true). **mnmainrule** — import→def
+class: 0x134 u8 head table + cursor_descs[5] (5 ADDR32 relocs) +
+struct[7] defs + the `data`→`user_data` HSD_ASSERTREPORT stringize
+rename (ONE rename fixed .sdata AND .data); .data 0xa30→**0xbd0
+BYTE-IDENTICAL + RELOCS 5/5**; .sdata2 →**BYTE-IDENTICAL** (idiom-259
+declspec block incl. pointer-typed byte-pattern def 316); .sdata
+content-exact (>8B-struct bound 312 probe-reverted); gate 93/31/0.
+**ifstatus** — stream-ORDER unit, **first .data-string idiom-258
+sequencer (315)**: `char* volatile` TU-top mints for
+DmgNum/DmgMrk_scene_models + ifStatus_803F9628 def move + the
+**one-past-end pointer arg (314) → ifStatus_802F7134 →100** (reloc-free
+addi into the adjacent string, binary-proven) + **802F6EA4 →100**
+(named-zero 266 cure); .data 306B-gap→content-exact 0x1e6; .sdata
+u8[4]-quad packing law (313); gate 53/35/0. **Lane F (w32: mpisland
+324B · itmewtwoshadowball 290B · ftCo_Attack100 277B; ~49 compiles)**:
+**mpisland** — TerrainPalette `__declspec(section ".rodata")` (271)
++ 6 reads respelled `*(volatile const f32*)&mpIsland_804D8158`;
+.rodata MISSING→**0xa0 BYTE-IDENTICAL**, .data/.sdata2 content-exact,
+.text reloc structure 18/18 target-IDENTICAL; **mpIsland_8005AC14 +
+8005AE1C →100 NEW MATCHES**; P1/P2 falsifications minted as 320/321
+bounds (zero-init demotion beats declspec for .sdata2 floats;
+volatile-const DEF forces anon copy — volatile belongs on the READ).
+**itmewtwoshadowball** — extern-only ItemStateTable[18] 0x120 defined
+in-TU from target bytes ONE-SHOT: [.data-0] 7.78→**99.81**, 54/54
+relocs IDENTICAL, .text untouched; its LAST data rows — flip-near
+again (re-rank). **ftCo_Attack100 — THE MULTI-TU DUP-POOL CLASS
+CRACKED AT SCALE (317; ~36 compiles)**: the "TU" is a pre-dtk-merge
+multi-TU band (Attack100/JumpAerialF1/ItemScope/Catch/Capture*) with
+per-original-TU pool epochs — symbols.txt b=0 names are pool-slot
+cosmetics; ALL-DEFS-at-exact-slots + 3 TRUE anon mints pinned by
+lexical def/fn-order interleave (8EC8 def moved to target fn order)
++ ATTRIBUTE_ALIGN(8) epoch pads + TU-local inline clones re-keying
+__assert args + char[4]="" zero-pad instrument (320): .sdata2
+0x40→**0xe8 BYTE-IDENTICAL** · .data →**0x34 BYTE-IDENTICAL** ·
+.sdata/.rodata content-exact; const-prop/hoist ladder (318) +
+volatile-local fan-out (319) byte-proven (MWCC arg eval LEFT-to-RIGHT);
+gate 162 SAME / 47 UP / 5 DOWN — **36 fn NEW 100s in one unit** (+2
+section rows = +38); 4 kept DOWNs documented target-direction
+(magic-dedupe park: single-TU pool dedupe limit, the one UNCRACKED
+dup sub-class). INCIDENT→LAW: python edit scripts must COUNT-ASSERT
+every replacement (s.index() hit a prototype, 1.5k-line dup; rebuilt
+via apply_attack100.py replay). **OURS-BIGGER SWEEP (recipe 294, 61
+rows tree-wide, diagnosis only — oursbigger_sweep.txt)**: toy 32B =
+1-line `__declspec(section ".sdata")` ×4 string defs (also clears its
+.sdata row; the @627 jtbl band is CORRECT, not the ftkirby class) ·
+ftNn_Init 64B = 2 zero-ref dead defs DELETE (verify ftNana sibling) ·
+gm_18A5 74B = lbl_803D9E9C 0x70 dead blob DELETE · mnnamenew 78B =
+naming-lane re-pair (relocs present, NOT leftovers) · gricemt =
+positional-blob 272 respell · mninfo/mnruleplus/mnevent/vi1201v2 =
+invented-literal 245/247 or cross-split 270, S1-coupled · ftCo
+.sdata2 family (ThrownKirby 64B · Guard 44B · Bury/DamageIce/Damage/
+DownBound/Shouldered/ItemThrow/09F7/WarpStar 40B-class + camera 92B +
+psdisp 40B) = **317/318 generalization sweep, next recon lane** ·
+hsd_3983 47B sqrtf ballast park (49/251). GATES both lanes: pgrep
+hard-guard + ps resample (308) clean at every compile; DOL sha
+08e0bf20 EXACT per 307 (NonMatching src objs are NOT DOL link inputs
+— per-unit linkcheck/objdiff bytegates are the binding gates);
+ninja-rule byte-reproducibility proven ×6 units; ZERO file collision
+across the 3 live lanes. New laws → **idioms 310-321** (+ s1-unlock
+322-325). Naming-18 queue: mpisland uniform +1 after @269 ·
+Attack100 anon-kill maps + 3 filler names + ftCo_804D9050 at the
+@848 slot · tylist/ifstatus sequencer renumbers · mnmainrule
+~stable. **Next rank rows: gm_16F1 258B > psdisp 254B > grrcruise
+238B > mndiagram2 215B > itkusudama 210B > camera 208B**
+(soundtest/particle own-session exclusions stand) **+ the diagnosed
+~170B one-liner batch (toy/ftNn_Init/gm_18A5)**.
 
 ## ⭐⭐ MERGE VERDICT (w29 — upstream/master ed970616e, 25 commits, merged a76c460359; NOT pushed)
 
@@ -907,7 +1021,7 @@ our committed fix (6377641b9).
   grgreatbay 29B, gmopening, vi0501/lbshadow/leak/itkyasarin tail —
   those TUs untouched (vi0501.c minor declaration churn only).
 
-### ⭐ UPSTREAM-TECHNIQUES ADOPTION LIST (minted as idioms 257-264; ⚠ w30 finals 265-291 + w31 finals 292-309 assigned — highest now 309)
+### ⭐ UPSTREAM-TECHNIQUES ADOPTION LIST (minted as idioms 257-264; ⚠ w30 finals 265-291 + w31 finals 292-309 + w32 finals 310-325 assigned — highest now 325)
 
 Adoption priority (full statements in the playbook):
 1. **257 inline_sw switch-helper dedup** — try on the remaining
@@ -1279,7 +1393,7 @@ WORKSTREAM — the w30 structural-tier wave 1 took its first 4 units
 | PARK-CONFIRMED | 2 | grgreatbay 29B · **lbmemory 34B (w28 PARK-PROVEN, idiom 240)** · ~~itdraw 3B~~ **(w29: REMOVED — upstream MATCHED+linked the TU via inline_sw, a8bc21722/idiom 257; the w28 PARK-PROVEN verdict held for band routes but the restructure space contained the C lever — 240 BOUNDED)** · (historical: itdraw w26 DISSOLVED from 37B — rover anonymization, idiom 215; w28 PARK-PROVEN) — mechanism-proven order parks. **w26: the w25 W-AUDIT directive is EXECUTED and CLOSED-NEGATIVE for the ENTIRE park set** (read-only census `file-flip-w26/waudit_census.txt` + waudit-w26 byte-probes: current W = target W = 0 everywhere, all subword traffic load-fed/literal = W-inert, idioms 212/213). Sole open lever WAS count/v26 — **w27 made it law (226-228), w28 APPLIED it (lawapply-w28/RECORD.md): both park maps reconstructed EXACTLY, NO C lever exists (itdraw E-web eff_abs=0 immutable/227-gate unfireable/228-band EMPTY; lbmemory old band-front needs an illegal hoist, currentp bottom needs decl-unreachable demotion, d1 top-slot inert per 238, d3 anti-target per 237) — PARK-PROVEN ×2, lever line CLOSED. grgreatbay = last PARK-CONFIRMED unread under 226-228+237/238 (cheap desk check queued)** |
 | FPR-PARK | 1 | sobjlib 27B — FPR trio/band-mirror joint park (183-186/156) |
 | L1P-PENDING | 2 | **w25: BOTH RUN, bucket now EMPTY of pending work** — gmopening 12B → PARK-CONFIRMED (intra-anchor chain LIFO, idiom 206; ~50 forms falsified; cleanest low-pressure order-law specimen) · itpikachuthunder 17B DF8 → DEMOTED to BLOCKED-class (163-vs-160 closure, idiom 208) |
-| S1-SMALL+DATA | 4 | vi0501 41B — **w27 PARKED w/ mechanism (un_8031D9F8 98.83; r0-mode family, idiom 233; src byte-reverted)** · ft_0852 · ifcoget **23B (was 34B)** — w25 park RE-CONFIRMED, 2 new walls (idiom 207) · itmewtwoshadowball **w26: it_802C4D10 →100.0000 MATCH (void→s32 re-type, idiom 214; kept edit), .text done — pends [.data-0] 7.78 recon only; w27 rank: CONTENT:.text row GONE** |
+| S1-SMALL+DATA | 4 | vi0501 41B — **w27 PARKED w/ mechanism (un_8031D9F8 98.83; r0-mode family, idiom 233; src byte-reverted)** · ft_0852 · ifcoget **23B (was 34B)** — w25 park RE-CONFIRMED, 2 new walls (idiom 207) · itmewtwoshadowball **w26: it_802C4D10 →100.0000 MATCH (void→s32 re-type, idiom 214; kept edit), .text done — pends [.data-0] 7.78 recon only; w27 rank: CONTENT:.text row GONE; ⭐ w32: [.data-0] recon EXECUTED 029c11e15 (99.81, 54/54 relocs) — likely FLIP-READY, re-rank** |
 | S1-MED+DATA | 6 | lbshadow 126B · leak 78B · itkyasarin 83B · vi0502 64B · textdraw 144B · ftmaterial 123B |
 | CODEGEN+DATA | 1 | efsync — 4844B same-size .text, schedule/mnemonic. ~~plbonus flip-near~~ **(w29: plbonus MATCHED+linked upstream in the merge — item CLOSED)** |
 | DATA-RECON | 1 | **if_2FC93 — ZERO .text work, solved recon class = cheapest flip after gm_1BFA** |
@@ -1327,7 +1441,14 @@ landed from the adoption stream; queue heads now if_2FC93 (zero
 100d7e5d4 + #17 groldyoshi COMMITTED ded316a75 (surfaced FLIP-READY
 by the w30 recon, rank2 pass-1); pass-2 pool EMPTY; queue heads now
 if_2FC93 → itmewtwoshadowball → ftNn_Init 22B (NEW) → gm_1A3F 20B →
-gmopening 12B.**
+gmopening 12B.** **w32 (no exec lane this wave): itmewtwoshadowball
+[.data-0] recon EXECUTED (99.81, 54/54 relocs, .text untouched —
+rank row 290B→0B, residual ALIGNFIX/dtk-gap softs only) — **likely
+FLIP-READY, run rank2 at 029c11e15 first thing next exec pass**
+(re-rank-after-recon is twice-proven policy); ftNn_Init gained a
+diagnosed 64B dead-def delete on top of its 22B row (oursbigger
+sweep); queue heads now if_2FC93 → itmewtwoshadowball (re-rank) →
+ftNn_Init → gm_1A3F 20B → gmopening 12B.**
 
 **Flipped (17)**: gm_182F + plattack (51951826b) · ftchangeparam
 (4715a41d8) · hsd_40FF (ab2a4870d, data-only) · itdrop (d4fee40d1) ·
@@ -1365,8 +1486,9 @@ by count.**
 SIZE .rodata 0x10vs0x90 + .bss 0x34vs0x48 + .sdata2 + ~30 imported
 const exports — named-def recon, the solved class), then
 ~~plbonus~~ (**w29: matched+linked upstream — CLOSED**), then
-**itmewtwoshadowball** (.text CONTENT row GONE in w27 rank; pends
-[.data-0] 7.78 recon = 5 hard rows). ~~itdraw OUT of flip-near (w28
+**itmewtwoshadowball** (.text CONTENT row GONE in w27 rank; ~~pends
+[.data-0] 7.78 recon = 5 hard rows~~ **w32: recon EXECUTED, data
+rows GONE — likely FLIP-READY at 029c11e15**). ~~itdraw OUT of flip-near (w28
 PARK-PROVEN, 240)~~ — **w29: itdraw matched+linked UPSTREAM
 (a8bc21722, inline_sw 257); the "C-UNREACHABLE under 226-228"
 reading held for band routes only — 240 bounded**. NEW: **gm_1A3F 20B** (w28 rank: 17→1 hard; residual =
@@ -1593,7 +1715,7 @@ gmClassic_80472AF8 static→global. ~~SIDE ITEM (math_data.c)~~ —
 binary-proven transcription-error call.
 Re-run `file-flip-w20/rank.py` after each recon/S1 wave.
 
-## ⭐ STRUCTURAL-TIER VERDICT (w30 wave 1 OPENS the deep/partial tail assault + w31 wave 2; kept edits UNCOMMITTED pend grant)
+## ⭐ STRUCTURAL-TIER VERDICT (w30 wave 1 OPENS the deep/partial tail assault + w31 wave 2; kept edits COMMITTED 720798909 at the w32 boundary)
 
 First dedicated structural wave against the S3 tier (the census's
 145-unit STRUCT-DEEP(+DATA) + partial band). **Lane A
@@ -4076,6 +4198,113 @@ fns (non-portable, 241).
    .sdata2 would have been WRONG ×4) — derive @-renumber maps by
    content-byte LCS over target-vs-src objects, then value-verify
    every pin.
+310. **IMPORT→LITERAL INVERSION DIAGNOSIS (w32 tylist; the INVERSE of
+   the leak/gmresult import→def class)**: when target data-section
+   stream order == reloc FIRST-USE order across ALL entries, the
+   un_*/symbols.txt names on pool entries are dtk artifacts
+   (scope:global boilerplate), NOT defs — respell the decomp's extern
+   imports as PLAIN LITERALS; the named-twin EXPORT rows go
+   [0imp]-soft per 236.
+311. **EQUALITY-COMPARE CONST-FIRST CANONICALIZATION IS A RECON TELL
+   (w32 tylist un_80313508; operationalizes 92)**: MWCC canonicalizes
+   literal ==/!= compares CONST-FIRST in fcmpu; a target row with the
+   VARIABLE first proves the original read a NAMED symbol — keep or
+   restore the extern at exactly those sites (pool entry stays anon;
+   the import resolves to the same address at link).
+312. **>8B STRUCT DEF LEAVES SMALLDATA (w32 mnmainrule 4B88; bounds
+   223)**: a dtk-merged .sdata run CANNOT be respelled as one >8B
+   struct (it goes .data); re-splitting into ≤8B scalar defs is the
+   only .sdata spelling.
+313. **u8 ARRAYS 4-ALIGN IN .sdata, SCALARS PACK (w32 ifstatus color
+   quads; refines the gmresult u8-block law)**: 1B+3B dtk symbol
+   boundaries are NOT def boundaries; u8[4] quads are the packed
+   spelling.
+314. **ONE-PAST-END POINTER ARG = RELOC-FREE addi INTO THE NEXT
+   OBJECT (w32 ifstatus 802F7134 →100)**: a target
+   `addi rX,rAnchor,sizeof(arr)` with NO reloc, landing inside an
+   adjacent dead-static string, is the `(char*)(ptr_local + N)`
+   one-past-the-end spelling; the pointer LOCAL pins sym-anchored
+   materialization (98/256); a visible-def with plain indexing
+   section-anchors at .data+0 instead (293); an EOF def kills both
+   the fold and the stream (all three probed).
+315. **SEQUENCERS MINT .data STRINGS TOO (w32 ifstatus; extends 258
+   beyond .sdata2)**: `char* volatile s = "...";` locals in the
+   TU-top uncalled static sequencer pin .data pool-STRING order;
+   floats and strings can share ONE helper.
+316. **POINTER-TYPED BYTE-PATTERN DEF (w32 mnmainrule)**: `u8* x =
+   (u8*)0x02030506;` under __declspec(section ".sdata2") emits the
+   byte pattern reloc-free (abs init) and stays decl-compatible with
+   a `u8*` extern.
+317. **MULTI-TU BAND DIAGNOSIS + ALL-DEFS RECONSTRUCTION — THE
+   DUP-POOL RECIPE (w32 ftCo_Attack100, class CRACKED; extends
+   294/296)**: symbols.txt-named b=0 .sdata2/.sdata slots in
+   same-VALUE groups keyed to fn clusters = per-original-TU pool
+   epochs of a pre-dtk-merge multi-TU band (dup 0.0/1.0 pairs,
+   "jobj.h"/"jobj" ×5, etc.). Reconstruct via named const defs at the
+   exact stream slots — def-AFTER-readers for plain reads (itdrop
+   precedent), volatile casts where the def precedes the reader —
+   plus the few TRUE anon mints pinned by lexical def/fn-order
+   interleave (move the creator fn to target order so the FIRST
+   converter pins the 4330-magic mint); ATTRIBUTE_ALIGN(8) reproduces
+   per-epoch pads; TU-local inline clones (gmresult-76F60 precedent)
+   re-key __assert pool args to the named arrays; char[4]="" fillers
+   (320) supply the .data epoch pads. The gm_1A4C/sislib dup-pair
+   class IS this in miniature — the named-def route SIDESTEPS the
+   uncracked dup-pool mechanism entirely. Residual limit: TRUE anon
+   magics deduped by our single TU stay parked (magic-dedupe class).
+318. **CONST-PROP/HOIST LADDER FOR NAMED CONST READS (w32 Attack100;
+   extends 104)**: plain named read = CSE+const-prop (needs
+   def-after-reader) · `*(f32*)&const_obj` = hoistable ACROSS CALLS
+   into a callee-saved · `*(volatile T*)&sym` = load pinned at the
+   statement, one load per cast. MWCC arg eval order is
+   LEFT-to-RIGHT (byte-proven): an `(z = *(volatile f32*)&X)`
+   assignment-in-arg + later `z` arg reuse reproduces post-call
+   lfs+fmr exactly (86E0 →100).
+319. **VOLATILE-LOCAL FAN-OUT (w32 Attack100 8C54/A8E4 →100)**:
+   `f32 z = *(volatile f32*)&X;` + N uses = exactly ONE load feeding
+   stores and args byte-exactly.
+320. **ZERO-INIT DEMOTION BOUNDS (w32; refines 252/266/298)**:
+   char[4]="" (all-zero string init) demotes to .sdata even
+   NON-static (252's .data-forcing needs nonzero content), and
+   `__declspec(section ".data")` DOES beat zero-init demotion for
+   char[] — unlike floats/.sdata2, where demotion WINS over declspec
+   (mpisland P1: declspec'd .sdata2 float=0.0F lands in .sbss2).
+   char[]+declspec is the .data zero-pad instrument.
+321. **VOLATILE BELONGS ON THE READ, NEVER THE DEF (w32 mpisland P2
+   falsification)**: a `volatile const` DEF keeps the named symbol
+   placed but makes MWCC copy ALL reads through a fresh anon pool
+   slot (+11 rt=109 relocs, .text +4B); spell volatility as
+   `*(volatile const T*)&sym` at the read sites (sobjlib.c:632
+   in-tree precedent).
+322. **u32-ONLY ZERO-TRIP-GUARD FOLD ON UNROLLED CONSTANT-TRIP LOOPS
+   (w32 s1 gm_801A9630 +1.46)**: MWCC drops the dead li/cmpwi/bge
+   entry guard on an unrolled constant-trip loop ONLY for UNSIGNED
+   counters; s32 keeps it. Falsified: do-while (kills the unroll),
+   (s32) cast in the cond (kills the unroll), init-outside/while/
+   ptr-deref (no-ops), PAD_STACK (orthogonal).
+323. **STORES KILL POINTER-CHAIN CSE — RE-DEREF PER STATEMENT (w32 s1
+   gm_801BBB64 +3.54; extends the 235-era alias rules)**: MWCC
+   re-derives a pointer chain after EVERY store; decomp
+   `p = chain; ... use p` caching is the anti-pattern. Write the
+   chain expression per statement — a condition's load IS reused for
+   the first store-free field read, then reloaded after stores.
+324. **NAMED-LOCAL vs CSE-TEMP COLORING LOTTERY (w32 s1 ftKb EED50
+   →100; third sighting incl. the 9630 homes web)**: single-init
+   pointer locals take scratch-r3-then-home-copy; multi-assign goes
+   direct-into-home; a pure CSE expression (no named local)
+   coalesces straight into the precolored arg reg (kills
+   `addi rX,r3,0`), and flips two-colorings + call-arg schedules.
+   Choosing named-local vs inline-expression IS the lever for this
+   residual S1 class. Sibling law same session: an s8→u8 ELEMENT
+   re-type fixes extsb rows where a (u8) CAST falsified (EEC34 →100
+   — the TYPE form reaches both load sites, the cast only one).
+325. **fn-PTR-CAST CALLS FORCE INDIRECT lis/addi/mtlr (w32 s1
+   gm_1884)**: casting a direct callee
+   `((void(*)(int,int))fn)(...)` to shim a proto mismatch forces an
+   indirect call — a FALSIFIER for proto-mismatch shims; fix the
+   prototype at the owning header instead (HEADER QUEUE: gm_16AE.h:52
+   + gm_16AE.c:289 fn_8016B388 s16→int, gm_16AE bytegate expected
+   identical — callee-side s16 params are caller-converted; verify).
 
 ### Experiment results (wave 3)
 
@@ -4491,6 +4720,114 @@ fns (non-portable, 241).
 
 ## Session log
 
+- **2026-06-08 — Wave 32 (⭐⭐ MULTI-TU DUP-POOL CLASS CRACKED —
+  ftCo_Attack100 recipe 317, **36 fn NEW 100s in one unit** + ⭐⭐
+  data-recon ×6, BOTH w31 rank waves CLEARED (tylist/mnmainrule/
+  ifstatus + mpisland/itmewtwoshadowball/ftCo_Attack100 ALL OFF THE
+  GAP RANK); data 59.04→**59.45% COMMITTED**; matched fns
+  **18852/19829 = 95.07%**, fuzzy 97.636 + ⭐ S1 harvest: **ftKb
+  EEC34+EED50 →100 MATCH ×2**, gm_801A9630 +1.46, gm_801BBB64 +3.54
+  + ⭐ NAMING-17 COMMITTED 73b6ed2ba (268 pins ×4 units, rows
+  301→88, +2 strict-100s); idioms 310-325 minted)**. 3 streams
+  (recon lane E w32b · recon lane F w32 · s1-unlock-w32) + editor;
+  EVERYTHING COMMITTED — chain e17787cfe → **720798909 (w31 kept
+  edits GRANTED)** → 73b6ed2ba (naming-17) → **029c11e15 = wave-32
+  HEAD** (all 9 lane files); DOL sha 08e0bf20 EXACT at every lane
+  gate (307 sibling-isolated `ninja build/GALE01/ok`; NonMatching
+  src objs are NOT DOL link inputs — per-unit linkcheck/objdiff
+  bytegates are the binding gates) + ninja-rule byte-reproducibility
+  proven ×6 units; pgrep+ps (308) clean throughout; ZERO file
+  collision across 3 live lanes; w29 merge chain STILL NOT PUSHED.
+  ⭐⭐ **LANE E (datarecon-scale-w32b/; tylist 490B · mnmainrule 483B
+  · ifstatus 336B; ~31 compiles)**: tylist — **IMPORT→LITERAL
+  INVERSION first-of-class (310)**: 26 extern f32 + 8 data objects
+  respelled as plain literals/global string-blob defs (stream order
+  == reloc first-use order across all 27 .sdata2 entries = the
+  diagnosis); .data 0x9→**0x190 BYTE-IDENTICAL**, .sdata/.sdata2
+  content-exact; **un_80313358 →100**; the fcmpu CONST-FIRST tell
+  (311) kept un_804DDE48 extern at exactly 3 sites; gate 14/4/0.
+  mnmainrule — import→def class + the `data`→`user_data` stringize
+  rename (ONE rename fixed .sdata AND .data); .data 0xa30→**0xbd0
+  BYTE-IDENTICAL + RELOCS 5/5**, .sdata2 **BYTE-IDENTICAL** (259
+  declspec block, ptr-typed byte-pattern 316), .sdata content-exact
+  (>8B-struct bound 312); gate 93/31/0. ifstatus — stream-ORDER
+  unit, **first .data-string sequencer (315)** + ifStatus_803F9628
+  def move + **one-past-end pointer arg (314) → 802F7134 →100** +
+  **802F6EA4 →100** (named-zero 266 cure); u8[4]-quad packing (313);
+  gate 53/35/0; splice incident (static glued onto A8 def) caught by
+  EXPORT+bind check, repaired. ⭐⭐ **LANE F (datarecon-scale-w32/;
+  mpisland 324B · itmewtwoshadowball 290B · ftCo_Attack100 277B;
+  ~49 compiles)**: mpisland — TerrainPalette declspec .rodata (271)
+  + `*(volatile const f32*)&` read respells; .rodata →**0xa0
+  BYTE-IDENTICAL**, .text reloc structure 18/18 IDENTICAL;
+  **8005AC14 + 8005AE1C →100**; P1/P2 falsifications → 320/321.
+  itmewtwoshadowball — ItemStateTable[18] 0x120/54-reloc def
+  ONE-SHOT, [.data-0] 7.78→**99.81**, .text untouched — last data
+  rows GONE, **likely FLIP-READY (rank2 next exec pass)**.
+  ftCo_Attack100 — pre-dtk-merge MULTI-TU band: ALL-DEFS + 3-MINTS
+  layout (317) + const-prop/hoist ladder (318, MWCC arg eval
+  LEFT-to-RIGHT byte-proven) + volatile fan-out (319) + char[4]=""
+  zero-pads (320); .sdata2 0x40→**0xe8 BYTE-IDENTICAL** + .data
+  **BYTE-IDENTICAL**, .sdata/.rodata content-exact; gate 162/47/5 —
+  **36 fn NEW 100s** (+2 section rows = the commit's +38); 4 kept
+  DOWNs documented target-direction (magic-dedupe park = single-TU
+  dedupe limit, the one UNCRACKED dup sub-class). INCIDENT→LAW:
+  python edits must COUNT-ASSERT every replacement (s.index() hit a
+  prototype, 1.5k-line dup; rebuilt via apply_attack100.py).
+  OURS-BIGGER sweep (61 rows, diagnosis only): toy 32B 1-line
+  declspec(".sdata") ×4 + ftNn_Init 64B + gm_18A5 0x70 dead-def
+  deletes = ~170B tractable; ftCo .sdata2 family = 317/318
+  generalization lane; mnnamenew = naming-lane re-pair.
+  ⭐ **S1-UNLOCK (s1-unlock-w32/; ftkirby/gm_1A4C/gm_1BA8/gm_1884/
+  gmresult; ~52 compiles)**: **ftKb_SpecialN_800EEC34 →100** (s8→u8
+  ELEMENT re-type — the w31 cast-probe falsification was the CAST
+  form, 324 sibling law) + **800EED50 →100** (3-part named-local vs
+  CSE-temp web, 324); gm_801A9630 96.16→**97.62** (u32-only
+  zero-trip-guard fold, 322); gm_801BBB64 72.02→**75.56**
+  (pointer-chain re-deref, 323; const-hoist residual = next lever);
+  gm_801BC00C diagnosed (recipe in record); gm_1884 fn_801891F4
+  96.61 BLOCKED on header (fn-ptr-cast falsifier 325) — **HEADER
+  QUEUE: gm_16AE.h:52 + gm_16AE.c:289 fn_8016B388 s16→int**;
+  gmresult 8-fn queue triaged, 0 kept (74920 idiom-15-class park
+  ×5 falsifications; 75DC8/74468/74B4C diagnosed, 4 unopened).
+  ⭐ **NAMING-17 (naming17 commit 73b6ed2ba, symbols.txt alone)**:
+  268 pins ×4 w31 units (gmresult 40 · grbigblue 49 · gm_1A4C 113 ·
+  ftkirby 66 incl. 6 ftKb jtbl demotions per 306 + 14
+  winning-src-emission names), per-pin DOL-gated, ZERO fuzzy DOWNs,
+  +2 strict-100s (grBigBlue_801EACE8 + fn_801A851C), rows 301→88;
+  content-LCS value-keyed maps (309). **Editor finals: lane-E A-G →
+  310-316 · lane-F A-E → 317-321 · s1 a-d → 322-325 (highest now
+  325; no self-assign collisions)**.
+  **QUEUES (ranked)**: (1) **PUSH the chain** (w29 merge → 029c11e15,
+  all gates green); (2) recon rank: **gm_16F1 258B > psdisp 254B >
+  grrcruise 238B > mndiagram2 215B > itkusudama 210B > camera 208B**
+  (soundtest/particle own-session exclusions stand) + the diagnosed
+  ~170B one-liner batch (toy 32B declspec ×4-strings · ftNn_Init 64B
+  dead-defs, verify ftNana sibling · gm_18A5 lbl_803D9E9C 0x70
+  delete); (3) ftCo .sdata2 ours-BIGGER family sweep = 317/318
+  generalization (ThrownKirby 64B · Guard 44B · camera 92B · psdisp
+  40B · Bury/DamageIce/Damage/DownBound/Shouldered/ItemThrow/09F7/
+  WarpStar); (4) flips: re-run rank2 at 029c11e15 —
+  **itmewtwoshadowball likely FLIP-READY**; queue if_2FC93 →
+  itmewtwoshadowball → ftNn_Init 22B+64B → gm_1A3F 20B → gmopening
+  12B (257-probe still pending); (5) S1 (data now byte-true under
+  them): mpisland A728 89.75 (0x18 short)/B004 · Attack100
+  9558/9930/8EC8/9228/A054 (f0/f1 pair swap — 304 lever?)/74A4/72A0/
+  7938/BBF8 · tylist 80312904 87.9/80313774 78.0 · mnmainrule
+  80230274/80230E38/80231804/8022F538 · ifstatus 4EDC 82.7/5EC0/61FC
+  · gm_1BA8 BC00C recipe + BBB64 const-hoist lever · gmresult
+  leftovers (75240/75880/771C0/76D3C unopened); (6) HEADER QUEUE:
+  gm_16AE fn_8016B388 s16→int (unblocks gm_1884 →100-near, clears
+  RELOC:.data:9 + 0.016f pool); (7) naming-18 — re-derive AFTER
+  029c11e15 per 290 (mpisland uniform +1 after @269 · Attack100
+  anon-kill maps + 3 filler names + ftCo_804D9050 at the @848 slot,
+  value-keyed per 99/309 · tylist/ifstatus sequencer renumbers ·
+  ftkirby 9 anons @999→@1001-class · mnnamenew value-keyed re-pair);
+  (8) parks: mnmainrule MISSING:.sbss:0x10 + ifstatus .bss 0x278
+  (zero-fill register-rotation, mnname w30b precedent) · hsd_3983
+  sqrtf ballast · magic-dedupe dup sub-class (single-TU pool dedupe
+  limit) · gm_801A9094 dup-pool binding pair; (9) re-run triage.py
+  + refresh backlog.json (editor dirt, stale at HEAD).
 - **2026-06-08 — Wave 31 (⭐⭐ FLIPS #16+#17 COMMITTED
   (grgreatbay 100d7e5d4 + groldyoshi ded316a75) — **874/1057 linked
   (47.10%)**, fuzzy 97.626, matched 72.873 + ⭐⭐ data-recon ×6 — the
