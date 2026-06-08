@@ -292,6 +292,11 @@ the end of every session.
 
 ## Infrastructure
 
+- **STATUS DASHBOARD (every wave landing)**: update /Users/sawyerhood/glyphdown/melee-status.md
+  (headline metrics + wave-log entry) then run `cd ~/glyphdown && glyphdown sync` (exit 0
+  required; never --force). The orchestrator does this as part of each landing.
+
+
 - `campaign/check_fn.py <function>` — rebuild one unit + diff one function.
   ~0.75s warm. Exit 0 iff 100% fuzzy. `--full` for whole listing, `--ninja`
   for ninja-mediated rebuild (~6s). Direct compile verified byte-identical
