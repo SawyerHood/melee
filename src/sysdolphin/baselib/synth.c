@@ -2,12 +2,31 @@
 
 #include "synth.static.h"
 
-#include <math_ppc.h>
 #include <dolphin/ai.h>
 #include <dolphin/ar.h>
 #include <dolphin/os.h>
 #include <sysdolphin/baselib/debug.h>
 #include <sysdolphin/baselib/devcom.h>
+
+/* math_ppc.h dropped: it emits dead _half/_three sqrtf localstatics the
+ * target .sdata2 does not have (idiom 329); only sqrtf_accurate is used
+ * here, replicated verbatim (it already uses pool-literal 0.5/3.0). */
+extern double __frsqrte(double);
+
+static inline float xsqrtf_accurate(float x)
+{
+    volatile float y;
+    if (x > 0.0f) {
+        double guess = __frsqrte((double) x);
+        guess = 0.5 * guess * (3.0 - guess * guess * x);
+        guess = 0.5 * guess * (3.0 - guess * guess * x);
+        guess = 0.5 * guess * (3.0 - guess * guess * x);
+        guess = 0.5 * guess * (3.0 - guess * guess * x);
+        y = (float) (x * guess);
+        return y;
+    }
+    return x;
+}
 
 /* 389334 */ static int HSD_Synth_80389334(int sfx_id, u8 vol, u8 vol2, u8 pan,
                                            int priority, u8 itd_flag,
@@ -1033,8 +1052,8 @@ void HSD_SynthSFXUpdateMix(struct HSD_SynthSFXNode* node, int interpolate)
 
     if (HSD_Synth_804D7754 != 0) {
         l = 32767.0F *
-            sqrtf_accurate(0.003921569F * (0xFF - node->user_vol[1].x8));
-        r = 32767.0F * sqrtf_accurate(0.003921569F * node->user_vol[1].x8);
+            xsqrtf_accurate(0.003921569F * (0xFF - node->user_vol[1].x8));
+        r = 32767.0F * xsqrtf_accurate(0.003921569F * node->user_vol[1].x8);
     } else {
         l = 23169.768F;
         r = 23169.768F;

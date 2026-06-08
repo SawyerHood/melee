@@ -34,8 +34,26 @@
 #include <baselib/lobj.h>
 #include <baselib/memory.h>
 #include <baselib/random.h>
-#include <MSL/math_ppc.h>
 #include <MSL/trigf.h>
+
+/* math_ppc.h dropped: its sqrtf inline emits dead _half/_three localstatics
+ * the target .sdata2 does not have (idiom 329). xsqrtf below is the same
+ * inline with pool-literal 0.5/3.0 (= target @-anon doubles). */
+extern double __frsqrte(double);
+
+static inline float xsqrtf(float x)
+{
+    volatile float y;
+    if (x > 0.0f) {
+        double guess = __frsqrte((double) x);
+        guess = 0.5 * guess * (3.0 - guess * guess * x);
+        guess = 0.5 * guess * (3.0 - guess * guess * x);
+        guess = 0.5 * guess * (3.0 - guess * guess * x);
+        y = (float) (x * guess);
+        return y;
+    }
+    return x;
+}
 
 extern DevText* un_804D6F24;
 extern HSD_Archive* un_804A2DE8[0xB0];
@@ -52,6 +70,17 @@ typedef struct {
 } TyDspArchiveHolder;
 TyDspArchiveHolder un_804A2DD0;
 
+/* .data head strings at exact target offsets (dtk merges each pair into
+ * one symbol: un_803FEFF0[0x2C] / un_803FF01C[0x2C]). The code reaches
+ * some of them via strbase offsets +0x18/+0xA8/+0xB8/+0x18C, so layout is
+ * functionally load-bearing. Split defs (not one blob) keep every code ref
+ * a sym+0 -- MWCC hoists sym+const address arithmetic into a callee-saved
+ * reg, which broke un_8031B1FC's shape. */
+char un_803FEFF0[0x18] = "ToyDspPanel_Top_joint";
+char un_803FF008[] = "ToyDspBg_Top_joint";
+char un_803FF01C[0x18] = "ToyDspStand_Top_joint";
+char un_803FF034[] = "ScMenDisplay_fog";
+
 typedef struct TyDspBgData {
     /* 0x00 */ HSD_GObj* gobj0;
     /* 0x04 */ HSD_GObj* gobj4;
@@ -67,7 +96,8 @@ typedef struct TyDspBgData {
 
 extern TyDspBgData* un_804D6F1C;
 extern s32 un_804D6F20;
-extern HSD_GObj* un_804D6F2C;
+HSD_GObj* un_804D6F2C; /* was an undefined import; target .sbss(0x4) owns
+                        * it in THIS unit */
 extern s32 un_804D6F28;
 
 typedef struct TyDspArchNames {
@@ -381,8 +411,8 @@ void un_80318CB4(s32 arg0)
             }
             if (HSD_Randi(3) != 0) {
                 f32 theta = atan2f(grid->pos[i].z, grid->pos[i].x);
-                f32 mag = sqrtf(grid->pos[i].x * grid->pos[i].x +
-                                grid->pos[i].z * grid->pos[i].z);
+                f32 mag = xsqrtf(grid->pos[i].x * grid->pos[i].x +
+                                 grid->pos[i].z * grid->pos[i].z);
                 s32 tries;
                 s32 start;
                 s32 collided;
@@ -409,7 +439,7 @@ void un_80318CB4(s32 arg0)
                     for (k = i - 1; k >= start; k--) {
                         f32 dx = grid->pos[i].x - grid->pos[k].x;
                         f32 dz = grid->pos[i].z - grid->pos[k].z;
-                        f32 dist = sqrtf(dx * dx + dz * dz);
+                        f32 dist = xsqrtf(dx * dx + dz * dz);
                         if (dist > 2.1474836e9f || dist < -2.1474836e9f) {
                             OSReport("*** tyDisplay Atari Irregul!\n");
                             HSD_ASSERT(0xC6, 0);
@@ -557,6 +587,48 @@ void un_80318CB4(s32 arg0)
         }
     }
 }
+
+/* target .data 0x84-0x12B (dtk: one un_803FF074[0xA8] object): six strings
+ * at exact offsets, incl. the TyMnDisp archive names reached only via
+ * strbase+0xA8/+0xB8. Split defs for sym+0 refs (see note above). */
+char un_803FF074[0x24] = "*** tyDisplay Table Scale Irregul!\n";
+char un_803FF098[0x10] = "TyMnDisp.dat";
+char un_803FF0A8[0x10] = "TyMnDisp.usd";
+char un_803FF0B8[0x24] = "*** BG data aren't being loaded!\n";
+char un_803FF0DC[0x24] = "*** Can not Load Panel Label(%s)\n";
+char un_803FF100[] = "ScMenDisplay_scene_lights";
+
+/* target .data 0x12C: small float table referenced by the camera desc */
+f32 un_803FF11C[5] = { 0.0f, 0.0f, 130.0f, 500.0f, 0.0f };
+
+/* target .data 0x140-0x1AB: camera descriptor blob w/ self-reference and
+ * trailing "ScMenDisplay_cam_int1_camera" (reached via strbase+0x18C) */
+struct TyDspCamBlob {
+    /* 0x00 */ u8 pad0[0x1B];
+    /* 0x1B */ u8 x1B;
+    /* 0x1C */ u32 viewport[4];
+    /* 0x2C */ f32* x2C;
+    /* 0x30 */ void* x30;
+    /* 0x34 */ u8 pad34[8];
+    /* 0x3C */ f32 x3C;
+    /* 0x40 */ f32 x40;
+    /* 0x44 */ f32 x44;
+    /* 0x48 */ f32 x48;
+    /* 0x4C */ char name[0x20];
+};
+struct TyDspCamBlob un_803FF130 = {
+    { 0 },
+    1,
+    { 640, 480, 640, 480 },
+    un_803FF11C,
+    &un_803FF130,
+    { 0 },
+    0.1f,
+    32768.0f,
+    30.0f,
+    1.2173333168029785f,
+    "ScMenDisplay_cam_int1_camera",
+};
 
 void un_80319540(s32 arg0)
 {
@@ -1003,7 +1075,7 @@ void un_80319EF0(void)
             }
         }
         if (scale > 2.1474836e9f || scale < -2.1474836e9f) {
-            OSReport("*** tyDisplay Table Scale Irregul!\n");
+            OSReport(un_803FF074); /* "*** tyDisplay Table Scale Irregul!\n" */
             HSD_ASSERT(0x28C, 0);
         }
         if ((s32) scale != 0) {
@@ -1379,7 +1451,9 @@ void fn_8031A94C(HSD_GObj* arg0)
     }
 }
 
-static u16 un_804D5ABC = 0x15;
+/* target .sdata: 4-byte-aligned 4-byte slot, u16 payload 0x15 in the high
+ * half (BE bytes 00 15 00 00) */
+static u32 un_804D5ABC = 0x00150000;
 static char un_804D5AC0[8] = "";
 
 void un_8031B1FC(void)
@@ -1398,7 +1472,7 @@ void un_8031B1FC(void)
     } while (zero);
 
     if (ptr->archive == NULL) {
-        OSReport("*** BG data aren't being loaded!\n");
+        OSReport(un_803FF0B8); /* "*** BG data aren't being loaded!\n" */
         HSD_ASSERT(0x3FD, 0);
     }
 
@@ -1416,17 +1490,19 @@ void un_8031B1FC(void)
         ptr->gobj4 = NULL;
     }
 
-    joint = HSD_ArchiveGetPublicAddress(ptr->archive, "ToyDspBg_Top_joint");
+    joint = HSD_ArchiveGetPublicAddress(
+        ptr->archive, un_803FF008 /* "ToyDspBg_Top_joint" */);
     if (joint != NULL) {
         ptr->gobj4 = GObj_Create(9, 9, zero);
         jobj = HSD_JObjLoadJoint(joint);
         HSD_GObjObject_80390A70(ptr->gobj4, temp = HSD_GObj_804D7849, jobj);
         GObj_SetupGXLink(ptr->gobj4, HSD_GObj_JObjCallback, 0x3C, zero);
-        lb_8001204C(jobj, &ptr->jobj, &un_804D5ABC, 1);
+        lb_8001204C(jobj, &ptr->jobj, (u16*) &un_804D5ABC, 1);
         return;
     }
 
-    OSReport("*** Can not Load Panel Label(%s)\n", "ToyDspBg_Top_joint");
+    OSReport(un_803FF0DC /* "*** Can not Load Panel Label(%s)\n" */,
+             un_803FF008 /* "ToyDspBg_Top_joint" */);
     HSD_ASSERT(0x43E, 0);
 }
 
@@ -1446,12 +1522,12 @@ void un_8031B328(void)
     PAD_STACK(24);
 
     if ((temp3 = ptr)->archive == NULL) {
-        OSReport("*** BG data aren't being loaded!\n");
+        OSReport(un_803FF0B8); /* "*** BG data aren't being loaded!\n" */
         OSPanic(__FILE__, 0x459, un_804D5AC0);
     }
 
-    lightData = HSD_ArchiveGetPublicAddress(temp3->archive,
-                                            "ScMenDisplay_scene_lights");
+    lightData = HSD_ArchiveGetPublicAddress(
+        temp3->archive, un_803FF100 /* "ScMenDisplay_scene_lights" */);
     if (lightData != NULL) {
         scene->x00 = GObj_Create(2, 3, 0);
         lobj = Toy_LoadLObjList(lightData, 0);
@@ -1466,7 +1542,8 @@ void un_8031B328(void)
         HSD_LObjSetColor(lobj, *(GXColor*) &un_804DE018);
     }
 
-    fogDesc = HSD_ArchiveGetPublicAddress(temp3->archive, "ScMenDisplay_fog");
+    fogDesc = HSD_ArchiveGetPublicAddress(
+        temp3->archive, un_803FF034 /* "ScMenDisplay_fog" */);
     if (fogDesc != NULL) {
         scene->x08 = GObj_Create(3, 4, 0);
         HSD_GObjObject_80390A70(scene->x08, temp2 = HSD_GObj_804D7848,
@@ -1476,9 +1553,6 @@ void un_8031B328(void)
 }
 
 const s32 un_804DE018 = (s32) 0xC8C8C8FF;
-
-static char un_803FEFF0[] = "ToyDspPanel_Top_joint";
-static char un_803FF01C[] = "ToyDspStand_Top_joint";
 
 void un_8031B460_OnEnter(void* arg0)
 {

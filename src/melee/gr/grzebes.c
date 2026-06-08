@@ -25,7 +25,6 @@
 #include <baselib/jobj.h>
 #include <baselib/lobj.h>
 #include <baselib/random.h>
-#include <MSL/math_ppc.h>
 
 /* 1D84A0 */ static void grZebes_801D84A0(bool arg);
 /* 1D8528 */ static void grZebes_801D8528(void);
@@ -288,12 +287,55 @@ typedef struct {
     Vec3 x10;
 } grZe_803B7FF0_t;
 
+/// local clone of the MSL sqrtf inline with literal pool doubles: the MSL
+/// extern-inline's function-scope statics emit _half/_three localstatic
+/// ballast (0x10 at .sdata2+0) that the target lacks; its reads
+/// const-prop to the same anon 0.5/3.0 pool slots this clone mints.
+#ifdef __MWERKS__
+#pragma push
+#pragma cplusplus on
+#endif
+
+extern double __frsqrte(double);
+
+extern inline float sqrtf(float x)
+{
+    volatile float y;
+    if (x > 0.0f) {
+        double guess = __frsqrte((double) x);
+        guess = .5 * guess * (3.0 - guess * guess * x);
+        guess = .5 * guess * (3.0 - guess * guess * x);
+        guess = .5 * guess * (3.0 - guess * guess * x);
+        y = (float) (x * guess);
+        return y;
+    }
+    return x;
+}
+
+#ifdef __MWERKS__
+#pragma pop
+#endif
+
 static const grZe_803B7FF0_t grZe_803B7FF0 = {
     { 0.0f, 0.0f, 0.0f },     { 8.2f, -4.55f, 0.0f },    { 7.59f, 2.5f, 0.0f },
     { 8.589f, 1.215f, 0.0f }, { 23.151f, 1.207f, 0.0f },
 };
 
-u8 grZe_803E1B90[0xF0] = { 0 };
+f32 grZe_803E1B90[60] = {
+    -40.5f, -10.0f, 13.0f, -40.5f, -24.0f, 13.0f, -5.5f,  -13.0f, 23.5f,
+    -5.5f,  -27.0f, 23.5f, -5.5f,  0.5f,   0.0f,  -5.5f,  -10.0f, 0.0f,
+    -8.0f,  4.5f,   32.0f, -8.0f,  -14.5f, 32.0f, -34.0f, 0.5f,   24.0f,
+    -34.0f, -17.5f, 24.0f, -23.5f, -12.0f, 5.5f,  -23.5f, -23.0f, 5.5f,
+    6.5f,   4.0f,   18.0f, 6.5f,   -10.5f, 18.0f, 10.0f,  0.5f,   9.5f,
+    10.0f,  -10.0f, 9.5f,  -21.5f, 2.0f,   15.5f, -21.5f, -16.0f, 15.5f,
+    -59.0f, 27.5f,  6.0f,  -59.0f, 17.0f,  6.0f,
+};
+
+f32 grZe_803E1C80[24] = {
+    42.5f, -11.0f, 0.0f, 42.5f, -25.0f, 0.0f, 30.0f, 1.0f,  11.0f,
+    30.0f, -17.0f, 11.0f, 45.0f, -5.0f,  7.5f, 45.0f, -14.0f, 7.5f,
+    56.0f, 15.0f,  6.0f, 56.0f, 4.5f,   6.0f,
+};
 
 void grZebes_801D8644(HSD_GObj* gobj)
 {
@@ -585,8 +627,6 @@ void grZebes_801D881C(HSD_GObj* gobj)
 }
 
 void grZebes_801D90FC(Ground_GObj* arg) {}
-
-u8 grZe_803E1C80[0x6C] = { 0 };
 
 void grZebes_801D9100(HSD_GObj* gobj)
 {
@@ -1080,52 +1120,53 @@ const grZe_BubbleConfig grZe_803B8044 = {
     },
 };
 
+grZe_ColorEntry grZe_803E1CF8[3] = {
+    { -320.0f, 0.0f, 0.0f, 0.0f },
+    { -80.0f, 1.0f, 20.0f, 30.0f },
+    { 90.0f, 90.0f, 75.0f, 0.0f },
+};
+
 void grZebes_801DA0C4(f32 level)
 {
     GXColor color;
-    grZe_ColorEntry table[3] = {
-        { -320.0f, 0.0f, 0.0f, 0.0f },
-        { -80.0f, 1.0f, 20.0f, 30.0f },
-        { 90.0f, 90.0f, 75.0f, 0.0f },
-    };
     u32 idx = 0;
 
-    while (idx < 3U && level > table[idx].threshold) {
+    while (idx < 3U && level > grZe_803E1CF8[idx].threshold) {
         idx++;
     }
 
     if ((s32) idx == 0) {
-        color.r = (u8) table[0].r;
-        color.g = (u8) table[0].g;
-        color.b = (u8) table[0].b;
+        color.r = (u8) grZe_803E1CF8[0].r;
+        color.g = (u8) grZe_803E1CF8[0].g;
+        color.b = (u8) grZe_803E1CF8[0].b;
         color.a = 0xFF;
         return;
     }
 
     if (idx == 3) {
-        color.r = (u8) table[2].r;
-        color.g = (u8) table[2].g;
-        color.b = (u8) table[2].b;
+        color.r = (u8) grZe_803E1CF8[2].r;
+        color.g = (u8) grZe_803E1CF8[2].g;
+        color.b = (u8) grZe_803E1CF8[2].b;
         color.a = 0xFF;
         return;
     }
 
     {
-        f32 t0 = table[idx - 1].threshold;
-        f32 t = (level - t0) / (table[idx].threshold - t0);
+        f32 t0 = grZe_803E1CF8[idx - 1].threshold;
+        f32 t = (level - t0) / (grZe_803E1CF8[idx].threshold - t0);
 
         if (Ground_801C2090(&color)) {
             // This is clearly some inline lerp function, but I am unsure how
             // to do that.
-            f32 r0 = table[idx - 1].r;
-            color.r = (u8) (t * (table[idx].r - r0) + r0);
+            f32 r0 = grZe_803E1CF8[idx - 1].r;
+            color.r = (u8) (t * (grZe_803E1CF8[idx].r - r0) + r0);
             {
-                f32 g0 = table[idx - 1].g;
-                color.g = (u8) (t * (table[idx].g - g0) + g0);
+                f32 g0 = grZe_803E1CF8[idx - 1].g;
+                color.g = (u8) (t * (grZe_803E1CF8[idx].g - g0) + g0);
             }
             {
-                f32 b0 = table[idx - 1].b;
-                color.b = (u8) (t * (table[idx].b - b0) + b0);
+                f32 b0 = grZe_803E1CF8[idx - 1].b;
+                color.b = (u8) (t * (grZe_803E1CF8[idx].b - b0) + b0);
             }
             Ground_801C205C(&color);
         }
@@ -1883,6 +1924,8 @@ s32 grZebes_801DB3CC(HSD_GObj* gobj)
     return popped;
 }
 
+const f64 grZe_804DB120 = 0.001;
+
 s32 grZebes_801DBB60(s32 arg)
 {
     HSD_GObj* yaku = (HSD_GObj*) arg;
@@ -2221,9 +2264,8 @@ void grZebes_801DC744(s32 arg0, u8 arg1)
         grZebes_801DAE70(7, arg1, (f32) mid_x, (f32) (0.5 * y_range + y_min),
                          1.0f);
 
-        hi_y = 0.8 * y_range + y_min;
-        grZebes_801DAE70(8, arg1, (f32) (0.2 * x_range + x_base), (f32) hi_y,
-                         1.2f);
+        grZebes_801DAE70(8, arg1, (f32) (0.2 * x_range + x_base),
+                         (f32) (hi_y = 0.8 * y_range + y_min), 1.2f);
 
         hi_x = 0.8 * x_range + x_base;
         lo_y = 0.2 * y_range + y_min;

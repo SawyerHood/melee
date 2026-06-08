@@ -42,6 +42,14 @@
 #include <melee/mn/mnnamenew.h>
 #include <MSL/trigf.h>
 
+/* .sdata byte tables (target defines them in this TU at .sdata head;
+ * they were previously undefined imports -- import->literal inversion) */
+u8 mnCharSel_804D50C8[4] = { 1, 2, 4, 8 };
+u8 mnCharSel_804D50CC[4] = { 1, 0, 0, 2 };
+u8 mnCharSel_804D50D0[8] = { 2, 0, 1, 0, 5, 3, 4, 0 };
+u8 mnCharSel_804D50D8[8] = { 2, 0, 8, 1, 7, 7, 7, 7 };
+u8 mnCharSel_804D50E0[3] = { 0, 1, 3 };
+
 TextKerning* mnCharSel_8025BC20(TextKerning* arg0, u32 arg1)
 {
     TextKerning* kerning;
@@ -1961,13 +1969,14 @@ void mnCharSel_CursorThink(HSD_GObj* gobj)
             CSSTagData* tag = mnCharSel_803F0DFC.tags[cursor->x4].data;
             if ((u8) tag->state != 0) {
                 if ((u8) mnCharSel_804D6CF5 == 1) {
+                    /* pool-proven: target .sdata2 has no (double)0.0002f --
+                     * the 5th vararg was decomp-invented (idiom 247 class) */
                     lb_80011E24(mnCharSel_804D6CC0, &sp98,
-                                mnCharSel_803F0DFC.name_list_joint, -1,
-                                0.0002f);
+                                mnCharSel_803F0DFC.name_list_joint, -1);
                 } else {
                     lb_80011E24(mnCharSel_804D6CC0, &sp98,
                                 mnCharSel_803F0DFC.tags[cursor->x4].list_joint,
-                                -1, 0.0002f);
+                                -1);
                 }
                 lb_8000B1CC(sp98, NULL, &sp88);
 
@@ -2699,7 +2708,13 @@ void mnCharSel_CursorThink(HSD_GObj* gobj)
                                                 cx4 < dp->togglebtn_right)
                                             {
                                                 f32 cy4 = cursor->x10;
-                                                if (cy4 < 0.2f && cy4 > -4.6f)
+                                                /* target pool: epsilon-
+                                                 * widened f64 bounds
+                                                 * (mnCharSel_804DC4D8/E0) */
+                                                if (cy4 <
+                                                        0.20000009536743146 &&
+                                                    cy4 >
+                                                        -4.6000000953674318)
                                                 {
                                                     cursor->x10 = -2.2f;
                                                     {
@@ -2762,8 +2777,12 @@ void mnCharSel_CursorThink(HSD_GObj* gobj)
                                                     cx5 < dp->teambtn_right)
                                                 {
                                                     f32 cy5 = cursor->x10;
-                                                    if (cy5 < -1.0f &&
-                                                        cy5 > -5.8f)
+                                                    /* target pool: f64
+                                                     * bounds (804DC4F0/F8) */
+                                                    if (cy5 <
+                                                            -0.99999990463256827 &&
+                                                        cy5 >
+                                                            -5.800000095367432)
                                                     {
                                                         cursor->x10 = -3.4f;
                                                         dp->team =
@@ -3594,8 +3613,8 @@ void fn_80263354(HSD_GObj* gobj)
 
 /// Nametag list think callback - handles scrolling through nametag list
 
-static GXColor mnCharSel_804DC560 = { 255, 255, 255, 255 };
-static GXColor mnCharSel_804DC564 = { 100, 100, 100, 255 };
+static const GXColor mnCharSel_804DC560 = { 255, 255, 255, 255 };
+static const GXColor mnCharSel_804DC564 = { 100, 100, 100, 255 };
 
 void fn_802633B0(HSD_GObj* gobj)
 {
@@ -4048,15 +4067,26 @@ void fn_8026407C(HSD_GObj* gobj)
 
 extern HSD_CObjDesc* MenMain_cam;
 
-static GXColor mnCharSel_804DC580 = { 255, 255, 0, 255 };
-static GXColor mnCharSel_804DC584 = { 20, 80, 160, 255 };
-static GXColor mnCharSel_804DC588 = { 60, 140, 80, 255 };
-static GXColor mnCharSel_804DC58C = { 160, 160, 0, 255 };
-static GXColor mnCharSel_804DC590 = { 180, 80, 0, 255 };
-static GXColor mnCharSel_804DC594 = { 220, 0, 0, 255 };
+static const GXColor mnCharSel_804DC580 = { 255, 255, 0, 255 };
+static const GXColor mnCharSel_804DC584 = { 20, 80, 160, 255 };
+static const GXColor mnCharSel_804DC588 = { 60, 140, 80, 255 };
+static const GXColor mnCharSel_804DC58C = { 160, 160, 0, 255 };
+static const GXColor mnCharSel_804DC590 = { 180, 80, 0, 255 };
+static const GXColor mnCharSel_804DC594 = { 220, 0, 0, 255 };
+
+/* "%d <SJIS fullwidth space>" -- target .sdata slot mnCharSel_804D5108;
+ * dead in current decomp (the matching .text branch is unmatched) */
+static char mnCharSel_804D5108[] = "%d \x81\x40";
 
 #define MODELS ((CSSSceneModels*) mnCharSel_804D6CB4)
 #define ANIM ((CSSAnimSet*) mnCharSel_804D6CD8)
+
+/* SJIS "NAME CANCEL" (fullwidth, ideographic space) -- target .data slot
+ * lbl_803F1000 just before this function's string band; dead in current
+ * decomp (the using branch is unmatched) */
+static char lbl_803F1000[] =
+    "\x82\x6d\x82\x60\x82\x6c\x82\x64\x81\x40\x82\x62\x82\x60\x82\x6d\x82\x62"
+    "\x82\x64\x82\x6b";
 
 s32 mnCharSel_802640A0(void)
 {
@@ -4954,8 +4984,6 @@ s32 mnCharSel_802640A0(void)
 
 #undef MODELS
 #undef ANIM
-
-static u8 data_pad[0x18] = { 0 };
 
 void mnCharSel_8026688C_OnEnter(void* arg0)
 {

@@ -10,8 +10,8 @@ the end of every session.
 > **18852/19829 = 95.07%**)** at **2e104422d = FLIP #18
 > itmewtwoshadowball (landed at the w32→33 boundary, zero src work in
 > the flip commit — the w32 recon cleared its last hard rows;
-> re-rank-after-recon policy proven a THIRD time)**, on 029c11e15
-> (wave 32). Commit
+> re-rank-after-recon policy proven a THIRD time)**, on a2b34c25c
+> (wave 33 grants LANDED). Commit
 > chain since the merge: **a76c460359 = W29 MERGE of upstream/master
 > ed970616e (25 commits), still NOT pushed** → f28cf5166 (w30
 > symbols-truth fix) → ec8fbdf41 (w30 rebalanced kept edits) →
@@ -21,11 +21,16 @@ the end of every session.
 > leak/gm_1A4C/ftkirby · WarpStar/ItemThrow/item.h+c)** → 73b6ed2ba
 > (naming-17, 268 pins, naming rows 301→88) → **029c11e15 (wave 32:
 > all 9 lane files COMMITTED)** → **2e104422d FLIP #18
-> itmewtwoshadowball (875/1057 = 47.24%)**. DOL sha 08e0bf20 EXACT at every
+> itmewtwoshadowball (875/1057 = 47.24%)** → 08500efd5 + 0f18a48aa
+> (w32/33 PLAN syntheses) → **a2b34c25c (wave 33: ALL 15 lane files /
+> 10 units COMMITTED — ~30 NEW fn 100s landed)** → bc1f374ea
+> (status-dashboard routine; campaign-only). DOL sha 08e0bf20 EXACT at every
 > gate, dtk OK, idempotence EXACT; working-tree dirt =
-> backlog.json (editor-owned, stale) **+ the 15 w33 kept-edit src
-> files (10 units, ALL lane gates PASS, UNCOMMITTED PEND GRANT —
-> ~30 NEW fn 100s + ~1.56KB rank weight in-tree; see W33)**.
+> backlog.json (editor-owned, stale) + config/GALE01/symbols.txt
+> (**naming-18 per-pin DOL-gated loop IN FLIGHT**, 262 pins, zero
+> failures so far; commits itself iff clean) **+ the 16 w34 kept-edit
+> src files (ALL lane gates PASS, UNCOMMITTED PEND GRANT — ~1.15KB
+> rank weight cleared + 6 NEW fn 100s in-tree; see W34)**.
 > Denominator 1041→1057 = upstream
 > resplit (18 kirby TUs
 > + crowdsfx/sfx_unk + 4 dtk filler data units; no real unit lost).
@@ -249,6 +254,51 @@ the end of every session.
 > itkusudama 210B > gmtou 205B > grzebes 197B > mncharsel 192B + toy
 > .sdata2 diagnosed session + camera 0x2c-prefix probe; HEADER QUEUE
 > gr/types.h:1506 + gm_16AE; naming-18 after grants per 290.
+> **W34 (4 src lanes + naming-18 in flight + exec standby; ZERO src
+> commits — ALL KEPT EDITS UNCOMMITTED PEND GRANT; lane baseline
+> a2b34c25c = w33 grants LANDED; HEAD bc1f374ea campaign-only)**:
+> ⭐⭐ **Data-recon ×6 + sqrtf sweep ×6 — the ENTIRE w33 rank head
+> CLEARED (~1.15KB)**: lane I itkusudama 210B + gmtou 205B → **0B ×2
+> OFF RANK** · grzebes 197B→2B (S1-coupled 344 pair) — **4 NEW fn
+> 100s** (gm_8019B8C4_OnEnter cross-split anchor 358 ·
+> grZebes_801D9100/801D9F84/**801DA0C4 28.3→100 = the S6 hard-tail
+> row**); lane J mncharsel 192B→9B (.data BYTE-IDENTICAL 0x768;
+> invented 0.0002f varargs DROPPED pool-proven 247-class) ·
+> tydisplay 187B→4B (head relayout binary-proven LOAD-BEARING;
+> rodata tables ×3 →100) · itsamusgrapple 176B→**0B in ONE probe**
+> (ItemStateTable[9] + bitfield-decoded hitbox words) +
+> **tree-wide sqrtf-ballast sweep OPENED (329): 52 carriers
+> enumerated, 6 cured .text-byte-identical** (lb_00CE size-EXACT ·
+> gmstaffroll/synth .sdata2 BYTE-IDENTICAL · ftCo_Guard/ThrownKirby
+> −0x10 · tydisplay in-claim). ⭐ **HEADER QUEUE CLEARED (both
+> rows)**: gr/types.h:1506 scroll_jobj→int_jobj landed (330 proxy
+> RETIRED to natural HSD_ASSERT; 1051-object bytegate sha-IDENTICAL)
+> + gm_16AE fn_8016B388 s16→int (**325 upgraded predicted→
+> byte-PROVEN**; gm_1884 fn_801891F4 96.61→97.10 = now a pure
+> idiom-324 coloring web). ⭐ S1 post-recon: **grRCruise_80200578 +
+> 8020071C →100 MATCH ×2** (6 binary-proven decomp bugs: invented
+> null guards deleted · x14→x18 ×8 · GE/LE clamps · m2c
+> ternary-precedence ABS) · ftNn_Init Coll pair →99.15/99.16
+> (tail-fp web fixed; flip blocked ONLY on park-D callback-cluster
+> scheduler wall 371) · 80201588 + fn_801701C0 PARKed w/ laws
+> (372/373). ⭐ naming-18 (granted: commit iff clean): **262 pins
+> re-derived fresh per 290** (×13 units; 2 stale-map catches;
+> mnnamenew queue item CLOSED-NEGATIVE = data-recon work; grrcruise
+> deferred to naming-19) — per-pin DOL-gated loop **IN FLIGHT**,
+> then S1-S3 special steps. Exec: STANDING BY for settle (base gates
+> at a2b34c25c); ZERO flips, count stays 18. Idioms **355-373 minted
+> (highest now 373)** — 355 = `ninja ok` gate VOID for NonMatching
+> objects (drive bytegates off the explicit `ninja -t targets all`
+> .o list; exclude 6 stale ftKb_* orphans). NEXT: COMMIT GRANTS ×4
+> lanes (16 files; grrcruise.c carries header+s1 edits = ONE grant)
+> + naming-18 self-commit, then PUSH the chain (a76c460359 →
+> bc1f374ea all unpushed); flips per 353 re-rank — if_2FC93 →
+> ftNn_Init → ftCo_WarpStar → gm_1A3F → gmopening (+ rank2 gains the
+> 356 stripped-static-fn SOFT class); recon rank grkongo 174B
+> (357-law check first) > mndiagram3 174B > gm_1832 167B > mninfo
+> 158B + ~19 sqrtf class-(a) units (363/364 pre-checks); S1 unlocks
+> grzebes 881C (closes the final 2B) · gmtou C048/E634/ECAC ·
+> mncharsel CursorThink 90.01 + drawTimeText.
 
 ## Ground rules
 
@@ -1048,6 +1098,52 @@ full-recon DIAGNOSED session** (named-head import→def + ~80-slot
 stream, Attack100×tylist hybrid) + camera 0x2c-prefix probe +
 tree-wide sqrtf-ballast sweep (329).
 
+**⭐⭐ W34 (×2 lanes + the sqrtf sweep; ALL UNCOMMITTED PEND GRANT;
+records datarecon-scale-w34/ + datarecon-scale-w34b/)**: the ENTIRE
+w33 rank head CLEARED — 1167B claimed → **~15B residual, ALL
+S1-order-coupled**. **Lane I (itkusudama 210B · gmtou 205B ·
+grzebes 197B; ~22 compiles)**: itkusudama → **0B OFF RANK** (.data
+CONTENT-EXACT 26/26 relocs, .sdata2 BYTE-IDENTICAL); gmtou → **0B
+OFF RANK** (.rodata/.sdata/.sbss/.bss BYTE-IDENTICAL, .data/.sdata2
+CONTENT-EXACT; **gm_8019B8C4_OnEnter →100** via cross-split pool
+anchor recon 358); grzebes → **2B** (.rodata/.bss BYTE-IDENTICAL,
+.data CONTENT-EXACT 34/34; residual = the idiom-344 0.9d/1.8d pair,
+S1-coupled with 881C; **3 NEW 100s: grZebes_801D9100 · 801D9F84 ·
+801DA0C4 28.3→100** — the S6 hard-tail static-table-copy row, via
+pointer-local-vs-direct-indexing anchor law 360). Sweeps 46/0/0 ·
+23/2/0 · 51/5/0; objects ninja-rule sha-IDENTICAL ×3; DOL EXACT
+with live multi-lane dirt. **Lane J (mncharsel 192B · tydisplay
+187B · itsamusgrapple 176B + sqrtf sweep; ~38 compiles)**:
+mncharsel → **9B** — .data BYTE-IDENTICAL 0x768 (data_pad hack →
+real SJIS "NAME CANCEL" def, relocs 51/51 POS-ALIGNED) + 5
+byte-table imports inverted to defs (310) + 8 GXColors → .sdata2
+named slots + **CursorThink pool truths: invented 0.0002f varargs
+×2 DROPPED (247-class, pool-proven) + cursor-hitbox bounds
+respelled as epsilon-widened f64s (367)**, fn 89.60→90.01;
+tydisplay → **4B** — .data CONTENT-EXACT + .rodata/.sdata/.sbss
+BYTE-IDENTICAL; head relayout proved **functionally load-bearing**
+(code reads strbase+0x18/+0xA8/+0xB8/+0x18C — TyMnDisp.dat/.usd +
+camera-desc un_803FF130 self-reloc UNREACHABLE pre-fix); rodata
+tables un_803B8988/8A34/8AE0 50→**100 ×3**; itsamusgrapple →
+**0B in ONE probe** (ItemStateTable it_803F73A8[9] + hitbox-word
+bitfields decoded round-trip EXACT + zero-Vec3; .rodata/.data/
+.sdata2 BYTE-IDENTICAL, .text frozen, sweep 53/2/0). **sqrtf-ballast
+sweep (329) OPENED: 52 carriers enumerated**
+(sqrtf_ballast_scan.txt), 6 cured .text-byte-identical: tydisplay ·
+**lb_00CE size-EXACT** · **gmstaffroll .sdata2 BYTE-IDENTICAL** (+
+gm_804DAAEC inversion w/ volatile-read) · ftCo_Guard −0x10 ·
+ftCo_ThrownKirby −0x10 prefix-perfect · **synth .sdata2
+BYTE-IDENTICAL**; ~19 class-(a) units queued tractable (~2 compiles
+each, run 363 extab + 364 @-shift pre-checks; verify flip status
+first); class-(c) ours-smaller SKIPPED. **EXTAB GUARD (363)**:
+hsd_3983 cure deleted target-kept extab/extabindex → REVERTED;
+check extab base-vs-target before ANY 329 cure. Every per-unit
+sweep DOWN byte-verified .text-identical (@-display only; 364
+class). **Next rank rows: grkongo 174B (357 sqrtf-law check first)
+> mndiagram3 174B > gm_1832 167B > mninfo 158B**; follow-ups:
+Guard 0x1c · ThrownKirby named/anon unification 0x30 · gmstaffroll
+.data+22 relocs · synth .data · hsd_3983 .data 4B.
+
 ## ⭐⭐ MERGE VERDICT (w29 — upstream/master ed970616e, 25 commits, merged a76c460359; NOT pushed)
 
 **MERGE COMPLETE — SUCCESS.** Commit
@@ -1158,7 +1254,7 @@ our committed fix (6377641b9).
   grgreatbay 29B, gmopening, vi0501/lbshadow/leak/itkyasarin tail —
   those TUs untouched (vi0501.c minor declaration churn only).
 
-### ⭐ UPSTREAM-TECHNIQUES ADOPTION LIST (minted as idioms 257-264; ⚠ w30 finals 265-291 + w31 finals 292-309 + w32 finals 310-325 + w33 finals 326-354 assigned — highest now 354)
+### ⭐ UPSTREAM-TECHNIQUES ADOPTION LIST (minted as idioms 257-264; ⚠ w30 finals 265-291 + w31 finals 292-309 + w32 finals 310-325 + w33 finals 326-354 + w34 finals 355-373 assigned — highest now 373)
 
 Adoption priority (full statements in the playbook):
 1. **257 inline_sw switch-helper dedup** — try on the remaining
@@ -1568,7 +1664,7 @@ the deep tail (now an open workstream, see STRUCTURAL-TIER VERDICT)
 — try 257 on gmopening/gm_1A3F (~~grgreatbay~~ done) before any new
 C-unreachable verdict.
 
-### ⭐ Ranked flip queue (w33 state; flips #1-18 COMMITTED; rank2 RE-DERIVED post-#18 ×2 passes — FLIP-READY pool EMPTY)
+### ⭐ Ranked flip queue (w34 state; flips #1-18 COMMITTED; rank2 RE-DERIVED post-#18 ×2 passes — FLIP-READY pool EMPTY; w34 exec STANDING BY for settle)
 
 **⭐ W29 MERGE RE-BASE**: linked **872/1057** at a76c460359. Queue
 deltas from upstream's matched units: **#13 itdraw CLOSED**
@@ -1612,7 +1708,21 @@ EMPTY = final**; align-tail SOFT confirmation law minted (354 — the
 NEXT FLIP candidate after grant + re-rank (353)**; queue heads now
 **if_2FC93 (zero .text, CHEAPEST) → ftNn_Init → ftCo_WarpStar 15B →
 gm_1A3F 20B → gmopening 12B (257-probe still pending)**; recon feed
-= ftCo .sdata2 family sweep → next re-rank.
+= ftCo .sdata2 family sweep → next re-rank. **w34: exec STOOD BY
+(file-flip-w34/; base gates captured at a2b34c25c; no settle event —
+4 src lanes + naming-18 left edits uncommitted); ZERO flips, count
+stays 18.** The w34 recon took itkusudama/gmtou/itsamusgrapple to
+**0B** and grzebes/tydisplay/mncharsel to ≤9B S1-coupled residuals;
+ftNn_Init's ONE S1 web SHARPENED to the park-D callback-cluster
+wall (371 — emission order source-unreachable ×5 spellings, needs
+scheduler-level theory; s1 lane fixed the tail-fp web →99.15/99.16).
+Queue heads UNCHANGED pending grant + re-rank (353): **if_2FC93 →
+ftNn_Init → ftCo_WarpStar 15B → gm_1A3F 20B → gmopening 12B**.
+TOOLING for next pass: extend rank2 with the **356
+stripped-static-fn SOFT class** before judging the recon'd units +
+apply the **355 gate-validity fix** (drive all-object bytegates off
+the explicit `ninja -t targets all` .o list, NEVER the `ok` target;
+exclude the 6 stale ftKb_* orphan .o not in the ninja graph).
 
 **Flipped (18)**: gm_182F + plattack (51951826b) · ftchangeparam
 (4715a41d8) · hsd_40FF (ab2a4870d, data-only) · itdrop (d4fee40d1) ·
@@ -4474,6 +4584,11 @@ fns (non-portable, 241).
    prototype at the owning header instead (HEADER QUEUE: gm_16AE.h:52
    + gm_16AE.c:289 fn_8016B388 s16→int, gm_16AE bytegate expected
    identical — callee-side s16 params are caller-converted; verify).
+   **✅ w34 LANDED + upgraded predicted→byte-PROVEN**: target entry
+   has no extsh/clrlwi homing → s16→int changed EXACTLY 1/1051
+   objects (gm_1884.o, sole external caller, desired direction —
+   extsh GONE, fn_801891F4 96.61→97.10); gm_16AE.o byte-IDENTICAL,
+   fn_8016B388 stays 100. HEADER QUEUE row CLEARED.
 326. **VOLATILE-CAST PINS *AND* REORDERS STORES; DEREF-CAST IS THE
    PURE FOLD-BLOCK (w33 gm_16F1 F0/F4/F6; sharpens 318/321)**: a
    `*(volatile T*)&sym` read pins the load but can REORDER
@@ -4556,7 +4671,9 @@ fns (non-portable, 241).
 344. **POOL EMISSION ≠ @-CREATION ORDER INSIDE AN UNMATCHED FN (w33
    grbigblue 60/140 @1609/@1610)**: within a non-matching fn the
    pool emission order is S1-COUPLED (regalloc/schedule-driven), not
-   data-fixable — the swap closes only with the fn's S1 web.
+   data-fixable — the swap closes only with the fn's S1 web. **w34
+   grzebes RECONFIRMED negative** (0.9d/1.8d pair: statement reorder
+   cannot flip unmatched-fn pool pairs; closes with 881C's S1 web).
 345. **CHAINED ASSIGNMENT = REGISTER-REUSE / RELOAD KILL (w33 s1
    fn_800D9228 →100)**: `pos.z = pos.y = v;` reuses the store reg;
    two separate assignments reload — the chain is the spelling.
@@ -4601,6 +4718,90 @@ fns (non-portable, 241).
    110/166)**: an ALIGNFIX-only .data deficit whose target tail is
    zero bytes at equal alignment is FLIP-SAFE — the link restores
    the pad byte-exactly (DOL-sha-proven on #18, 0x136→0x138).
+355. **`ninja build/GALE01/ok` DOES NOT REBUILD NonMatching OBJECTS —
+   `ok`-DRIVEN ALL-OBJECT BYTEGATES ARE VOID FOR NonMatching
+   INCLUDERS (w34 header lane; GATE-VALIDITY law)**: caught
+   grrcruise.o stale via `ninja -d explain`; drive cross-unit
+   bytegates with the explicit `ninja -t targets all` .o list.
+   Ledger: 6 orphan .o in the build tree are NOT in the ninja graph
+   (stale ftKb_* split artifacts: Init/SpecialN/NNs/NPk/NYs/NZd) —
+   exclude from all-object gates.
+356. **SEQUENCER BODIES ALWAYS EMIT; mwld STRIPS UNREFERENCED STATIC
+   FNS AT LINK (w34 I; extends 176 to fn granularity, CORRECTS the
+   111/258 deletion assumption)**: a Matching .o may legally carry
+   its own unreferenced static sequencer fn (itdosei.o carries a
+   0x9c one) — never delete a static fn to cure object size; the
+   linker deadstrips it. Flip-executor: rank2 needs this as a SOFT
+   row class before judging recon'd units.
+357. **extern-inline + `#pragma cplusplus` = ALWAYS-INLINE;
+   static-inline IS BUDGETED (w34 I; the 329 multi-site ballast
+   cure)**: a 9-site static-inline sqrtf clone left ALL sites as
+   undefined `bl`; the multi-site cure is to REDEFINE sqrtf itself
+   in MSL shape with literals — unblocks the 329 tree sweep
+   (hsd_3983 + grkongo class).
+358. **CROSS-SPLIT POOL ANCHOR RECON (w34 I; gmtou OnEnter →100)**:
+   extern the sibling-TU object + a pointer-local + reloc-free addi
+   offsets reconstruct an anchored access into a sibling split's
+   pool.
+359. **SIZED `extern char[8]` RESTORES THE sda21 RELOC CLASS (w34
+   I)**: an unsized extern array decays to lis/addi; declaring the
+   true size restores sda21 addressing.
+360. **POINTER-LOCAL ANCHORS THE OBJECT; DIRECT INDEXING ANCHORS THE
+   SECTION (w34 I; grZebes_801DA0C4 97.7→100)**: pick the access
+   spelling by which anchor the target uses — a ptr-local emits
+   object-base addressing, raw indexing emits section-anchor
+   addressing.
+361. **`u8* const = NULL` STAYS .sdata2 (w34 I)**: pointer extension
+   of the const-int-zero law — a const NULL pointer def does not
+   migrate to .sbss/.sdata.
+362. **ASSIGNMENT-IN-ARG RESTORES f64 PAIR MINT ORDER (w34 I;
+   extends 318)**: spelling a value as an assignment inside the call
+   arg re-orders the f64 literal pair mint to target order.
+363. **EXTAB-COUPLED BALLAST — CHECK extab BASE-vs-TARGET BEFORE ANY
+   329 CURE (w34 J; BOUNDS 329/357)**: math_ppc.h's
+   `#pragma cplusplus on` block GENERATES extab/extabindex sections
+   that some targets KEEP (hsd_3983: cure deleted both → +0x104
+   MISSING → REVERTED).
+364. **LOCALSTATICS CONSUME 2 @-IDS AT INCLUDE (w34 J)**: a ballast
+   cure that drops the include shifts all later @-ids by −2; matched
+   fns dip to 99.x DISPLAY-ONLY — a naming-renumber signal, NEVER a
+   revert signal.
+365. **SPLIT-DEFS-NOT-BLOBS (w34 J)**: fed a blob def, MWCC hoists
+   sym+const address arithmetic into an extra callee-saved reg
+   (broke un_8031B1FC +0xC); contiguous sym+0 defs + section-anchor
+   folding regenerate the target shape for free.
+366. **SECTION-ANCHOR IMMEDIATES ARE LAYOUT-TRUTH DIVIDENDS (w34
+   J)**: fixing .data layout auto-corrects r31-anchored addi
+   immediates inside UNMATCHED fns (mncharsel ×11 + tydisplay ×11)
+   — expect free UPs in unmatched fns from pure data recon.
+367. **EPSILON-WIDENED f64 COMPARE BOUNDS (w34 J mncharsel; extends
+   326/347-family literal truths)**: UI hitbox compares test against
+   doubles = nice-value ± 0.1×2^-20; spell via 17-digit round-trip
+   decimals to hit the bit-exact pool bytes (804DC4D8/E0/F0/F8).
+368. **EQ-CHAIN / RANGE-FOLD / MEDIAN-TREE TRIVIUM (w34 s1
+   grRCruise_80200578 →100)**: `if (v == k) goto` is the ONLY
+   spelling that emits an EQ-chain; switch/else-if forms fold to
+   range or median-tree shapes.
+369. **ASSIGNMENT-IN-CONDITION BINDS THE DEF TO A NAMED FPR HOME
+   (w34 s1)**: `if ((x = expr) ...)` kills the stray fmr + the
+   float-home hole that separate assign-then-test spellings emit.
+370. **REASSIGNMENT-vs-SECOND-ALIAS RELEASES TAIL-WEB COLOR (w34 s1;
+   INVERSE of 352)**: where 352 mints a copy via a second alias,
+   REASSIGNING the same named local instead releases the tail-web
+   register color — choose by target copy presence.
+371. **CALLBACK-CLUSTER EMISSION ORDER IS SOURCE-UNREACHABLE (w34 s1
+   ftNn_Init park-D; sharpens the w33 park)**: ×5 spellings emit
+   identical colors with the wrong cluster order — needs
+   scheduler-level theory; THE blocker on the ftNn_Init flip (2 hard
+   rows, 10 bytes).
+372. **SOURCE-HOIST FLIPS THE UNROLL FACTOR 5→10 (w34 s1
+   grRCruise_80201588 90.93 PARK)**: hand-hoisting an invariant
+   changes MWCC's unroll threshold — a park wall, not a lever.
+373. **NAMED-LOCAL LOAD-BEARING NEGATIVES (w34 s1 gm_16F1
+   fn_801701C0 97.41 PARK)**: scratch-singleton respells of named
+   locals provably regress (catalogue in s1-postrecon-w34/); file
+   byte-reverted to the w33 sha — do not re-attempt without a new
+   class.
 
 ### Experiment results (wave 3)
 
@@ -4662,7 +4863,9 @@ fns (non-portable, 241).
   gates, NEVER byte work for flips (idiom 110e).
 - **S6 hard tail** (11 fns): THPDec.c cluster (5, in extern/, sbss-vs-bss
   placement + Huffman struct access), grZebes_801DA0C4 (static table copy —
-  mechanical), HSD_CObjGetLeftVector (de-inline roll2upvec; 104 extra rows
+  mechanical) **✅ w34: 28.3→100 MATCH (datarecon lane I; pointer-local
+  vs direct-indexing anchor law 360)**, HSD_CObjGetLeftVector (de-inline
+  roll2upvec; 104 extra rows
   from over-inlining). cobj.c belongs to ONE owner with S2's stack fix.
 - **S7 scratch harvest** (4 claimed-100% scratches): decomp.me API is
   Cloudflare-blocked; use browser automation to fetch. Attribution required
@@ -5016,6 +5219,143 @@ fns (non-portable, 241).
 
 ## Session log
 
+- **2026-06-08 — Wave 34 (⭐⭐ data-recon ×6 + sqrtf-ballast sweep ×6
+  — the ENTIRE w33 rank head CLEARED (~1.15KB → ~15B S1-coupled
+  residual): itkusudama/gmtou/itsamusgrapple → **0B ×3 OFF RANK** +
+  grzebes 197B→2B / tydisplay 187B→4B / mncharsel 192B→9B + ⭐
+  HEADER QUEUE CLEARED ×2 (325 byte-PROVEN, gm_1884 unblocked) + ⭐
+  S1 post-recon: **grRCruise_80200578 + 8020071C →100 MATCH ×2** (6
+  binary-proven bugs) + ftNn flip-web sharpened to ONE park wall + ⭐
+  naming-18 262 pins per-pin-DOL-gated IN FLIGHT + exec STANDBY;
+  **6 NEW fn 100s + 3 rodata-table 100s in-tree, ALL UNCOMMITTED
+  PEND GRANT**; idioms 355-373 minted)**. 4 src lanes (recon:data-I ·
+  recon:data-J · fix:headers · s1:post-recon-2) + naming-18 stream +
+  exec standby + editor; lane baseline a2b34c25c (**w33 grants
+  LANDED** — all 15 files/10 units committed); HEAD bc1f374ea
+  (campaign-only status-dashboard routine); chain a76c460359→HEAD
+  STILL NOT PUSHED; dirt = backlog.json + symbols.txt (naming-18 in
+  flight) + **16 w34 kept-edit src files** (itkusudama.c · gmtou.c ·
+  grzebes.c · mncharsel.c · tydisplay.c · itsamusgrapple.c ·
+  lb_00CE.c · gmstaffroll.c · ftCo_Guard.c · ftCo_ThrownKirby.c ·
+  synth.c · gr/types.h · grrcruise.c (header+s1 lanes BOTH) ·
+  gm_16AE.h+.c · ftNn_Init.c).
+  ⭐⭐ **LANE I (datarecon-scale-w34/; itkusudama 210B · gmtou 205B ·
+  grzebes 197B; ~22 compiles)**: 612B → 610B cleared + **4 fn
+  matches**. itkusudama .data CONTENT-EXACT 26/26 + .sdata2
+  BYTE-IDENTICAL; gmtou 4 sections BYTE-IDENTICAL + 2 CONTENT-EXACT,
+  **gm_8019B8C4_OnEnter →100** (cross-split pool anchor 358);
+  grzebes .rodata/.bss BYTE-IDENTICAL + .data CONTENT-EXACT 34/34,
+  2B residual = 344 pair (reconfirmed negative, closes with 881C),
+  **grZebes_801D9100 + 801D9F84 + 801DA0C4 28.3→100** (the S6
+  hard-tail row; anchor law 360). Sweeps 46/0/0 · 23/2/0 · 51/5/0;
+  ninja-rule sha-IDENTICAL ×3. Laws → 356-362 (sequencer
+  always-emit/mwld strip · sqrtf redefine cure · cross-split anchor ·
+  sized extern char[] sda21 · ptr-vs-index anchor · const-NULL
+  .sdata2 · assign-in-arg f64 mint order). w33 cc.sh guard
+  self-matched sibling wrapper text — fixed to `pgrep -x`.
+  ⭐⭐ **LANE J (datarecon-scale-w34b/; mncharsel 192B · tydisplay
+  187B · itsamusgrapple 176B + tree sqrtf sweep; ~38 compiles)**:
+  555B → ~13B residual (all S1-coupled). mncharsel .data
+  BYTE-IDENTICAL 0x768 (SJIS "NAME CANCEL" def at slot, 51/51
+  POS-ALIGNED · imports→defs ×5 (310) · GXColors→.sdata2 ×8 ·
+  **invented 0.0002f varargs ×2 DROPPED pool-proven (247-class)** ·
+  epsilon-widened f64 bounds 367, CursorThink 89.60→90.01);
+  tydisplay .data CONTENT-EXACT + 3 sections BYTE-IDENTICAL, head
+  relayout **binary-proven LOAD-BEARING** (strbase+0x18/+0xA8/+0xB8/
+  +0x18C unreachable pre-fix), un_803B8988/8A34/8AE0 50→**100 ×3**;
+  itsamusgrapple **0B in ONE probe** (ItemStateTable[9] +
+  bitfield-decoded hitbox words round-trip EXACT, sweep 53/2/0).
+  **sqrtf sweep: 52 carriers enumerated, 6 cured
+  .text-byte-identical** (tydisplay · lb_00CE size-EXACT ·
+  gmstaffroll .sdata2 BYTE-IDENT + gm_804DAAEC volatile-read
+  inversion · ftCo_Guard/ThrownKirby −0x10 · synth .sdata2
+  BYTE-IDENT); hsd_3983 cure REVERTED (extab guard 363); ~19
+  class-(a) units queued. Laws → 363-367 (extab ballast · localstatic
+  2-@-id shift · split-defs-not-blobs · section-anchor dividends ·
+  epsilon-widened f64). Every sweep DOWN byte-verified
+  .text-identical (display-only).
+  ⭐ **HEADER LANE (header-w34/; ~3 ninjas + 4 check_fn)**: BOTH
+  HEADER QUEUE rows CLEARED. gr/types.h:1506 scroll_jobj→int_jobj
+  LANDED (grrcruise ASSERTMSG proxy RETIRED to natural HSD_ASSERT —
+  `#cond` stringization byte-identical, grrcruise.o sha-proof; ALL
+  1051 live objects sha-IDENTICAL); gm_16AE fn_8016B388 s16→int
+  LANDED (idiom-213 pin check FIRST, zero compiles; **325 upgraded
+  predicted→byte-PROVEN**: exactly 1/1051 changed = gm_1884.o
+  desired direction, fn_801891F4 96.61→**97.10** extsh GONE — now a
+  pure idiom-324 stmw/coloring web); contamination check vs sibling
+  ftNn_Init.c touch — gates verified uncontaminated. Law → **355
+  GATE-VALIDITY** (`ninja ok` skips NonMatching objects; drive
+  bytegates off `ninja -t targets all`; 6 stale ftKb_* orphan .o
+  excluded).
+  ⭐ **S1 POST-RECON (s1-postrecon-w34/; ~45 compiles)**:
+  **grRCruise_80200578 96.43→100 + 8020071C 84.76→100 MATCH ×2** (EQ
+  -chain goto crack 368 · assign-in-cond FPR home 369 · 6
+  binary-proven bugs: invented gobj5/jobj5 null guards deleted ·
+  x14→x18 ×8 0xdc-byte-proven · int-ternary ±1 ×2 · GE/LE clamps ×2
+  · m2c ternary-precedence ABS); 80201588 90.93 PARK (unroll wall
+  372); ftNn_Init SpecialS_0/1_Coll →99.15/99.16 (tail-fp web fixed
+  370; **flip blocked ONLY on park-D callback-cluster wall 371**);
+  gm_16F1 fn_801701C0 97.41 PARK + byte-reverted (373); psdisp/
+  mndiagram2 archaeology catalogued for next visitors. Sweeps
+  ftNn 77/2/0 · grrcruise 94/2/0 (re-gated byte-neutral after the
+  sibling header land).
+  ⭐ **NAMING-18 (naming18/; granted commit-iff-clean)**: ALL maps
+  re-derived FRESH from current objects per 290 (the w32 round never
+  executed) — **262 pins ×13 units** value-verified (LCS keying 309;
+  2 stale-map catches logged as 290 catches #1/#2); mnnamenew
+  CLOSED-NEGATIVE (no value-matching target rows = data-recon work,
+  78B ours-BIGGER stands); grrcruise DEFERRED to naming-19 (live
+  sibling dirt, 99/115a); 3 multi-line special steps queued (gm_16F1
+  pad · mndiagram2 string split · attack100 zero-pad adds ×4);
+  per-pin sibling-isolated DOL-gate loop **IN FLIGHT** (26/262 at
+  capture, zero failures), then S1-S3 + camera 9-fn recovery check +
+  idempotence + self-commit.
+  ⭐ **EXEC (file-flip-w34/)**: STANDING BY for settle (configure +
+  ninja + idempotence base gates captured at a2b34c25c; queue
+  if_2FC93 → ftNn_Init → gm_1A3F → gmopening); ZERO flips, count
+  stays 18. GATES all lanes: pgrep+ps (308) clean throughout busy
+  multi-lane tree (zero collisions; I-lane waited out 3 live
+  siblings); DOL `ninja build/GALE01/ok` sha1 08e0bf20 EXACT per 307
+  ×4 lanes with live sibling dirt; ninja-rule byte-reproducibility
+  sha-identical ×9 units; ~108 src-lane compiles, each lane ≪80.
+  **Editor finals: header 355 · lane-I A-G → 356-362 (H = 344
+  reconfirm, no number) · lane-J J1-J5 → 363-367 · s1 A-F → 368-373
+  (highest now 373; no collisions)**.
+  **QUEUES (ranked)**: (1) **COMMIT GRANTS ×4 lanes** (16 files,
+  serialize: I itkusudama/gmtou/grzebes · J mncharsel/tydisplay/
+  itsamusgrapple/lb_00CE/gmstaffroll/ftCo_Guard/ftCo_ThrownKirby/
+  synth · header gr/types.h+gm_16AE.h+.c · s1 ftNn_Init.c —
+  **grrcruise.c carries header+s1 edits = ONE shared grant**) +
+  naming-18 self-commit on clean loop, then **PUSH the chain**
+  (a76c460359 → bc1f374ea all unpushed); (2) flips per 353 after
+  grants — re-rank: **if_2FC93 → ftNn_Init (only blocker = park-D
+  371, needs scheduler-level theory) → ftCo_WarpStar 15B → gm_1A3F
+  20B → gmopening 12B** (257-probe still pending); rank2 upgrades
+  first: 356 stripped-static-fn SOFT class + 355 gate fix; (3) recon
+  rank: **grkongo 174B (357 sqrtf-law check first) > mndiagram3
+  174B > gm_1832 167B > mninfo 158B** + sqrtf class-(a) remainder
+  ~19 units (~2 compiles each; 363 extab + 364 @-shift pre-checks;
+  verify flip status first) + carryovers toy .sdata2 diagnosed
+  session · camera 0x2c-prefix probe · recon follow-ups Guard 0x1c /
+  ThrownKirby 0x30 unification / gmstaffroll .data+22relocs / synth
+  .data / hsd_3983 .data 4B; (4) S1 unlocks on byte-true data:
+  grzebes 881C 90.0 (closes the final 2B) / DC744 89.0 · gmtou C048
+  83.6 / E634 90.7 / ECAC 99.01 · itkusudama BE8 +4B web · mncharsel
+  8025C020 drawTimeText + CursorThink 90.01 · gm_1884 fn_801891F4
+  97.10 (pure 324 web, header-unblocked) + w33 carryover list
+  (psDispParticles dedicated session — f64 band 0x818-0x8b0 + FPR
+  seed map in s1-postrecon-w34 record · mndiagram2 scratch-web ·
+  mpisland A728/B004 · mnmainrule · ifstatus 4EDC · tylist · leak ·
+  lbdvd); (5) **HEADER QUEUE: EMPTY** (both w33 rows landed); (6)
+  naming-19 queue: grrcruise re-derive post-land · 364-class @-shift
+  renumbers from sqrtf cures (lb_00CE ×4 · Guard ×17 · synth ×9 ·
+  gmstaffroll ×2 · mncharsel/tydisplay ledgers) · naming18 skipped
+  candidates (mnDiagram2_804DBFE8 iff dead-extern dropped · gm_18A5
+  lbl_804DA658-class demotions · gm_16F1 3-row merge); (7) parks
+  ledger adds: grzebes 2B (344) · mncharsel 9B / tydisplay 4B
+  S1-coupled · ftNn park-D (371) · 80201588 unroll (372) · gm_16F1
+  named-local negatives (373) + standing w33 parks; (8) refresh
+  backlog.json + triage.py (stale; editor dirt).
 - **2026-06-08 — Wave 33 (⭐⭐ data-recon ×9 across THREE lanes — the
   ENTIRE w32 rank head CLEARED (~1561B): gm_16F1/psdisp/grrcruise →
   0B ×3 + mndiagram2/toy/ftNn_Init/gm_18A5 ~435B off +

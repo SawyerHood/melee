@@ -372,9 +372,8 @@ void grRCruise_801FF924(Ground_GObj* gobj)
     gp->u.scroll.x34[1] = Ground_801C3FA4(gobj, 5);
     gp->u.scroll.x34[2] = Ground_801C3FA4(gobj, 6);
     gp->u.scroll.x40 = Ground_801C3FA4(gobj, 7);
-    gp->u.scroll.scroll_jobj = Ground_801C3FA4(gobj, 3);
-    /* target string proves the original field name (types.h queue) */
-    HSD_ASSERTMSG(0x2B0, gp->u.scroll.scroll_jobj, "gp->u.scroll.int_jobj");
+    gp->u.scroll.int_jobj = Ground_801C3FA4(gobj, 3);
+    HSD_ASSERT(0x2B0, gp->u.scroll.int_jobj);
     gp->u.scroll.cam_jobj = Ground_801C3FA4(gobj, 2);
     HSD_ASSERT(0x2B2, gp->u.scroll.cam_jobj);
 
@@ -636,26 +635,31 @@ void grRCruise_80200540(Ground_GObj* gobj)
 void grRCruise_80200578(Ground* gp_arg, s32 joint_id, CollData* cd, s32 arg3,
                         mpLib_GroundEnum arg4, f32 arg5)
 {
+    u8 _[8];
     Point3d pos;
     HSD_GObj* gobj = (HSD_GObj*) gp_arg;
     Ground* gp = HSD_GObjGetUserData(gobj);
     HSD_JObj* jobj = Ground_801C3FA4(gobj, 8);
+    f32 dist;
     f32 dx;
     f32 dy;
-    f32 dist;
-    PAD_STACK(16);
+    PAD_STACK(12);
 
-    if (cd->x34_flags.b1234 == 1 || cd->x34_flags.b1234 == 2 ||
-        cd->x34_flags.b1234 == 3)
-    {
+    if ((s32) cd->x34_flags.b1234 == 1) {
+        goto body;
+    }
+    if ((s32) cd->x34_flags.b1234 == 2) {
+        goto body;
+    }
+    if ((s32) cd->x34_flags.b1234 == 3) {
+    body: {
         if ((f32) arg3 > 1000.0f) {
             arg3 = 1000;
         }
         lb_8000B1CC(jobj, NULL, &pos);
         dx = pos.x - cd->cur_pos.x;
         dy = pos.y - cd->cur_pos.y;
-        dist = dx * dx + dy * dy;
-        if (dist > 0.0f) {
+        if ((dist = dy * dy + dx * dx) > 0.0f) {
             /* literal-pool Newton (MSL sqrtf would emit dead _half/_three
                localstatics the target .sdata2 does not have) */
             volatile float y;
@@ -675,23 +679,23 @@ void grRCruise_80200578(Ground* gp_arg, s32 joint_id, CollData* cd, s32 arg3,
         }
         gp->gv.rcruise.x34++;
     }
+    }
 }
 
 void grRCruise_8020071C(Ground_GObj* gobj)
 {
     Ground* gp = gobj->user_data;
     HSD_JObj* jobj = Ground_801C3FA4(gobj, 8);
-    HSD_GObj* gobj5 = Ground_801C2BA4(5);
-    HSD_JObj* jobj5 = gobj5 != NULL ? Ground_801C3FA4(gobj5, 8) : NULL;
+    HSD_JObj* jobj5 = Ground_801C3FA4(Ground_801C2BA4(5), 8);
     f32 abs_rot =
-        gp->gv.rcruise.x14 < 0.0f ? -gp->gv.rcruise.x14 : gp->gv.rcruise.x14;
+        gp->gv.rcruise.x18 < 0.0f ? -gp->gv.rcruise.x18 : gp->gv.rcruise.x18;
     f32 wrapped = abs_rot - (360.0f * (s32) (abs_rot / 360.0f));
     PAD_STACK(8);
 
     switch (gp->gv.rcruise.x2C) {
     case 0:
         if (gp->gv.rcruise.x34 == 0) {
-            gp->gv.rcruise.x1C = gp->gv.rcruise.x14 < 0.0f ? 1.0f : -1.0f;
+            gp->gv.rcruise.x1C = gp->gv.rcruise.x18 < 0.0f ? 1 : -1;
             gp->gv.rcruise.x20 = grRc_804D6A10->x8 * gp->gv.rcruise.x1C;
             if (wrapped <= 0.2f) {
                 gp->gv.rcruise.x20 = 0.0f;
@@ -701,14 +705,14 @@ void grRCruise_8020071C(Ground_GObj* gobj)
             gp->gv.rcruise.x1C = 1.0f;
             gp->gv.rcruise.x20 =
                 grRc_804D6A10->x0 * (gp->gv.rcruise.x28 - gp->gv.rcruise.x24);
-            if (gp->gv.rcruise.x20 > grRc_804D6A10->x4) {
+            if (gp->gv.rcruise.x20 >= grRc_804D6A10->x4) {
                 gp->gv.rcruise.x20 = grRc_804D6A10->x4;
             }
         } else {
             gp->gv.rcruise.x1C = -1.0f;
             gp->gv.rcruise.x20 =
                 -grRc_804D6A10->x0 * (gp->gv.rcruise.x24 - gp->gv.rcruise.x28);
-            if (gp->gv.rcruise.x20 < -grRc_804D6A10->x4) {
+            if (gp->gv.rcruise.x20 <= -grRc_804D6A10->x4) {
                 gp->gv.rcruise.x20 = -grRc_804D6A10->x4;
             }
         }
@@ -716,7 +720,7 @@ void grRCruise_8020071C(Ground_GObj* gobj)
     case 1:
         if (gp->gv.rcruise.x38 == 0) {
             if (gp->gv.rcruise.x34 == 0) {
-                gp->gv.rcruise.x1C = gp->gv.rcruise.x14 < 0.0f ? 1.0f : -1.0f;
+                gp->gv.rcruise.x1C = gp->gv.rcruise.x18 < 0.0f ? 1 : -1;
                 gp->gv.rcruise.x20 = grRc_804D6A10->x8 * gp->gv.rcruise.x1C;
                 if (wrapped <= 0.2f) {
                     gp->gv.rcruise.x20 = 0.0f;
@@ -728,19 +732,17 @@ void grRCruise_8020071C(Ground_GObj* gobj)
         } else {
             gp->gv.rcruise.x38--;
             gp->gv.rcruise.x20 += 0.008f * -gp->gv.rcruise.x1C;
-            if (gp->gv.rcruise.x20 < 0.0f ? -gp->gv.rcruise.x20
-                                          : gp->gv.rcruise.x20 <= 0.008f)
+            if ((gp->gv.rcruise.x20 < 0.0f ? -gp->gv.rcruise.x20
+                                            : gp->gv.rcruise.x20) <= 0.008f)
             {
                 gp->gv.rcruise.x20 = 0.0f;
             }
         }
         break;
     }
-    gp->gv.rcruise.x14 += gp->gv.rcruise.x20;
-    HSD_JObjSetRotationZ(jobj, 0.017453292f * gp->gv.rcruise.x14);
-    if (jobj5 != NULL) {
-        HSD_JObjSetRotationZ(jobj5, 0.017453292f * gp->gv.rcruise.x14);
-    }
+    gp->gv.rcruise.x18 += gp->gv.rcruise.x20;
+    HSD_JObjSetRotationZ(jobj, 0.017453292f * gp->gv.rcruise.x18);
+    HSD_JObjSetRotationZ(jobj5, 0.017453292f * gp->gv.rcruise.x18);
     gp->gv.rcruise.x30 = gp->gv.rcruise.x34;
     gp->gv.rcruise.x34 = 0;
     gp->gv.rcruise.x28 = 0.0f;
@@ -1051,15 +1053,12 @@ void grRCruise_80201588(Ground_GObj* gobj)
     PAD_STACK(4);
     desc = &grRc_803E5014;
     for (i = 0; i < 20; i++, desc++) {
-        struct grRCruise_VanishEntry* vanish;
-
         if (desc->x04 != 0) {
             continue;
         }
-        vanish = &gp->gv.rcruise.vanish[i];
-        switch (vanish->x00) {
+        switch (gp->gv.rcruise.vanish[i].x00) {
         case 0:
-            lb_8000B1CC(vanish->jobj, NULL, &pos);
+            lb_8000B1CC(gp->gv.rcruise.vanish[i].jobj, NULL, &pos);
             if (Camera_8003118C(&pos, -20.0f) != 0) {
                 gp->gv.rcruise.vanish[i].x00 = 1;
                 grAnime_801C7FF8(gobj, desc->x00, 2, 2, 0.0f, 1.0f);
@@ -1094,7 +1093,7 @@ void grRCruise_80201588(Ground_GObj* gobj)
             }
             break;
         case 2:
-            lb_8000B1CC(vanish->jobj, NULL, &pos);
+            lb_8000B1CC(gp->gv.rcruise.vanish[i].jobj, NULL, &pos);
             if (Camera_8003118C(&pos, -20.0f) == 0) {
                 HSD_GObj* gobj1;
                 HSD_GObj* gobj5;

@@ -971,17 +971,6 @@ static inline void ftPp_SpecialS_0_Coll_inline2(Fighter_GObj* nana_gobj)
     nana_fp->post_hitlag_cb = efLib_ResumeAll;
 }
 
-static inline void ftPp_SpecialS_0_Coll_inline3(Fighter_GObj* gobj)
-{
-    Fighter* fp = GET_FIGHTER(gobj);
-    fp->cmd_vars[0] = fp->cmd_vars[1] = fp->cmd_vars[2] = fp->cmd_vars[3] = 0;
-    ftNn_Init_80123B3C_inline(gobj);
-    ftCommon_8007D5D4(fp);
-    Fighter_ChangeMotionState(gobj, 360, 0x0C4C528A, fp->cur_anim_frame, 1.0f,
-                              *(volatile f32*) &ftNn_Init_804D98C0, NULL);
-    ftNn_Init_80123B3C_inline(gobj);
-}
-
 void ftPp_SpecialS_0_Coll(Fighter_GObj* nana_gobj)
 {
     u8 _[16];
@@ -1009,24 +998,30 @@ void ftPp_SpecialS_0_Coll(Fighter_GObj* nana_gobj)
             -((1.5f * (nana_fp->mv.pp.unk_80123954.x0 * nana_fp->facing_dir)) -
               popo_fp->cur_pos.x);
         if (!ft_80082888(nana_gobj, &ftNn_Unk2_803CDD60)) {
-            ftPp_SpecialS_0_Coll_inline3(nana_gobj);
+            Fighter* fp2;
+            Fighter* fp3;
+            nana_fp = GET_FIGHTER(nana_gobj);
+            nana_fp->cmd_vars[0] = nana_fp->cmd_vars[1] =
+                nana_fp->cmd_vars[2] = nana_fp->cmd_vars[3] = 0;
+            fp2 = GET_FIGHTER(nana_gobj);
+            fp2->take_dmg_cb = ftNn_Init_80122FAC;
+            fp2->death2_cb = ftNn_Init_80122FAC;
+            fp2->pre_hitlag_cb = efLib_PauseAll;
+            fp2->post_hitlag_cb = efLib_ResumeAll;
+            ftCommon_8007D5D4(nana_fp);
+            Fighter_ChangeMotionState(nana_gobj, 360, 0x0C4C528A,
+                                      nana_fp->cur_anim_frame, 1.0f,
+                                      *(volatile f32*) &ftNn_Init_804D98C0,
+                                      NULL);
+            fp3 = GET_FIGHTER(nana_gobj);
+            fp3->take_dmg_cb = ftNn_Init_80122FAC;
+            fp3->death2_cb = ftNn_Init_80122FAC;
+            fp3->pre_hitlag_cb = efLib_PauseAll;
+            fp3->post_hitlag_cb = efLib_ResumeAll;
         }
     }
     ftPp_SpecialS_0_Coll_inline(nana_gobj);
     ftPp_SpecialS_0_Coll_inline2(nana_gobj);
-}
-
-static inline void ftPp_SpecialS_1_Coll_inline3(Fighter_GObj* gobj)
-{
-    f32 z;
-    Fighter* fp = GET_FIGHTER(gobj);
-    fp->cmd_vars[0] = fp->cmd_vars[1] = fp->cmd_vars[2] = fp->cmd_vars[3] = 0;
-    ftNn_Init_80123B3C_inline(gobj);
-    ftCommon_8007D7FC(fp);
-    fp->self_vel.y = (z = *(volatile f32*) &ftNn_Init_804D98C0);
-    Fighter_ChangeMotionState(gobj, 359, 0x0C4C528A, fp->cur_anim_frame, 1.0f,
-                              z, NULL);
-    ftNn_Init_80123B3C_inline(gobj);
 }
 
 void ftPp_SpecialS_1_Coll(Fighter_GObj* nana_gobj)
@@ -1056,7 +1051,26 @@ void ftPp_SpecialS_1_Coll(Fighter_GObj* nana_gobj)
             -((1.5f * (nana_fp->mv.pp.unk_80123954.x0 * nana_fp->facing_dir)) -
               popo_fp->cur_pos.x);
         if (ft_800824A0(nana_gobj, &ftNn_Unk2_803CDD60)) {
-            ftPp_SpecialS_1_Coll_inline3(nana_gobj);
+            Fighter* fp2;
+            Fighter* fp3;
+            f32 z;
+            nana_fp = GET_FIGHTER(nana_gobj);
+            nana_fp->cmd_vars[0] = nana_fp->cmd_vars[1] =
+                nana_fp->cmd_vars[2] = nana_fp->cmd_vars[3] = 0;
+            fp2 = GET_FIGHTER(nana_gobj);
+            fp2->take_dmg_cb = ftNn_Init_80122FAC;
+            fp2->death2_cb = ftNn_Init_80122FAC;
+            fp2->pre_hitlag_cb = efLib_PauseAll;
+            fp2->post_hitlag_cb = efLib_ResumeAll;
+            ftCommon_8007D7FC(nana_fp);
+            nana_fp->self_vel.y = (z = *(volatile f32*) &ftNn_Init_804D98C0);
+            Fighter_ChangeMotionState(nana_gobj, 359, 0x0C4C528A,
+                                      nana_fp->cur_anim_frame, 1.0f, z, NULL);
+            fp3 = GET_FIGHTER(nana_gobj);
+            fp3->take_dmg_cb = ftNn_Init_80122FAC;
+            fp3->death2_cb = ftNn_Init_80122FAC;
+            fp3->pre_hitlag_cb = efLib_PauseAll;
+            fp3->post_hitlag_cb = efLib_ResumeAll;
         }
     }
     ftPp_SpecialS_0_Coll_inline(nana_gobj);

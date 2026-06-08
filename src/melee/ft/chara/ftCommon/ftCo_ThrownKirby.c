@@ -25,9 +25,27 @@
 #include "lb/lbvector.h"
 
 #include <common_structs.h>
-#include <math_ppc.h>
 #include <baselib/gobj.h>
 #include <baselib/jobj.h>
+
+/* math_ppc.h dropped: its sqrtf inline emits dead _half/_three localstatics
+ * the target .sdata2 does not have (idiom 329). xsqrtf is the same inline
+ * with pool-literal 0.5/3.0. */
+extern double __frsqrte(double);
+
+static inline float xsqrtf(float x)
+{
+    volatile float y;
+    if (x > 0.0f) {
+        double guess = __frsqrte((double) x);
+        guess = 0.5 * guess * (3.0 - guess * guess * x);
+        guess = 0.5 * guess * (3.0 - guess * guess * x);
+        guess = 0.5 * guess * (3.0 - guess * guess * x);
+        y = (float) (x * guess);
+        return y;
+    }
+    return x;
+}
 
 typedef float (*KirbyVelocityFunc)(Fighter_GObj* gobj, Vec3* victim_self_vel,
                                    float victim_facing_dir);
@@ -150,7 +168,7 @@ void ftCo_ThrownKirbyStar_IASA(Fighter_GObj* gobj) {}
 static inline void inlineA0(Fighter_GObj* gobj)
 {
     Fighter* fp = GET_FIGHTER(gobj);
-    float vel_mag = sqrtf(SQ(fp->self_vel.x) + SQ(fp->self_vel.y));
+    float vel_mag = xsqrtf(SQ(fp->self_vel.x) + SQ(fp->self_vel.y));
     if (vel_mag > fp->mv.co.thrownkirby.x4) {
         fp->self_vel.x =
             (fp->self_vel.x * (vel_mag - fp->mv.co.thrownkirby.x4)) / vel_mag;

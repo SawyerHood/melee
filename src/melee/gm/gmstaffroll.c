@@ -103,7 +103,7 @@ extern GXColor gm_804D42C0;
 extern GXColor gm_804D42C4;
 extern GXColor gm_804D42C8;
 extern GXColor gm_804D42CC;
-extern s32 gm_804DAAEC;
+extern const s32 gm_804DAAEC;
 
 bool gm_801AA644(void)
 {
@@ -401,7 +401,28 @@ void fn_801AAB74(HSD_GObj* gobj)
     }
 }
 
-#include <math_ppc.h>
+/* math_ppc.h dropped: its sqrtf inline emits dead _half/_three localstatics
+ * the target .sdata2 does not have (idiom 329). xsqrtf is the same inline
+ * with pool-literal 0.5/3.0. */
+extern double __frsqrte(double);
+
+static inline float xsqrtf(float x)
+{
+    volatile float y;
+    if (x > 0.0f) {
+        double guess = __frsqrte((double) x);
+        guess = 0.5 * guess * (3.0 - guess * guess * x);
+        guess = 0.5 * guess * (3.0 - guess * guess * x);
+        guess = 0.5 * guess * (3.0 - guess * guess * x);
+        y = (float) (x * guess);
+        return y;
+    }
+    return x;
+}
+
+/* target .sdata2 slot between @392 and @825: tally GXColor words
+ * {255,180,0,0} (was an undefined import) */
+const s32 gm_804DAAEC = (s32) 0xFFB40000;
 
 void fn_801AB200(HSD_GObj* gobj)
 {
@@ -472,10 +493,10 @@ void fn_801AB200(HSD_GObj* gobj)
 
     sq_x = vel_x * vel_x + 6400.0f;
     vel_y = (f32) adj_val;
-    sq_x = sqrtf(sq_x);
+    sq_x = xsqrtf(sq_x);
     vel_x *= 0.00038461538f * sq_x;
     sq_y = vel_y * vel_y + 6400.0f;
-    sq_y = sqrtf(sq_y);
+    sq_y = xsqrtf(sq_y);
 
     cursor_vy = vel_y * (0.00038461538f * sq_y);
     if (cursor_vy < -2.6f) {
@@ -853,7 +874,8 @@ void fn_801AB200(HSD_GObj* gobj)
             line_num = HSD_SisLib_803A6B98(
                 gm_804D680C, 0.0f, 0.0f, (char*) ((u8*) gm_803DBFD8 + 0x1264),
                 tally_count);
-            tally_color2 = gm_804DAAEC;
+            tally_color2 = *(volatile s32*) &gm_804DAAEC; /* volatile read: keep the
+                sda21 load -- a visible const def would const-prop (326) */
             HSD_SisLib_803A74F0(gm_804D680C, line_num,
                                 (GXColor*) &tally_color2);
 

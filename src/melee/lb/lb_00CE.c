@@ -2,12 +2,29 @@
 
 #include <platform.h>
 
-#include "MSL/math_ppc.h"
-
 #include <baselib/forward.h>
 
 #include <math.h>
 #include <trigf.h>
+
+/* math_ppc.h dropped: its sqrtf inline emits dead _half/_three localstatics
+ * the target .sdata2 does not have (idiom 329). xsqrtf is the same inline
+ * with pool-literal 0.5/3.0. */
+extern double __frsqrte(double);
+
+static inline float xsqrtf(float x)
+{
+    volatile float y;
+    if (x > 0.0f) {
+        double guess = __frsqrte((double) x);
+        guess = 0.5 * guess * (3.0 - guess * guess * x);
+        guess = 0.5 * guess * (3.0 - guess * guess * x);
+        guess = 0.5 * guess * (3.0 - guess * guess * x);
+        y = (float) (x * guess);
+        return y;
+    }
+    return x;
+}
 
 f32 expf(f32 arg8)
 {
@@ -157,7 +174,7 @@ s32 lb_8000D148(f32 point0_x, f32 point0_y, f32 point1_x, f32 point1_y,
         if (dist_01 < 0.00001f) {
             return 0;
         }
-        dist_01 = sqrtf(dist_01);
+        dist_01 = xsqrtf(dist_01);
 
         var_f0 = cross + ((diff_01_x * point2_x) + (diff_01_y * point2_y));
         if (var_f0 < 0.0f) {

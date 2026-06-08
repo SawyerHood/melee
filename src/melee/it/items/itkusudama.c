@@ -20,6 +20,59 @@
 #include "it/item.h"
 #include "sysdolphin/baselib/random.h"
 
+static f32 sdata2_ordering(void)
+{
+    volatile f32 data_0 = -1.0f;
+    volatile f32 data_1 = 0.0f;
+    volatile f32 data_2 = 3.1415927f;
+    volatile f32 data_3 = 6.2831855f;
+    volatile f32 data_4 = 0.17453292f;
+    volatile f32 data_5 = 0.08726646f;
+    volatile f32 data_6 = 1.0f;
+    volatile f32 data_7 = 4.694936f;
+    volatile f32 data_8 = -4.694936f;
+    volatile f32 data_9 = 1.5707964f;
+    volatile f32 data_10 = -1.5707964f;
+    volatile f32 data_11 = 5.0f;
+    volatile f32 data_12 = 1.2f;
+    volatile f32 data_13 = 0.6f;
+    volatile f32 data_14 = 0.3f;
+    volatile f32 data_15 = 0.1f;
+    volatile f32 data_16 = 0.05f;
+    volatile f32 data_17 = 0.025f;
+    volatile f32 data_18 = 1.4f;
+    volatile f32 data_19 = 0.7f;
+    volatile f32 data_20 = 0.35f;
+    volatile f32 data_21 = 1.8f;
+    volatile f32 data_22 = 0.9f;
+    volatile f32 data_23 = 0.45f;
+
+    return data_0 + data_1 + data_2 + data_3 + data_4 + data_5 + data_6 +
+           data_7 + data_8 + data_9 + data_10 + data_11 + data_12 + data_13 +
+           data_14 + data_15 + data_16 + data_17 + data_18 + data_19 +
+           data_20 + data_21 + data_22 + data_23;
+}
+
+ItemStateTable it_803F59F8[] = {
+    { -1, itKusudama_UnkMotion0_Anim, itKusudama_UnkMotion0_Phys,
+      itKusudama_UnkMotion0_Coll },
+    { 0, itKusudama_UnkMotion1_Anim, itKusudama_UnkMotion1_Phys,
+      itKusudama_UnkMotion1_Coll },
+    { -1, itKusudama_UnkMotion2_Anim, itKusudama_UnkMotion2_Phys,
+      itKusudama_UnkMotion2_Coll },
+    { 1, itKusudama_UnkMotion3_Anim, itKusudama_UnkMotion3_Phys,
+      itKusudama_UnkMotion3_Coll },
+    { -1, itKusudama_UnkMotion4_Anim, itKusudama_UnkMotion4_Phys, NULL },
+    { 2, itKusudama_UnkMotion6_Anim, itKusudama_UnkMotion6_Phys,
+      itKusudama_UnkMotion5_Coll },
+    { 2, itKusudama_UnkMotion6_Anim, itKusudama_UnkMotion6_Phys,
+      itKusudama_UnkMotion6_Coll },
+    { 3, itKusudama_UnkMotion7_Anim, itKusudama_UnkMotion7_Phys,
+      itKusudama_UnkMotion7_Coll },
+    { 4, itKusudama_UnkMotion8_Anim, itKusudama_UnkMotion8_Phys,
+      itKusudama_UnkMotion8_Coll }
+};
+
 HSD_GObj* it_802896CC(Vec3* arg0)
 {
     SpawnItem spawn;

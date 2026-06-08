@@ -39,8 +39,47 @@
 #include <baselib/jobj.h>
 #include <baselib/random.h>
 
-extern Vec3 it_803B8674;
-extern itSamusGrapple_HitboxData it_803B8660;
+/* target .rodata 0x0-0x13: the hitbox spawn words (the emitted object is
+ * exactly the five create_hitbox words; the trailing x133/x134 bits of the
+ * itSamusGrapple_HitboxData extern type are not part of it, so a 0x14-sized
+ * clone type is defined here and uses cast back). Was an undefined import.
+ * Decoded: opcode=11(hitbox), size=1200, angle=361(sakurai), kb_growth=100,
+ * item_hit_interaction=1, clank=1, element=8, sfx sev=1 kind=2,
+ * grounded-only. */
+const struct {
+    struct {
+        struct spawn_hitbox_0 create_hitbox_0;
+        struct spawn_hitbox_1 create_hitbox_1;
+        struct spawn_hitbox_2 create_hitbox_2;
+        struct spawn_hitbox_3 create_hitbox_3;
+        struct spawn_hitbox_4 create_hitbox_4;
+    } create_hitbox;
+} it_803B8660 = {
+    {
+        /* 0x2C045800 */ { 11, 0, 0, 0, 139, 0, 0 },
+        /* 0x04B00000 */ { 1200, 0 },
+        /* 0x00000000 */ { 0, 0 },
+        /* 0xB4990012 */ { 361, 100, 0, 1, 0, 0, 1, 0 },
+        /* 0x0020008A */ { 0, 8, 0, 1, 2, 1, 0 },
+    },
+};
+
+/* target .rodata 0x14: zero velocity vector (was an undefined import) */
+const Vec3 it_803B8674 = { 0.0f, 0.0f, 0.0f };
+
+/* target .data 0x0-0x8F: the item state table imported by it_279C.c
+ * (was an undefined import; bytes/relocs from target) */
+ItemStateTable it_803F73A8[] = {
+    { -1, NULL, itSamusgrapple_UnkMotion0_Phys, NULL },
+    { -1, NULL, itSamusgrapple_UnkMotion1_Phys, NULL },
+    { -1, NULL, itSamusgrapple_UnkMotion2_Phys, NULL },
+    { -1, NULL, itSamusgrapple_UnkMotion3_Phys, NULL },
+    { -1, NULL, itSamusgrapple_UnkMotion4_Phys, NULL },
+    { -1, NULL, itSamusgrapple_UnkMotion5_Phys, NULL },
+    { -1, NULL, itSamusgrapple_UnkMotion6_Phys, NULL },
+    { -1, NULL, itSamusgrapple_UnkMotion7_Phys, NULL },
+    { -1, NULL, itSamusgrapple_UnkMotion8_Phys, NULL },
+};
 
 static inline bool samus_grapple_fighter_compare(FtMotionId id)
 {
@@ -1065,7 +1104,8 @@ s32 it_802B9328(ItemLink* link, Vec3* pos, itSamusGrappleAttributes* attrs,
         grapple_ip->xDD4_itemVar.samusgrapple.x16 == 1)
     {
         if (fp->input.x668 & 0x100) {
-            hitbox_data.create_hitbox = it_803B8660.create_hitbox;
+            hitbox_data.create_hitbox =
+                ((itSamusGrapple_HitboxData*) &it_803B8660)->create_hitbox;
             ftColl_8007AFF8(fp->gobj);
             it_802B7160(fp->gobj, &hitbox_data);
             grapple_ip->xDD4_itemVar.samusgrapple.x16++;
@@ -1156,7 +1196,8 @@ s32 it_802B99A0(ItemLink* link, Vec3* pos, itSamusGrappleAttributes* attrs,
         grapple_ip->xDD4_itemVar.samusgrapple.x16 == 1)
     {
         if (fp->input.x668 & 0x100) {
-            hitbox_data.create_hitbox = it_803B8660.create_hitbox;
+            hitbox_data.create_hitbox =
+                ((itSamusGrapple_HitboxData*) &it_803B8660)->create_hitbox;
             ftColl_8007AFF8(fp->gobj);
             it_802B7160(fp->gobj, &hitbox_data);
             grapple_ip->xDD4_itemVar.samusgrapple.x16++;
@@ -1238,7 +1279,8 @@ void it_802B9CE8(ItemLink* link, Vec3* pos, itSamusGrappleAttributes* attrs,
         grapple_ip->xDD4_itemVar.samusgrapple.x16 == 1)
     {
         if (fp2->input.x668 & 0x100) {
-            hitbox_data.create_hitbox = it_803B8660.create_hitbox;
+            hitbox_data.create_hitbox =
+                ((itSamusGrapple_HitboxData*) &it_803B8660)->create_hitbox;
             ftColl_8007AFF8(fp2->gobj);
             it_802B7160(fp2->gobj, &hitbox_data);
             grapple_ip->xDD4_itemVar.samusgrapple.x16++;

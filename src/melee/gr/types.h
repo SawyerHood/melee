@@ -1503,7 +1503,7 @@ struct ScrollVars {
     /* +1C gp+E0 */ Vec3 x1C;
     /* +28 gp+EC */
     union {
-        HSD_JObj* scroll_jobj;
+        HSD_JObj* int_jobj;
         HSD_GObj* anim_gobj;
     };
     /* +2C gp+F0 */ HSD_JObj* cam_jobj;

@@ -36,27 +36,61 @@
 
 extern TmBoxArrays lbl_804771B8;
 extern HSD_Archive* lbl_804D6638;
-extern HSD_Archive* lbl_804D6660;
-extern HSD_Archive* lbl_804D6664;
-extern HSD_Archive* lbl_804D6668;
-extern SceneDesc* lbl_804D666C;
-extern SceneDesc* lbl_804D6670;
-extern SceneDesc* lbl_804D6674;
-extern u8 lbl_804D6680[8];
-static struct TmAnimTimers lbl_80479A58;
-extern HSD_Archive* lbl_804D6688;
-extern HSD_Archive* lbl_804D668C;
 extern s32 lbl_804D663C;
+extern u8 lbl_803DA0D0[];
+extern char lbl_804D41C8[8];
+
+SceneDesc* lbl_804D6694;
+SceneDesc* lbl_804D6690;
+HSD_Archive* lbl_804D668C;
+HSD_Archive* lbl_804D6688;
+u8 lbl_804D6680[8];
+s32 lbl_804D667C;
+s32 lbl_804D6678;
+SceneDesc* lbl_804D6674;
+SceneDesc* lbl_804D6670;
+SceneDesc* lbl_804D666C;
+HSD_Archive* lbl_804D6668;
+HSD_Archive* lbl_804D6664;
+HSD_Archive* lbl_804D6660;
+
+static struct TmAnimTimers lbl_80479A58;
 
 struct lbl_803DA2E0_t {
     u8 x0[0x20];
     f32 x20[0x29];
 };
-extern struct lbl_803DA2E0_t lbl_803DA2E0;
+struct lbl_803DA2E0_t lbl_803DA2E0 = {
+    { 0, 1, 2, 3, 5, 6, 12, 6, 6, 7, 9, 8, 6, 9, 4, 9, 10, 11, 12, 2, 12, 6,
+      7, 9, 12 },
+};
+
+extern s32 lbl_803B7D18[9];
+extern s32 lbl_803B7D3C[5];
 
 extern MatchEnd gm_80477738;
-extern s32 lbl_803B7D3C[4];
-extern u8* lbl_804DA948;
+extern u8* const lbl_804DA948;
+
+static f32 sdata2_ordering(void)
+{
+    char* volatile str_0 = "ScGamTour_scene_data";
+    char* volatile str_1 = "SIS_TournamentData";
+    volatile f32 data_0 = -19.5f;
+    volatile f32 data_1 = 13.0f;
+    volatile f32 data_2 = 6.5f;
+    volatile f32 data_3 = 19.5f;
+    volatile f32 data_4 = 2.0f;
+    volatile f64 data_5 = 4503601774854144.0;
+    volatile f32 data_6 = 10000.0f;
+    volatile f32 data_7 = 0.0f;
+    volatile f64 data_8 = 4503599627370496.0;
+    volatile f32 data_9 = 1.0f;
+
+    return data_0 + data_1 + data_2 + data_3 + data_4 + data_5 + data_6 +
+           data_7 + data_8 + data_9;
+}
+
+__declspec(section ".sdata") char lbl_804D41B8[] = "GmTou1p";
 s32 fn_80166CBC(void*, ssize_t);
 
 static inline TmData* GetTmData(void)
@@ -66,22 +100,23 @@ static inline TmData* GetTmData(void)
 
 void gm_8019B8C4_OnEnter(void* arg0)
 {
+    char* sd = (char*) lbl_803DA0D0;
     lbl_804D6668 = NULL;
     lbl_804D6664 = NULL;
     lbl_804D6680[0] = 0;
     lbl_804D6680[2] = 0;
     gm_8018F634();
-    lbl_804D6660 = lbArchive_80016DBC("GmTou1p", &lbl_804D666C,
-                                      "ScGamTour_scene_data", 0);
-    lbl_804D6638 = lbArchive_80016DBC(
-        "TmBox.dat", &lbl_804771B8.box2, "tournament_box2_array",
-        &lbl_804771B8.box3, "tournament_box3_array", &lbl_804771B8.box4,
-        "tournament_box4_array", 0);
-    lbl_804D6664 = lbArchive_80016DBC("GmTou3p", &lbl_804D6670,
-                                      "ScGamTour_scene_data", 0);
-    lbl_804D6668 = lbArchive_80016DBC("GmTou4p", &lbl_804D6674,
-                                      "ScGamTour_scene_data", 0);
-    HSD_SisLib_803A62A0(0, fn_8018F5F0(), "SIS_TournamentData");
+    lbl_804D6660 =
+        lbArchive_80016DBC(lbl_804D41B8, &lbl_804D666C, sd + 0x190, 0);
+    lbl_804D6638 = lbArchive_80016DBC(sd + 0x1A8, &lbl_804771B8.box2,
+                                      sd + 0x1B4, &lbl_804771B8.box3,
+                                      sd + 0x1CC, &lbl_804771B8.box4,
+                                      sd + 0x1E4, 0);
+    lbl_804D6664 =
+        lbArchive_80016DBC("GmTou3p", &lbl_804D6670, sd + 0x190, 0);
+    lbl_804D6668 =
+        lbArchive_80016DBC(lbl_804D41C8, &lbl_804D6674, sd + 0x190, 0);
+    HSD_SisLib_803A62A0(0, fn_8018F5F0(), sd + 0x1FC);
     if (HSD_Randi(2) != 0) {
         lbAudioAx_80023F28(0x5D);
         return;
@@ -96,6 +131,8 @@ void gm_8019B9C8_OnLeave(void* arg0)
     lbArchive_80016EFC(lbl_804D6664);
     lbArchive_80016EFC(lbl_804D6668);
 }
+
+__declspec(section ".sdata") char lbl_804D41C8[] = "GmTou4p";
 
 void fn_8019BA04(s32* state) {}
 
@@ -171,8 +208,6 @@ void fn_8019BF8C(HSD_GObj* gobj)
     fn_8019044C(jobj, lbl_80479A58.xE);
     lbl_80479A58.xE++;
 }
-
-extern s32 lbl_803B7D18[9];
 
 void fn_8019C048(HSD_GObj* gobj)
 {
@@ -1093,7 +1128,7 @@ void gm_8019E634(void)
     if ((u8) gmMainLib_8015CC34()->handicap == 1) {
         u8* hbuf;
 
-        hbuf_init = lbl_804DA948;
+        hbuf_init = *(u8**) &lbl_804DA948;
         hbuf = hbuf_init;
 
         /* Read handicap from x37 entries */
@@ -1381,3 +1416,10 @@ void fn_8019EF08(TmVsData* arg0)
 
     lbDvd_80018254();
 }
+
+u8* const lbl_804DA948 = NULL;
+
+__declspec(section ".rodata") s32 lbl_803B7D18[9] = {
+    30, 50, 0x3B0000, 0x3C0046, 0x1005A, 0x640000, 0x6E0082, 150, 0xA00000,
+};
+__declspec(section ".rodata") s32 lbl_803B7D3C[5] = { 0, 1, 2, 3, 0 };

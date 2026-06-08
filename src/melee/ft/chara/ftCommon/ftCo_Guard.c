@@ -39,9 +39,27 @@
 
 #include <common_structs.h>
 #include <math.h>
-#include <math_ppc.h>
 #include <baselib/gobj.h>
 #include <baselib/jobj.h>
+
+/* math_ppc.h dropped: its sqrtf inline emits dead _half/_three localstatics
+ * the target .sdata2 does not have (idiom 329). xsqrtf is the same inline
+ * with pool-literal 0.5/3.0. */
+extern double __frsqrte(double);
+
+static inline float xsqrtf(float x)
+{
+    volatile float y;
+    if (x > 0.0f) {
+        double guess = __frsqrte((double) x);
+        guess = 0.5 * guess * (3.0 - guess * guess * x);
+        guess = 0.5 * guess * (3.0 - guess * guess * x);
+        guess = 0.5 * guess * (3.0 - guess * guess * x);
+        y = (float) (x * guess);
+        return y;
+    }
+    return x;
+}
 
 bool ftCo_80091A2C(Fighter_GObj* gobj)
 {
@@ -153,7 +171,7 @@ void ftCo_80091BC4(Fighter* fp)
     }
     fp->mv.co.guard.x8 = 10 + guard_deg;
 
-    stick_mag = sqrtf(fp->input.lstick.x * fp->input.lstick.x +
+    stick_mag = xsqrtf(fp->input.lstick.x * fp->input.lstick.x +
                       fp->input.lstick.y * fp->input.lstick.y);
     if (stick_mag > 1) {
         stick_mag = 1;
