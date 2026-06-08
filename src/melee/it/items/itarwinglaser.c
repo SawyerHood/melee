@@ -162,8 +162,7 @@ Item_GObj* it_802E72E0(Item_GObj* parent, HSD_JObj* bone, s32 type, f32 scale,
         break;
     }
     }
-    spawn.pos = sp24;
-    spawn.prev_pos = spawn.pos;
+    spawn.prev_pos = spawn.pos = sp24;
     spawn.kind = 0xEA;
     spawn.facing_dir = scale;
     spawn.x3C_damage = 0;
@@ -252,7 +251,7 @@ void it_802E7654(Item_GObj* owner, HSD_JObj* bone, Vec3* target, s32 type,
     lb_8000B1CC(bone, NULL, &sp28);
     spawn.kind = It_Kind_Arwing_Laser;
     spawn.prev_pos = sp28;
-    *(u32*) &spawn.prev_pos.y = *(u32*) &sp28.y;
+    *(u32*) ((u8*) &spawn.prev_pos + 4) = *(u32*) ((u8*) &spawn.prev_pos + 4);
     spawn.facing_dir = 0.0f;
     spawn.x3C_damage = 0;
     spawn.vel.z = 0.0f;

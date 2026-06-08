@@ -49,15 +49,21 @@ typedef struct {
     /* 0x20 */ f32 x20[4];
 } CharScaleEntry;
 
-extern CharScaleEntry lbl_803D6A18[];
-extern f32 lbl_803D7058[];
+extern f32 lbl_803D6A18[4];
+
+typedef struct {
+    /* 0x000 */ f32 vals[416];
+    /* 0x680 */ u32 tail[132];
+} CharResultTable; // size = 0x890
+
+extern CharResultTable lbl_803D7058;
 
 typedef struct {
     GObj_RenderFunc funcs[4];
 } ResultsRenderFuncs;
 
 typedef struct {
-    /* 0x00 */ u8 pad_00[0x24];
+    /* 0x00 */ f32 pad_00[9];
     /* 0x24 */ Vec3 x24;
     /* 0x30 */ Vec3 x30;
     /* 0x3C */ ResultsRenderFuncs x3C;
@@ -74,10 +80,11 @@ typedef struct {
     /* 0x90 */ f32 x90;
     /* 0x94 */ f32 x94;
     /* 0x98 */ f32 x98;
-} ResultsPlayerConfig;
+    /* 0x9C */ f32 x9C;
+} ResultsPlayerConfig; // size = 0xA0
 
-extern ResultsPlayerConfig lbl_803B7B68;
-extern HSD_CObjDesc lbl_803D7910;
+extern const ResultsPlayerConfig lbl_803B7B68;
+extern HSD_CameraDescPerspective lbl_803D7910;
 
 typedef struct {
     /* 0x00 */ f32 x_off[4];   // indexed by variant (clamped to 3)
@@ -92,7 +99,7 @@ typedef struct {
     /* 0x6E0 */ f32 slot_y_off[4];
 } CameraKindData;
 
-extern CameraKindData lbl_803D6A08;
+extern u8 lbl_803D6A08[16];
 
 extern s32 lbl_804DA3F0;
 extern s32 lbl_804DA3F4;
@@ -409,7 +416,19 @@ bool fn_80177DD0(int slot)
     return result;
 }
 
-static s32 lbl_804D3FC8 = 1;
+static s32 lbl_804D3FC8[2] = { 1, 0 };
+static s32 lbl_804D3FD0 = 0x500050;
+static s32 lbl_804D3FD4 = 0x460034;
+static s32 lbl_804D3FD8 = 0x6E0072;
+static s32 lbl_804D3FDC = 0x64004A;
+static s32 lbl_804D3FE0 = 0x340034;
+static s32 lbl_804D3FE4 = 0x340034;
+static s32 lbl_804D3FE8 = 0x4A004A;
+static s32 lbl_804D3FEC = 0x4A004A;
+static s32 lbl_804D3FF0 = 0xC0008;
+static s32 lbl_804D3FF4 = 0x60000;
+static s32 lbl_804D3FF8 = 0xE000E;
+static s32 lbl_804D3FFC = 0x60000;
 
 void fn_80178050(HSD_GObj* arg0)
 {
@@ -427,17 +446,17 @@ void fn_80178050(HSD_GObj* arg0)
     if (lbGetJObjCurrFrame(jobj) >= 50.0f && !data->x0_23) {
         lb_8000BA0C(jobj, 0.0f);
         data->x0_23 = 1;
-        lbl_804D3FC8 = 1;
+        lbl_804D3FC8[0] = 1;
         {
             s32 j;
             for (j = 0; j < 4; j++) {
                 if ((u8) match_end->player_standings[j].slot_type == 0) {
-                    lbl_804D3FC8 = 0;
+                    lbl_804D3FC8[0] = 0;
                     break;
                 }
             }
         }
-        if ((s32) lbl_804D3FC8 != 0) {
+        if (lbl_804D3FC8[0] != 0) {
             data->x3 = 0x14;
         } else {
             data->x3 = 0x0A;
@@ -545,7 +564,7 @@ void fn_80178050(HSD_GObj* arg0)
                         if (fn_80177DD0(k2) != 0) {
                             fn_80174B4C(data, k2);
                         }
-                        if ((s32) lbl_804D3FC8 != 0) {
+                        if (lbl_804D3FC8[0] != 0) {
                             data->player_data[k2].x0_0 = 0;
                             if (((s8) HSD_PadCopyStatus[(u8) k2].err == 0) &&
                                 (HSD_PadCopyStatus[(u8) k2].trigger & 0x1000))
@@ -555,7 +574,7 @@ void fn_80178050(HSD_GObj* arg0)
                             }
                         }
                     } else if (slot == 3) {
-                        if (((s32) lbl_804D3FC8 != 0) &&
+                        if ((lbl_804D3FC8[0] != 0) &&
                             ((s8) HSD_PadCopyStatus[(u8) k2].err == 0) &&
                             (HSD_PadCopyStatus[(u8) k2].trigger & 0x1000))
                         {
@@ -1315,7 +1334,7 @@ void fn_8017A004(void)
 void fn_8017A078(s32 arg0)
 {
     ResultsDisplayData* disp = &lbl_8046E1B0;
-    ResultsPlayerConfig* config = &lbl_803B7B68;
+    ResultsPlayerConfig* config = (ResultsPlayerConfig*) &lbl_803B7B68;
     Vec3 eye;
     Vec3 interest;
     ResultsRenderFuncs callbacks;
@@ -1329,7 +1348,7 @@ void fn_8017A078(s32 arg0)
     callbacks = config->x3C;
 
     gobj = GObj_Create(0x13, 0x14, 0);
-    cobj = HSD_CObjLoadDesc(&lbl_803D7910);
+    cobj = HSD_CObjLoadDesc((HSD_CObjDesc*) &lbl_803D7910);
     HSD_GObjObject_80390A70(gobj, HSD_GObj_804D784B, cobj);
 
     eye.y = (eye.y * (f32) (arg0 + 1)) + (0.7f * Player_800360D8(arg0));
@@ -1369,8 +1388,8 @@ void fn_8017A078(s32 arg0)
 HSD_GObj* fn_8017A318(s32 arg0)
 {
     ResultsDisplayData* disp = &lbl_8046E1B0;
-    ResultsPlayerConfig* config = &lbl_803B7B68;
-    CameraKindData* data = &lbl_803D6A08;
+    ResultsPlayerConfig* config = (ResultsPlayerConfig*) &lbl_803B7B68;
+    CameraKindData* data = (CameraKindData*) &lbl_803D6A08;
     MatchEnd* match_end = &disp->state.match_end;
     s32 _pad[2];
     s32 scissor[2];
@@ -1403,7 +1422,7 @@ HSD_GObj* fn_8017A318(s32 arg0)
     }
 
     gobj = GObj_Create(0x13, 0x14, 0);
-    cobj = HSD_CObjLoadDesc(&lbl_803D7910);
+    cobj = HSD_CObjLoadDesc((HSD_CObjDesc*) &lbl_803D7910);
     HSD_GObjObject_80390A70(gobj, HSD_GObj_804D784B, cobj);
 
     {
@@ -1474,7 +1493,7 @@ Fighter_GObj* fn_8017A67C(CharacterKind c_kind, int arg1, int arg2)
 {
     ResultsDisplayData* disp = &lbl_8046E1B0;
     MatchEnd* match_end = &disp->state.match_end;
-    ResultsPlayerConfig* config = &lbl_803B7B68;
+    ResultsPlayerConfig* config = (ResultsPlayerConfig*) &lbl_803B7B68;
     CharacterKind kind = c_kind;
     HSD_GObj* gobj = NULL;
     int slot_type;
@@ -1547,7 +1566,7 @@ Fighter_GObj* fn_8017A67C(CharacterKind c_kind, int arg1, int arg2)
                 *(s32*) &pz = *(s32*) &config->x88;
                 py = 100.0f * (f32) (arg2 + 1);
                 Player_80032A04(arg2, (Vec3*) &px);
-                Player_SetScale(arg2, 1.8f * lbl_803D7058[kind]);
+                Player_SetScale(arg2, 1.8f * lbl_803D7058.vals[kind]);
                 Player_80036F34(arg2, variant);
             } else {
                 f32 sp[4];
@@ -1562,7 +1581,7 @@ Fighter_GObj* fn_8017A67C(CharacterKind c_kind, int arg1, int arg2)
                 } else {
                     var_idx = 3;
                 }
-                scale = lbl_803D6A18[kind].x20[var_idx];
+                scale = ((CharScaleEntry*) lbl_803D6A18)[kind].x20[var_idx];
                 Player_80036F34(arg2, variant);
                 Player_SetScale(
                     arg2,
@@ -1607,11 +1626,6 @@ void fn_8017A9B4(int slot)
 
 extern u32 lbl_803D7018[];
 extern u32 lbl_803D7038[];
-
-static s32 lbl_804D3FD0[4][2] = { { 0x500050, 0x460034 },
-                                  { 0x6E0072, 0x64004A },
-                                  { 0x340034, 0x340034 },
-                                  { 0x4A004A, 0x4A004A } };
 
 void fn_8017AA78(u8* arg0)
 {
@@ -1664,14 +1678,14 @@ void fn_8017AA78(u8* arg0)
 
     {
         lbl_8046E3AC_t* state = &disp->state;
-        state->dim_w1[0] = lbl_804D3FD0[0][0];
-        state->dim_w1[1] = lbl_804D3FD0[0][1];
-        state->dim_h1[0] = lbl_804D3FD0[1][0];
-        state->dim_h1[1] = lbl_804D3FD0[1][1];
-        state->scissor_y[0] = lbl_804D3FD0[2][0];
-        state->scissor_y[1] = lbl_804D3FD0[2][1];
-        state->scissor_x[0] = lbl_804D3FD0[3][0];
-        state->scissor_x[1] = lbl_804D3FD0[3][1];
+        state->dim_w1[0] = lbl_804D3FD0;
+        state->dim_w1[1] = lbl_804D3FD4;
+        state->dim_h1[0] = lbl_804D3FD8;
+        state->dim_h1[1] = lbl_804D3FDC;
+        state->scissor_y[0] = lbl_804D3FE0;
+        state->scissor_y[1] = lbl_804D3FE4;
+        state->scissor_x[0] = lbl_804D3FE8;
+        state->scissor_x[1] = lbl_804D3FEC;
     }
 
     {
@@ -1692,3 +1706,222 @@ void fn_8017AA78(u8* arg0)
         }
     }
 }
+
+/* Reconstructed initialized data (byte-verified against the target
+ * object). Layout/order matches the original .data stream:
+ * 803D6A08, 803D6A18, 803D6A28, 803D7018, 803D7038, 803D7058,
+ * 803D78E8, 803D78FC, 803D7910, then the three dead strings. */
+
+const ResultsPlayerConfig lbl_803B7B68 = {
+    { 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, -100.0f },
+    { 0.0f, 100.0f, 62.0f },
+    { 0.0f, 100.0f, 0.0f },
+    { { fn_80179DCC, fn_80179E34, fn_80179E9C, fn_80179F04 } },
+    { 0.0f, 100.0f, 62.0f },
+    { 0.0f, 100.0f, 0.0f },
+    { { fn_80179D3C, fn_80179D60, fn_80179D84, fn_80179DA8 } },
+    0.0f,
+    0.0f,
+    -100.0f,
+    0.0f,
+    0.0f,
+    -100.0f,
+    0.75f,
+    0.48f,
+    0.4f,
+    0.307f,
+    0.0f,
+};
+
+u8 lbl_803D6A08[16] = { 0x01, 0x3C, 0x59, 0xFF, 0x06, 0x4E, 0x01, 0xFF,
+                        0x54, 0x01, 0x0B, 0xFF, 0x40, 0x80, 0x80, 0xFF };
+
+f32 lbl_803D6A18[4] = { 0.2f, 0.0f, 2.8f, 0.0f };
+
+f32 lbl_803D6A28[380] = {
+    10.0f, 13.5f, 24.0f, 7.0f, 3.6f, 4.0f, 3.8f, 1.5f,
+    -3.0f, 0.0f, -0.8f, 0.0f, 12.0f, 11.0f, 12.0f, 1.0f,
+    2.3f, 2.0f, 2.5f, 1.0f, 3.5f, -3.0f, 1.0f, 0.0f,
+    17.0f, 16.0f, 18.0f, 5.0f, 3.5f, 3.3f, 3.5f, 1.5f,
+    2.5f, -7.0f, -2.0f, -0.5f, 3.5f, -4.5f, -7.0f, 3.0f,
+    1.8f, 0.9f, 0.9f, 1.3f, 0.0f, -1.0f, 0.0f, 0.0f,
+    0.0f, 7.0f, -4.0f, 1.5f, 2.0f, 3.2f, 1.5f, 1.2f,
+    0.0f, -8.0f, 5.0f, 0.0f, 20.0f, 10.0f, 13.0f, 1.0f,
+    3.2f, 3.6f, 2.8f, 1.1f, -1.0f, -4.5f, 3.0f, 1.0f,
+    22.0f, 22.0f, 23.0f, 6.0f, 3.6f, 3.7f, 3.7f, 1.5f,
+    11.0f, 2.0f, 0.0f, 0.0f, -3.0f, 11.0f, 13.5f, 5.0f,
+    3.0f, 2.5f, 3.0f, 1.5f, 0.0f, -3.0f, 0.0f, 0.1f,
+    12.5f, 10.0f, 15.0f, 4.0f, 3.0f, 3.0f, 4.0f, 1.4f,
+    -2.0f, 0.0f, 3.0f, 0.0f, 20.0f, 23.0f, 23.0f, 7.0f,
+    3.5f, 4.0f, 3.8f, 1.6f, -1.0f, 4.0f, -1.0f, -0.6f,
+    12.0f, 13.5f, 23.0f, 3.5f, 2.8f, 3.0f, 3.0f, 1.3f,
+    0.0f, 0.0f, 0.0f, 0.0f, 7.0f, 4.0f, 6.0f, 4.0f,
+    3.0f, 2.0f, 2.5f, 1.4f, 0.0f, 0.0f, 0.0f, 0.0f,
+    18.0f, 18.0f, 20.0f, 7.0f, 3.5f, 3.5f, 4.0f, 1.6f,
+    0.0f, 2.0f, -8.0f, 0.0f, 0.0f, 9.0f, -4.0f, 1.5f,
+    1.5f, 3.2f, 2.2f, 1.2f, -8.0f, -9.0f, -5.0f, -2.0f,
+    10.0f, 6.5f, 0.8f, 2.0f, 2.35f, 3.0f, 2.0f, 1.3f,
+    0.0f, 0.0f, 0.0f, 0.0f, -2.0f, 0.0f, -7.0f, 0.0f,
+    1.6f, 2.8f, 1.0f, 1.1f, 0.0f, 1.0f, -2.0f, 0.0f,
+    18.0f, 12.5f, 25.0f, 6.5f, 3.2f, 3.8f, 4.2f, 1.5f,
+    3.0f, -1.0f, 2.5f, 0.1f, 13.0f, 9.5f, 13.0f, 2.8f,
+    2.6f, 2.2f, 2.3f, 1.2f, -1.0f, 1.0f, 0.0f, 0.2f,
+    23.5f, 22.0f, 23.0f, 8.0f, 4.0f, 4.0f, 4.0f, 1.6f,
+    1.0f, 0.0f, 1.0f, 0.0f, 20.0f, 25.0f, 16.0f, 7.0f,
+    3.5f, 4.0f, 4.0f, 1.5f, -11.0f, -9.0f, -3.0f, 0.5f,
+    9.0f, 7.0f, 24.0f, 5.0f, 3.0f, 3.5f, 3.8f, 1.5f,
+    1.0f, -5.5f, -0.5f, 1.0f, 18.0f, 19.0f, 20.0f, 6.5f,
+    3.3f, 4.0f, 3.8f, 1.5f, 0.0f, 0.5f, 0.0f, 0.2f,
+    10.0f, 13.0f, 14.0f, 5.0f, 3.0f, 3.0f, 3.6f, 1.5f,
+    -15.0f, 3.5f, -0.3f, 0.0f, 15.0f, 23.0f, 22.0f, 5.5f,
+    4.0f, 3.5f, 4.0f, 1.5f, 0.0f, 2.0f, 0.0f, 0.0f,
+    -3.0f, 1.0f, 1.0f, 0.5f, 1.3f, 2.5f, 2.0f, 1.3f,
+    0.5f, 0.0f, 0.0f, 0.0f, 19.0f, 27.0f, 25.0f, 7.5f,
+    4.1f, 4.0f, 4.0f, 1.5f, 0.0f, 0.0f, 0.0f, 0.0f,
+    0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f,
+    0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f,
+    1.0f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f,
+    0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f,
+    0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f,
+    1.0f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f,
+    0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f,
+    0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f,
+    1.0f, 1.0f, 1.0f, 1.0f,
+};
+
+u32 lbl_803D7018[8] = { 0x00180000, 0x00000000, 0x00150015, 0x00000000,
+                        0x00120012, 0x00120000, 0x000E000E, 0x000E000E };
+
+u32 lbl_803D7038[8] = { 0x00000000, 0x00000000, 0xFFF2000E, 0x00000000,
+                        0xFFEE0000, 0x00120000, 0xFFEAFFF9, 0x00070016 };
+
+CharResultTable lbl_803D7058 = {
+    {
+        0.85f, 0.8f, 1.0f, 1.0f, 1.0f, 0.7f, 0.9f, 1.0f,
+        1.0f, 0.88f, 0.8f, 1.0f, 0.9f, 1.0f, 0.9f, 1.0f,
+        0.9f, 0.9f, 0.9f, 0.9f, 1.0f, 1.0f, 1.0f, 1.0f,
+        1.0f, 0.79f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f,
+        0.0f, 0.0f, 0.0f, 0.0f, 0.0f, -2.7f, -3.5f, -4.0f,
+        0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f,
+        0.0f, -3.0f, -2.3f, -1.5f, 0.0f, 0.0f, 0.0f, 0.0f,
+        0.0f, 0.0f, 0.0f, 0.0f, 0.0f, -2.7f, -3.3f, -3.5f,
+        0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f,
+        0.0f, -2.7f, -2.7f, -2.0f, 0.0f, 0.0f, 0.0f, 0.0f,
+        0.0f, 0.0f, 0.0f, 0.0f, 0.0f, -2.7f, -2.4f, -1.5f,
+        0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f,
+        0.0f, -2.7f, -2.4f, -1.2f, 0.0f, 0.0f, 0.0f, 0.0f,
+        0.0f, 0.0f, -0.3f, -0.6f, 0.0f, -2.7f, -3.1f, -3.5f,
+        0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f,
+        0.0f, -2.7f, -2.9f, -3.2f, 0.0f, 0.0f, 0.0f, 0.0f,
+        0.0f, 0.0f, 0.0f, 0.0f, 0.0f, -2.7f, -2.7f, -2.7f,
+        0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, -0.2f, -0.4f,
+        0.0f, -2.7f, -3.1f, -3.5f, 0.0f, 0.0f, 0.0f, 0.0f,
+        0.0f, 0.0f, 0.0f, 0.0f, 0.0f, -2.7f, -2.7f, -2.7f,
+        0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f,
+        0.0f, -2.7f, -2.7f, -2.7f, 0.0f, 0.0f, 0.0f, 0.0f,
+        0.0f, 0.0f, 0.0f, 0.0f, 0.0f, -2.3f, -2.9f, -3.5f,
+        0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f,
+        0.0f, -2.7f, -2.7f, -2.0f, 0.0f, 0.0f, 0.0f, 0.0f,
+        0.0f, 0.0f, 0.4f, 0.9f, 0.0f, -3.3f, -2.9f, -2.0f,
+        0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f,
+        0.0f, -2.7f, -2.0f, -1.0f, 0.0f, 0.0f, 0.0f, 0.0f,
+        0.0f, 0.0f, 0.0f, 0.0f, 0.0f, -2.7f, -2.9f, -3.3f,
+        0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f,
+        0.0f, -2.7f, -2.7f, -2.1f, 0.0f, 0.0f, 0.0f, 0.0f,
+        0.0f, 0.0f, 0.0f, 0.0f, 0.0f, -2.7f, -3.5f, -3.9f,
+        0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f,
+        0.0f, -2.7f, -3.3f, -3.9f, 0.0f, 0.0f, 0.0f, 0.0f,
+        0.0f, 0.0f, 0.0f, 0.0f, 0.0f, -2.5f, -2.6f, -2.7f,
+        0.0f, 0.0f, 0.0f, 0.0f, 0.0f, -0.1f, -0.3f, -0.6f,
+        0.0f, -2.7f, -2.9f, -3.2f, 0.0f, 0.0f, 0.0f, 0.0f,
+        0.0f, 0.0f, 0.0f, 0.0f, 0.0f, -2.7f, -2.9f, -3.1f,
+        0.0f, 0.0f, 0.0f, 0.0f, 0.0f, -0.2f, -0.4f, -0.5f,
+        0.0f, -2.7f, -3.0f, -3.3f, 0.0f, 0.0f, 0.0f, 0.0f,
+        0.0f, 0.0f, 0.0f, 0.0f, 0.0f, -2.7f, -2.0f, -0.7f,
+        0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f,
+        0.0f, -2.7f, -3.3f, -3.9f, 0.0f, 0.0f, 0.0f, 0.0f,
+        0.0f, 0.0f, 0.0f, 0.0f, 0.0f, -2.7f, -2.7f, -2.7f,
+        0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f,
+        0.0f, -2.7f, -2.7f, -2.7f, 0.0f, 0.0f, 0.0f, 0.0f,
+        0.0f, 0.0f, 0.0f, 0.0f, 0.0f, -2.7f, -2.7f, -2.7f,
+        0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f,
+        0.0f, -2.7f, -2.7f, -2.7f, 0.0f, 0.0f, 0.0f, 0.0f,
+        0.0f, 0.0f, 0.0f, 0.0f, 0.0f, -2.7f, -2.7f, -2.7f,
+        0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f,
+        0.0f, -2.7f, -2.7f, -2.7f, 0.0f, 0.0f, 0.0f, 0.0f,
+    },
+    {
+        0x17000000, 0x00000000, 0x00000000, 0x00000000, 0x29000000, 0x00000000,
+        0x00000000, 0x00000000, 0x27000000, 0x00000000, 0x00000000, 0x00000000,
+        0x2C000000, 0x00000000, 0x00000000, 0x00000000, 0x05000000, 0x00000000,
+        0x00000000, 0x00000000, 0x17000000, 0x00000000, 0x00000000, 0x00000000,
+        0x28000000, 0x00000000, 0x00000000, 0x00000000, 0x24000000, 0x00000000,
+        0x00000000, 0x00000000, 0x18000000, 0x00000000, 0x00000000, 0x00000000,
+        0x57000000, 0x00000000, 0x00000000, 0x00000000, 0x13000000, 0x00000000,
+        0x00000000, 0x00000000, 0x13000000, 0x00000000, 0x00000000, 0x00000000,
+        0x17000000, 0x00000000, 0x00000000, 0x00000000, 0x17000000, 0x00000000,
+        0x00000000, 0x00000000, 0x17000000, 0x00000000, 0x00000000, 0x00000000,
+        0x17000000, 0x00000000, 0x00000000, 0x00000000, 0x17000000, 0x00000000,
+        0x00000000, 0x00000000, 0x17000000, 0x00000000, 0x00000000, 0x00000000,
+        0x17000000, 0x00000000, 0x00000000, 0x00000000, 0x17000000, 0x00000000,
+        0x00000000, 0x00000000, 0x17000000, 0x00000000, 0x00000000, 0x00000000,
+        0x17000000, 0x00000000, 0x00000000, 0x00000000, 0x17000000, 0x00000000,
+        0x00000000, 0x00000000, 0x17000000, 0x00000000, 0x00000000, 0x00000000,
+        0x17000000, 0x00000000, 0x00000000, 0x00000000, 0x17000000, 0x00000000,
+        0x00000000, 0x00000000, 0x17000000, 0x00000000, 0x00000000, 0x00000000,
+        0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+        0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+        0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+        0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    },
+};
+
+/* HSD_WObjDesc-shaped; TU-local type avoids pulling in wobj.h */
+typedef struct {
+    /* 0x00 */ char* class_name;
+    /* 0x04 */ Vec3 pos;
+    /* 0x10 */ void* robjdesc;
+} WObjDescData; // size = 0x14
+
+WObjDescData lbl_803D78E8 = { NULL, { 0.0f, 0.0f, 62.0f }, NULL };
+WObjDescData lbl_803D78FC = { NULL, { 0.0f, 0.0f, 0.0f }, NULL };
+
+HSD_CameraDescPerspective lbl_803D7910 = {
+    NULL,
+    0,
+    PROJ_PERSPECTIVE,
+    { 0, 640, 0, 480 },
+    { 0, 640, 0, 480 },
+    (HSD_WObjDesc*) &lbl_803D78E8,
+    (HSD_WObjDesc*) &lbl_803D78FC,
+    0.0f,
+    NULL,
+    1.0f,
+    5000.0f,
+    19.999998f,
+    1.216667f,
+};
+
+/* "Error : model gobj dont't find at gmResultSetViewPos\n" */
+u8 lbl_803D7948[54] = {
+    0x45, 0x72, 0x72, 0x6F, 0x72, 0x20, 0x3A, 0x20, 0x6D, 0x6F, 0x64, 0x65,
+    0x6C, 0x20, 0x67, 0x6F, 0x62, 0x6A, 0x20, 0x64, 0x6F, 0x6E, 0x74, 0x27,
+    0x74, 0x20, 0x66, 0x69, 0x6E, 0x64, 0x20, 0x61, 0x74, 0x20, 0x67, 0x6D,
+    0x52, 0x65, 0x73, 0x75, 0x6C, 0x74, 0x53, 0x65, 0x74, 0x56, 0x69, 0x65,
+    0x77, 0x50, 0x6F, 0x73, 0x0A, 0x00,
+};
+
+/* "gmresultplayer.c" */
+u8 lbl_803D7980[17] = {
+    0x67, 0x6D, 0x72, 0x65, 0x73, 0x75, 0x6C, 0x74, 0x70, 0x6C, 0x61, 0x79,
+    0x65, 0x72, 0x2E, 0x63, 0x00,
+};
+
+/* "Error : model jobj dont't find at gmResultSetViewPos\n" */
+u8 lbl_803D7994[54] = {
+    0x45, 0x72, 0x72, 0x6F, 0x72, 0x20, 0x3A, 0x20, 0x6D, 0x6F, 0x64, 0x65,
+    0x6C, 0x20, 0x6A, 0x6F, 0x62, 0x6A, 0x20, 0x64, 0x6F, 0x6E, 0x74, 0x27,
+    0x74, 0x20, 0x66, 0x69, 0x6E, 0x64, 0x20, 0x61, 0x74, 0x20, 0x67, 0x6D,
+    0x52, 0x65, 0x73, 0x75, 0x6C, 0x74, 0x53, 0x65, 0x74, 0x56, 0x69, 0x65,
+    0x77, 0x50, 0x6F, 0x73, 0x0A, 0x00,
+};

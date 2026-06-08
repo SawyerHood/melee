@@ -199,18 +199,6 @@
    }
   },
   {
-   "name": "fn_80039618",
-   "unit": "main/melee/pl/plbonus",
-   "vaddr": "0x80039618",
-   "size": 6700,
-   "fuzzy": 99.95,
-   "class": "layout",
-   "rows": {
-    "layout": 18
-   },
-   "severity": "near_miss"
-  },
-  {
    "name": "Exception_ReportStackTrace",
    "unit": "main/sysdolphin/baselib/particle",
    "vaddr": "0x80394A48",
@@ -261,19 +249,6 @@
    "fuzzy": 99.94,
    "class": "codegen",
    "rows": {
-    "other_arg": 2
-   },
-   "severity": "near_miss"
-  },
-  {
-   "name": "un_802FE918",
-   "unit": "main/melee/if/ifprize",
-   "vaddr": "0x802FE918",
-   "size": 712,
-   "fuzzy": 99.94,
-   "class": "regalloc",
-   "rows": {
-    "regalloc": 2,
     "other_arg": 2
    },
    "severity": "near_miss"
@@ -1612,19 +1587,6 @@
    "rows": {
     "layout": 4,
     "regalloc": 12
-   },
-   "severity": "near_miss"
-  },
-  {
-   "name": "gm_801BFCFC",
-   "unit": "main/melee/gm/gm_1BFA",
-   "vaddr": "0x801BFCFC",
-   "size": 640,
-   "fuzzy": 99.28,
-   "class": "regalloc",
-   "rows": {
-    "regalloc": 17,
-    "other_arg": 1
    },
    "severity": "near_miss"
   },

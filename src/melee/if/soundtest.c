@@ -35,14 +35,197 @@
 #include <MSL/stdio.h>
 #include <MSL/string.h>
 
+/// .sdata
+/* 4D5850 */ static int un_804D5850 = 0x7F;
+/* 4D5854 */ static int un_804D5854 = 0x7F;
+/* 4D5858 */ static int un_804D5858 = 0x7F;
+/* 4D585C */ static int un_804D585C = -1;
+
+/// .sbss
+/* 4D6DA8 */ static int* un_804D6DA8;
+/* 4D6DAC */ static int un_804D6DAC;
+/* 4D6DB0 */ static int un_804D6DB0;
+/* 4D6DB4 */ static int un_804D6DB4;
+/* 4D6DB8 */ static int un_804D6DB8;
+/* 4D6DBC */ static int un_804D6DBC;
+/* 4D6DC0 */ static int un_804D6DC0;
+
+int un_802FF88C(void);
+void un_802FF934(void);
+int un_802FF958(void);
+int un_802FF99C(int arg0);
+s32 un_802FF9DC(void);
+int un_802FFB58(int arg0);
+int un_802FFBAC(int arg0);
+bool un_802FFC30(void);
+bool un_802FFC6C(bool update_scene);
+
 /// .data
-/* 3F9FD0 */ static int un_803F9FD0;
-/* 3F9FDC */ static float un_803F9FDC;
-/* 3FA070 */ static int un_803FA070;
-/* 3FA090 */ static int un_803FA090;
-/* 3FA098 */ static float un_803FA098;
-/* 3FA09C */ static float un_803FA09C;
-/* 3FA0B0 */ static int un_803FA0B0;
+/* "Sound Test Menu" */
+u8 un_803F9F28[16] = {
+    0x53, 0x6F, 0x75, 0x6E, 0x64, 0x20, 0x54, 0x65, 0x73, 0x74, 0x20, 0x4D,
+    0x65, 0x6E, 0x75, 0x00,
+};
+
+/* "Sound Mode " */
+u8 un_803F9F38[12] = {
+    0x53, 0x6F, 0x75, 0x6E, 0x64, 0x20, 0x4D, 0x6F, 0x64, 0x65, 0x20, 0x00,
+};
+
+/* "Mas Volume" */
+u8 un_803F9F44[11] = {
+    0x4D, 0x61, 0x73, 0x20, 0x56, 0x6F, 0x6C, 0x75, 0x6D, 0x65, 0x00,
+};
+
+/* "FGM Volume" */
+u8 un_803F9F50[11] = {
+    0x46, 0x47, 0x4D, 0x20, 0x56, 0x6F, 0x6C, 0x75, 0x6D, 0x65, 0x00,
+};
+
+/* "BGM Volume" */
+u8 un_803F9F5C[11] = {
+    0x42, 0x47, 0x4D, 0x20, 0x56, 0x6F, 0x6C, 0x75, 0x6D, 0x65, 0x00,
+};
+
+/* "DSP Level" */
+u8 un_803F9F68[10] = {
+    0x44, 0x53, 0x50, 0x20, 0x4C, 0x65, 0x76, 0x65, 0x6C, 0x00,
+};
+
+/* "FGM Group" */
+u8 un_803F9F74[10] = {
+    0x46, 0x47, 0x4D, 0x20, 0x47, 0x72, 0x6F, 0x75, 0x70, 0x00,
+};
+
+/* "FGM Name" */
+u8 un_803F9F80[9] = {
+    0x46, 0x47, 0x4D, 0x20, 0x4E, 0x61, 0x6D, 0x65, 0x00,
+};
+
+/* "BGM Name" */
+u8 un_803F9F8C[9] = {
+    0x42, 0x47, 0x4D, 0x20, 0x4E, 0x61, 0x6D, 0x65, 0x00,
+};
+
+/* "-- EXIT --" */
+u8 un_803F9F98[11] = {
+    0x2D, 0x2D, 0x20, 0x45, 0x58, 0x49, 0x54, 0x20, 0x2D, 0x2D, 0x00,
+};
+
+/* Sound-test menu item table (entries reference the un_802FF*
+ * callbacks, the label strings above and the value cells). Two
+ * runtime-written cells live at +0x2C and +0x38. */
+void* un_803F9FA4[97] = {
+    NULL, (void*) un_802FF88C, un_803F9F28,
+    NULL, NULL, NULL,
+    NULL, NULL, (void*) 0x00000002,
+    (void*) un_802FF934, un_803F9F38, NULL,
+    &un_804D6DBC, NULL, NULL,
+    NULL, (void*) 0x00000003, (void*) un_802FF958,
+    un_803F9F44, NULL, &un_804D5850,
+    NULL, (void*) 0x42FE0000, (void*) 0x3F800000,
+    (void*) 0x00000003, (void*) un_802FF958, un_803F9F50,
+    NULL, &un_804D5854, NULL,
+    (void*) 0x42FE0000, (void*) 0x3F800000, (void*) 0x00000003,
+    (void*) un_802FF958, un_803F9F5C, NULL,
+    &un_804D5858, NULL, (void*) 0x42FE0000,
+    (void*) 0x3F800000, (void*) 0x00000003, (void*) un_802FF99C,
+    un_803F9F68, NULL, &un_804D6DAC,
+    NULL, (void*) 0x42FE0000, (void*) 0x3F800000,
+    (void*) 0x00000002, (void*) un_802FF9DC, un_803F9F74,
+    NULL, &un_804D6DB0, NULL,
+    (void*) 0x425C0000, (void*) 0x3F800000, (void*) 0x00000002,
+    (void*) un_802FFB58, un_803F9F80, NULL,
+    &un_804D6DB4, NULL, NULL,
+    NULL, (void*) 0x00000002, (void*) un_802FFBAC,
+    un_803F9F8C, NULL, &un_804D6DB8,
+    NULL, (void*) 0x42C40000, (void*) 0x3F800000,
+    (void*) 0x00000001, (void*) un_802FFC6C, un_803F9F98,
+    NULL, NULL, NULL,
+    NULL, NULL, (void*) 0x00000009,
+    (void*) un_802FFC30, NULL, NULL,
+    NULL, NULL, NULL,
+    NULL, (void*) 0x536D5374, (void*) 0x2E646174,
+    NULL, (void*) 0x736D536F, (void*) 0x756E6454,
+    (void*) 0x6573744C, (void*) 0x6F616444, (void*) 0x61746100,
+    NULL,
+};
+
+/* Runtime-written cells inside the menu table (formerly modeled as
+ * separate statics; the original keeps them inside un_803F9FA4). */
+#define un_803F9FD0 (*(int*) &un_803F9FA4[11])
+#define un_803F9FDC (*(float*) &un_803F9FA4[14])
+#define un_803FA070 (*(int*) &un_803F9FA4[51])
+#define un_803FA090 (*(int*) &un_803F9FA4[59])
+#define un_803FA098 (*(float*) &un_803F9FA4[61])
+#define un_803FA09C (*(float*) &un_803F9FA4[62])
+#define un_803FA0B0 (*(int*) &un_803F9FA4[67])
+
+/* "GmLangTypeJP" */
+u8 un_803FA3F4[13] = {
+    0x47, 0x6D, 0x4C, 0x61, 0x6E, 0x67, 0x54, 0x79, 0x70, 0x65, 0x4A, 0x50,
+    0x00,
+};
+
+/* "GmLangTypeUS" */
+u8 un_803FA404[13] = {
+    0x47, 0x6D, 0x4C, 0x61, 0x6E, 0x67, 0x54, 0x79, 0x70, 0x65, 0x55, 0x53,
+    0x00,
+};
+
+/* "Battle Royal" */
+u8 un_803FB064[13] = {
+    0x42, 0x61, 0x74, 0x74, 0x6C, 0x65, 0x20, 0x52, 0x6F, 0x79, 0x61, 0x6C,
+    0x00,
+};
+
+/* "Team Battle" */
+u8 un_803FB074[12] = {
+    0x54, 0x65, 0x61, 0x6D, 0x20, 0x42, 0x61, 0x74, 0x74, 0x6C, 0x65, 0x00,
+};
+
+
+/// .sdata (reconstructed)
+u8 un_804D5860[5] = { 0x4E, 0x4F, 0x4E, 0x45, 0x00 }; /* "NONE" */
+u8 un_804D5868[8] = { 0x41, 0x43, 0x54, 0x49, 0x56, 0x45, 0x44, 0x00 }; /* "ACTIVED" */
+u8 un_804D5870[5] = { 0x41, 0x55, 0x54, 0x4F, 0x00 }; /* "AUTO" */
+u8 un_804D5878[4] = { 0x4F, 0x46, 0x46, 0x00 }; /* "OFF" */
+u8 un_804D587C[3] = { 0x4F, 0x4E, 0x00 }; /* "ON" */
+void* un_804D5880[2] = { un_804D5878, un_804D587C };
+void* un_804D5888[2] = { un_803FA3F4, un_803FA404 };
+u8 un_804D5890[7] = { 0x4D, 0x61, 0x73, 0x74, 0x65, 0x72, 0x00 }; /* "Master" */
+u8 un_804D5898[8] = { 0x44, 0x65, 0x76, 0x65, 0x6C, 0x6F, 0x70, 0x00 }; /* "Develop" */
+u8 un_804D58A0[8] = { 0x41, 0x64, 0x64, 0x72, 0x34, 0x20, 0x3A, 0x00 }; /* "Addr4 :" */
+u8 un_804D58A8[8] = { 0x75, 0x33, 0x32, 0x20, 0x20, 0x20, 0x3A, 0x00 }; /* "u32   :" */
+u8 un_804D58B0[8] = { 0x41, 0x64, 0x64, 0x72, 0x32, 0x20, 0x3A, 0x00 }; /* "Addr2 :" */
+u8 un_804D58B8[8] = { 0x75, 0x31, 0x36, 0x20, 0x20, 0x20, 0x3A, 0x00 }; /* "u16   :" */
+u8 un_804D58C0[8] = { 0x41, 0x64, 0x64, 0x72, 0x20, 0x20, 0x3A, 0x00 }; /* "Addr  :" */
+u8 un_804D58C8[8] = { 0x75, 0x38, 0x20, 0x20, 0x20, 0x20, 0x3A, 0x00 }; /* "u8    :" */
+u8 un_804D58D0[8] = { 0x4E, 0x6F, 0x74, 0x68, 0x69, 0x6E, 0x67, 0x00 }; /* "Nothing" */
+u8 un_804D58D8[8] = { 0x56, 0x65, 0x72, 0x79, 0x6C, 0x6F, 0x77, 0x00 }; /* "Verylow" */
+u8 un_804D58E0[4] = { 0x4C, 0x6F, 0x77, 0x00 }; /* "Low" */
+u8 un_804D58E4[7] = { 0x4D, 0x69, 0x64, 0x64, 0x6C, 0x65, 0x00 }; /* "Middle" */
+u8 un_804D58EC[5] = { 0x48, 0x69, 0x67, 0x68, 0x00 }; /* "High" */
+u8 un_804D58F4[5] = { 0x52, 0x75, 0x6C, 0x65, 0x00 }; /* "Rule" */
+void* un_804D58FC[2] = { un_803FB064, un_803FB074 };
+static s32 un_804D5904[1] = { 0 }; /* keeps un_804D5908 8-aligned (dtk pad) */
+s32 un_804D5908 = 1;
+s32 un_804D590C = 1;
+s32 un_804D5910 = 1;
+u8 un_804D5914[7] = { 0x53, 0x49, 0x4D, 0x50, 0x4C, 0x45, 0x00 }; /* "SIMPLE" */
+u8 un_804D591C[8] = { 0x43, 0x68, 0x61, 0x72, 0x61, 0x20, 0x3A, 0x00 }; /* "Chara :" */
+u8 un_804D5924[8] = { 0x43, 0x6F, 0x6C, 0x6F, 0x72, 0x20, 0x3A, 0x00 }; /* "Color :" */
+u8 un_804D592C[7] = { 0x4D, 0x6F, 0x64, 0x65, 0x20, 0x3A, 0x00 }; /* "Mode :" */
+u8 un_804D5934[6] = { 0x4C, 0x75, 0x69, 0x67, 0x69, 0x00 }; /* "Luigi" */
+u8 un_804D593C[5] = { 0x4D, 0x61, 0x72, 0x73, 0x00 }; /* "Mars" */
+u8 un_804D5944[7] = { 0x4D, 0x65, 0x77, 0x74, 0x77, 0x6F, 0x00 }; /* "Mewtwo" */
+u8 un_804D594C[6] = { 0x50, 0x75, 0x72, 0x69, 0x6E, 0x00 }; /* "Purin" */
+u8 un_804D5954[6] = { 0x46, 0x61, 0x6C, 0x63, 0x6F, 0x00 }; /* "Falco" */
+u8 un_804D595C[7] = { 0x43, 0x2D, 0x4C, 0x69, 0x6E, 0x6B, 0x00 }; /* "C-Link" */
+u8 un_804D5964[4] = { 0x52, 0x6F, 0x69, 0x00 }; /* "Roi" */
+u8 un_804D5968[6] = { 0x50, 0x69, 0x63, 0x68, 0x75, 0x00 }; /* "Pichu" */
+u8 un_804D5970[6] = { 0x47, 0x61, 0x6E, 0x6F, 0x6E, 0x00 }; /* "Ganon" */
+
 /* 3FA128 */ static struct {
     u8 _pad0[0x220];
     u16 x220;
@@ -135,21 +318,6 @@
 /* 3FD29C */ extern char un_803FD29C[];
 /* 3FD2AC */ extern char un_803FD2AC[];
 
-/// .sdata
-/* 4D5850 */ static int un_804D5850 = 0x7F;
-/* 4D5854 */ static int un_804D5854 = 0x7F;
-/* 4D5858 */ static int un_804D5858 = 0x7F;
-/* 4D585C */ static int un_804D585C = -1;
-
-/// .sbss
-/* 4D6DA8 */ static int* un_804D6DA8;
-/* 4D6DAC */ static int un_804D6DAC;
-/* 4D6DB0 */ static int un_804D6DB0;
-/* 4D6DB4 */ static int un_804D6DB4;
-/* 4D6DB8 */ static int un_804D6DB8;
-/* 4D6DBC */ static int un_804D6DBC;
-/* 4D6DC0 */ static int un_804D6DC0;
-
 /// .sbss (extern)
 /* 4D6DC8 */ extern s32 un_804D6DC8;
 /* 4D6DCC */ extern s32 un_804D6DCC;
@@ -171,12 +339,7 @@
 /* 4D6E10 */ extern s32 un_804D6E10;
 /* 4D6E14 */ extern s32 un_804D6E14;
 
-/// .sdata (extern)
-/* 4D5908 */ extern s32 un_804D5908;
-/* 4D590C */ extern s32 un_804D590C;
-/* 4D5910 */ extern s32 un_804D5910;
 
-/* 4D5990 */ extern char un_804D5990[8];
 
 /// .bss (extern)
 /* 45A6C0 */ extern u8 gmMainLib_8045A6C0[];
@@ -1365,6 +1528,34 @@ int un_80301840(int arg0)
     }
     return 0;
 }
+
+void* un_803FD274[6] = { NULL, (void*) 0x028001E0, (void*) 0x00000004,
+                          NULL, NULL, NULL };
+
+void* un_804D5990[2] = { un_803FD274, NULL };
+u8 un_804D5998[5] = { 0x49, 0x6E, 0x69, 0x74, 0x00 }; /* "Init" */
+u8 un_804D59A0[7] = { 0x46, 0x6F, 0x72, 0x6D, 0x61, 0x74, 0x00 }; /* "Format" */
+u8 un_804D59A8[7] = { 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x00 }; /* "Create" */
+u8 un_804D59B0[5] = { 0x53, 0x61, 0x76, 0x65, 0x00 }; /* "Save" */
+u8 un_804D59B8[5] = { 0x4C, 0x6F, 0x61, 0x64, 0x00 }; /* "Load" */
+u8 un_804D59C0[7] = { 0x44, 0x65, 0x6C, 0x65, 0x74, 0x65, 0x00 }; /* "Delete" */
+u8 un_804D59C8[7] = { 0x4E, 0x6F, 0x72, 0x6D, 0x61, 0x6C, 0x00 }; /* "Normal" */
+u8 un_804D59D0[5] = { 0x54, 0x65, 0x61, 0x6D, 0x00 }; /* "Team" */
+u8 un_804D59D8[6] = { 0x47, 0x69, 0x61, 0x6E, 0x74, 0x00 }; /* "Giant" */
+u8 un_804D59E0[6] = { 0x42, 0x6F, 0x6E, 0x75, 0x73, 0x00 }; /* "Bonus" */
+u8 un_804D59E8[6] = { 0x43, 0x6F, 0x72, 0x70, 0x73, 0x00 }; /* "Corps" */
+u8 un_804D59F0[7] = { 0x54, 0x61, 0x72, 0x67, 0x65, 0x74, 0x00 }; /* "Target" */
+u8 un_804D59F8[7] = { 0x54, 0x45, 0x53, 0x54, 0x20, 0x3E, 0x00 }; /* "TEST >" */
+u8 un_804D5A00[2] = { 0x30, 0x00 }; /* "0" */
+u8 un_804D5A08[4] = { 0x40, 0x50, 0x80, 0x80 };
+u8 un_804D5A0C[4] = { 0xE2, 0xE2, 0xE2, 0xFF };
+u8 un_804D5A10[4] = { 0xFF, 0x80, 0x20, 0xFF };
+u8 un_804D5A14[4] = { 0xA0, 0xA0, 0xFF, 0xFF };
+u8 un_804D5A18[3] = { 0x25, 0x64, 0x00 }; /* "%d" */
+u8 un_804D5A1C[5] = { 0x25, 0x30, 0x32, 0x78, 0x00 }; /* "%02x" */
+u8 un_804D5A24[5] = { 0x25, 0x30, 0x34, 0x78, 0x00 }; /* "%04x" */
+u8 un_804D5A2C[5] = { 0x25, 0x30, 0x38, 0x78, 0x00 }; /* "%08x" */
+u8 un_804D5A34[6] = { 0x25, 0x33, 0x2E, 0x32, 0x66, 0x00 }; /* "%3.2f" */
 
 int un_803018BC(int arg0)
 {
