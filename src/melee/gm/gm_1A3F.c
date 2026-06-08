@@ -58,27 +58,35 @@ void gm_801A3F48(GameScene* scene)
     un_8031C8B8();
 }
 
-inline u8 nextScene(GameScene* scenes)
+static inline u8 nextScene(GameScene* scenes)
 {
-    int i;
     u8 var_r3_3;
+    GameScene* cur2 = scenes;
+    u8 curr = gm_80479D30.routing.curr_scene;
+    int i;
     GameScene* cur = scenes;
 
-    for (i = 0; scenes[i].idx != 0xFF; i++) {
-        if (cur->idx > gm_80479D30.routing.curr_scene) {
+    for (i = 0; cur2->idx != 0xFF; cur2++, i++) {
+        if (cur->idx > curr) {
             return scenes[i].idx;
         }
         cur++;
     }
+    goto not_found;
 
+out:
+    return var_r3_3;
+
+not_found:
     var_r3_3 = scenes[0].idx;
-    if (var_r3_3 == 0xFF) {
-        var_r3_3 = 0;
+    if (var_r3_3 != 0xFF) {
+        goto out;
     }
+    var_r3_3 = 0;
     return var_r3_3;
 }
 
-inline GameScene* findScene(GameScene* scene)
+static inline GameScene* findScene(GameScene* scene)
 {
     int i, j;
     for (i = gm_80479D30.routing.curr_scene; i < 0xFF; i++) {

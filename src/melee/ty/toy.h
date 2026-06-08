@@ -102,7 +102,7 @@
 /* 4D5A78 */ extern char un_804D5A78;
 /* 4D5A80 */ extern char un_804D5A80;
 
-/* 3B8910 */ extern s32 un_803B8910[18];
+/* 3B8910 */ extern const s32 un_803B8910[18];
 /* 4D6E98 */ extern DevText* un_804D6E98;
 /* 3FE7A0 */ extern char un_803FE7A0[];
 /* 3FE7B0 */ extern char un_803FE7B0[];
@@ -113,9 +113,9 @@
 /* 4D5A40 */ extern s32 un_804D5A40;
 /* 4D5A44 */ extern s32 un_804D5A44;
 /* 4D6E5C */ extern void** un_804D6E5C;
-/* 4DDE0C */ extern s32 un_804DDE0C;
-/* 4DDE10 */ extern f32 un_804DDE10;
-/* 4DDE14 */ extern f32 un_804DDE14;
+/* 4DDE0C */ extern const s32 un_804DDE0C;
+/* 4DDE10 */ extern const f32 un_804DDE10;
+/* 4DDE14 */ extern const f32 un_804DDE14;
 
 /* un_80311788 externs */
 /* 3FE2A4 */ extern char un_803FE2A4[];
@@ -123,15 +123,15 @@
 /* 4A26C4 */ extern char un_804A26C4[];
 /* 4D6E9C */ extern DevText* un_804D6E9C;
 /* 4D6EE0 */ extern void* un_804D6EE0;
-/* 4DDE18 */ extern s32 un_804DDE18;
+/* 4DDE18 */ extern const s32 un_804DDE18;
 
 /* un_803060BC externs */
 /* 4D6EC0 */ extern struct TrophyData* un_804D6EC0;
 /* 4D6EC4 */ extern struct TrophyData* un_804D6EC4;
 
 /* un_80312050 externs */
-/* 4DDE1C */ extern f32 un_804DDE1C;
-/* 4DDE20 */ extern f32 un_804DDE20;
+/* 4DDE1C */ extern const f32 un_804DDE1C;
+/* 4DDE20 */ extern const f32 un_804DDE20;
 
 /* un_803053C4 externs */
 /* 4D6EB4 */ extern s16* un_804D6EB4;
@@ -163,8 +163,8 @@ extern s16* un_804D6E64;
 extern char un_803FDD18[];
 extern char un_803FE3B8[];
 extern char un_803FE3DC[];
-extern HSD_FogDesc un_803B8844;
-extern Vec3 un_803B8858;
+extern const HSD_FogDesc un_803B8844;
+extern const Vec3 un_803B8858;
 
 typedef struct PosArray {
     s32 xy[2];
@@ -174,8 +174,8 @@ typedef struct PosArrayFull {
     PosArray a[7];
 } PosArrayFull;
 
-extern PosArrayFull un_803B8864;
-extern PosArrayFull un_803B889C;
+extern const PosArrayFull un_803B8864;
+extern const PosArrayFull un_803B889C;
 
 extern s32 un_804D6E58;
 extern s32 un_804D6E60;
@@ -196,8 +196,8 @@ extern f32 un_804DDD78;
 extern f32 un_804DDD7C;
 extern f32 un_804DDD80;
 extern f32 un_804DDD84;
-extern f32 un_804DDE00;
-extern Vec3 un_803B88F8;
-extern Vec3 un_803B8904;
+extern const f32 un_804DDE00;
+extern const Vec3 un_803B88F8;
+extern const Vec3 un_803B8904;
 
 #endif

@@ -199,6 +199,18 @@
    }
   },
   {
+   "name": "it_8026EECC",
+   "unit": "main/melee/it/itdraw",
+   "vaddr": "0x8026EECC",
+   "size": 1248,
+   "fuzzy": 99.95,
+   "class": "regalloc",
+   "rows": {
+    "regalloc": 3
+   },
+   "severity": "near_miss"
+  },
+  {
    "name": "Exception_ReportStackTrace",
    "unit": "main/sysdolphin/baselib/particle",
    "vaddr": "0x80394A48",
@@ -1212,6 +1224,19 @@
    "severity": "near_miss"
   },
   {
+   "name": "it_802E72E0",
+   "unit": "main/melee/it/items/itarwinglaser",
+   "vaddr": "0x802E72E0",
+   "size": 884,
+   "fuzzy": 99.48,
+   "class": "structural",
+   "rows": {
+    "gap": 1,
+    "regalloc": 2
+   },
+   "severity": "near_miss"
+  },
+  {
    "name": "mnCharSel_8025D1C4",
    "unit": "main/melee/mn/mncharsel",
    "vaddr": "0x8025D1C4",
@@ -1325,18 +1350,6 @@
    "rows": {
     "regalloc": 13,
     "naming": 1
-   },
-   "severity": "near_miss"
-  },
-  {
-   "name": "it_8026EECC",
-   "unit": "main/melee/it/itdraw",
-   "vaddr": "0x8026EECC",
-   "size": 1248,
-   "fuzzy": 99.41,
-   "class": "regalloc",
-   "rows": {
-    "regalloc": 37
    },
    "severity": "near_miss"
   },
@@ -1704,18 +1717,6 @@
    "severity": "near_miss"
   },
   {
-   "name": "it_802C4D10",
-   "unit": "main/melee/it/items/itmewtwoshadowball",
-   "vaddr": "0x802C4D10",
-   "size": 576,
-   "fuzzy": 99.24,
-   "class": "regalloc",
-   "rows": {
-    "regalloc": 20
-   },
-   "severity": "near_miss"
-  },
-  {
    "name": "fn_8001EBF0",
    "unit": "main/melee/lb/lbmthp",
    "vaddr": "0x8001EBF0",
@@ -2061,6 +2062,19 @@
     "naming": 1,
     "gap": 1,
     "regalloc": 4
+   },
+   "severity": "near_miss"
+  },
+  {
+   "name": "it_802E7654",
+   "unit": "main/melee/it/items/itarwinglaser",
+   "vaddr": "0x802E7654",
+   "size": 884,
+   "fuzzy": 99.05,
+   "class": "structural",
+   "rows": {
+    "gap": 2,
+    "regalloc": 2
    },
    "severity": "near_miss"
   },
@@ -2650,21 +2664,6 @@
    "severity": "near_miss"
   },
   {
-   "name": "it_802E7654",
-   "unit": "main/melee/it/items/itarwinglaser",
-   "vaddr": "0x802E7654",
-   "size": 884,
-   "fuzzy": 98.64,
-   "class": "codegen",
-   "rows": {
-    "regalloc": 8,
-    "gap": 2,
-    "mnemonic": 1,
-    "layout": 1
-   },
-   "severity": "near_miss"
-  },
-  {
    "name": "it_80271830",
    "unit": "main/melee/it/itcoll",
    "vaddr": "0x80271830",
@@ -3105,20 +3104,6 @@
     "naming": 2,
     "other_arg": 11,
     "mixed": 1
-   },
-   "severity": "near_miss"
-  },
-  {
-   "name": "it_802E72E0",
-   "unit": "main/melee/it/items/itarwinglaser",
-   "vaddr": "0x802E72E0",
-   "size": 884,
-   "fuzzy": 98.26,
-   "class": "structural",
-   "rows": {
-    "regalloc": 4,
-    "gap": 3,
-    "mnemonic": 1
    },
    "severity": "near_miss"
   },
@@ -4859,20 +4844,6 @@
    "rows": {
     "gap": 2,
     "regalloc": 9
-   },
-   "severity": "near_miss"
-  },
-  {
-   "name": "hsd_80396A20",
-   "unit": "main/sysdolphin/baselib/particle",
-   "vaddr": "0x80396A20",
-   "size": 600,
-   "fuzzy": 96.93,
-   "class": "structural",
-   "rows": {
-    "layout": 6,
-    "gap": 4,
-    "regalloc": 6
    },
    "severity": "near_miss"
   },
@@ -7841,21 +7812,6 @@
    "severity": "near_miss"
   },
   {
-   "name": "hsd_803962A8",
-   "unit": "main/sysdolphin/baselib/particle",
-   "vaddr": "0x803962A8",
-   "size": 1016,
-   "fuzzy": 94.06,
-   "class": "structural",
-   "rows": {
-    "layout": 5,
-    "regalloc": 35,
-    "mnemonic": 5,
-    "gap": 10
-   },
-   "severity": "near_miss"
-  },
-  {
    "name": "ifMagnify_802FB8C0",
    "unit": "main/melee/if/ifmagnify",
    "vaddr": "0x802FB8C0",
@@ -8622,24 +8578,6 @@
    "severity": "near_miss"
   },
   {
-   "name": "fn_8017A67C",
-   "unit": "main/melee/gm/gmresultplayer",
-   "vaddr": "0x8017A67C",
-   "size": 824,
-   "fuzzy": 92.86,
-   "class": "codegen",
-   "rows": {
-    "regalloc": 54,
-    "other_arg": 9,
-    "gap": 10,
-    "mixed": 7,
-    "layout": 9,
-    "naming": 1,
-    "mnemonic": 2
-   },
-   "severity": "near_miss"
-  },
-  {
    "name": "fn_8022F538",
    "unit": "main/melee/mn/mnmainrule",
    "vaddr": "0x8022F538",
@@ -8703,6 +8641,24 @@
     "mnemonic": 5,
     "regalloc": 94,
     "naming": 1
+   },
+   "severity": "near_miss"
+  },
+  {
+   "name": "fn_8017A67C",
+   "unit": "main/melee/gm/gmresultplayer",
+   "vaddr": "0x8017A67C",
+   "size": 824,
+   "fuzzy": 92.69,
+   "class": "codegen",
+   "rows": {
+    "regalloc": 59,
+    "other_arg": 8,
+    "gap": 10,
+    "mixed": 7,
+    "layout": 9,
+    "naming": 1,
+    "mnemonic": 2
    },
    "severity": "near_miss"
   },
@@ -9144,24 +9100,6 @@
     "mixed": 4,
     "mnemonic": 1,
     "layout": 4
-   },
-   "severity": "near_miss"
-  },
-  {
-   "name": "hsd_80395A78",
-   "unit": "main/sysdolphin/baselib/particle",
-   "vaddr": "0x80395A78",
-   "size": 784,
-   "fuzzy": 92.03,
-   "class": "structural",
-   "rows": {
-    "naming": 1,
-    "gap": 12,
-    "layout": 4,
-    "mixed": 12,
-    "regalloc": 37,
-    "other_arg": 1,
-    "mnemonic": 1
    },
    "severity": "near_miss"
   },
@@ -10358,6 +10296,22 @@
    "severity": "near_miss"
   },
   {
+   "name": "hsd_80396A20",
+   "unit": "main/sysdolphin/baselib/particle",
+   "vaddr": "0x80396A20",
+   "size": 600,
+   "fuzzy": 90.24,
+   "class": "structural",
+   "rows": {
+    "naming": 1,
+    "gap": 13,
+    "layout": 9,
+    "mixed": 9,
+    "regalloc": 12
+   },
+   "severity": "near_miss"
+  },
+  {
    "name": "mnInfo_80252758",
    "unit": "main/melee/mn/mninfo",
    "vaddr": "0x80252758",
@@ -10917,6 +10871,23 @@
    "severity": "partial"
   },
   {
+   "name": "hsd_80395A78",
+   "unit": "main/sysdolphin/baselib/particle",
+   "vaddr": "0x80395A78",
+   "size": 784,
+   "fuzzy": 89.05,
+   "class": "codegen",
+   "rows": {
+    "naming": 1,
+    "gap": 14,
+    "layout": 7,
+    "mixed": 18,
+    "regalloc": 54,
+    "mnemonic": 4
+   },
+   "severity": "partial"
+  },
+  {
    "name": "mnName_SortNames",
    "unit": "main/melee/mn/mnname",
    "vaddr": "0x80237A68",
@@ -11189,6 +11160,24 @@
     "mnemonic": 8,
     "gap": 21,
     "mixed": 1
+   },
+   "severity": "partial"
+  },
+  {
+   "name": "fn_8017A318",
+   "unit": "main/melee/gm/gmresultplayer",
+   "vaddr": "0x8017A318",
+   "size": 868,
+   "fuzzy": 88.29,
+   "class": "structural",
+   "rows": {
+    "layout": 50,
+    "regalloc": 52,
+    "other_arg": 5,
+    "gap": 17,
+    "mixed": 6,
+    "mnemonic": 6,
+    "naming": 1
    },
    "severity": "partial"
   },
@@ -11930,6 +11919,22 @@
    "severity": "partial"
   },
   {
+   "name": "hsd_803962A8",
+   "unit": "main/sysdolphin/baselib/particle",
+   "vaddr": "0x803962A8",
+   "size": 1016,
+   "fuzzy": 86.35,
+   "class": "structural",
+   "rows": {
+    "layout": 6,
+    "gap": 27,
+    "mixed": 8,
+    "regalloc": 25,
+    "mnemonic": 9
+   },
+   "severity": "partial"
+  },
+  {
    "name": "ifMagnify_802FC750",
    "unit": "main/melee/if/ifmagnify",
    "vaddr": "0x802FC750",
@@ -11992,24 +11997,6 @@
     "mixed": 5,
     "mnemonic": 9,
     "layout": 1
-   },
-   "severity": "partial"
-  },
-  {
-   "name": "fn_8017A318",
-   "unit": "main/melee/gm/gmresultplayer",
-   "vaddr": "0x8017A318",
-   "size": 868,
-   "fuzzy": 86.16,
-   "class": "structural",
-   "rows": {
-    "gap": 21,
-    "regalloc": 62,
-    "mixed": 8,
-    "layout": 38,
-    "other_arg": 6,
-    "mnemonic": 6,
-    "naming": 1
    },
    "severity": "partial"
   },
@@ -12843,6 +12830,23 @@
    "severity": "partial"
   },
   {
+   "name": "fn_80397814",
+   "unit": "main/sysdolphin/baselib/particle",
+   "vaddr": "0x80397814",
+   "size": 1424,
+   "fuzzy": 83.17,
+   "class": "structural",
+   "rows": {
+    "regalloc": 97,
+    "gap": 47,
+    "mixed": 18,
+    "other_arg": 3,
+    "layout": 1,
+    "mnemonic": 11
+   },
+   "severity": "partial"
+  },
+  {
    "name": "mnEvent_8024E524",
    "unit": "main/melee/mn/mnevent",
    "vaddr": "0x8024E524",
@@ -12956,23 +12960,6 @@
     "mixed": 4,
     "mnemonic": 18,
     "regalloc": 3
-   },
-   "severity": "partial"
-  },
-  {
-   "name": "fn_80397814",
-   "unit": "main/sysdolphin/baselib/particle",
-   "vaddr": "0x80397814",
-   "size": 1424,
-   "fuzzy": 82.61,
-   "class": "structural",
-   "rows": {
-    "regalloc": 97,
-    "gap": 49,
-    "mixed": 18,
-    "other_arg": 3,
-    "layout": 1,
-    "mnemonic": 11
    },
    "severity": "partial"
   },
@@ -13279,24 +13266,6 @@
    "severity": "partial"
   },
   {
-   "name": "hsd_80397110",
-   "unit": "main/sysdolphin/baselib/particle",
-   "vaddr": "0x80397110",
-   "size": 612,
-   "fuzzy": 80.88,
-   "class": "structural",
-   "rows": {
-    "naming": 2,
-    "mixed": 11,
-    "regalloc": 36,
-    "layout": 5,
-    "mnemonic": 7,
-    "gap": 22,
-    "other_arg": 1
-   },
-   "severity": "partial"
-  },
-  {
    "name": "grCorneria_801DCE1C",
    "unit": "main/melee/gr/grcorneria",
    "vaddr": "0x801DCE1C",
@@ -13411,6 +13380,24 @@
    "severity": "partial"
   },
   {
+   "name": "hsd_80397110",
+   "unit": "main/sysdolphin/baselib/particle",
+   "vaddr": "0x80397110",
+   "size": 612,
+   "fuzzy": 80.52,
+   "class": "structural",
+   "rows": {
+    "naming": 3,
+    "mixed": 13,
+    "regalloc": 42,
+    "mnemonic": 10,
+    "gap": 20,
+    "layout": 5,
+    "other_arg": 6
+   },
+   "severity": "partial"
+  },
+  {
    "name": "order_dag",
    "unit": "main/sysdolphin/baselib/texpdag",
    "vaddr": "0x80385944",
@@ -13427,19 +13414,17 @@
    "severity": "partial"
   },
   {
-   "name": "hsd_80396884",
-   "unit": "main/sysdolphin/baselib/particle",
-   "vaddr": "0x80396884",
-   "size": 412,
-   "fuzzy": 80.25,
+   "name": "un_802FF7DC",
+   "unit": "main/melee/if/soundtest",
+   "vaddr": "0x802FF7DC",
+   "size": 168,
+   "fuzzy": 80.31,
    "class": "structural",
    "rows": {
-    "naming": 2,
-    "mixed": 19,
-    "gap": 17,
-    "regalloc": 22,
-    "layout": 9,
-    "mnemonic": 2
+    "layout": 2,
+    "regalloc": 5,
+    "mixed": 5,
+    "gap": 5
    },
    "severity": "partial"
   },
@@ -13697,6 +13682,23 @@
    "severity": "partial"
   },
   {
+   "name": "hsd_80396E40",
+   "unit": "main/sysdolphin/baselib/particle",
+   "vaddr": "0x80396E40",
+   "size": 664,
+   "fuzzy": 79.39,
+   "class": "structural",
+   "rows": {
+    "naming": 2,
+    "regalloc": 34,
+    "mnemonic": 11,
+    "gap": 26,
+    "mixed": 10,
+    "layout": 7
+   },
+   "severity": "partial"
+  },
+  {
    "name": "grInishie1_801FAD84",
    "unit": "main/melee/gr/grinishie1",
    "vaddr": "0x801FAD84",
@@ -13919,23 +13921,6 @@
     "regalloc": 3,
     "layout": 5,
     "mixed": 3
-   },
-   "severity": "partial"
-  },
-  {
-   "name": "hsd_80396E40",
-   "unit": "main/sysdolphin/baselib/particle",
-   "vaddr": "0x80396E40",
-   "size": 664,
-   "fuzzy": 77.72,
-   "class": "structural",
-   "rows": {
-    "naming": 2,
-    "mnemonic": 11,
-    "mixed": 11,
-    "gap": 29,
-    "layout": 7,
-    "regalloc": 31
    },
    "severity": "partial"
   },
@@ -14270,6 +14255,23 @@
    "severity": "partial"
   },
   {
+   "name": "hsd_80396884",
+   "unit": "main/sysdolphin/baselib/particle",
+   "vaddr": "0x80396884",
+   "size": 412,
+   "fuzzy": 74.44,
+   "class": "structural",
+   "rows": {
+    "naming": 1,
+    "gap": 21,
+    "layout": 6,
+    "mixed": 28,
+    "regalloc": 34,
+    "mnemonic": 2
+   },
+   "severity": "partial"
+  },
+  {
    "name": "un_80300AF4",
    "unit": "main/melee/if/soundtest",
    "vaddr": "0x80300AF4",
@@ -14444,22 +14446,6 @@
    "severity": "partial"
   },
   {
-   "name": "un_802FF7DC",
-   "unit": "main/melee/if/soundtest",
-   "vaddr": "0x802FF7DC",
-   "size": 168,
-   "fuzzy": 72.76,
-   "class": "structural",
-   "rows": {
-    "naming": 1,
-    "gap": 6,
-    "layout": 4,
-    "mnemonic": 3,
-    "mixed": 6
-   },
-   "severity": "partial"
-  },
-  {
    "name": "hsd_803975D4",
    "unit": "main/sysdolphin/baselib/particle",
    "vaddr": "0x803975D4",
@@ -14622,6 +14608,23 @@
    "severity": "partial"
   },
   {
+   "name": "fn_8017AA78",
+   "unit": "main/melee/gm/gmresultplayer",
+   "vaddr": "0x8017AA78",
+   "size": 652,
+   "fuzzy": 69.95,
+   "class": "structural",
+   "rows": {
+    "layout": 18,
+    "mnemonic": 14,
+    "gap": 39,
+    "mixed": 14,
+    "regalloc": 19,
+    "other_arg": 18
+   },
+   "severity": "partial"
+  },
+  {
    "name": "mn_80230E38",
    "unit": "main/melee/mn/mnmainrule",
    "vaddr": "0x80230E38",
@@ -14735,23 +14738,6 @@
     "mnemonic": 27,
     "layout": 20,
     "other_arg": 1
-   },
-   "severity": "partial"
-  },
-  {
-   "name": "fn_8017AA78",
-   "unit": "main/melee/gm/gmresultplayer",
-   "vaddr": "0x8017AA78",
-   "size": 652,
-   "fuzzy": 62.74,
-   "class": "structural",
-   "rows": {
-    "layout": 13,
-    "gap": 43,
-    "mixed": 25,
-    "mnemonic": 18,
-    "other_arg": 7,
-    "regalloc": 24
    },
    "severity": "partial"
   },
@@ -14886,22 +14872,6 @@
    "severity": "partial"
   },
   {
-   "name": "un_802FF9DC",
-   "unit": "main/melee/if/soundtest",
-   "vaddr": "0x802FF9DC",
-   "size": 380,
-   "fuzzy": 55.48,
-   "class": "structural",
-   "rows": {
-    "layout": 2,
-    "regalloc": 51,
-    "mnemonic": 8,
-    "mixed": 5,
-    "gap": 32
-   },
-   "severity": "partial"
-  },
-  {
    "name": "HSD_SisLib_803A7684",
    "unit": "main/sysdolphin/baselib/sislib",
    "vaddr": "0x803A7684",
@@ -14932,6 +14902,22 @@
     "regalloc": 48,
     "mixed": 15,
     "naming": 1
+   },
+   "severity": "partial"
+  },
+  {
+   "name": "un_802FF9DC",
+   "unit": "main/melee/if/soundtest",
+   "vaddr": "0x802FF9DC",
+   "size": 380,
+   "fuzzy": 53.54,
+   "class": "structural",
+   "rows": {
+    "layout": 2,
+    "regalloc": 55,
+    "mnemonic": 7,
+    "gap": 36,
+    "mixed": 3
    },
    "severity": "partial"
   },

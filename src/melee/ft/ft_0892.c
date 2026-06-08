@@ -21,7 +21,6 @@
 #include "it/it_26B1.h"
 #include "it/items/itpeachparasol.h"
 #include "lb/lb_00B0.h"
-#include "lb/lbbgflash.h"
 #include "lb/lbvector.h"
 #include "mp/mplib.h"
 #include "pl/plattack.h"
@@ -33,6 +32,16 @@
 #include <MSL/trigf.h>
 
 extern s32 db_804D4AF8;
+
+/* The original ft_0892 TU saw a three-float prototype for
+ * lbBgFlash_80020E38 (binary-proven: f3 loaded at both call sites);
+ * lbbgflash.h declares the two-float form, so declare TU-locally
+ * (idiom 204). */
+/* 020E38 */ void lbBgFlash_80020E38(HSD_JObj*, Vec3*, f32, f32, f32);
+/* 021410 */ void lbBgFlash_80021410(void*);
+
+extern f32 lbl_804D840C;
+extern f32 lbl_804D8410;
 
 typedef struct ftData_x58_t {
     /* 0x00 */ u8 x0;
@@ -416,7 +425,8 @@ void ft_80089B08(Fighter_GObj* gobj)
                 if (fn_8008998C(fp, &ik, &spA4) != 0) {
                     lbBgFlash_80021410(&ik);
                 }
-                lbBgFlash_80020E38(ik.jobj2, &spA4, 0.34906584f, 0.34906584f);
+                lbBgFlash_80020E38(ik.jobj2, &spA4, 0.34906584f, 0.34906584f,
+                                   lbl_804D840C);
                 ik.jobj0->rotate = rot_save0;
                 ik.jobj1->rotate = rot_save1;
                 ik.jobj2->rotate = rot_save2;
@@ -450,7 +460,8 @@ void ft_80089B08(Fighter_GObj* gobj)
                 if (fn_8008998C(fp, &ik, &spA4) != 0) {
                     lbBgFlash_80021410(&ik);
                 }
-                lbBgFlash_80020E38(ik.jobj2, &spA4, 0.34906584f, 0.34906584f);
+                lbBgFlash_80020E38(ik.jobj2, &spA4, 0.34906584f, 0.34906584f,
+                                   lbl_804D8410);
                 ik.jobj0->rotate = rot_save3;
                 ik.jobj1->rotate = rot_save4;
                 ik.jobj2->rotate = rot_save5;

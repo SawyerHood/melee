@@ -54,6 +54,6 @@ typedef struct {
     /* 0x08 */ HSD_JObj* x08;
 } GrPuVtxMapEntry; // size = 0x0C
 
-/* 3E6C0C */ extern GrPuVtxMapEntry grPu_803E6C0C[42];
+/* 3E6C0C */ extern GrPuVtxMapEntry grPu_803E6C0C[44];
 
 #endif
