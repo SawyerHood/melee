@@ -90,7 +90,6 @@ void lbHeap_80015900(void)
     struct lbHeap_HeapOffsetView* destroy_view;
     struct Heap* bounds_heap;
     struct lbHeap_HeapOffsetView* create_view;
-    s32 destroy_i;
     s32 heap_offset;
     s32 bounds_i;
     s32 create_i;
@@ -100,6 +99,7 @@ void lbHeap_80015900(void)
     u32 arena_hi;
     struct Heap* main_heap;
     struct Heap* aram_heap;
+    s32 destroy_i;
 
     /// @remarks 0 and 1 are reserved for HSD and ARAM
     for (destroy_i = 2, heap_offset = 0x38; destroy_i < 6;

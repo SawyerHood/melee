@@ -12,7 +12,31 @@
 #include <melee/ft/chara/ftZelda/forward.h>
 
 #include <math.h>
-#include <math_ppc.h>
+
+/* Target pools plain 0.5/3.0 doubles for the sqrtf expansions (no
+ * _half/_three localstatics in .sdata2) -- TU-local sqrtf copy. */
+extern double __frsqrte(double);
+
+#ifdef __MWERKS__
+#pragma push
+#pragma cplusplus on
+#endif
+extern inline float sqrtf(float x)
+{
+    volatile float y;
+    if (x > 0.0f) {
+        double guess = __frsqrte((double) x);
+        guess = .5 * guess * (3.0 - guess * guess * x);
+        guess = .5 * guess * (3.0 - guess * guess * x);
+        guess = .5 * guess * (3.0 - guess * guess * x);
+        y = (float) (x * guess);
+        return y;
+    }
+    return x;
+}
+#ifdef __MWERKS__
+#pragma pop
+#endif
 #include <sysdolphin/baselib/gobj.h>
 #include <melee/ft/chara/ftCommon/ftCo_09F7.h>
 #include <melee/ft/chara/ftCommon/ftCo_0A01.h>
@@ -125,7 +149,7 @@ int ftCo_800B4AB0(Fighter* fp, Fighter* target, void* arg2)
     tgtX = target->cur_pos.x;
     tgtVx = target->pos_delta.x;
     x568 = target->x1A88.x568;
-    if (target->facing_dir > 0.0f) {
+    if (target->facing_dir > 0.0) {
         rangeF = target->x1A88.x55C;
         rangeB = target->x1A88.x560;
     } else {
@@ -264,7 +288,7 @@ int ftCo_800B4AB0(Fighter* fp, Fighter* target, void* arg2)
         }
         sel++;
     }
-    HSD_ASSERT(0xFA, NULL);
+    HSD_ASSERT(0xFA, 0);
 }
 
 int ftCo_800B52AC(Fighter* fp, Fighter* target, void* arg2, f32 reach)
@@ -329,7 +353,7 @@ int ftCo_800B52AC(Fighter* fp, Fighter* target, void* arg2, f32 reach)
     tgtX = target->cur_pos.x;
     tgtVx = target->pos_delta.x;
     x568 = target->x1A88.x568;
-    if (target->facing_dir > 0.0f) {
+    if (target->facing_dir > 0.0) {
         rangeF = target->x1A88.x55C;
         rangeB = target->x1A88.x560;
     } else {
@@ -468,7 +492,7 @@ int ftCo_800B52AC(Fighter* fp, Fighter* target, void* arg2, f32 reach)
         }
         sel++;
     }
-    HSD_ASSERT(0x1C5, NULL);
+    HSD_ASSERT(0x1C5, 0);
 }
 
 int ftCo_800B5AB0(Fighter* fp, void* arg1, void* arg2)
@@ -659,7 +683,7 @@ int ftCo_800B5AB0(Fighter* fp, void* arg1, void* arg2)
         }
         sel++;
     }
-    HSD_ASSERT(0x26A, NULL);
+    HSD_ASSERT(0x26A, 0);
 }
 
 int ftCo_800B6208(ftCo_AttackEntry* arr)
@@ -1131,6 +1155,16 @@ void ftCo_800B7180(Fighter* fp)
         ftCo_800B463C(fp, CpuCmd_Done);
         break;
     }
+}
+
+/* Uncalled pool-orphan creator (idiom 111): the target stream holds 5.0 and
+ * 1000.0 f64 pool entries here, from a creator deleted in the final build;
+ * the linker deadstrips this helper but its pool entries remain. */
+static f64 ftCo_CpuAttackPoolOrphans(f64 x)
+{
+    x = x * 5.0;
+    x = x * 1000.0;
+    return x;
 }
 
 int ftCo_800B732C(Fighter* fp)
@@ -2227,6 +2261,13 @@ bool ftCo_800B98C8(Fighter* fp, f32 arg1, f32 arg2)
     return true;
 }
 
+/* Pool-orphan creator (idiom 111): target holds a -0.785398... f64 entry
+ * here from a deleted creator; deadstripped, pool entry remains. */
+static f64 ftCo_CpuAttackPoolOrphans2(f64 x)
+{
+    return x * -0.7853981573134661;
+}
+
 bool ftCo_800B9A04(Fighter* fp, Item* arg1, f32 arg2, f32 arg3)
 {
     f32 temp_f1;
@@ -2505,6 +2546,12 @@ bool ftCo_800BA2E8(Fighter* fp, Fighter* arg1)
         }
         return false;
     }
+}
+
+/* Pool-orphan creator (idiom 111): target holds a 1.0f entry here. */
+static f32 ftCo_CpuAttackPoolOrphans3(f32 x)
+{
+    return x + 1.0f;
 }
 
 void ftCo_800BA674(Fighter* fp, Fighter* arg1)
@@ -3009,3 +3056,143 @@ int ftCo_800BB9B4(Fighter* fp)
 
     return temp_r31->xF8_b12;
 }
+
+/* Dead CPU-attack pattern records (chain-linked, byte-proven dead:
+ * zero .text references in target; reached only via the in-data chain).
+ * dtk names the per-record syms ftCo_803C61F8..ftCo_803C6540; one static
+ * array reproduces the bytes (MWCC rejects forward static defs). */
+typedef struct ftCo_CpuAttackRecord {
+    f32 v[20];
+    struct ftCo_CpuAttackRecord* next;
+} ftCo_CpuAttackRecord;
+
+static struct {
+    s32 pad;
+    ftCo_CpuAttackRecord recs[11];
+} ftCo_803C61F8 = {
+    0,
+    {
+    {
+        {
+            37.0f, -143.5f, 0.0f, 5.5f,
+            -111.0f, 0.0f, 5.5f, -111.0f,
+            0.0f, 0.0f, 0.0f, -1.0f,
+            5.5f, -111.0f, 0.0f, 0.7853982f,
+            -0.7853982f, 0.0f, 0.0f, 0.0f,
+        },
+        &ftCo_803C61F8.recs[1],
+    },
+    {
+        {
+            30.0f, -16.0f, 0.0f, -3.5f,
+            24.0f, 0.0f, -60.0f, -86.0f,
+            0.0f, 0.0f, 0.0f, -1.0f,
+            -3.5f, 24.0f, 0.0f, 0.7853982f,
+            -0.2617994f, 0.0f, 0.0f, 0.0f,
+        },
+        &ftCo_803C61F8.recs[2],
+    },
+    {
+        {
+            -60.0f, -86.0f, 0.0f, -131.0f,
+            -26.8f, 0.0f, 0.0f, 0.0f,
+            -1.0f, 0.0f, 0.0f, -1.0f,
+            0.0f, 0.0f, -1.0f, 0.7853982f,
+            -0.7853982f, 2.3509887e-38f, -1000.0f, -95.0f,
+        },
+        &ftCo_803C61F8.recs[3],
+    },
+    {
+        {
+            -60.0f, -86.0f, 0.0f, -16.0f,
+            -46.0f, 0.0f, 0.0f, 0.0f,
+            -1.0f, 0.0f, 0.0f, -1.0f,
+            0.0f, 0.0f, -1.0f, 0.2617994f,
+            -0.7853982f, 2.3509887e-38f, -95.0f, -25.0f,
+        },
+        &ftCo_803C61F8.recs[4],
+    },
+    {
+        {
+            -60.0f, -86.0f, 0.0f, -60.0f,
+            -86.0f, 0.0f, 0.0f, 0.0f,
+            -1.0f, 0.0f, 0.0f, -1.0f,
+            -60.0f, -86.0f, 0.0f, 0.7853982f,
+            -0.7853982f, 2.3509887e-38f, -25.0f, 1000.0f,
+        },
+        NULL,
+    },
+    {
+        {
+            -130.0f, 6.0f, 0.0f, -130.0f,
+            6.0f, 0.0f, 0.0f, 0.0f,
+            -1.0f, -130.0f, 6.0f, 0.0f,
+            0.0f, 0.0f, -1.0f, 0.7853982f,
+            -0.7853982f, 2.3509887e-38f, -120.0f, 1000.0f,
+        },
+        &ftCo_803C61F8.recs[6],
+    },
+    {
+        {
+            -130.0f, 6.0f, 0.0f, -100.0f,
+            34.0f, 0.0f, 0.0f, 0.0f,
+            -1.0f, -100.0f, 34.0f, 0.0f,
+            0.0f, 0.0f, -1.0f, 0.7853982f,
+            -0.7853982f, 0.0f, 0.0f, 0.0f,
+        },
+        &ftCo_803C61F8.recs[7],
+    },
+    {
+        {
+            -10.0f, 6.0f, 0.0f, -10.0f,
+            6.0f, 0.0f, 0.0f, 0.0f,
+            -1.0f, 0.0f, 0.0f, -1.0f,
+            -10.0f, 6.0f, 0.0f, 0.7853982f,
+            -0.7853982f, 2.3509887e-38f, -1000.0f, -20.0f,
+        },
+        &ftCo_803C61F8.recs[8],
+    },
+    {
+        {
+            -10.0f, 6.0f, 0.0f, -30.0f,
+            34.0f, 0.0f, 0.0f, 0.0f,
+            -1.0f, 0.0f, 0.0f, -1.0f,
+            -30.0f, 34.0f, 0.0f, 0.7853982f,
+            -0.7853982f, 0.0f, 0.0f, 0.0f,
+        },
+        &ftCo_803C61F8.recs[9],
+    },
+    {
+        {
+            -100.0f, 34.0f, 0.0f, 0.0f,
+            0.0f, -1.0f, -10.0f, 6.0f,
+            0.0f, 0.0f, 0.0f, -1.0f,
+            0.0f, 0.0f, -1.0f, 0.7853982f,
+            -0.7853982f, 2.3509887e-38f, -50.0f, 0.0f,
+        },
+        &ftCo_803C61F8.recs[10],
+    },
+    {
+        {
+            -100.0f, 34.0f, 0.0f, 0.0f,
+            0.0f, -1.0f, -130.0f, 6.0f,
+            0.0f, 0.0f, 0.0f, -1.0f,
+            0.0f, 0.0f, -1.0f, 0.7853982f,
+            -0.7853982f, 2.3509887e-38f, -200.0f, -80.0f,
+        },
+        NULL,
+    },
+    },
+};
+
+static struct {
+    s32 x0[6];
+    ftCo_CpuAttackRecord* x18;
+    ftCo_CpuAttackRecord* x1C;
+    s32 tail[213];
+} ftCo_803C6594 = {
+    { 0, 0, 0, 0, 0, 0 },
+    &ftCo_803C61F8.recs[5],
+    &ftCo_803C61F8.recs[0],
+    { 0 },
+};

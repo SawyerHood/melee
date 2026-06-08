@@ -166,6 +166,7 @@ static inline ItemKind it_80289BE8_spawn(Item_GObj* gobj, ItemKind kind,
 void it_80289BE8(Item_GObj* gobj, s32 arg1, s32 arg2, s32 arg3)
 {
     ItemKind prev_kind;
+    ItemKind kind;
     ItemKind spawned[15];
     Vec3 pos;
     Vec3 vel;
@@ -199,10 +200,11 @@ void it_80289BE8(Item_GObj* gobj, s32 arg1, s32 arg2, s32 arg3)
     for (i = 0; i < 15; i++) {
         spawned[i] = -1;
     }
+    if (0) {}
 
     i = HSD_Randi(arg1 + arg2 + arg3);
     if (i < arg1) {
-        ItemKind kind = attr->x10;
+        kind = attr->x10;
         count = attr->x14;
         if (kind == It_Kind_M_Ball && it_8026C704() == true) {
             i = HSD_Randi(arg2 + arg3);
@@ -226,18 +228,18 @@ void it_80289BE8(Item_GObj* gobj, s32 arg1, s32 arg2, s32 arg3)
             }
         }
         for (; i < count; i++) {
-            ItemKind rand_kind = it_8026F3AC();
             Vec3 vel;
             Vec3 pos;
-            PAD_STACK(8);
-            if (rand_kind != -1) {
+            UNUSED u8 pad[8];
+            kind = it_8026F3AC();
+            if (kind != -1) {
                 Item_GObj* spawned_gobj;
                 it_80289BE8_inline(gobj, 1.2f, &pos, &vel);
-                spawned_gobj = it_8026F5C8(gobj, rand_kind, &pos);
+                spawned_gobj = it_8026F5C8(gobj, kind, &pos);
                 if (spawned_gobj != NULL) {
                     it_8026F53C(spawned_gobj, &vel, true);
                     it_80274ED8();
-                    prev_kind = rand_kind;
+                    prev_kind = kind;
                 } else {
                     prev_kind = -1;
                 }
@@ -264,15 +266,15 @@ void it_80289BE8(Item_GObj* gobj, s32 arg1, s32 arg2, s32 arg3)
             Vec3 pos;
             count = HSD_Randi(2) + 3;
             for (i = 0; i < count; i++) {
-                ItemKind rand_kind = it_8026F3AC();
-                if (rand_kind != -1) {
+                kind = it_8026F3AC();
+                if (kind != -1) {
                     Item_GObj* spawned_gobj;
                     it_80289BE8_inline(gobj, 1.2f, &pos, &vel);
-                    spawned_gobj = it_8026F5C8(gobj, rand_kind, &pos);
+                    spawned_gobj = it_8026F5C8(gobj, kind, &pos);
                     if (spawned_gobj != NULL) {
                         it_8026F53C(spawned_gobj, &vel, true);
                         it_80274ED8();
-                        prev_kind = rand_kind;
+                        prev_kind = kind;
                     } else {
                         prev_kind = -1;
                     }
