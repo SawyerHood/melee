@@ -7,7 +7,24 @@
 
 #include <dolphin/os/OSInterrupt.h>
 #include <dolphin/pad.h>
-#include <MSL/math_ppc.h>
+/* math_ppc.h dropped: its sqrtf inline emits dead _half/_three localstatics
+ * the target .sdata2 does not have (idiom 329). xsqrtf below is the same
+ * inline with pool-literal 0.5/3.0 (= target @-anon doubles). */
+extern double __frsqrte(double);
+
+static inline float xsqrtf(float x)
+{
+    volatile float y;
+    if (x > 0.0f) {
+        double guess = __frsqrte((double) x);
+        guess = 0.5 * guess * (3.0 - guess * guess * x);
+        guess = 0.5 * guess * (3.0 - guess * guess * x);
+        guess = 0.5 * guess * (3.0 - guess * guess * x);
+        y = (float) (x * guess);
+        return y;
+    }
+    return x;
+}
 #include <MSL/trigf.h>
 
 HSD_PadStatus default_status_data = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -179,7 +196,7 @@ static void HSD_PadClampCheck3(s8* x, s8* y, u8 shift, s8 min, s8 max)
 {
     f32 r;
 
-    r = sqrtf(((f32) *x * (f32) *x) + ((f32) *y * (f32) *y));
+    r = xsqrtf(((f32) *x * (f32) *x) + ((f32) *y * (f32) *y));
 
     if (r < min) {
         *y = 0;
@@ -189,7 +206,7 @@ static void HSD_PadClampCheck3(s8* x, s8* y, u8 shift, s8 min, s8 max)
     if (r > max) {
         *x = ((f32) *x * (f32) max) / r;
         *y = ((f32) *y * (f32) max) / r;
-        r = sqrtf(((f32) *x * (f32) *x) + ((f32) *y * (f32) *y));
+        r = xsqrtf(((f32) *x * (f32) *x) + ((f32) *y * (f32) *y));
     }
 
     if (shift == 1 && r > 1.000000013351432e-10f) {
@@ -236,7 +253,7 @@ static inline f32 vec2DSqDist(f32 x, f32 y)
 
 static inline f32 vec2Dlen(s8 x, s8 y)
 {
-    return sqrtf(vec2DSqDist(x, y));
+    return xsqrtf(vec2DSqDist(x, y));
 }
 
 static void HSD_PadADConvertCheck1(HSD_PadStatus* mp, s8 x, s8 y, u32 up,

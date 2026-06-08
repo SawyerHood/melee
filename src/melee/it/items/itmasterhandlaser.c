@@ -1,7 +1,8 @@
 #include "itmasterhandlaser.h"
 
-#include "math_ppc.h"
-
+/* math_ppc.h dropped: it emits dead _half/_three sqrtf localstatics the
+ * target .sdata2 does not have (idiom 329); only __frsqrte was needed. */
+extern double __frsqrte(double);
 #include <placeholder.h>
 #include <platform.h>
 

@@ -393,6 +393,7 @@ void grZebes_801D881C(HSD_GObj* gobj)
 {
     Vec3 sp80;
     Vec3 sp74;
+    f32 dead2[4];
     f32 col_heights[6];
     f32 col_x[6];
     Vec3 sp28;
@@ -401,8 +402,7 @@ void grZebes_801D881C(HSD_GObj* gobj)
     f32 sp14;
     Ground* gp = GET_GROUND(gobj);
     HSD_GObj* secondary_gobj = (HSD_GObj*) gp->gv.zebes5.xF0;
-    u8 result = grZebes_801DA528(gobj, &gp->gv.zebes5.xC8, 1, 2);
-    PAD_STACK(8);
+    s32 result = grZebes_801DA528(gobj, &gp->gv.zebes5.xC8, 1, 2);
 
     if ((s32) gp->gv.zebes5.xEC != result) {
         gp->gv.zebes5.xEC = result;
@@ -416,14 +416,13 @@ void grZebes_801D881C(HSD_GObj* gobj)
     }
 
     {
-        s16 timer = *(s16*) &gp->gv.zebes5.xF8;
-        *(s16*) &gp->gv.zebes5.xF8 = (s16) (timer - 1);
-        if (timer < 0) {
+        if ((*(s16*) &gp->gv.zebes5.xF8)-- < 0) {
             grZebes_801DAA08();
             {
+                f32 rand = HSD_Randf();
                 f32 base = grZe_804D6990->x08;
                 *(s16*) &gp->gv.zebes5.xF8 =
-                    (s16) ((grZe_804D6990->x0C - base) * HSD_Randf() + base);
+                    (s16) ((grZe_804D6990->x0C - base) * rand + base);
             }
         }
     }
@@ -446,11 +445,12 @@ void grZebes_801D881C(HSD_GObj* gobj)
             break;
         case 1:
             if (grAnime_801C83D0(gobj, 0xE, 1) != 0) {
-                f32 base;
+                f32 rand;
                 gp->gv.zebes5.xC4 = 2;
-                base = grZe_804D6990->x00;
+                rand = HSD_Randf();
                 gp->gv.zebes5.xC6 =
-                    (s16) ((grZe_804D6990->x04 - base) * HSD_Randf() + base);
+                    (s16) ((grZe_804D6990->x04 - grZe_804D6990->x00) * rand +
+                           grZe_804D6990->x00);
             }
             break;
         case 2:
@@ -468,17 +468,16 @@ void grZebes_801D881C(HSD_GObj* gobj)
         case 3: {
             s16 eq_counter;
             s32 divisor;
-            s32 spawn_phase;
             gp->gv.zebes5.xF6 = (s16) (gp->gv.zebes5.xF6 + 1);
             divisor = grZe_804D6990->x10;
             eq_counter = gp->gv.zebes5.xF6;
-            spawn_phase = eq_counter / divisor;
             if (eq_counter % divisor == 0) {
+                s32 spawn_phase = eq_counter / divisor;
                 s32 mirror = 6 - spawn_phase;
                 if (spawn_phase < mirror) {
+                    f32 rand = HSD_Randf();
                     f32 scale_min = grZe_804D6990->x58;
                     u8* base = (u8*) grZe_8049F140 + spawn_phase * 0x24;
-                    f32 rand = HSD_Randf();
                     grZebes_801DAE70(spawn_phase, 4, *(f32*) (base + 0x14),
                                      *(f32*) (base + 0x18),
                                      (grZe_804D6990->x5C - scale_min) * rand +
@@ -486,10 +485,9 @@ void grZebes_801D881C(HSD_GObj* gobj)
                 }
                 if (spawn_phase <= mirror) {
                     u8* base2 = (u8*) grZe_8049F140 + mirror * 0x24;
-                    f32 rand2 = HSD_Randf();
                     grZebes_801DAE70(mirror, 4, *(f32*) (base2 + 0x5C),
                                      *(f32*) (base2 + 0x60),
-                                     (f32) (0.5 * rand2 + 1.0));
+                                     (f32) (0.5 * HSD_Randf() + 1.0));
                 }
             }
             if (grAnime_801C83D0(gobj, 0xE, 1) != 0) {
@@ -545,7 +543,7 @@ void grZebes_801D881C(HSD_GObj* gobj)
                     {
                         f32 left_frac = (f32) ((f64) dx - 0.9) / colWidth;
                         s32 col_left = (s32) (0.5 + (f64) left_frac);
-                        if (col_left > 5) {
+                        if ((s32) (0.5 + (f64) left_frac) > 5) {
                             col_left = 5;
                         } else if (col_left < 0) {
                             col_left = 0;
@@ -558,7 +556,7 @@ void grZebes_801D881C(HSD_GObj* gobj)
                     {
                         f32 right_frac = (f32) (0.9 + (f64) dx) / colWidth;
                         s32 col_right = (s32) (0.5 + (f64) right_frac);
-                        if (col_right > 5) {
+                        if ((s32) (0.5 + (f64) right_frac) > 5) {
                             col_right = 5;
                         } else if (col_right < 0) {
                             col_right = 0;

@@ -15,11 +15,11 @@ typedef struct mnDiagram3_PosTable {
     /* 0x18 */ Vec3 x18;
 } mnDiagram3_PosTable;
 
+/// The emitted object is 0x60 bytes (48 u16 stat text indices); the bytes
+/// after it in the DOL (.data 0x9c-0xcf) are this TU's pooled assert strings,
+/// not part of this table.
 typedef struct mnDiagram3_StatTable {
-    /* 0x00 */ u16 indices[0x28];
-    /* 0x50 */ char x50[0x18];
-    /* 0x68 */ char x68[0x10];
-    /* 0x78 */ char x78[0x1C];
+    /* 0x00 */ u16 indices[0x30];
 } mnDiagram3_StatTable;
 
 /* 3EEC10 */ extern AnimLoopSettings mnDiagram3_803EEC10;

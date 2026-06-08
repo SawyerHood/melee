@@ -3,7 +3,7 @@
 #include "debug.h"
 #include "math.h"
 
-#include <MSL/math_ppc.h>
+/* math_ppc.h dropped (idiom 329): dead _half/_three localstatics absent from target .sdata2; same sqrtf inline w/ pool-literal 0.5/3.0; ONE LINE so __LINE__-bearing asserts below stay byte-stable */ extern double __frsqrte(double); static inline float xsqrtf(float x) { volatile float y; if (x > 0.0f) { double guess = __frsqrte((double) x); guess = 0.5 * guess * (3.0 - guess * guess * x); guess = 0.5 * guess * (3.0 - guess * guess * x); guess = 0.5 * guess * (3.0 - guess * guess * x); y = (float) (x * guess); return y; } return x; }
 #include <MSL/trigf.h>
 
 #define EPSILON 0.0000000001f
@@ -225,12 +225,12 @@ void HSD_MtxGetRotation(Mtx m, Vec3* vec)
     f32 testVal_1;
     f32 val_01;
 
-    length0 = sqrtf(m[0][0] * m[0][0] + m[1][0] * m[1][0] + m[2][0] * m[2][0]);
+    length0 = xsqrtf(m[0][0] * m[0][0] + m[1][0] * m[1][0] + m[2][0] * m[2][0]);
     if (!(length0 < FLOAT_MIN)) {
         length1 =
-            sqrtf(m[0][1] * m[0][1] + m[1][1] * m[1][1] + m[2][1] * m[2][1]);
+            xsqrtf(m[0][1] * m[0][1] + m[1][1] * m[1][1] + m[2][1] * m[2][1]);
         if (!(length1 < FLOAT_MIN)) {
-            length2 = sqrtf(m[0][2] * m[0][2] + m[1][2] * m[1][2] +
+            length2 = xsqrtf(m[0][2] * m[0][2] + m[1][2] * m[1][2] +
                             m[2][2] * m[2][2]);
             if (!(length2 < FLOAT_MIN)) {
                 testVal_1 = -m[2][0];

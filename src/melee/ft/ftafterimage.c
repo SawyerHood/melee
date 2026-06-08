@@ -19,8 +19,24 @@
 #include <melee/it/items/itsword.h>
 #include <melee/lb/lb_00B0.h>
 #include <melee/lb/lbvector.h>
-#include <MSL/math_ppc.h>
+/* math_ppc.h dropped: its sqrtf inline emits dead _half/_three localstatics
+ * the target .sdata2 does not have (idiom 329). xsqrtf below is the same
+ * inline with pool-literal 0.5/3.0 (= target @-anon doubles). */
+extern double __frsqrte(double);
 
+static inline float xsqrtf(float x)
+{
+    volatile float y;
+    if (x > 0.0f) {
+        double guess = __frsqrte((double) x);
+        guess = 0.5 * guess * (3.0 - guess * guess * x);
+        guess = 0.5 * guess * (3.0 - guess * guess * x);
+        guess = 0.5 * guess * (3.0 - guess * guess * x);
+        y = (float) (x * guess);
+        return y;
+    }
+    return x;
+}
 typedef struct AfterimageVtx {
     f32 x, y, z;
     u8 r, g, b, a;
@@ -144,7 +160,7 @@ void ftCo_800C2600(Fighter_GObj* gobj, u32 arg1)
                     f32 d2 = delta.z * delta.z +
                              (delta.x * delta.x + delta.y * delta.y);
                     if (d2 > 0.0f) {
-                        d2 = sqrtf(d2);
+                        d2 = xsqrtf(d2);
                     }
                     totalDist += d2;
                     *dp = totalDist;

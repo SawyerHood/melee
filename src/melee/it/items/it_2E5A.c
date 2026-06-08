@@ -20,7 +20,9 @@
 #include "mp/mpcoll.h"
 
 #include <math.h>
-#include <math_ppc.h>
+/* math_ppc.h dropped: it emits dead _half/_three sqrtf localstatics the
+ * target .sdata2 does not have (idiom 329); only __frsqrte was needed. */
+extern double __frsqrte(double);
 #include <baselib/cobj.h>
 #include <baselib/gobj.h>
 #include <baselib/gobjproc.h>

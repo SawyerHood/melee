@@ -23,6 +23,37 @@
 #include <melee/mn/mnmain.h>
 #include <melee/mn/mnname.h>
 
+/// .sdata2 pool-order sequencer (never called; stripped by the linker).
+/// The original TU emitted fn_802461BC second (right after
+/// mnDiagram3_80245BA4), so its literals head the pool; this pins them.
+static f32 sdata2_ordering(void)
+{
+    volatile f64 data_0 = 4503599627370496.0;
+    volatile f32 data_1 = 6.5f;
+    volatile f32 data_2 = 240.0f;
+
+    return data_0 + data_1 + data_2;
+}
+
+AnimLoopSettings mnDiagram3_803EEC10 = { 10.0f, 19.0f, -0.1f };
+
+AnimLoopSettings mnDiagram3_803EEC1C = { 0.0f, 199.0f, 0.0f };
+
+mnDiagram3_PosTable mnDiagram3_803EEC28 = {
+    { 3.3f, 0.5f, 0.0f },
+    { -2.0f, 0.57f, 0.0f },
+    { 8.0f, 0.57f, 0.0f },
+};
+
+mnDiagram3_StatTable mnDiagram3_803EEC4C = { {
+    0x62, 0x63, 0x64, 0x65, 0x66, 0x67, 0x68, 0x69, 0x6A, 0x6B, 0x6C, 0x6D,
+    0x6E, 0x6F, 0x70, 0x71, 0x72, 0x73, 0x74, 0x75, 0x76, 0x77, 0x78, 0x79,
+    0x7A, 0x7A, 0x7A, 0x7C, 0x7C, 0x7C, 0x7C, 0x7C, 0x7A, 0x7A, 0x7A, 0xFFFF,
+    0x7C, 0x7B, 0x7E, 0x7E, 0x7E, 0x7E, 0x7D, 0x7D, 0x7D, 0x7B, 0x7B, 0x7B,
+} };
+
+HSD_GObj* mnDiagram3_804D6C20;
+
 void mnDiagram3_80245BA4(HSD_GObj* gobj)
 {
     Vec3 sp6C;
@@ -251,6 +282,18 @@ void mnDiagram3_80245BA4(HSD_GObj* gobj)
             }
         }
     }
+}
+
+/// Tail of the literal pool: mnDiagram3_80245BA4 above mints the signed
+/// conversion magic; the original's later functions minted these four.
+static f32 sdata2_ordering_2(void)
+{
+    volatile f32 data_0 = 0.035f;
+    volatile f32 data_1 = 0.0f;
+    volatile f32 data_2 = 1.5f;
+    volatile f32 data_3 = 1.0f;
+
+    return data_0 + data_1 + data_2 + data_3;
 }
 
 void mnDiagram3_80246D40(HSD_GObj* gobj)

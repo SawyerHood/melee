@@ -13,7 +13,25 @@
 
 #include <common_structs.h>
 #include <math.h>
-#include <math_ppc.h>
+/* math_ppc.h dropped: it emits dead _half/_three sqrtf localstatics the
+ * target .sdata2 does not have (idiom 329); only sqrtf_accurate is used
+ * here, replicated verbatim (it already uses pool-literal 0.5/3.0). */
+extern double __frsqrte(double);
+
+static inline float xsqrtf_accurate(float x)
+{
+    volatile float y;
+    if (x > 0.0f) {
+        double guess = __frsqrte((double) x);
+        guess = 0.5 * guess * (3.0 - guess * guess * x);
+        guess = 0.5 * guess * (3.0 - guess * guess * x);
+        guess = 0.5 * guess * (3.0 - guess * guess * x);
+        guess = 0.5 * guess * (3.0 - guess * guess * x);
+        y = (float) (x * guess);
+        return y;
+    }
+    return x;
+}
 #include <dolphin/mtx.h>
 #include <baselib/gobj.h>
 #include <baselib/mtx.h>
@@ -77,7 +95,7 @@ void itMariofireball_UnkMotion0_Phys(Item_GObj* gobj)
 
 static double calc_dist_2d_accurate(Vec3* v)
 {
-    return sqrtf_accurate(VEC2_SQ_LEN(*v));
+    return xsqrtf_accurate(VEC2_SQ_LEN(*v));
 }
 
 bool itMariofireball_UnkMotion0_Coll(Item_GObj* gobj)

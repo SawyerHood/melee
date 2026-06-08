@@ -27,8 +27,24 @@
 #include "sysdolphin/baselib/gobjplink.h"
 #include "sysdolphin/baselib/jobj.h"
 
-#include <MSL/math_ppc.h>
+/* math_ppc.h dropped: its sqrtf inline emits dead _half/_three localstatics
+ * the target .sdata2 does not have (idiom 329). xsqrtf below is the same
+ * inline with pool-literal 0.5/3.0 (= target @-anon doubles). */
+extern double __frsqrte(double);
 
+static inline float xsqrtf(float x)
+{
+    volatile float y;
+    if (x > 0.0f) {
+        double guess = __frsqrte((double) x);
+        guess = 0.5 * guess * (3.0 - guess * guess * x);
+        guess = 0.5 * guess * (3.0 - guess * guess * x);
+        guess = 0.5 * guess * (3.0 - guess * guess * x);
+        y = (float) (x * guess);
+        return y;
+    }
+    return x;
+}
 /* 2A5770 */ static void it_802A5770_inline(ItemLink* link_1,
                                             itLinkHookshotAttributes* arg2,
                                             Fighter* arg3, s32 var_r29);
@@ -899,7 +915,7 @@ float it_802A3C98(Vec3* arg0, Vec3* arg1, Vec3* arg2)
     arg2->y = arg0->y - arg1->y;
     arg2->z = arg0->z - arg1->z;
 
-    len = sqrtf(arg2->x * arg2->x + arg2->y * arg2->y + arg2->z * arg2->z);
+    len = xsqrtf(arg2->x * arg2->x + arg2->y * arg2->y + arg2->z * arg2->z);
     if (len == (f64) 0.0F) {
         inv = (f64) 0.0F;
     } else {
@@ -1813,7 +1829,7 @@ static inline f64 it_802A6A78_normalize_diff(Vec3* vec, Vec3* a, Vec3* b)
     vec->x = a->x - b->x;
     vec->y = a->y - b->y;
     vec->z = a->z - b->z;
-    len = sqrtf(vec->x * vec->x + vec->y * vec->y + vec->z * vec->z);
+    len = xsqrtf(vec->x * vec->x + vec->y * vec->y + vec->z * vec->z);
     if (len == 0.0F) {
         inv = 0.0F;
     } else {

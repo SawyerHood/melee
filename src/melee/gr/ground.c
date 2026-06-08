@@ -46,7 +46,24 @@
 
 #include <common_structs.h>
 #include <math.h>
-#include <math_ppc.h>
+/* math_ppc.h dropped: its sqrtf inline emits dead _half/_three localstatics
+ * the target .sdata2 does not have (idiom 329). xsqrtf below is the same
+ * inline with pool-literal 0.5/3.0 (= target @-anon doubles). */
+extern double __frsqrte(double);
+
+static inline float xsqrtf(float x)
+{
+    volatile float y;
+    if (x > 0.0f) {
+        double guess = __frsqrte((double) x);
+        guess = 0.5 * guess * (3.0 - guess * guess * x);
+        guess = 0.5 * guess * (3.0 - guess * guess * x);
+        guess = 0.5 * guess * (3.0 - guess * guess * x);
+        y = (float) (x * guess);
+        return y;
+    }
+    return x;
+}
 #include <trigf.h>
 #include <dolphin/gx.h>
 #include <dolphin/mtx.h>
@@ -2926,7 +2943,7 @@ static inline float vec_len(Vec3* v)
     float x2 = v->x * v->x;
     float y2 = v->y * v->y;
     float z2 = v->z * v->z;
-    return sqrtf(x2 + y2 + z2);
+    return xsqrtf(x2 + y2 + z2);
 }
 
 void Ground_801C4FAC(HSD_CObj* cobj)
@@ -2964,7 +2981,7 @@ void Ground_801C4FAC(HSD_CObj* cobj)
             sp44 = stage_info.x16C;
         }
         if (sp74.z < 0) {
-            temp_f3_2 = 1.0f / sqrtf((sp74.x * sp74.x) + (sp74.z * sp74.z));
+            temp_f3_2 = 1.0f / xsqrtf((sp74.x * sp74.x) + (sp74.z * sp74.z));
             phi_f1 = temp_f3_2 * fabsf(sp74.x);
             phi_f2 = temp_f3_2 * fabsf(sp74.z);
             sp50.x *= phi_f1;
@@ -2998,14 +3015,14 @@ void Ground_801C4FAC(HSD_CObj* cobj)
                 dx2 = d.x * d.x;
                 dy2 = d.y * d.y;
                 dz2 = d.z * d.z;
-                phi_f31 = sqrtf(dx2 + dy2 + dz2);
+                phi_f31 = xsqrtf(dx2 + dy2 + dz2);
                 d.x = sp2C.x - sp20.x;
                 d.y = sp2C.y - sp20.y;
                 d.z = sp2C.z - sp20.z;
                 dx2 = d.x * d.x;
                 dy2 = d.y * d.y;
                 dz2 = d.z * d.z;
-                phi_f30 = sqrtf(dx2 + dy2 + dz2);
+                phi_f30 = xsqrtf(dx2 + dy2 + dz2);
                 if (phi_f30 < 10) {
                     phi_f30 = 10;
                 }

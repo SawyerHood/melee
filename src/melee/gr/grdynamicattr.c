@@ -6,7 +6,24 @@
 #include "mp/mplib.h"
 
 #include <math.h>
-#include <math_ppc.h>
+/* math_ppc.h dropped: its sqrtf inline emits dead _half/_three localstatics
+ * the target .sdata2 does not have (idiom 329). xsqrtf below is the same
+ * inline with pool-literal 0.5/3.0 (= target @-anon doubles). */
+extern double __frsqrte(double);
+
+static inline float xsqrtf(float x)
+{
+    volatile float y;
+    if (x > 0.0f) {
+        double guess = __frsqrte((double) x);
+        guess = 0.5 * guess * (3.0 - guess * guess * x);
+        guess = 0.5 * guess * (3.0 - guess * guess * x);
+        guess = 0.5 * guess * (3.0 - guess * guess * x);
+        y = (float) (x * guess);
+        return y;
+    }
+    return x;
+}
 #include <baselib/debug.h>
 
 static const s32 GC_Id_None = -1;
@@ -93,7 +110,7 @@ void grDynamicAttr_801CA224(void)
 
 inline f32 do_sqrtf(f32 x)
 {
-    return sqrtf(x);
+    return xsqrtf(x);
 }
 
 int grDynamicAttr_801CA284(Vec3* v, int arg1)

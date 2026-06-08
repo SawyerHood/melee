@@ -2,7 +2,7 @@
 
 #include "axdriver.static.h"
 
-#include <math_ppc.h>
+/* math_ppc.h dropped (idiom 329): dead _half/_three localstatics absent from target .sdata2; same sqrtf inline w/ pool-literal 0.5/3.0; ONE LINE so __LINE__-bearing asserts below stay byte-stable */ extern double __frsqrte(double); static inline float xsqrtf(float x) { volatile float y; if (x > 0.0f) { double guess = __frsqrte((double) x); guess = 0.5 * guess * (3.0 - guess * guess * x); guess = 0.5 * guess * (3.0 - guess * guess * x); guess = 0.5 * guess * (3.0 - guess * guess * x); y = (float) (x * guess); return y; } return x; }
 #include <string.h>
 #include <dolphin/axfx.h>
 #include <dolphin/dvd.h>
@@ -205,10 +205,10 @@ void AXDriver_8038BF6C(HSD_SM* v)
             case 0x1: {
                 float left_vol = (v->x26 * v->x24[0]) / 65535.0F;
                 float right_vol = (v->x27 * v->x24[1]) / 65535.0F;
-                float left_sqrt = sqrtf(left_vol);
-                float left_inv_sqrt = sqrtf(1.0F - left_vol);
-                float right_sqrt = sqrtf(right_vol);
-                float right_inv_sqrt = sqrtf(1.0F - right_vol);
+                float left_sqrt = xsqrtf(left_vol);
+                float left_inv_sqrt = xsqrtf(1.0F - left_vol);
+                float right_sqrt = xsqrtf(right_vol);
+                float right_inv_sqrt = xsqrtf(1.0F - right_vol);
                 float tmp2 = left_inv_sqrt * right_sqrt;
                 float pitch1 = powf(2.0F, v->x20 / 1200.0F);
                 float pitch2 = powf(2.0F, v->fadetime / 1200.0F);
@@ -256,10 +256,10 @@ void AXDriver_8038BF6C(HSD_SM* v)
             case 0x80: {
                 float left_vol = (v->x26 * v->x24[0]) / 65535.0F;
                 float right_vol = (v->x27 * v->x24[1]) / 65535.0F;
-                float left_sqrt = sqrtf(left_vol);
-                float left_inv_sqrt = sqrtf(1.0F - left_vol);
-                float right_sqrt = sqrtf(right_vol);
-                float right_inv_sqrt = sqrtf(1.0F - right_vol);
+                float left_sqrt = xsqrtf(left_vol);
+                float left_inv_sqrt = xsqrtf(1.0F - left_vol);
+                float right_sqrt = xsqrtf(right_vol);
+                float right_inv_sqrt = xsqrtf(1.0F - right_vol);
 
                 HSD_SynthSFXSetMix(
                     v->vID, left_inv_sqrt * (left_inv_sqrt * right_inv_sqrt),
@@ -709,10 +709,10 @@ bool AXDriver_8038D5B4(s32 vid, s32 aux_bus, u8 send_level)
         v->x24[aux_bus] = clamped;
         left_vol = (f32) (v->x26 * v->x24[0]) / 65535.0F;
         right_vol = (f32) (v->x27 * v->x24[1]) / 65535.0F;
-        left_sqrt = sqrtf(left_vol);
-        left_inv_sqrt = sqrtf(1.0F - left_vol);
-        right_sqrt = sqrtf(right_vol);
-        right_inv_sqrt = sqrtf(1.0F - right_vol);
+        left_sqrt = xsqrtf(left_vol);
+        left_inv_sqrt = xsqrtf(1.0F - left_vol);
+        right_sqrt = xsqrtf(right_vol);
+        right_inv_sqrt = xsqrtf(1.0F - right_vol);
         HSD_SynthSFXSetMix(v->vID,
                            left_inv_sqrt * (left_inv_sqrt * right_inv_sqrt),
                            left_sqrt, right_sqrt * left_inv_sqrt);

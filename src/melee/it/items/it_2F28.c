@@ -15,7 +15,24 @@
 #include "it/types.h"
 
 #include <math.h>
-#include <math_ppc.h>
+/* math_ppc.h dropped: its sqrtf inline emits dead _half/_three localstatics
+ * the target .sdata2 does not have (idiom 329). xsqrtf below is the same
+ * inline with pool-literal 0.5/3.0 (= target @-anon doubles). */
+extern double __frsqrte(double);
+
+static inline float xsqrtf(float x)
+{
+    volatile float y;
+    if (x > 0.0f) {
+        double guess = __frsqrte((double) x);
+        guess = 0.5 * guess * (3.0 - guess * guess * x);
+        guess = 0.5 * guess * (3.0 - guess * guess * x);
+        guess = 0.5 * guess * (3.0 - guess * guess * x);
+        y = (float) (x * guess);
+        return y;
+    }
+    return x;
+}
 #include <baselib/gobj.h>
 #include <baselib/jobj.h>
 #include <melee/it/item.h>
@@ -106,7 +123,7 @@ bool it_2F28_UnkMotion0_Anim(Item_GObj* item_gobj)
 void it_2F28_UnkMotion0_Phys(HSD_GObj* item_gobj)
 {
     Item* item = GET_ITEM(item_gobj);
-    f32 var_f4 = sqrtf(SQ(item->x40_vel.x) + SQ(item->x40_vel.y));
+    f32 var_f4 = xsqrtf(SQ(item->x40_vel.x) + SQ(item->x40_vel.y));
     if (var_f4 > item->xDD4_itemVar.unk2.x0) {
         item->x40_vel.x =
             (item->x40_vel.x * (var_f4 - item->xDD4_itemVar.unk2.x0)) /

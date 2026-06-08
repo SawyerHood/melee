@@ -95,19 +95,18 @@ static struct {
     /* 0x20 */ u8 pad_104[0x4];
 } lbl_8047368C;
 
+static HSD_GObj* lbl_804D65F0;
 static HSD_Archive* lbl_804D65F4;
 static HSD_Archive* lbl_804D65F8;
-static HSD_GObj* lbl_804D65F0;
+static SceneDesc* lbl_804D65FC;
 static SceneDesc* lbl_804D6600;
-
-extern int lbl_804D6608;
 
 typedef struct {
     s32 v[6];
 } ClassicProcArray;
 
-extern ClassicProcArray lbl_803B7C40;
-extern ClassicProcArray lbl_803B7C28;
+extern const ClassicProcArray lbl_803B7C40;
+extern const ClassicProcArray lbl_803B7C28;
 
 extern DynamicModelDesc** lbl_804D662C;
 extern HSD_Archive* lbl_804D6628;
@@ -157,6 +156,11 @@ static struct {
     /* 0x678 */ ClassicSlotVals x678[4];
     /* 0x6A8 */ ClassicCharLayout x6A8[28];
 }* lbl_804D6604;
+
+static int lbl_804D6608;
+static int pool_804D660C;
+static HSD_Archive* lbl_804D6610;
+static SceneDesc* lbl_804D6614;
 
 /// Classic mode stage data table entry (size 0x10)
 /// Table has 65 entries: 13 stages x 5 difficulty levels
@@ -374,7 +378,7 @@ void fn_80184A94(HSD_GObj* gobj)
     fn_80184138(gobj, 2);
 }
 
-static f32 lbl_803D9248[] = {
+f32 lbl_803D9248[] = {
     0.6f,  0.35f, 0.6f,  0.5f,  0.6f,  0.35f, 0.6f,  0.6f,  0.7f,  0.6f,
     0.5f,  0.6f,  0.6f,  0.6f,  0.5f,  0.5f,  0.6f,  0.5f,  0.6f,  0.6f,
     0.5f,  0.6f,  0.6f,  0.6f,  0.6f,  0.5f,  0.5f,  0.5f,  0.0f,  -6.0f,
@@ -389,10 +393,33 @@ static f32 lbl_803D9248[] = {
     -3.5f, 0.0f,  3.0f,  4.0f,  -5.0f,
 };
 
-static char lbl_803D9414[] = { 0x82, 0x73, 0x82, 0x85, 0x82, 0x81,
+char lbl_803D9414[] = { 0x82, 0x73, 0x82, 0x85, 0x82, 0x81,
                                0x82, 0x8D, 0,    0,    0,    0 };
 
 static char lbl_804D40A0[] = { 0x8C, 0x52, 0x92, 0x63, 0x00 };
+
+static char lbl_804D40A8[] = "IrAls";
+
+static char lbl_804D40B0[] = "IrRdMap";
+
+extern char lbl_803D9438[0x24];
+
+const ClassicProcArray lbl_803B7C28 = { {
+    (s32) fn_801849E0, (s32) fn_80184A04, (s32) fn_80184A28,
+    (s32) fn_80184A4C, (s32) fn_80184A70, (s32) fn_80184A94,
+} };
+
+const ClassicProcArray lbl_803B7C40 = { {
+    (s32) fn_801849E0, (s32) fn_80184A04, (s32) fn_80184A28,
+    (s32) fn_80184A4C, (s32) fn_80184A70, (s32) fn_80184A94,
+} };
+
+const char* const lbl_803B7C58[] = { lbl_804D40A8, "IrEzTarg", "IrEzTuki",
+                                     lbl_803D9438 };
+
+/// 0x24 bytes: "IrEzFigG" + pad + an in-array copy of the Allstar scene-data
+/// string (fn_80186634 points at +0xC reloc-free off the .data anchor).
+char lbl_803D9438[] = "IrEzFigG\0\0\0\0ScItrAllstar_scene_data";
 
 void fn_80184AB8(HSD_GObj* arg0)
 {
@@ -675,6 +702,22 @@ void fn_80185408(int x, float arg8, float arg9, float argA, float argB)
 extern float MSL_TrigF_80400770[];
 extern float MSL_TrigF_80400774[];
 #pragma dont_inline on
+/// .sdata2 pool-order sequencer (never called; stripped by the linker).
+/// In the original multi-TU band, fn_801857C4's literal pool group
+/// (280/290/40/-60/160 + the unsigned conversion magic) sits BEFORE
+/// fn_801855BC's double group; this pins those slots (idiom 317).
+static f32 sdata2_ordering(void)
+{
+    volatile f32 data_0 = 280.0f;
+    volatile f32 data_1 = 290.0f;
+    volatile f32 data_2 = 40.0f;
+    volatile f32 data_3 = -60.0f;
+    volatile f32 data_4 = 160.0f;
+    volatile f64 data_5 = 4503599627370496.0;
+
+    return data_0 + data_1 + data_2 + data_3 + data_4 + data_5;
+}
+
 double fn_801855BC(double arg8)
 {
     f64 temp_f2;
@@ -1028,7 +1071,10 @@ void fn_801861B8(void)
     }
 }
 
-static SceneDesc* lbl_804D65FC;
+/// Second "jobj.h"/"jobj" assert-string pair of the original multi-TU band
+/// (.sdata 0x30/0x38; never referenced -- pool bytes only, idiom 317).
+static char pool_804D40C0[] ATTRIBUTE_ALIGN(8) = "jobj.h";
+static char pool_804D40C8[] = "jobj";
 
 void fn_80186400(void)
 {
@@ -1049,11 +1095,6 @@ void fn_80186400(void)
         HSD_JObjSetTranslateZ(lbl_804735A8.x4[3], 10000.0F);
     }
 }
-
-static const char* const lbl_803B7C58[] = { "IrAls", "IrEzTarg", "IrEzTuki",
-                                            "IrEzFigG" };
-
-static char lbl_804D40B0[] = "IrRdMap";
 
 void fn_80186634(void* arg0)
 {
@@ -1084,9 +1125,9 @@ void fn_80186634(void* arg0)
     names[2] = lbl_803B7C58[2];
     names[3] = lbl_803B7C58[3];
     lbl_804D65F4 = lbArchive_80016DBC(names[lbl_8047368C.xE8], &lbl_804D65FC,
-                                      "ScItrAllstar_scene_data", 0);
+                                      lbl_803D9438 + 0xC, 0);
     lbl_804D65F8 = lbArchive_80016DBC(lbl_804D40B0, &lbl_804D6600,
-                                      "ScItrAllstar_scene_data", 0);
+                                      lbl_803D9438 + 0xC, 0);
 
     gobj = GObj_Create(0xB, 3, 0);
     HSD_GObjObject_80390A70(gobj, HSD_GObj_804D784A,
@@ -1289,7 +1330,37 @@ typedef struct gm_80186F6C_Entry {
     /* 0x14 */ f32 x14;
 } gm_80186F6C_Entry;
 
-static gm_80186F6C_Entry lbl_803D9498[] = {
+/// Dead .sdata2 pool bytes of the original band (slot 804DA5C8 = 0.0f;
+/// readers keep the extern, idiom 317/318).
+static const f32 pool_804DA5C8 ATTRIBUTE_ALIGN(8) = 0.0f;
+
+/// Never called (stripped); pins pool_804DA5C8 emission at this epoch.
+static f32 sdata2_keep_0(void)
+{
+    return *(volatile f32*) &pool_804DA5C8;
+}
+
+/// Never called (stripped); mints 7.0f ahead of fn_80186F6C so its pool
+/// group lands [7.0, 3.0(ls), 5.0(ls), 4.0] like the original (idiom 317).
+static f32 sdata2_ordering_2(void)
+{
+    volatile f32 data_0 = 7.0f;
+
+    return data_0;
+}
+
+/// Dead pool slots 804DA5D0/804DA5D4 (3.0f/5.0f) sit between the 7.0f and
+/// 4.0f mints of fn_80186F6C's group in the original (idiom 317); the
+/// never-called keeper pins their emission at this epoch.
+static const f32 pool_804DA5D0 = 3.0f;
+static const f32 pool_804DA5D4 = 5.0f;
+
+static f32 sdata2_keep_2(void)
+{
+    return *(volatile f32*) &pool_804DA5D0 + *(volatile f32*) &pool_804DA5D4;
+}
+
+gm_80186F6C_Entry lbl_803D9498[] = {
     { 0.0f, -4.5f, 0.0f, 1.0f, 1.0f, 1.0f },
     { 0.0f, 1.5f, 0.0f, 0.6f, 0.6f, 0.6f },
     { 0.0f, -5.3f, 0.0f, 1.3f, 1.3f, 1.3f },
@@ -1358,7 +1429,6 @@ void fn_80186F6C(HSD_GObj* arg0)
     }
 }
 
-extern HSD_Archive* lbl_804D6610;
 
 #pragma push
 #pragma dont_inline on
@@ -1390,7 +1460,28 @@ void fn_80187494(HSD_GObj* gobj, int arg1)
     }
 }
 
-static SceneDesc* lbl_804D6614;
+/// Dead .sdata2 tail of the original band: 804DA5DC..804DA600
+/// (1.0f / dup 10000.0f / aligned 0.0f / dup signed magic / 1-60th /
+/// dup unsigned magic; idiom 317 dup-pool reconstruction).
+static const f32 pool_804DA5DC = 1.0f;
+static const f32 pool_804DA5E0 = 10000.0f;
+static const f32 pool_804DA5E8 ATTRIBUTE_ALIGN(8) = 0.0f;
+static const f64 pool_804DA5F0 = 4503601774854144.0;
+static const f32 pool_804DA5F8 = 0.016666668f;
+static const f64 pool_804DA600 = 4503599627370496.0;
+
+/// Never called (stripped); the ordered volatile loads pin the dead tail
+/// slots 804DA5DC..804DA600 in original stream order (idiom 317/318).
+static f32 sdata2_keep_1(void)
+{
+    f32 ret = *(volatile f32*) &pool_804DA5DC;
+    ret += *(volatile f32*) &pool_804DA5E0;
+    ret += *(volatile f32*) &pool_804DA5E8;
+    ret += (f32) *(volatile f64*) &pool_804DA5F0;
+    ret += *(volatile f32*) &pool_804DA5F8;
+    ret += (f32) *(volatile f64*) &pool_804DA600;
+    return ret;
+}
 
 void fn_801874FC(void)
 {
@@ -1433,8 +1524,6 @@ void fn_80187714(void)
 }
 #pragma pop
 
-extern HSD_Archive* lbl_804D6610;
-
 void gm_8018776C_OnFrame(void)
 {
     if (lbl_804736B0.x0 != 0) {
@@ -1446,7 +1535,7 @@ void gm_8018776C_OnFrame(void)
 
 #pragma push
 #pragma dont_inline on
-extern char lbl_804D40D0[6];
+static char lbl_804D40D0[] = "IrAls";
 
 void gm_801877A8_OnEnter(void* arg0_)
 {
@@ -1676,9 +1765,7 @@ void fn_80187CF4(HSD_GObj* gobj)
     HSD_JObjAnimAll(GET_JOBJ(gobj));
 }
 
-static char lbl_804D4138[] = "IrNml";
-
-static char* lbl_803D9750[] = {
+char* lbl_803D9750[] = {
     "mc01",
     "mc02",
     "mc03",
@@ -1734,6 +1821,8 @@ static char* lbl_803D9750[] = {
     (char*) 0x655F6461,
     (char*) 0x74610000,
 };
+
+static char lbl_804D4138[] = "IrNml";
 
 static HSD_Archive* lbl_804D6620;
 
@@ -1891,4 +1980,3 @@ bool gm_8018841C(void)
     }
     return false;
 }
-

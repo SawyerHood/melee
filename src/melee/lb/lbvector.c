@@ -5,7 +5,50 @@
 #include "lb/lbrefract.h"
 
 #include <math.h>
-#include <math_ppc.h>
+/* math_ppc.h dropped: its sqrtf inline emits dead _half/_three localstatics
+ * the target .sdata2 does not have (idiom 329). BUT this TU is the
+ * link-level WEAK EMITTER of sqrtf__Ff (symbols.txt pins it at 8000D5BC
+ * inside lbvector; baselib/mtx.h HSD_MtxColMag and 11 other units call it
+ * out-of-line) -- so the cure must KEEP the pragma-cplusplus extern inline
+ * named sqrtf, only swapping the localstatics for pool-literal 0.5/3.0
+ * (= the target @-anon doubles, shared with sqrtf_accurate's pool). */
+extern double __frsqrte(double);
+
+#ifdef __MWERKS__
+#pragma push
+#pragma cplusplus on
+#endif
+extern inline float sqrtf(float x)
+{
+    volatile float y;
+    if (x > 0.0f) {
+        double guess = __frsqrte((double) x);
+        guess = 0.5 * guess * (3.0 - guess * guess * x);
+        guess = 0.5 * guess * (3.0 - guess * guess * x);
+        guess = 0.5 * guess * (3.0 - guess * guess * x);
+        y = (float) (x * guess);
+        return y;
+    }
+    return x;
+}
+#ifdef __MWERKS__
+#pragma pop
+#endif
+
+static inline float xsqrtf_accurate(float x)
+{
+    volatile float y;
+    if (x > 0.0f) {
+        double guess = __frsqrte((double) x);
+        guess = 0.5 * guess * (3.0 - guess * guess * x);
+        guess = 0.5 * guess * (3.0 - guess * guess * x);
+        guess = 0.5 * guess * (3.0 - guess * guess * x);
+        guess = 0.5 * guess * (3.0 - guess * guess * x);
+        y = (float) (x * guess);
+        return y;
+    }
+    return x;
+}
 #include <dolphin/gx/GXTransform.h>
 #include <dolphin/mtx.h>
 #include <baselib/cobj.h>
@@ -18,7 +61,7 @@ static float lbVector_Len(Vec3* vec)
 
 static float lbVector_Len_xy(Vec3* vec)
 {
-    return sqrtf_accurate(vec->x * vec->x + vec->y * vec->y);
+    return xsqrtf_accurate(vec->x * vec->x + vec->y * vec->y);
 }
 
 float lbVector_Normalize(Vec3* vec)
@@ -38,7 +81,7 @@ float lbVector_Normalize(Vec3* vec)
 
 float lbVector_NormalizeXY(Vec3* a)
 {
-    float len = sqrtf_accurate(a->x * a->x + a->y * a->y);
+    float len = xsqrtf_accurate(a->x * a->x + a->y * a->y);
     float inv;
 
     if (len == 0.0f) {
@@ -362,7 +405,7 @@ Vec3* lbVector_ApplyEulerRotation(Vec3* v, Vec3* angles)
 /// 8000E19C
 float lbVector_sqrtf_accurate(float x)
 {
-    return sqrtf_accurate(x);
+    return xsqrtf_accurate(x);
 }
 
 /// 8000E210

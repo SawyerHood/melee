@@ -25,7 +25,24 @@
 
 #include <common_structs.h>
 #include <math.h>
-#include <math_ppc.h>
+/* math_ppc.h dropped: its sqrtf inline emits dead _half/_three localstatics
+ * the target .sdata2 does not have (idiom 329). xsqrtf below is the same
+ * inline with pool-literal 0.5/3.0 (= target @-anon doubles). */
+extern double __frsqrte(double);
+
+static inline float xsqrtf(float x)
+{
+    volatile float y;
+    if (x > 0.0f) {
+        double guess = __frsqrte((double) x);
+        guess = 0.5 * guess * (3.0 - guess * guess * x);
+        guess = 0.5 * guess * (3.0 - guess * guess * x);
+        guess = 0.5 * guess * (3.0 - guess * guess * x);
+        y = (float) (x * guess);
+        return y;
+    }
+    return x;
+}
 #include <trigf.h>
 #include <baselib/jobj.h>
 
@@ -70,7 +87,7 @@ void ftSk_SpecialS_80110490(Fighter* fp)
 
     fp->mv.sk.specials.x18 = v6;
 
-    v8 = sqrtf(fp->input.lstick.x * fp->input.lstick.x +
+    v8 = xsqrtf(fp->input.lstick.x * fp->input.lstick.x +
                fp->input.lstick.y * fp->input.lstick.y);
 
     if (v8 > 1) {

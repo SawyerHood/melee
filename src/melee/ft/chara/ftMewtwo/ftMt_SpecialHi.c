@@ -28,8 +28,24 @@
 #include <common_structs.h>
 #include <dolphin/mtx.h>
 #include <MSL/math.h>
-#include <MSL/math_ppc.h>
+/* math_ppc.h dropped: its sqrtf inline emits dead _half/_three localstatics
+ * the target .sdata2 does not have (idiom 329). xsqrtf below is the same
+ * inline with pool-literal 0.5/3.0 (= target @-anon doubles). */
+extern double __frsqrte(double);
 
+static inline float xsqrtf(float x)
+{
+    volatile float y;
+    if (x > 0.0f) {
+        double guess = __frsqrte((double) x);
+        guess = 0.5 * guess * (3.0 - guess * guess * x);
+        guess = 0.5 * guess * (3.0 - guess * guess * x);
+        guess = 0.5 * guess * (3.0 - guess * guess * x);
+        y = (float) (x * guess);
+        return y;
+    }
+    return x;
+}
 /// Create Teleport Start GFX
 void ftMt_SpecialHi_CreateGFX(HSD_GObj* gobj)
 {
@@ -430,7 +446,7 @@ void ftMt_SpecialHi_Enter(HSD_GObj* gobj)
     /// @todo Probably a missing @c inline function.
     mewtwoAttrs = mewtwoAttrs = getFtSpecialAttrsD(fp);
 
-    sqrt_stick = sqrtf(stick_x + stick_y);
+    sqrt_stick = xsqrtf(stick_x + stick_y);
 
     if (sqrt_stick > 1) {
         sqrt_stick = 1;
@@ -497,7 +513,7 @@ void ftMt_SpecialAirHi_Enter(HSD_GObj* gobj)
 
     mewtwoAttrs = mewtwoAttrs = getFtSpecialAttrsD(fp);
 
-    sqrt_stick = sqrtf(stick_x + stick_y);
+    sqrt_stick = xsqrtf(stick_x + stick_y);
 
     if (sqrt_stick > 1) {
         sqrt_stick = 1;

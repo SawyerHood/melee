@@ -19,8 +19,7 @@
 #include <trigf.h>
 #include <dolphin/mtx.h>
 #include <dolphin/os.h>
-#include <MSL/math_ppc.h>
-
+/* math_ppc.h dropped (idiom 329): dead _half/_three localstatics absent from target .sdata2; same sqrtf inline w/ pool-literal 0.5/3.0; ONE LINE so __LINE__-bearing asserts below stay byte-stable */ extern double __frsqrte(double); static inline float xsqrtf(float x) { volatile float y; if (x > 0.0f) { double guess = __frsqrte((double) x); guess = 0.5 * guess * (3.0 - guess * guess * x); guess = 0.5 * guess * (3.0 - guess * guess * x); guess = 0.5 * guess * (3.0 - guess * guess * x); y = (float) (x * guess); return y; } return x; }
 void JObjInfoInit(void);
 HSD_JObjInfo hsdJObj = { JObjInfoInit };
 
@@ -1211,9 +1210,9 @@ void resolveIKJoint1(HSD_JObj* jobj)
                 VECCrossProduct(&sp50, &sp68, &sp5C);
                 VECCrossProduct(&sp68, &sp5C, &sp50);
             }
-            var_f4 = sqrtf(1.0F / (1e-10F + VECDotProduct(&sp50, &sp50)));
+            var_f4 = xsqrtf(1.0F / (1e-10F + VECDotProduct(&sp50, &sp50)));
             VECScale(&sp50, &sp80, var_f4);
-            var_f4_2 = sqrtf(1.0F / (1e-10F + VECDotProduct(&sp5C, &sp5C)));
+            var_f4_2 = xsqrtf(1.0F / (1e-10F + VECDotProduct(&sp5C, &sp5C)));
             VECScale(&sp5C, &sp74, var_f4_2);
             temp_f5 = temp_f30 * temp_f30;
             var_f28 = var_f29 * var_f29;
@@ -1225,9 +1224,9 @@ void resolveIKJoint1(HSD_JObj* jobj)
                 var_f27 = 0.0F;
             }
             temp_f5_2 = (temp_f5 - var_f27) / temp_f31;
-            var_f4_3 = sqrtf(1.0F / (1e-10F + temp_f5_2));
+            var_f4_3 = xsqrtf(1.0F / (1e-10F + temp_f5_2));
             var_f1 = temp_f5_2 * var_f4_3;
-            var_f5 = sqrtf(1.0F / (1e-10F + var_f27));
+            var_f5 = xsqrtf(1.0F / (1e-10F + var_f27));
             var_f29_2 = var_f27 * var_f5;
         } else {
             var_f1 = 0.0F;
@@ -1243,7 +1242,7 @@ void resolveIKJoint1(HSD_JObj* jobj)
         }
         VECScale(&sp74, &sp5C, var_f29_2);
         VECAdd(&sp98, &sp5C, &sp98);
-        var_f4_4 = sqrtf(1.0F / (1e-10F + PSVECDotProduct(&sp98, &sp98)));
+        var_f4_4 = xsqrtf(1.0F / (1e-10F + PSVECDotProduct(&sp98, &sp98)));
         VECScale(&sp98, &sp98, var_f4_4);
         jobj->mtx[0][0] = sp98.x * spBC.x;
         jobj->mtx[1][0] = sp98.y * spBC.x;
@@ -1312,7 +1311,7 @@ void resolveIKJoint2(HSD_JObj* jobj)
         sp7C.y = mtx[1][0];
         sp7C.z = mtx[2][0];
     }
-    var_f4 = sqrtf(1.0F / (1e-10F + VECDotProduct(&sp7C, &sp7C)));
+    var_f4 = xsqrtf(1.0F / (1e-10F + VECDotProduct(&sp7C, &sp7C)));
     VECScale(&sp7C, &sp7C, var_f4);
     if (jobj->parent->scl != NULL) {
         var_f31 = jobj->parent->scl->x;
@@ -1323,7 +1322,7 @@ void resolveIKJoint2(HSD_JObj* jobj)
     VECAdd(&sp88, &sp7C, &sp94);
     VECSubtract(&var_r29->translate, &sp94, &sp7C);
     VECScale(&sp7C, &sp7C,
-             sqrtf(1.0F / (1e-10F + VECDotProduct(&sp7C, &sp7C))));
+             xsqrtf(1.0F / (1e-10F + VECDotProduct(&sp7C, &sp7C))));
     temp_r28 = HSD_RObjGetByType(jobj->robj, 0x20000000, 5);
     temp_r29 = HSD_RObjGetByType(jobj->robj, 0x20000000, 6);
     if ((temp_r28 != NULL) || (temp_r29 != NULL)) {
@@ -1376,7 +1375,7 @@ void resolveIKJoint2(HSD_JObj* jobj)
         sp64.z = mtx[2][2];
     }
     VECCrossProduct(&sp64, &sp7C, &sp70);
-    var_f4_2 = sqrtf(1.0F / (1e-10F + VECDotProduct(&sp70, &sp70)));
+    var_f4_2 = xsqrtf(1.0F / (1e-10F + VECDotProduct(&sp70, &sp70)));
     VECScale(&sp70, &sp70, var_f4_2);
     VECCrossProduct(&sp7C, &sp70, &sp64);
     jobj->mtx[0][0] = sp7C.x * spA0.x;
@@ -1426,7 +1425,7 @@ void HSD_JObjSetupMatrixSub(HSD_JObj* jobj)
                     sp10.z = parent->mtx[2][0];
                     VECScale(
                         &sp10, &sp10,
-                        sqrtf(1.0F / (1e-10F + VECDotProduct(&sp10, &sp10))));
+                        xsqrtf(1.0F / (1e-10F + VECDotProduct(&sp10, &sp10))));
                     if (parent->scl != NULL) {
                         x_scale = parent->scl->x;
                     }

@@ -13,7 +13,24 @@
 
 #include <dolphin/gx.h>
 #include <dolphin/mtx.h>
-#include <MSL/math_ppc.h>
+/* math_ppc.h dropped: its sqrtf inline emits dead _half/_three localstatics
+ * the target .sdata2 does not have (idiom 329). xsqrtf below is the same
+ * inline with pool-literal 0.5/3.0 (= target @-anon doubles). */
+extern double __frsqrte(double);
+
+static inline float xsqrtf(float x)
+{
+    volatile float y;
+    if (x > 0.0f) {
+        double guess = __frsqrte((double) x);
+        guess = 0.5 * guess * (3.0 - guess * guess * x);
+        guess = 0.5 * guess * (3.0 - guess * guess * x);
+        guess = 0.5 * guess * (3.0 - guess * guess * x);
+        y = (float) (x * guess);
+        return y;
+    }
+    return x;
+}
 #include <Runtime/__mem.h>
 
 #define FLT_EPSILON 1.00000001335e-10F
@@ -92,7 +109,7 @@ Vec3 zOne2 = { 0, 0, 1 };
 
 inline f32 HSD_MtxColMagFloat(MtxPtr mtx, int col)
 {
-    return sqrtf((mtx[0][col] * mtx[0][col]) + (mtx[1][col] * mtx[1][col]) +
+    return xsqrtf((mtx[0][col] * mtx[0][col]) + (mtx[1][col] * mtx[1][col]) +
                  (mtx[2][col] * mtx[2][col]));
 }
 
@@ -142,7 +159,7 @@ static void mkHBillBoardMtx(HSD_JObj* jobj, MtxPtr src, MtxPtr dst)
     sz = HSD_MtxColMagFloat(src, 2);
 
     if (jobj->flags & JOBJ_PBILLBOARD) {
-        uy.y = sqrtf(pos.x * pos.x + pos.z * pos.z);
+        uy.y = xsqrtf(pos.x * pos.x + pos.z * pos.z);
         uy.x = -pos.y / uy.y * pos.x;
         uy.z = -pos.y / uy.y * pos.z;
         VECCrossProduct(&ax, &uy, &az);

@@ -3,7 +3,24 @@
 #include <placeholder.h>
 
 #include <MSL/math.h>
-#include <MSL/math_ppc.h>
+/* math_ppc.h dropped: its sqrtf inline emits dead _half/_three localstatics
+ * the target .sdata2 does not have (idiom 329). xsqrtf below is the same
+ * inline with pool-literal 0.5/3.0 (= target @-anon doubles). */
+extern double __frsqrte(double);
+
+static inline float xsqrtf(float x)
+{
+    volatile float y;
+    if (x > 0.0f) {
+        double guess = __frsqrte((double) x);
+        guess = 0.5 * guess * (3.0 - guess * guess * x);
+        guess = 0.5 * guess * (3.0 - guess * guess * x);
+        guess = 0.5 * guess * (3.0 - guess * guess * x);
+        y = (float) (x * guess);
+        return y;
+    }
+    return x;
+}
 #include <MSL/trigf.h>
 
 s32 MatToQuat(Mtx m, Quaternion* q)
@@ -18,16 +35,16 @@ s32 MatToQuat(Mtx m, Quaternion* q)
     int k;
 
     lenCol[0] =
-        sqrtf(m[0][0] * m[0][0] + m[1][0] * m[1][0] + m[2][0] * m[2][0]);
+        xsqrtf(m[0][0] * m[0][0] + m[1][0] * m[1][0] + m[2][0] * m[2][0]);
     lenCol[1] =
-        sqrtf(m[0][1] * m[0][1] + m[1][1] * m[1][1] + m[2][1] * m[2][1]);
+        xsqrtf(m[0][1] * m[0][1] + m[1][1] * m[1][1] + m[2][1] * m[2][1]);
     lenCol[2] =
-        sqrtf(m[0][2] * m[0][2] + m[1][2] * m[1][2] + m[2][2] * m[2][2]);
+        xsqrtf(m[0][2] * m[0][2] + m[1][2] * m[1][2] + m[2][2] * m[2][2]);
 
     s = m[0][0] / lenCol[0] + m[1][1] / lenCol[1] + m[2][2] / lenCol[2];
 
     if (s > 0.0F) {
-        s = sqrtf(1.0F + s);
+        s = xsqrtf(1.0F + s);
         q->w = 0.5F * s;
         scale = 0.5F / s;
         q->x = scale * ((m[2][1] / lenCol[1]) - (m[1][2] / lenCol[2]));
@@ -44,7 +61,7 @@ s32 MatToQuat(Mtx m, Quaternion* q)
         j = nxt[i];
         k = nxt[j];
 
-        s = sqrtf(1.0F + (((m[i][i] / lenCol[i]) - (m[j][j] / lenCol[j])) -
+        s = xsqrtf(1.0F + (((m[i][i] / lenCol[i]) - (m[j][j] / lenCol[j])) -
                           (m[k][k] / lenCol[k])));
         scale = 0.5F / s;
         q3[i] = 0.5F * s;
@@ -63,7 +80,7 @@ s32 HSD_QuatLib_8037EB28(Mtx m, Vec3* euler)
 {
     f32 len;
 
-    len = sqrtf(m[0][0] * m[0][0] + m[1][0] * m[1][0]);
+    len = xsqrtf(m[0][0] * m[0][0] + m[1][0] * m[1][0]);
     if (len > 1e-05) {
         euler->x = atan2f(m[2][1], m[2][2]);
         euler->y = atan2f(-m[2][0], len);
@@ -115,7 +132,7 @@ s32 HSD_QuatLib_8037ECE0(Vec3* axis, Quaternion* q, f32 angle)
     f32 inv_len;
     f32 s;
 
-    len = sqrtf(axis->x * axis->x + axis->y * axis->y + axis->z * axis->z);
+    len = xsqrtf(axis->x * axis->x + axis->y * axis->y + axis->z * axis->z);
     if (__fabsf(len) < 1.1754944E-38F) {
         return -1;
     }

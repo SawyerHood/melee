@@ -18,7 +18,24 @@
 #include <dolphin/mtx.h>
 #include <dolphin/vi.h>
 #include <MetroTRK/intrinsics.h>
-#include <MSL/math_ppc.h>
+/* math_ppc.h dropped: its sqrtf inline emits dead _half/_three localstatics
+ * the target .sdata2 does not have (idiom 329). xsqrtf below is the same
+ * inline with pool-literal 0.5/3.0 (= target @-anon doubles). */
+extern double __frsqrte(double);
+
+static inline float xsqrtf(float x)
+{
+    volatile float y;
+    if (x > 0.0f) {
+        double guess = __frsqrte((double) x);
+        guess = 0.5 * guess * (3.0 - guess * guess * x);
+        guess = 0.5 * guess * (3.0 - guess * guess * x);
+        guess = 0.5 * guess * (3.0 - guess * guess * x);
+        y = (float) (x * guess);
+        return y;
+    }
+    return x;
+}
 #include <MSL/trigf.h>
 
 static HSD_ClassInfo* default_class;
@@ -663,11 +680,11 @@ static int roll2upvec(HSD_CObj* cobj, Vec3* up, float roll)
         return res;
     }
     if (1.0 - cobj_fabsf_p(&eye.y) < 0.0001) {
-        v0.x = sqrtf(eye.y * eye.y + eye.z * eye.z);
+        v0.x = xsqrtf(eye.y * eye.y + eye.z * eye.z);
         v0.y = eye.y * (-eye.x / v0.x);
         v0.z = eye.z * (-eye.x / v0.x);
     } else {
-        v0.y = sqrtf(eye.x * eye.x + eye.z * eye.z);
+        v0.y = xsqrtf(eye.x * eye.x + eye.z * eye.z);
         v0.x = eye.x * (-eye.y / v0.y);
         v0.z = eye.z * (-eye.y / v0.y);
     }

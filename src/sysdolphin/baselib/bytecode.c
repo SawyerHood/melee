@@ -11,7 +11,7 @@
 #include <dolphin/os.h>
 #include <melee/lb/lb_00CE.h>
 #include <MSL/math.h>
-#include <MSL/math_ppc.h>
+/* math_ppc.h dropped (idiom 329): dead _half/_three localstatics absent from target .sdata2; same sqrtf inline w/ pool-literal 0.5/3.0; ONE LINE so __LINE__-bearing asserts below stay byte-stable */ extern double __frsqrte(double); static inline float xsqrtf(float x) { volatile float y; if (x > 0.0f) { double guess = __frsqrte((double) x); guess = 0.5 * guess * (3.0 - guess * guess * x); guess = 0.5 * guess * (3.0 - guess * guess * x); guess = 0.5 * guess * (3.0 - guess * guess * x); y = (float) (x * guess); return y; } return x; }
 #include <MSL/trigf.h>
 
 typedef union {
@@ -229,7 +229,7 @@ float HSD_ByteCodeEval(u8* bytecode, f32* args, s32 nb_args)
             break;
         case 0x16:
             HSD_ASSERT(474, stack);
-            fv = sqrtf(((ByteCodeVal*) &stack->data)->f);
+            fv = xsqrtf(((ByteCodeVal*) &stack->data)->f);
             stack->data = *(void**) &fv;
             break;
         case 0x31:

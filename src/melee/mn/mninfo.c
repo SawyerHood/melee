@@ -138,6 +138,10 @@ static AnimLoopSettings mnInfo_803EFC08[0x12] = {
     { 2.8395941e29f, 1.7935375e25f, 7.2243537e28f },
 };
 
+/// The DOL pads this TU's .data to 0xE0 (the last ConCo string ends at
+/// 0xD9); a "" filler supplies the zero bytes (idiom 320).
+__declspec(section ".data") static char mnInfo_803EFCE0_pad[8] = "";
+
 #pragma push
 #pragma dont_inline on
 s32 mnInfo_80251D58(MenuInfo_GObj* arg0, s32 arg1, u32 arg2, u32 arg3)
@@ -516,12 +520,17 @@ s32 mnInfo_80252758(void)
     sp8 = NULL;
     spC = 0;
 
-    lbArchive_LoadSections(
-        mn_804D6BB8, (void**) &mnInfo_804A0958.joint, "MenMainConSs_Top_joint",
-        &mnInfo_804A0958.animjoint, "MenMainConSs_Top_animjoint",
-        &mnInfo_804A0958.matanim_joint, "MenMainConSs_Top_matanim_joint",
-        &mnInfo_804A0958.shapeanim_joint, "MenMainConSs_Top_shapeanim_joint",
-        0);
+    /// The section names are the MenMainConCo_Top_* strings inside
+    /// mnInfo_803EFC08 (+0x64/+0x7C/+0x98/+0xB8), addressed reloc-free off
+    /// the data anchor like the original (idioms 366/314).
+    lbArchive_LoadSections(mn_804D6BB8, (void**) &mnInfo_804A0958.joint,
+                           (char*) mnInfo_803EFC08 + 0x64,
+                           &mnInfo_804A0958.animjoint,
+                           (char*) mnInfo_803EFC08 + 0x7C,
+                           &mnInfo_804A0958.matanim_joint,
+                           (char*) mnInfo_803EFC08 + 0x98,
+                           &mnInfo_804A0958.shapeanim_joint,
+                           (char*) mnInfo_803EFC08 + 0xB8, 0);
 
     mnInfo_80251AFC();
 
@@ -530,7 +539,14 @@ s32 mnInfo_80252758(void)
 
     temp_ret = HSD_MemAlloc(sizeof(MnInfoData));
     temp_r3_3 = temp_ret;
-    HSD_ASSERTREPORT(0x267, temp_r3_3, "Can't get user_data.\n");
+    /// HSD_ASSERTREPORT(0x267, temp_r3_3, "Can't get user_data.\n") with
+    /// all three strings addressed inside mnInfo_803EFC08 (+0x34 message,
+    /// +0x4C file, +0x58 condition) like the original.
+    temp_r3_3 != NULL
+        ? (void) 0
+        : (OSReport((char*) mnInfo_803EFC08 + 0x34),
+           __assert((char*) mnInfo_803EFC08 + 0x4C, 0x267,
+                    (char*) mnInfo_803EFC08 + 0x58));
     mnInfo_80252720(temp_r3_3);
     GObj_InitUserData(temp_r3_2, 0, HSD_Free, temp_r3_3);
 

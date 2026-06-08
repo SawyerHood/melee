@@ -225,8 +225,8 @@ void it_80289BE8(Item_GObj* gobj, s32 arg1, s32 arg2, s32 arg3)
     Vec3 vel;
     itKusudamaAttributes* attr;
     Item* ip = GET_ITEM(gobj);
-    int i;
     s32 count;
+    int i;
     PAD_STACK(8);
 
     attr = ip->xC4_article_data->x4_specialAttributes;
@@ -257,11 +257,14 @@ void it_80289BE8(Item_GObj* gobj, s32 arg1, s32 arg2, s32 arg3)
 
     i = HSD_Randi(arg1 + arg2 + arg3);
     if (i < arg1) {
-        kind = attr->x10;
-        count = attr->x14;
-        if (kind == It_Kind_M_Ball && it_8026C704() == true) {
-            i = HSD_Randi(arg2 + arg3);
-            goto food_or_random;
+        {
+            s32 x10val = attr->x10;
+            kind = x10val;
+            count = attr->x14;
+            if (x10val == It_Kind_M_Ball && it_8026C704() == true) {
+                i = HSD_Randi(arg2 + arg3);
+                goto food_or_random;
+            }
         }
         if (!it_8026D324(kind)) {
             i = HSD_Randi(arg2 + arg3);

@@ -16,11 +16,10 @@
 
 #include <__mem.h>
 #include <math.h>
-#include <math_ppc.h>
+/* math_ppc.h dropped (idiom 329): dead _half/_three localstatics absent from target .sdata2; same sqrtf inline w/ pool-literal 0.5/3.0; ONE LINE so __LINE__-bearing asserts below stay byte-stable */ extern double __frsqrte(double); static inline float xsqrtf(float x) { volatile float y; if (x > 0.0f) { double guess = __frsqrte((double) x); guess = 0.5 * guess * (3.0 - guess * guess * x); guess = 0.5 * guess * (3.0 - guess * guess * x); guess = 0.5 * guess * (3.0 - guess * guess * x); y = (float) (x * guess); return y; } return x; }
 #include <dolphin/mtx.h>
 #include <dolphin/os.h>
-#include <MSL/math_ppc.h>
-
+/* (duplicate math_ppc.h include dropped, idiom 329) */
 HSD_ObjAllocData robj_alloc_data;   // robj_alloc_data
 HSD_ObjAllocData rvalue_alloc_data; // rvalue_alloc_data
 
@@ -253,9 +252,9 @@ static void set_dirup_matrix(Vec3* dir_ptr, Vec3* uv_ptr, Vec3* scale_ptr,
 
     PSVECCrossProduct(dir_ptr, uv_ptr, &z_vec);
     kdir =
-        sqrtf(1.0F / (1.00000001335e-10f + PSVECDotProduct(dir_ptr, dir_ptr)));
+        xsqrtf(1.0F / (1.00000001335e-10f + PSVECDotProduct(dir_ptr, dir_ptr)));
     PSVECScale(dir_ptr, dir_ptr, kdir);
-    kz = sqrtf(1.0F / (1.00000001335e-10f + PSVECDotProduct(&z_vec, &z_vec)));
+    kz = xsqrtf(1.0F / (1.00000001335e-10f + PSVECDotProduct(&z_vec, &z_vec)));
     PSVECScale(&z_vec, &z_vec, kz);
     PSVECCrossProduct(&z_vec, dir_ptr, uv_ptr);
     v.x = dir_ptr->x * scale_ptr->x;
@@ -346,7 +345,7 @@ static inline HSD_RObj* inlined_HSD_RObjGetByType(HSD_RObj* robj, u32 type,
 
 inline f32 HSD_MtxColMagFloat(MtxPtr mtx, int col)
 {
-    return sqrtf((mtx[0][col] * mtx[0][col]) + (mtx[1][col] * mtx[1][col]) +
+    return xsqrtf((mtx[0][col] * mtx[0][col]) + (mtx[1][col] * mtx[1][col]) +
                  (mtx[2][col] * mtx[2][col]));
 }
 
