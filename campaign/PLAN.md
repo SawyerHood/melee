@@ -5,9 +5,13 @@ bytes toward 100%. This file is the persistent campaign state — update it at
 the end of every session.
 
 > **⭐⭐ ENDGAME METRIC (live since wave 18): LINKED Matching file count.**
-> Currently **874/1057 linked COMMITTED (47.10% complete code; matched
+> Currently **875/1057 linked COMMITTED (47.24% complete code; matched
 > 72.85%, fuzzy 97.636; data **59.45% COMMITTED**; matched fns
-> **18852/19829 = 95.07%**)** at HEAD **029c11e15 (wave 32)**. Commit
+> **18852/19829 = 95.07%**)** at **2e104422d = FLIP #18
+> itmewtwoshadowball (landed at the w32→33 boundary, zero src work in
+> the flip commit — the w32 recon cleared its last hard rows;
+> re-rank-after-recon policy proven a THIRD time)**, on 029c11e15
+> (wave 32). Commit
 > chain since the merge: **a76c460359 = W29 MERGE of upstream/master
 > ed970616e (25 commits), still NOT pushed** → f28cf5166 (w30
 > symbols-truth fix) → ec8fbdf41 (w30 rebalanced kept edits) →
@@ -16,7 +20,8 @@ the end of every session.
 > kept edits GRANTED+COMMITTED: gmresult/gmclassic/grbigblue ·
 > leak/gm_1A4C/ftkirby · WarpStar/ItemThrow/item.h+c)** → 73b6ed2ba
 > (naming-17, 268 pins, naming rows 301→88) → **029c11e15 (wave 32:
-> all 9 lane files COMMITTED)**. DOL sha 08e0bf20 EXACT at every
+> all 9 lane files COMMITTED)** → **2e104422d FLIP #18
+> itmewtwoshadowball (875/1057 = 47.24%)**. DOL sha 08e0bf20 EXACT at every
 > gate, dtk OK, idempotence EXACT; sole working-tree dirt =
 > backlog.json (editor-owned, stale). Denominator 1041→1057 = upstream
 > resplit (18 kirby TUs
@@ -204,10 +209,14 @@ the end of every session.
 > +2 strict-100s, per-pin DOL-gated). Idioms **310-325 minted
 > (highest now 325)**. OURS-BIGGER sweep diagnosed ~170B of 1-line
 > cures (toy 32B declspec ×4-strings · ftNn_Init 64B + gm_18A5 0x70
-> dead-def deletes). NEXT: push the chain; recon rank gm_16F1 258B >
+> dead-def deletes). **FLIP #18 itmewtwoshadowball COMMITTED
+> 2e104422d at the boundary — the exec re-rank confirmed FLIP-READY
+> (zero hard rows), all flip gates PASS (DOL sha EXACT, link edge ×3,
+> idempotence); 875/1057 linked (47.24%)**. NEXT: push the chain;
+> recon rank gm_16F1 258B >
 > psdisp 254B > grrcruise 238B > mndiagram2 215B; ftCo .sdata2
 > ours-BIGGER family = 317/318 generalization sweep; naming-18
-> re-derive; exec re-rank (itmewtwoshadowball likely FLIP-READY).
+> re-derive; flip queue if_2FC93 → ftNn_Init → gm_1A3F → gmopening.
 
 ## Ground rules
 
@@ -1113,7 +1122,7 @@ PROVEN (stack bands) · 263 BOUNDED by the 285 wall · 284-289 minted.
 One pgrep operator-binding slip (pid verified dead post-hoc, DOL
 exact) — guard discipline re-logged.
 
-## ⭐⭐ FLIP VERDICT (w18 ×3 + w19 ×2 + w20 ×1 + w21/22 boundary ×3 + w23 ×4 + w24/25 boundary ×1 + w25/26 boundary ×1 + ⭐ w31 ×2 (#16 grgreatbay 100d7e5d4 + #17 groldyoshi ded316a75) = **17 FLIPS COMMITTED, 874/1057 linked**; THE ENDGAME METRIC)
+## ⭐⭐ FLIP VERDICT (w18 ×3 + w19 ×2 + w20 ×1 + w21/22 boundary ×3 + w23 ×4 + w24/25 boundary ×1 + w25/26 boundary ×1 + ⭐ w31 ×2 (#16 grgreatbay 100d7e5d4 + #17 groldyoshi ded316a75) + ⭐ w32/33 boundary ×1 (#18 itmewtwoshadowball 2e104422d) = **18 FLIPS COMMITTED, 875/1057 linked**; THE ENDGAME METRIC)
 
 **The flip recipe is PROVEN.** Wave 18 flipped the first three units to
 `Object(Matching, ...)` — ninja links OUR compiled objects into the DOL,
@@ -1393,7 +1402,7 @@ WORKSTREAM — the w30 structural-tier wave 1 took its first 4 units
 | PARK-CONFIRMED | 2 | grgreatbay 29B · **lbmemory 34B (w28 PARK-PROVEN, idiom 240)** · ~~itdraw 3B~~ **(w29: REMOVED — upstream MATCHED+linked the TU via inline_sw, a8bc21722/idiom 257; the w28 PARK-PROVEN verdict held for band routes but the restructure space contained the C lever — 240 BOUNDED)** · (historical: itdraw w26 DISSOLVED from 37B — rover anonymization, idiom 215; w28 PARK-PROVEN) — mechanism-proven order parks. **w26: the w25 W-AUDIT directive is EXECUTED and CLOSED-NEGATIVE for the ENTIRE park set** (read-only census `file-flip-w26/waudit_census.txt` + waudit-w26 byte-probes: current W = target W = 0 everywhere, all subword traffic load-fed/literal = W-inert, idioms 212/213). Sole open lever WAS count/v26 — **w27 made it law (226-228), w28 APPLIED it (lawapply-w28/RECORD.md): both park maps reconstructed EXACTLY, NO C lever exists (itdraw E-web eff_abs=0 immutable/227-gate unfireable/228-band EMPTY; lbmemory old band-front needs an illegal hoist, currentp bottom needs decl-unreachable demotion, d1 top-slot inert per 238, d3 anti-target per 237) — PARK-PROVEN ×2, lever line CLOSED. grgreatbay = last PARK-CONFIRMED unread under 226-228+237/238 (cheap desk check queued)** |
 | FPR-PARK | 1 | sobjlib 27B — FPR trio/band-mirror joint park (183-186/156) |
 | L1P-PENDING | 2 | **w25: BOTH RUN, bucket now EMPTY of pending work** — gmopening 12B → PARK-CONFIRMED (intra-anchor chain LIFO, idiom 206; ~50 forms falsified; cleanest low-pressure order-law specimen) · itpikachuthunder 17B DF8 → DEMOTED to BLOCKED-class (163-vs-160 closure, idiom 208) |
-| S1-SMALL+DATA | 4 | vi0501 41B — **w27 PARKED w/ mechanism (un_8031D9F8 98.83; r0-mode family, idiom 233; src byte-reverted)** · ft_0852 · ifcoget **23B (was 34B)** — w25 park RE-CONFIRMED, 2 new walls (idiom 207) · itmewtwoshadowball **w26: it_802C4D10 →100.0000 MATCH (void→s32 re-type, idiom 214; kept edit), .text done — pends [.data-0] 7.78 recon only; w27 rank: CONTENT:.text row GONE; ⭐ w32: [.data-0] recon EXECUTED 029c11e15 (99.81, 54/54 relocs) — likely FLIP-READY, re-rank** |
+| S1-SMALL+DATA | 4 | vi0501 41B — **w27 PARKED w/ mechanism (un_8031D9F8 98.83; r0-mode family, idiom 233; src byte-reverted)** · ft_0852 · ifcoget **23B (was 34B)** — w25 park RE-CONFIRMED, 2 new walls (idiom 207) · itmewtwoshadowball **w26: it_802C4D10 →100.0000 MATCH (void→s32 re-type, idiom 214; kept edit), .text done — pends [.data-0] 7.78 recon only; w27 rank: CONTENT:.text row GONE; ⭐ w32: [.data-0] recon EXECUTED 029c11e15 (99.81, 54/54 relocs) → FLIPPED #18 2e104422d** |
 | S1-MED+DATA | 6 | lbshadow 126B · leak 78B · itkyasarin 83B · vi0502 64B · textdraw 144B · ftmaterial 123B |
 | CODEGEN+DATA | 1 | efsync — 4844B same-size .text, schedule/mnemonic. ~~plbonus flip-near~~ **(w29: plbonus MATCHED+linked upstream in the merge — item CLOSED)** |
 | DATA-RECON | 1 | **if_2FC93 — ZERO .text work, solved recon class = cheapest flip after gm_1BFA** |
@@ -1441,16 +1450,20 @@ landed from the adoption stream; queue heads now if_2FC93 (zero
 100d7e5d4 + #17 groldyoshi COMMITTED ded316a75 (surfaced FLIP-READY
 by the w30 recon, rank2 pass-1); pass-2 pool EMPTY; queue heads now
 if_2FC93 → itmewtwoshadowball → ftNn_Init 22B (NEW) → gm_1A3F 20B →
-gmopening 12B.** **w32 (no exec lane this wave): itmewtwoshadowball
-[.data-0] recon EXECUTED (99.81, 54/54 relocs, .text untouched —
-rank row 290B→0B, residual ALIGNFIX/dtk-gap softs only) — **likely
-FLIP-READY, run rank2 at 029c11e15 first thing next exec pass**
-(re-rank-after-recon is twice-proven policy); ftNn_Init gained a
+gmopening 12B.** **w32→33 boundary: itmewtwoshadowball [.data-0]
+recon EXECUTED (99.81, 54/54 relocs, .text untouched — rank row
+290B→0B) → exec rank2 pass-1 FLIP-READY (zero hard; soft = ALIGNFIX
+0x136→0x138 + 2 zero-importer gap EXPORT-MISSING) → **FLIP #18
+COMMITTED 2e104422d, 875/1057 linked (47.24%)** — flip gates ALL
+PASS (.text 0x14e4 byte-identical, reloc parity 167/54 exact, DOL
+sha 08e0bf20 EXACT, link edge consumes the unit's .o ×3, idempotence
+EXACT); re-rank-after-recon now THRICE-proven policy (hsd_40FF w19,
+groldyoshi w31, itmewtwoshadowball w32). ftNn_Init gained a
 diagnosed 64B dead-def delete on top of its 22B row (oursbigger
-sweep); queue heads now if_2FC93 → itmewtwoshadowball (re-rank) →
-ftNn_Init → gm_1A3F 20B → gmopening 12B.**
+sweep); queue heads now if_2FC93 → ftNn_Init → gm_1A3F 20B →
+gmopening 12B.**
 
-**Flipped (17)**: gm_182F + plattack (51951826b) · ftchangeparam
+**Flipped (18)**: gm_182F + plattack (51951826b) · ftchangeparam
 (4715a41d8) · hsd_40FF (ab2a4870d, data-only) · itdrop (d4fee40d1) ·
 bytecode (b6674faf6, zero src work) · MSL/math + ftPr_SpecialN +
 itlinkbomb (0c6fe90d1, the w21 trio) · ftmetal (d711d02b2) ·
@@ -1460,7 +1473,9 @@ ftdevice (3084bc2f4) · itwstar (b31fdd544) · ftkirbyspecialfox
 linked 851/1041 = 43.87%)** · **grgreatbay (100d7e5d4, #16, w30
 inline_sw crack, committed w31)** · **groldyoshi (ded316a75, #17,
 recon-completed STRUCT-NEAR unit, zero src work in the flip commit —
-linked 874/1057 = 47.10%)**. Importer closures all
+linked 874/1057 = 47.10%)** · **itmewtwoshadowball (2e104422d, #18,
+w32/33 boundary — w26 .text match + w32 .data recon, zero src work
+in the flip commit; linked 875/1057 = 47.24%)**. Importer closures all
 re-verified at flip time. Re-rank after every recon/S1 wave with `rank2.py`
 (idiom-176-aware; en-masse importer closure mandatory, idiom 132).
 W26 exec pass: baseline ninja gate PASS at 43973db87 + idempotence;
@@ -1488,7 +1503,7 @@ const exports — named-def recon, the solved class), then
 ~~plbonus~~ (**w29: matched+linked upstream — CLOSED**), then
 **itmewtwoshadowball** (.text CONTENT row GONE in w27 rank; ~~pends
 [.data-0] 7.78 recon = 5 hard rows~~ **w32: recon EXECUTED, data
-rows GONE — likely FLIP-READY at 029c11e15**). ~~itdraw OUT of flip-near (w28
+rows GONE → FLIPPED #18 2e104422d at the w32/33 boundary**). ~~itdraw OUT of flip-near (w28
 PARK-PROVEN, 240)~~ — **w29: itdraw matched+linked UPSTREAM
 (a8bc21722, inline_sw 257); the "C-UNREACHABLE under 226-228"
 reading held for band routes only — 240 bounded**. NEW: **gm_1A3F 20B** (w28 rank: 17→1 hard; residual =
@@ -4728,11 +4743,14 @@ fns (non-portable, 241).
   **18852/19829 = 95.07%**, fuzzy 97.636 + ⭐ S1 harvest: **ftKb
   EEC34+EED50 →100 MATCH ×2**, gm_801A9630 +1.46, gm_801BBB64 +3.54
   + ⭐ NAMING-17 COMMITTED 73b6ed2ba (268 pins ×4 units, rows
-  301→88, +2 strict-100s); idioms 310-325 minted)**. 3 streams
+  301→88, +2 strict-100s) + ⭐⭐ FLIP #18 itmewtwoshadowball
+  2e104422d at the w32/33 boundary — **875/1057 linked (47.24%)**;
+  idioms 310-325 minted)**. 3 streams
   (recon lane E w32b · recon lane F w32 · s1-unlock-w32) + editor;
   EVERYTHING COMMITTED — chain e17787cfe → **720798909 (w31 kept
-  edits GRANTED)** → 73b6ed2ba (naming-17) → **029c11e15 = wave-32
-  HEAD** (all 9 lane files); DOL sha 08e0bf20 EXACT at every lane
+  edits GRANTED)** → 73b6ed2ba (naming-17) → **029c11e15 = wave-32**
+  (all 9 lane files) → **2e104422d FLIP #18 itmewtwoshadowball at
+  the boundary, 875/1057 linked (47.24%)**; DOL sha 08e0bf20 EXACT at every lane
   gate (307 sibling-isolated `ninja build/GALE01/ok`; NonMatching
   src objs are NOT DOL link inputs — per-unit linkcheck/objdiff
   bytegates are the binding gates) + ninja-rule byte-reproducibility
@@ -4763,7 +4781,8 @@ fns (non-portable, 241).
   **8005AC14 + 8005AE1C →100**; P1/P2 falsifications → 320/321.
   itmewtwoshadowball — ItemStateTable[18] 0x120/54-reloc def
   ONE-SHOT, [.data-0] 7.78→**99.81**, .text untouched — last data
-  rows GONE, **likely FLIP-READY (rank2 next exec pass)**.
+  rows GONE → **FLIP #18 COMMITTED 2e104422d at the boundary
+  (875/1057 = 47.24%; rank2 zero hard, all flip gates PASS)**.
   ftCo_Attack100 — pre-dtk-merge MULTI-TU band: ALL-DEFS + 3-MINTS
   layout (317) + const-prop/hoist ladder (318, MWCC arg eval
   LEFT-to-RIGHT byte-proven) + volatile fan-out (319) + char[4]=""
@@ -4807,9 +4826,11 @@ fns (non-portable, 241).
   delete); (3) ftCo .sdata2 ours-BIGGER family sweep = 317/318
   generalization (ThrownKirby 64B · Guard 44B · camera 92B · psdisp
   40B · Bury/DamageIce/Damage/DownBound/Shouldered/ItemThrow/09F7/
-  WarpStar); (4) flips: re-run rank2 at 029c11e15 —
-  **itmewtwoshadowball likely FLIP-READY**; queue if_2FC93 →
-  itmewtwoshadowball → ftNn_Init 22B+64B → gm_1A3F 20B → gmopening
+  WarpStar); (4) flips: **EXECUTED AT THE BOUNDARY — FLIP #18
+  itmewtwoshadowball COMMITTED 2e104422d (875/1057 = 47.24%; rank2
+  pass-1 zero hard, all flip gates PASS, zero src work in the flip
+  commit)**, re-rank-after-recon THRICE-proven; queue now if_2FC93 →
+  ftNn_Init 22B+64B → gm_1A3F 20B → gmopening
   12B (257-probe still pending); (5) S1 (data now byte-true under
   them): mpisland A728 89.75 (0x18 short)/B004 · Attack100
   9558/9930/8EC8/9228/A054 (f0/f1 pair swap — 304 lever?)/74A4/72A0/
