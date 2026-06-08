@@ -5,15 +5,19 @@ bytes toward 100%. This file is the persistent campaign state — update it at
 the end of every session.
 
 > **⭐⭐ ENDGAME METRIC (live since wave 18): LINKED Matching file count.**
-> Currently **873/1057 linked in-tree (47.02% complete code; matched
-> 72.87%, fuzzy 97.61%)** = 872 committed at HEAD **f28cf5166 (W30
-> symbols-truth fix)** + **flip #16 grgreatbay UNCOMMITTED in the
-> working tree (pends grant)**; HEAD sits +1 on
-> **a76c460359 = W29 MERGE of upstream/master
-> ed970616e (25 commits)** on branch campaign, NOT pushed; parents
-> 2da1b4688 (the w28 kept edits, COMMITTED) + ed970616e; DOL sha
-> 08e0bf20 EXACT pre+post merge, dtk shasum OK, idempotence EXACT,
-> tree clean. Denominator 1041→1057 = upstream resplit (18 kirby TUs
+> Currently **874/1057 linked COMMITTED (47.10% complete code; matched
+> 72.87%, fuzzy 97.626; data 58.50% committed → 59.04% with the w31
+> kept edits in-tree)** at HEAD **e17787cfe (naming-16)**. Commit
+> chain since the merge: **a76c460359 = W29 MERGE of upstream/master
+> ed970616e (25 commits), still NOT pushed** → f28cf5166 (w30
+> symbols-truth fix) → ec8fbdf41 (w30 rebalanced kept edits) →
+> **100d7e5d4 FLIP #16 grgreatbay** → **ded316a75 FLIP #17
+> groldyoshi** → e17787cfe (naming-16, 134 pins). DOL sha
+> 08e0bf20 EXACT at every gate, dtk OK, idempotence EXACT; **w31 kept
+> edits UNCOMMITTED pend grant** (gmresult.c/.static.h + gmclassic.c +
+> grbigblue.c · leak.c + gm_1A4C.c + ftkirby.c · ftCo_WarpStar.c +
+> ftCo_ItemThrow.c + item.h/item.c). Denominator 1041→1057 = upstream
+> resplit (18 kirby TUs
 > + crowdsfx/sfx_unk + 4 dtk filler data units; no real unit lost).
 > Flips #1-3 wave 18, #4 (hsd_40FF, data-only) wave 19, #5 (itdrop)
 > wave-19 boundary, #6 (bytecode, ZERO src work) wave 20, #7-9
@@ -143,6 +147,36 @@ the end of every session.
 > pending; lbmemory copy-retaining-construct hunt (one row out);
 > data-recon next = ftkirby 756B (ours-BIGGER, NEW shape) →
 > gmclassic 752B → grbigblue 594B.
+> **W31 (5 streams; 3 commits — flips #16/#17 100d7e5d4/ded316a75 +
+> naming-16 e17787cfe; recon/struct kept edits UNCOMMITTED pend
+> grant)**: ⭐⭐ **FLIPS #16+#17 COMMITTED — 874/1057 linked
+> (47.10%)**; groldyoshi surfaced FLIP-READY purely from the w30 data
+> recon (re-rank-after-recon now twice-proven policy); pass-2 pool
+> EMPTY again. ⭐⭐ **Data-recon ×6, BOTH residual rank waves CLEARED**:
+> gmresult (the long-queued idiom-69 package — .data/.sdata zero-diff,
+> .sdata2 byte-identical, **fn_80176A6C NEW MATCH**) · gmclassic .data
+> BYTE-IDENTICAL · grbigblue (.rodata/.data/.sdata byte/zero-diff, +2
+> fn-100s, 176B .sdata2 park) · leak .data BYTE-IDENTICAL matched_data
+> COMPLETE · gm_1A4C .data+RELOC EXACT + first in-campaign idiom-258
+> volatile sequencer (+fn_801A7FB4 →100) · **ftkirby ours-BIGGER
+> first-of-class CRACKED** (dead sibling-TU leftovers + duplicated
+> transcribed jtbls; .data BYTE-IDENTICAL 1389/1389 relocs, +5
+> strict-100s, EED50 77.5→95.4). Data 58.50→**59.04%** in-tree.
+> ⭐ **Structural wave 2**: ftCo_800C4C60 →**99.22** ·
+> ftCo_80095EFC →**94.47** (+15.05) · 7 binary-proven decomp bugs
+> incl. **Item_8026AD20's true 5-arg signature** (item.o byte-EXACT
+> under the Matching freeze) + FLOAT-HOME stack law. ⭐ **naming-16
+> COMMITTED e17787cfe**: 134/134 pins ×10 units, naming rows 163→31,
+> ~12 strict-100 recoveries, ZERO DOWNs; first jumptable_→@ renames
+> DOL-EXACT ×5; content-order LCS keying caught a positional mis-pair
+> (grvenom). Idioms **292-309 minted (highest now 309)** — no
+> self-assign collisions this wave. NEXT: commit grants for the 11
+> kept files; push the merge chain; naming-17 re-derive AFTER lanes
+> land; recon rank now tylist 490B > mnmainrule 483B > ifstatus
+> 336B > mpisland 324B; flips if_2FC93 → itmewtwoshadowball → ftNn_Init
+> 22B (NEW S1-SMALL+DATA) → gm_1A3F → gmopening; structural lb_0192
+> 65r → gm_16A9 83r → ft_0CDD 91r; dup-string pool-pair mechanism
+> hunt (2 fresh falsifications, sislib/particle/gm_1A4C class).
 
 ## Ground rules
 
@@ -176,6 +210,13 @@ the end of every session.
   "ninja" (a log-tail monitor self-matched on its tailed filename) —
   verify every pgrep hit with `ps -p <pid>` before treating it as a
   live build.
+  **W31 SHARPENING (naming-16, live-observed ×2; idioms 307/308)**:
+  (a) transient pgrep GHOSTS exist (pid dead by the `ps -p`
+  resample) — the guard is wait-for-idle with a cap + resample, not
+  abort-on-hit; (b) on a live shared tree, full-ninja EXIT CODE is
+  NOT a valid gate (sibling mid-edit compile errors in non-DOL-dep
+  units return exit 2) — the sibling-isolated gate is
+  `ninja build/GALE01/ok` (DOL + dtk CHECK only).
 
 ## Infrastructure
 
@@ -665,12 +706,96 @@ grShrineRoute_80209BEC −0.37. Naming — idiom-91 @-renumber maps ×6
 units (in lane progress files: gm_1884 uniform −2 after @638 ·
 lbcollision uniform −2 @277..@1205→@275..@1203 · gm_1BA8 jt names
 @481/@614/@613/@612 ↔ jumptable_803DF684/724/7C4/864 +
-mnname/grvenom/grshrineroute maps). **Next rank rows (post #1-6,
-own-session exclusions stand)**: **ftkirby 756B — ours-BIGGER class
+mnname/grvenom/grshrineroute maps) — **w31: EXECUTED as naming-16
+e17787cfe (134/134 pins, rows 163→31, see session log)**. **Next
+rank rows (post #1-6,
+own-session exclusions stand)**: ~~**ftkirby 756B — ours-BIGGER class
 0x3664vs0x3370, NEW shape + kirby-family adjacency CAUTION** >
 gmclassic 752B > grbigblue 594B > gm_1A4C 528B > leak 520B
-(park-listed, verify) > tylist 490B (gmresult 1071B stays an
-idiom-69 own-session package).
+(park-listed, verify)~~ (**ALL CLEARED w31, incl. the gmresult
+idiom-69 package — see below**) > tylist 490B.
+
+**⭐⭐ WAVE-31 SCALE ×6 — TWO LANES, ZERO CLAIM COLLISION (all kept
+edits UNCOMMITTED pend grant; shared scratch dir
+datarecon-scale-w31/ — progress.txt + progress_laneB.txt,
+cross-referenced)**: claimed the w30 rank heads on the identical
+exclusion basis; **both lanes' units ALL OFF THE GAP RANK** except
+grbigblue's parked 176B row (rank_w31_post.txt). Data headline
+58.49→**59.04%** (shared by both lanes). **Lane C
+(progress_laneB.txt: gmresult 1071B · gmclassic 752B · grbigblue
+594B; owned files = gmresult.c/.static.h + gmclassic.c +
+grbigblue.c, ~16 compiles + 2 ninjas)**: **gmresult — the idiom-69
+package EXECUTED IN FULL**: 3 StatsEntry tables + 6878 defined
+(suffix char* field carries the "P"/"%" relocs) · .data string
+stream rebuilt (named defs in target order + EOF translate def +
+76D3C/76F60 assert respells + binary-proven "%d\x81\x46%02d"
+content fix; the w15 donor @882 retired to the exact target reloc) ·
+.sdata all-defs numeric block (F8C was wrongly static-u32-zero/.sbss
+→ 8B SJIS init) · .sdata2 pool cured first try (declspec defs at
+creator gaps); .data/.sdata zero-diff (+ALIGNFIX tails), .sdata2
+BYTE-IDENTICAL; gate 66/9/0; **fn_80176A6C →100.00 NEW MATCH**;
+residual = .text-coupled only. **gmclassic** .data 0x270→**0x560
+BYTE-IDENTICAL** (gmClassic_803DDEC8 0x2F0 local blob; 2 compiles;
+zero @-pins in unit). **grbigblue** .rodata 0x18→**0xb0
+BYTE-IDENTICAL** (8120/8134 EOF defs after a measured in-TU-fold
+regression, idiom 293) · .data 0x670→0x772/0x778 ZERO-diff (2938
+S16Vec3 fill + 2 hex-literal transcription fixes + 2D78 blob +
+FFlyer/Tyukei/3010/3090 dead-position defs + TrackEntries move +
+target-true assert respells) · .sdata BYTE-IDENTICAL; gate 112/13/9
+— all 5 matched-fn "DOWNs" PROVEN @-renumber display (masked
+bytegate, idiom 274); **fn_801EF60C + grBigBlue_801EC58C NEW
+MATCHES**; .sdata2 **PARKED 176B** (TU-wide literal→named-const
+class, w14/grvenom precedent). **Lane D (progress.txt: gm_1A4C
+528B · leak 520B · ftkirby 756B; ~27 compiles)**: **leak** — park
+VERIFIED .text-only (97.3041 S1 intact); .data MISSING→**0x208
+BYTE-IDENTICAL** (in-TU HSD_LeakChecker singleton def; struct
+re-typed into 13 true string fields, offsets preserved, python
+pre-image verified); RELOC:.text:2 cleared free; **matched_data
+536/536 COMPLETE**; NEW BOUND minted (298): static is
+placement-load-bearing for ≤8B .sdata string char[]. **gm_1A4C**
+.data→**0xb48 BYTE-IDENTICAL + RELOCN 78/78 EXACT** (named assert
+dup at 0x0 + 33 dead char-name strings + Zeldaseak-dup 26th entries
+×3 tables, tables 49→100 ×3) · .sdata2→**100 BYTE-IDENTICAL — first
+in-campaign idiom-258 volatile sequencer** (non-volatile form
+const-folds; volatile is load-bearing, 299) · .sdata 40→87.9;
+**fn_801A7FB4 →100.0000**; gate 115/11/1 (sole DOWN gm_801A7B00
+−0.033 = documented binding-swap park P2, C-unreachable evidence:
+MWCC section-anchors at offset-0 def). PARKS: dup "jobj.h"/"jobj"
+pool pair 0x10B — 2 probes FALSIFIED (mid-file #include is no
+pool barrier; `#pragma dont_reuse_strings` mints PER SITE) — same
+family as the sislib/particle Fix-A dup class, mechanism hunt
+queued. **ftkirby — OURS-BIGGER FIRST-OF-CLASS CRACKED** (recipe →
+idiom 294): (1) 6 dead sibling-TU leftover defs
+(ftkirbyspecialfox-family addresses, 0-ref) DELETED; (2) 6 explicit
+transcribed jtbl_t defs (fake case-label pseudo-decls) occupied the
+target band while the real switches minted dup anon jtbls at the
+tail — defs deleted, def blocks sandwich-moved (115
+emission-neutral externs + early typedef; jt-flush law 292), final
+4B via ATTRIBUTE_ALIGN(8); .data 0x3664→**0x3370 BYTE-IDENTICAL +
+RELOCN 1389/1389 EXACT**; gate **219/9/0, +5 strict-100s**; EED50
+77.5→**95.4** (extern-decl arrangement is codegen-TRUE — visible
+defs broke .text BOTH directions, 293) · EEC34 86.4→**98.5** (1
+extsb row left, S1); residual .text-coupled only (RELOC:.data:162 =
+fn-address shifts, grvenom-class); ⚠ report.json ftkirby
+matched_data 60/13228 is a REPORT ARTIFACT (fn-ptr table relocs vs
+shifted .text offsets) — bytegate is the truth (w27 law
+re-confirmed). GATES both lanes: pgrep hard-guard + ps -p clean;
+full ninja DOL sha1 08e0bf20 EXACT ×2 per lane + idempotence
+(lane C's pass post-orchestrator-commits proves committed tree ==
+built tree); zero file collisions; no header/configure.py/
+symbols.txt edits. New laws → **idioms 292-299**. QUEUES: commit
+grant 7 files; S1 unlocks — gmresult 8 displacement-aligned fns
+(74468/75240/74B4C/75880/75DC8/771C0/76D3C/74920) · ftKb EEC34
+extsb + EED50 · gm_801A7B00 binding-swap · gm_1A4C 9094/9630/85E4 ·
+grbigblue jt-addend RELOC:.data:51 + .sdata2 unpark
+(literal→named respell pass); naming-17 — gmresult uniform −3 ·
+grbigblue uniform −1 · gm_1A4C sequencer+def renumber · ftkirby
+@223..region→@1075+ + 6 jtbl anons ↔ ftKb_Init_803CA0CC..2CC
+(re-derive AFTER these lanes commit); dup-string pool-pair
+mechanism hunt (0x10B here + ~70 @-ticks in particle); sweep other
+ours-BIGGER rows with recipe 294. **Next rank rows: tylist 490B >
+mnmainrule 483B > ifstatus 336B > mpisland 324B**
+(soundtest/particle own-session exclusions stand).
 
 ## ⭐⭐ MERGE VERDICT (w29 — upstream/master ed970616e, 25 commits, merged a76c460359; NOT pushed)
 
@@ -782,7 +907,7 @@ our committed fix (6377641b9).
   grgreatbay 29B, gmopening, vi0501/lbshadow/leak/itkyasarin tail —
   those TUs untouched (vi0501.c minor declaration churn only).
 
-### ⭐ UPSTREAM-TECHNIQUES ADOPTION LIST (minted as idioms 257-264; ⚠ w30 finals 265-291 assigned — highest now 291)
+### ⭐ UPSTREAM-TECHNIQUES ADOPTION LIST (minted as idioms 257-264; ⚠ w30 finals 265-291 + w31 finals 292-309 assigned — highest now 309)
 
 Adoption priority (full statements in the playbook):
 1. **257 inline_sw switch-helper dedup** — try on the remaining
@@ -874,7 +999,7 @@ PROVEN (stack bands) · 263 BOUNDED by the 285 wall · 284-289 minted.
 One pgrep operator-binding slip (pid verified dead post-hoc, DOL
 exact) — guard discipline re-logged.
 
-## ⭐⭐ FLIP VERDICT (w18 ×3 + w19 ×2 + w20 ×1 + w21/22 boundary ×3 + w23 ×4 + w24/25 boundary ×1 + w25/26 boundary ×1 = 15 FLIPS COMMITTED + ⭐ w30 #16 grgreatbay IN-TREE uncommitted; THE ENDGAME METRIC)
+## ⭐⭐ FLIP VERDICT (w18 ×3 + w19 ×2 + w20 ×1 + w21/22 boundary ×3 + w23 ×4 + w24/25 boundary ×1 + w25/26 boundary ×1 + ⭐ w31 ×2 (#16 grgreatbay 100d7e5d4 + #17 groldyoshi ded316a75) = **17 FLIPS COMMITTED, 874/1057 linked**; THE ENDGAME METRIC)
 
 **The flip recipe is PROVEN.** Wave 18 flipped the first three units to
 `Object(Matching, ...)` — ninja links OUR compiled objects into the DOL,
@@ -1054,6 +1179,33 @@ lbmemory 34B→53B row is a live sibling experiment, NOT a regression
 of record — pass-1 is the settled-tree record for lbmemory/
 groldyoshi/hsd_3AA7.
 
+**WAVE-31 EXEC — FLIPS #16+#17 COMMITTED (file-flip-w31/progress.txt
++ rank2_pass1/2.txt + strategic_classification.txt)**: baseline
+ec8fbdf41 (w30 rebalanced). **FLIP #16 grgreatbay COMMITTED
+100d7e5d4** (configure.py only): gate PASS — configure
+`--no-warn-error` 0, full ninja ZERO recompiles, DOL sha1 08e0bf20
+EXACT, idempotence EXACT, link edge consumes
+`build/GALE01/src/melee/gr/grgreatbay.o`; 873/1057. rank2 pass-1:
+**groldyoshi FLIP-READY** — the w30 data recon (ec8fbdf41) cleared
+its last hard rows (was STRUCT-NEAR+DATA, SIZE:.text 0xcd4vs0xcd0);
+zero hard, soft = 3 ALIGNFIX + 14 zero-imp EXPORT-MISSING. **FLIP
+#17 groldyoshi COMMITTED ded316a75** (configure.py only): deadstrip
+audit PASS (idiom 134: .data rooted via grOy_803E650C [1imp], all
+sections intra-object reachable, no force_active); gate PASS (full
+ninja relink, `main.dol: OK` dtk, DOL sha EXACT, link edge = src
+object, idempotence EXACT). **874/1057 linked (47.10%)**, fuzzy
+97.626 / matched 72.873 / data 58.502. rank2 pass-2: **FLIP-READY
+pool EMPTY** (177 ranked, was 179); no headgap-166 candidates.
+lbmemory settled back to 34B/1-hard (w29 53B confirmed sibling
+dirt). Build-race note: sibling dirt mid-session (gmclassic.c,
+leak.c — theirs, NonMatching/DOL-inert; rank rows byte-identical to
+the settled record). **Policy now twice-proven: data-recon waves can
+complete a STRUCT-NEAR unit outright (hsd_40FF w19, groldyoshi w31)
+— re-rank after EVERY recon wave.** Queue: if_2FC93 (zero .text,
+recon class) → itmewtwoshadowball (.data 0x16vs0x138) → **ftNn_Init
+22B (NEW S1-SMALL+DATA — w30 resolved its SIZE:.text row)** →
+gm_1A3F 20B → gmopening 12B (idiom-257 probe STILL pending).
+
 **GATE INSTRUMENT**: `campaign/scratch/file-flip-w18/linkcheck.py`
 (resolved-reloc equality + weak-exempt + ALIGNFIX + export-importer
 closure) — gate flips with it, NOT fuzzy/analyzer counts (extends the
@@ -1107,10 +1259,19 @@ by the resplit). hard=1 heads: gmopening 12B < itpika 17B < gm_1A3F
 20B < quatlib 25B (BLOCKED, w30 ×4 re-confirmed) < sobjlib 27B <
 ~~grgreatbay 29B~~ (**w30 CRACKED+FLIPPED #16 via 257/288 —
 PARK-CONFIRMED bucket effectively 1**) < lbmemory 34B (w30: ONE row
-from match, 285 wall) < lbdvd 129B. The w25 table below is
+from match, 285 wall) < lbdvd 129B. **w31: RE-DERIVED AGAIN
+(file-flip-w31/strategic_classification.txt, 177 ranked)** —
+PARK-CONFIRMED **1 (lbmemory ONLY** — grgreatbay+groldyoshi FLIPPED
+#16/#17) / FPR-PARK 1 / L1P-PENDING 2 / S1-SMALL 2 / **S1-SMALL+DATA
+4 (ftNn_Init NEW — w30 resolved its SIZE:.text row, now
+CONTENT:.text:22B)** / S1-MED 1 / S1-MED+DATA 7 / CODEGEN+DATA 1 /
+DATA-RECON 1 / STRUCT-NEAR 8 / STRUCT-NEAR+DATA 47 / STRUCT-DEEP 5 /
+STRUCT-DEEP+DATA 95 / BLOCKED 2; hard=1 heads gmopening 12B < itpika
+17B < gm_1A3F 20B < quatlib 25B < sobjlib 27B < lbmemory 34B < lbdvd
+129B. The w25 table below is
 HISTORICAL. The 145-unit STRUCT-DEEP(+DATA) tail is now an OPEN
 WORKSTREAM — the w30 structural-tier wave 1 took its first 4 units
-(see STRUCTURAL-TIER VERDICT).
+(see STRUCTURAL-TIER VERDICT); w31 wave 2 took the next 2.
 
 | class | n | meaning / members |
 |---|---|---|
@@ -1144,7 +1305,7 @@ the deep tail (now an open workstream, see STRUCTURAL-TIER VERDICT)
 — try 257 on gmopening/gm_1A3F (~~grgreatbay~~ done) before any new
 C-unreachable verdict.
 
-### ⭐ Ranked flip queue (w30 state; flips #1-15 COMMITTED + #16 grgreatbay IN-TREE; rank2 RE-DERIVED at the 1057-unit baseline — FLIP-READY pool EMPTY ×2)
+### ⭐ Ranked flip queue (w31 state; flips #1-17 COMMITTED; rank2 RE-DERIVED post-#17 — FLIP-READY pool EMPTY)
 
 **⭐ W29 MERGE RE-BASE**: linked **872/1057** at a76c460359. Queue
 deltas from upstream's matched units: **#13 itdraw CLOSED**
@@ -1162,18 +1323,23 @@ a76c460359, read deltas per-row-class. **w30: re-run DONE ×2
 EXECUTED as the f28cf5166 truth-fix (75/19/8); flip #16 grgreatbay
 landed from the adoption stream; queue heads now if_2FC93 (zero
 .text recon) → itmewtwoshadowball (.data 0x16vs0x138) → gm_1A3F
-20B → gmopening 12B (257-probe pending).**
+20B → gmopening 12B (257-probe pending).** **w31: #16 COMMITTED
+100d7e5d4 + #17 groldyoshi COMMITTED ded316a75 (surfaced FLIP-READY
+by the w30 recon, rank2 pass-1); pass-2 pool EMPTY; queue heads now
+if_2FC93 → itmewtwoshadowball → ftNn_Init 22B (NEW) → gm_1A3F 20B →
+gmopening 12B.**
 
-**Flipped (15)**: gm_182F + plattack (51951826b) · ftchangeparam
+**Flipped (17)**: gm_182F + plattack (51951826b) · ftchangeparam
 (4715a41d8) · hsd_40FF (ab2a4870d, data-only) · itdrop (d4fee40d1) ·
 bytecode (b6674faf6, zero src work) · MSL/math + ftPr_SpecialN +
 itlinkbomb (0c6fe90d1, the w21 trio) · ftmetal (d711d02b2) ·
 ftdevice (3084bc2f4) · itwstar (b31fdd544) · ftkirbyspecialfox
 (53d7181ae, HEADGAP) — the w23 quartet · ifprize (783ae7006, #14) ·
 **gm_1BFA (43973db87, #15, committed at the w25→26 boundary —
-linked 851/1041 = 43.87%)** · **grgreatbay (#16, w30 inline_sw
-crack — UNCOMMITTED in working tree + configure.py, pends grant;
-in-tree linked 873/1057 = 47.02%)**. Importer closures all
+linked 851/1041 = 43.87%)** · **grgreatbay (100d7e5d4, #16, w30
+inline_sw crack, committed w31)** · **groldyoshi (ded316a75, #17,
+recon-completed STRUCT-NEAR unit, zero src work in the flip commit —
+linked 874/1057 = 47.10%)**. Importer closures all
 re-verified at flip time. Re-rank after every recon/S1 wave with `rank2.py`
 (idiom-176-aware; en-masse importer closure mandatory, idiom 132).
 W26 exec pass: baseline ninja gate PASS at 43973db87 + idempotence;
@@ -1427,7 +1593,7 @@ gmClassic_80472AF8 static→global. ~~SIDE ITEM (math_data.c)~~ —
 binary-proven transcription-error call.
 Re-run `file-flip-w20/rank.py` after each recon/S1 wave.
 
-## ⭐ STRUCTURAL-TIER VERDICT (w30 wave 1 — the deep/partial tail assault OPENS; 2 lanes, all kept edits UNCOMMITTED pend grant)
+## ⭐ STRUCTURAL-TIER VERDICT (w30 wave 1 OPENS the deep/partial tail assault + w31 wave 2; kept edits UNCOMMITTED pend grant)
 
 First dedicated structural wave against the S3 tier (the census's
 145-unit STRUCT-DEEP(+DATA) + partial band). **Lane A
@@ -1491,7 +1657,45 @@ unowned): ftCo_WarpStar 57r → ftCo_ItemThrow 65r → lb_0192 65r
 other fmr-split abs sites. S5 naming: grgreens @1019→@999 ·
 grOldYoshi_8020E854 2 reloc rows · grOy_803B83F0 scope:global→
 local-template · ftNn_Init_804D98C0 named-0.0f recon (ours .sdata2
-0x3c vs 0x58).
+0x3c vs 0x58) — **w31: EXECUTED in naming-16 e17787cfe** (@999+@997
+confirmed · grOy_803B83F0→@348 demoted, 0 importers ·
+ftNn_Init_804D98C0→@227 idiom-54 dup; grOldYoshi_8020E854's 2 rows
+= subdivision class PARKED w/ evidence grOy_803E650C 0x68 split at
++0x34/@213/@214).
+
+**⭐ WAVE 2 (struct-w31/; partial-tier units #3-4 by rows asc:
+ftCo_WarpStar 57r + ftCo_ItemThrow 65r; parks excluded quatlib 14r
+FPR / grzakogenerator 27r; ~42 compiles + 2 ninjas; kept edits
+UNCOMMITTED: ftCo_WarpStar.c + ftCo_ItemThrow.c + item.h +
+item.c)**: ftCo_800C4C60 86.90→**99.22** (+12.31) ·
+ftCo_80095EFC 79.42→**94.47** (+15.05) · ftCo_80095D5C
+95.34→**96.37** · ftCo_800C4724 99.61→99.58 truth-fix (swapped-args
+bug killed). Units: WarpStar 95.77→**98.75** · ItemThrow
+96.18→**97.51**. **7 BINARY-PROVEN decomp bugs fixed toward DOL**:
+it_80294430 float args SWAPPED (target f1=x2C4.y,
+f2=co_attrs.x164) · C4C60 vec.z accumulate dropped (`= 0 + x`
+folds; `+=` spelled) · C4C60 self_vel.y statement misplaced (0x2348
+CSE share/reload proves position) · EFC `M2C_FIELD(fp + 0x110,...)`
+Fighter-STRIDE pointer-arith bug → `&fp->co_attrs` · **Item_8026AD20
+true signature has a 5th int arg** (li r6 = 1/0 by branch; item.h +
+item.c extended — **item.o sha256 EXACT, the Matching freeze
+honored**; full-ninja restat proved zero linked-object changes from
+the item.h ripple across 41 units) · cmd_vars[1]=0 store order.
+Gates: both unit gates PASS (only claimed fns moved; siblings/data/
+@462-canary byte-stable); DOL sha 08e0bf20 EXACT; one BUSY-ABORT was
+the W25 compound pgrep self-match (ps verified idle). New laws →
+**idioms 300-305** (FLOAT-HOME law · load-seeded op= coalesce ·
+named row-array displacement · s16 bitfield extlwi template ·
+f30/f31 decl-order pairing · signature-recovery-from-caller).
+Falsified/parked: D5C r5/r3 + C4C60 f2/f4 GPR rotation (idiom-29
+allocator tie-break family) · EFC 3-swap load-scheduler cluster
+(source-position inert ×2) · C4724 2-row load-order (arg temps go
+gap-negative). QUEUES: next partial-tier (rows asc, unowned):
+**lb_0192 65r → gm_16A9 83r → ft_0CDD 91r** (textdraw 65r =
+data-lane overlap, skip). S5 naming GREW: ftCo_804D8D48/4C +
+ftCo_804D8590/8598/85A0/85A8/85AC/85B0 named-literal recon — 15 of
+the residual rows across all 4 fns are this class, flips when these
+units' .sdata2 recon lands.
 
 ## ⭐ ROTATION-LAW VERDICT (wave 20; ⚠ W23: L1/idiom-128 FALSIFIED — the true rule is L1', idiom 171. L2-L5 retained; see the W23 INVERTER VERDICT below)
 
@@ -3780,6 +3984,98 @@ fns (non-portable, 241).
    right"; where src emits no symbol yet there is NO ground truth —
    keep; demote globals to @-pin locals only after a 0-importer
    proof across ALL link inputs.
+292. **SWITCH JTBLS QUEUE AND FLUSH AT THE NEXT FILE-SCOPE DATA DEF
+   (w31 ftkirby; extends 235 + the w30 gm_1884 jt-sandwich)**:
+   consecutive switch fns' jtbls emit as ONE band in fn order at the
+   next file-scope data def's stream slot (or EOF); arrangement is
+   law-agnostic with defs placed around fns (sandwich) — ×6 jtbls
+   byte-proven landing 0x1d64-0x1fa0 exactly. Decls/typedefs are
+   emission-neutral; defs emit at their lexical slot.
+293. **DEF-VISIBILITY CODEGEN COUPLING WORKS IN BOTH DIRECTIONS (w31
+   cross-lane merge: ftkirby cand-b ≡ grbigblue cand-B; extends
+   104 + 224)**: when the target compiled fns BEFORE their data,
+   extern-decl + later/EOF def is the *codegen-true* arrangement —
+   visible defs CHANGE .text (EED50 312B w/ visible defs vs 332B ==
+   target w/ extern decls; EEC34 276→288 vs tgt 284) and an in-TU
+   .rodata def before its uses folds multi-access anchors to ONE
+   section-anchored base (grbigblue 8120/8134, −1.16pp measured);
+   EOF-def keeps uses extern-shaped per-use lis while still emitting
+   the bytes. Decomp "defs up top" can silently break .text.
+294. **OURS-BIGGER DIAGNOSIS RECIPE (w31 ftkirby, first-of-class)**:
+   ours-only syms whose NAMES carry another TU's address range =
+   pre-split monolith leftovers (verify 0-ref, delete); ours-only
+   @-anon jtbls at the .data tail whose entries point into in-TU fns
+   = duplicated transcribed jumptables (fake case-label pseudo-decls
+   occupy the target band — delete defs, let the switches mint, then
+   sandwich per 292). Likely campaign-wide in pre-split monoliths.
+295. **SIZED STATIC TENTATIVE + INIT DEF REJECTED (w31 gmresult;
+   extends 70 beyond unsized arrays)**: MWCC rejects
+   `static char x[10];` followed by an initialized def ("object
+   redefined") — cure = non-static extern decl + EOF def.
+296. **IMPOSSIBLE-SANDWICH READING (w31 gmresult; extends 272)**: a
+   target data def positioned BETWEEN two literals minted by the
+   SAME fn proves the original spelled those "literals" as named
+   file-scope defs — forces the all-defs route for the section.
+297. **EXPORT-NAMED DEAD-POSITION DEFS (w31 grbigblue)**: naming a
+   dead-position string def by the target export name
+   (grBb_803E2EB8) clears the EXPORT row AND lets folded sym+offset
+   reads (sym+0x158) match target reloc records.
+298. **STATIC IS PLACEMENT-LOAD-BEARING FOR SMALL STRING char[] (w31
+   leak; bounds 139, refines 252)**: global string char[] forces
+   .data at ANY size; static ≤8B string char[] stays .sdata —
+   dropping `static` moved HSD_Leak_804D6000/4 .sdata→.data and
+   reshaped sda21 consumer loads (97.30→94.82). 139's "sections stay
+   byte-identical" holds only for non-sda sections.
+299. **VOLATILE IS LOAD-BEARING IN FLOAT-ONLY 258 SEQUENCERS (w31
+   gm_1A4C — first in-campaign 258 application)**: the non-volatile
+   (itzako-style) sequencer form CONST-FOLDS float-only chains (sum
+   literal pooled instead of the operand literals); volatile locals
+   force each literal into the pool in sequence. Related park note:
+   `#pragma dont_reuse_strings` mints a copy PER SITE — it cannot
+   spell one shared dup pair (the sislib/particle/gm_1A4C dup-string
+   class stays UNCRACKED; mid-file #include is NOT a pool barrier).
+300. **FLOAT-HOME LAW (w31 struct-tier)**: MWCC reserves 4B stack
+   homes per INITIALIZED fn-block float beyond the first, rounded
+   to 8 (5→16B / 3→8B / 2→0B); inner-block inits get none — tune
+   frame size with init-count + dual positional pads.
+301. **LOAD-SEEDED op= COALESCES CLAMP WEBS (w31; extends 109c)**:
+   `n3 = x; n3 += n2;` coalesces def+phi of a clamp web and kills
+   the fmr split; ternary, explicit-abs and decl-order spellings all
+   falsified.
+302. **NAMED ROW-ARRAY LOCAL FORCES lfs-DISPLACEMENT (w31; extends
+   278)**: a named `float (*arr)[3]` local + `arr[i][-k]` indexing
+   emits add + lfs-displacement; M2C_FIELD/inline-cast spellings
+   fold to subi+lfsx — the NAMED local is load-bearing.
+303. **extlwi+srawi = MWCC s16 BITFIELD TEMPLATE (w31)**: extlwi
+   13,20 + srawi 20 is the template for `s16 pad:4; s16 angle:12;`
+   — hand shift-pair spellings emit slwi instead (falsified ×3).
+304. **f30/f31 CALLEE-SAVED FPR PAIRING IS DECL-ORDER-DRIVEN (w31)**:
+   FPR pair assignment follows declaration order (GPR/volatile
+   decl-order stays inert per w30) — a decl-order lever exists for
+   FPR pairs specifically.
+305. **SIGNATURE RECOVERY FROM CALLERS (w31 Item_8026AD20)**: a
+   callee's true signature can carry UNUSED trailing params proven
+   only by caller-side arg loads (li r6 = 1/0 by branch); adding
+   them to a Matching unit's definition is byte-invariant (item.o
+   sha256 EXACT) — recover signatures from callers, then freeze.
+306. **jumptable_→@ RENAMES ARE DOL-BYTE-SAFE (w31 naming-16, ×5
+   probe-proven)**: dtk jt relocs survive the rename — settles the
+   old "jtbl→@ config-recoverability" queue item and unlocks
+   jumptable-park naming.
+307. **SIBLING-ISOLATED DOL GATE = `ninja build/GALE01/ok` (w31
+   naming-16; extends 103)**: the DOL+dtk CHECK target survives
+   broken sibling non-linked units — full-ninja EXIT CODE is NOT a
+   valid gate on a live shared tree (exit-2 ×2 attributed to sibling
+   mid-edits of non-DOL-dep units).
+308. **TRANSIENT PGREP GHOSTS (w31 naming-16; sharpens 211 + the w29
+   ps-p rule)**: pgrep can hit pids already dead — the guard is
+   wait-for-idle (capped) + `ps -p` RESAMPLE, not abort-on-hit.
+309. **POSITIONAL @-ALIGNMENT IS UNSAFE; CONTENT-ORDER LCS KEYING IS
+   THE INSTRUMENT (w31 naming-16)**: where ours-extra pool slots
+   shift offsets, positional alignment value-MIS-PAIRS pins (grvenom
+   .sdata2 would have been WRONG ×4) — derive @-renumber maps by
+   content-byte LCS over target-vs-src objects, then value-verify
+   every pin.
 
 ### Experiment results (wave 3)
 
@@ -3888,6 +4184,9 @@ fns (non-portable, 241).
 - **Conversion magics (0x4330…) & jumptable_* names**: per-TU duplicate
   copies / compiler-generated names, unreachable from C (re-confirmed
   gm_18A5, particle, camera S32_TO_F32). Naming/diff-policy problem only.
+  **w31: the naming side is SETTLED — jumptable_→@ renames are
+  DOL-byte-safe (idiom 306, ×5 probe-proven in naming-16); jumptable
+  parks are now namable.**
 - **mplib arg-copy temp placement** (mpLib_80059E60): ours pools fn-wide
   descending, target per-block ascending — emission rule uncracked.
 - **f31/r30 ANONYMOUS-TEMP ATTRACTOR (toy ×3: un_803087F4/80310324/803109A0;
@@ -4192,6 +4491,93 @@ fns (non-portable, 241).
 
 ## Session log
 
+- **2026-06-08 — Wave 31 (⭐⭐ FLIPS #16+#17 COMMITTED
+  (grgreatbay 100d7e5d4 + groldyoshi ded316a75) — **874/1057 linked
+  (47.10%)**, fuzzy 97.626, matched 72.873 + ⭐⭐ data-recon ×6 — the
+  w30 rank heads ALL CLEARED incl. the long-queued gmresult idiom-69
+  package AND the ours-BIGGER first-of-class ftkirby crack; data
+  58.50→**59.04%** in-tree + ⭐ structural wave 2 (WarpStar/ItemThrow,
+  7 binary-proven bugs incl. a recovered 5-arg item signature) + ⭐
+  NAMING-16 COMMITTED e17787cfe (134/134 pins, naming rows 163→31);
+  idioms 292-309 minted)**. 5 streams (recon:data-C/D · struct:tier-B
+  · naming-16 · exec:flips) + editor; baseline ec8fbdf41 (w30
+  rebalanced) → HEAD e17787cfe; DOL sha 08e0bf20 EXACT at every gate
+  (2 flip gates ×[main+idem] + 2×2 recon-lane ninjas + 134 per-pin
+  naming gates + struct restat); recon+struct kept edits UNCOMMITTED
+  PEND GRANT (gmresult.c/.static.h + gmclassic.c + grbigblue.c ·
+  leak.c + gm_1A4C.c + ftkirby.c · ftCo_WarpStar.c + ftCo_ItemThrow.c
+  + item.h + item.c); w29 merge chain STILL NOT PUSHED.
+  ⭐⭐ **EXEC (file-flip-w31/)**: flip #16 gate PASS at baseline →
+  COMMITTED 100d7e5d4 (configure.py only; 873/1057); rank2 pass-1
+  found **groldyoshi FLIP-READY** — the w30 recon cleared its last
+  hard rows (zero hard; 3 ALIGNFIX + 14 zero-imp soft) → deadstrip
+  audit (134: .data rooted via grOy_803E650C, no force_active) →
+  **FLIP #17 COMMITTED ded316a75**, 874/1057; pass-2 pool EMPTY (177
+  ranked); census re-derived: PARK-CONFIRMED **1 (lbmemory only)**,
+  **ftNn_Init promoted STRUCT-NEAR+DATA → S1-SMALL+DATA (22B)**;
+  lbmemory settled back to 34B/1-hard. **Re-rank after every recon
+  wave is now twice-proven policy** (hsd_40FF w19, groldyoshi w31).
+  ⭐⭐ **DATA-RECON ×6 (datarecon-scale-w31/, two lanes, shared
+  scratch, zero collision; ~46 compiles + 4 ninjas)**: **gmresult**
+  (idiom-69 package EXECUTED IN FULL — 3 StatsEntry tables + string
+  stream + .sdata all-defs + .sdata2 declspec cure; .data/.sdata
+  zero-diff, .sdata2 BYTE-IDENTICAL; **fn_80176A6C →100 NEW
+  MATCH**) · **gmclassic** .data 0x560 BYTE-IDENTICAL (2 compiles) ·
+  **grbigblue** .rodata/.sdata BYTE-IDENTICAL + .data zero-diff
+  (+**fn_801EF60C + grBigBlue_801EC58C NEW MATCHES**; 5 "DOWNs"
+  PROVEN @-display per 274; .sdata2 176B PARKED literal→named
+  class) · **leak** .data 0x208 BYTE-IDENTICAL, **matched_data
+  536/536 COMPLETE**, park verified .text-only · **gm_1A4C** .data
+  0xb48 BYTE-IDENTICAL + RELOCN 78/78 (Zeldaseak-dup 26th entries ×3
+  tables) + .sdata2 →100 via the **first in-campaign idiom-258
+  volatile sequencer** (+**fn_801A7FB4 →100**; dup-pair park P1 ×2
+  falsifications + binding-swap park P2 = sole tree DOWN −0.033) ·
+  **ftkirby OURS-BIGGER CRACKED** (recipe 294: 6 dead sibling-TU
+  leftovers DELETED + 6 dup transcribed jtbls → sandwich per 292;
+  .data 0x3370 BYTE-IDENTICAL + RELOCN 1389/1389; gate 219/9/0, +5
+  strict-100s, EED50 →95.4 via codegen-true extern decls 293).
+  ⚠ ftkirby report.json matched_data 60/13228 = REPORT ARTIFACT;
+  bytegate is the truth. ⭐ **STRUCT wave 2 (struct-w31/)**:
+  ftCo_800C4C60 →**99.22** · ftCo_80095EFC →**94.47** ·
+  ftCo_80095D5C →96.37 · C4724 truth-fix; units WarpStar →98.75 /
+  ItemThrow →97.51; **7 BINARY-PROVEN bugs** (swapped float args ·
+  dropped += accumulate · misplaced self_vel.y · Fighter-STRIDE
+  M2C_FIELD ptr-arith · **Item_8026AD20 5th int arg — item.h/item.c
+  extended, item.o sha256 EXACT, 41-unit restat zero changes** ·
+  store order); laws 300-305 (FLOAT-HOME · load-seeded op= ·
+  named row-array · s16 bitfield template · FPR pair decl-order ·
+  caller-signature recovery). ⭐ **NAMING-16 (naming16/, commit
+  e17787cfe symbols.txt ALONE)**: 134/134 pins ×10 units; live
+  re-derivation corrected TWO queued maps (mnname "+2" → +3 +
+  pool-head; grvenom positional would have MIS-PAIRED — content-LCS
+  keying, 309); first **jumptable_→@ renames DOL-EXACT ×5 (306)**;
+  ~12 strict-100 recoveries (gm_8018A188 ×4 · grVenom_80205E84 ·
+  grShrineRoute ×2 · ftNn ×3/ftPp ×2 · ftCo ×6), ZERO DOWNs;
+  residual 31 rows all S1/park class; incidents → laws 307 (ninja
+  build/GALE01/ok sibling-isolated gate) + 308 (pgrep ghosts).
+  **No idiom-number collisions this wave** (all four streams
+  deferred finals to the editor — finals 292-299 data-recon ·
+  300-305 struct · 306-309 naming; highest now 309).
+  **QUEUES (ranked)**: (1) COMMIT GRANTS for the 11 kept files (4
+  lane-C + 3 lane-D + 4 struct), then PUSH the whole chain (w29
+  merge still unpushed); (2) S1 unlocks — gmresult 8
+  displacement-aligned fns · ftKb EEC34 extsb/EED50 · gm_801A7B00 ·
+  gm_1A4C 9094/9630/85E4 · grbigblue jt-addends + .sdata2 unpark ·
+  w30 carryovers (gm_1884 ×2 · gm_1BA8 ×2 ·
+  mnName_80238C34 · grVenom ×4 · grSh_80209BEC); (3) naming-17 —
+  re-derive AFTER the w31 lanes commit (gmresult −3 · grbigblue −1 ·
+  gm_1A4C sequencer · ftkirby @1075+ + 6 jtbl names · struct-w31
+  drift) + w27b leftovers (grmutecity −2 + grcorneria/ftcpuattack +
+  ftCo_803C624C..6540) + subdivision parks (grOy_803E650C ·
+  ftCo_0A01 @1977/@3249 · hsd_804D0908); (4) recon rank: tylist
+  490B > mnmainrule 483B > ifstatus 336B > mpisland 324B; sweep
+  other ours-BIGGER rows with 294; dup-string pool-pair mechanism
+  hunt (gm_1A4C 0x10B + particle ~70 ticks); (5) flips: if_2FC93 →
+  itmewtwoshadowball → ftNn_Init 22B → gm_1A3F 20B → gmopening 12B
+  (257-probe STILL pending); (6) structural: lb_0192 65r → gm_16A9
+  83r → ft_0CDD 91r + .sdata2 named-literal recon for the
+  WarpStar/ItemThrow residue (15 rows); (7) re-run triage.py
+  (backlog.json stale, editor-owned dirt).
 - **2026-06-08 — Wave 30 (⭐⭐ FLIP #16 grgreatbay CRACKED via 257
   adoption — in-tree linked **873/1057 = 47.02%**, fuzzy 97.6133,
   matched 72.873, flip UNCOMMITTED pend grant + ⭐⭐ data-recon ×6

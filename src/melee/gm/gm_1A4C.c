@@ -32,6 +32,21 @@
 
 extern Event gm_804D6724;
 
+/* Data reconstruction (w31): the target keeps a SECOND, named copy of the
+ * jobj.h quaternion assert string at [.data-0] ahead of the anonymous pool
+ * copy; it is 0-importer dead data. */
+char gm_803DB430[] = "!(jobj->flags & JOBJ_USE_QUATERNION)";
+
+static f32 sdata2_ordering(void)
+{
+    volatile f32 data_0 = 185.0f;
+    volatile f32 data_1 = 200.0f;
+    volatile f32 data_2 = 0.0f;
+    volatile f32 data_3 = 0.017453292f;
+    volatile f32 data_4 = 1.0f;
+    return data_4 + data_3 + data_2 + data_1 + data_0;
+}
+
 void fn_801A7A44(HSD_GObj* gobj)
 {
     HSD_JObjAnimAll(GET_JOBJ(gobj));
@@ -240,6 +255,42 @@ void gm_801A8114(HSD_JObj* arg0, int arg1)
     HSD_JObjSetScaleY(transJobj, scale);
     HSD_JObjSetScaleZ(transJobj, scale);
 }
+
+/* Data reconstruction (w31): 33 dead character-name strings (zero relocs in
+ * the target object; debug name table for the regend movies). */
+static char lbl_803DB49C[] = "Captain  ";
+static char lbl_803DB4A8[] = "Donkey   ";
+static char lbl_803DB4B4[] = "Fox      ";
+static char lbl_803DB4C0[] = "GameWatch";
+static char lbl_803DB4CC[] = "Kirby    ";
+static char lbl_803DB4D8[] = "Koopa    ";
+static char lbl_803DB4E4[] = "Link     ";
+static char lbl_803DB4F0[] = "Luigi    ";
+static char lbl_803DB4FC[] = "Mario    ";
+static char lbl_803DB508[] = "Mars     ";
+static char lbl_803DB514[] = "Mewtwo   ";
+static char lbl_803DB520[] = "Ness     ";
+static char lbl_803DB52C[] = "Peach    ";
+static char lbl_803DB538[] = "Pikachu  ";
+static char lbl_803DB544[] = "PopoNana ";
+static char lbl_803DB550[] = "Purin    ";
+static char lbl_803DB55C[] = "Samus    ";
+static char lbl_803DB568[] = "Yoshi    ";
+static char lbl_803DB574[] = "Ze->Se   ";
+static char lbl_803DB580[] = "Se->Ze   ";
+static char lbl_803DB58C[] = "Falco    ";
+static char lbl_803DB598[] = "Clink    ";
+static char lbl_803DB5A4[] = "Drmario  ";
+static char lbl_803DB5B0[] = "Emblem   ";
+static char lbl_803DB5BC[] = "Pichu    ";
+static char lbl_803DB5C8[] = "Ganon    ";
+static char lbl_803DB5D4[] = "MasterH  ";
+static char lbl_803DB5E0[] = "Boy      ";
+static char lbl_803DB5EC[] = "Girl     ";
+static char lbl_803DB5F8[] = "GKoops   ";
+static char lbl_803DB604[] = "CrezyH   ";
+static char lbl_803DB610[] = "Sandbag  ";
+static char lbl_803DB61C[] = "POPO     ";
 
 void fn_801A851C(HSD_GObj* gobj)
 {
@@ -631,6 +682,7 @@ char* gm_803DB8B8[] = {
     "GmRegendSimpleSamus.thp",
     "GmRegendSimpleYoshi.thp",
     "GmRegendSimpleZeldaseak.thp",
+    "GmRegendSimpleZeldaseak.thp",
     "GmRegendSimpleFalco.thp",
     "GmRegendSimpleClink.thp",
     "GmRegendSimpleDrmario.thp",
@@ -661,6 +713,7 @@ char* gm_803DBBF4[] = {
     "GmRegendAdventureSamus.thp",
     "GmRegendAdventureYoshi.thp",
     "GmRegendAdventureZeldaseak.thp",
+    "GmRegendAdventureZeldaseak.thp",
     "GmRegendAdventureFalco.thp",
     "GmRegendAdventureClink.thp",
     "GmRegendAdventureDrmario.thp",
@@ -690,6 +743,7 @@ char* gm_803DBF10[] = {
     "GmRegendAllstarPurin.thp",
     "GmRegendAllstarSamus.thp",
     "GmRegendAllstarYoshi.thp",
+    "GmRegendAllstarZeldaseak.thp",
     "GmRegendAllstarZeldaseak.thp",
     "GmRegendAllstarFalco.thp",
     "GmRegendAllstarClink.thp",
@@ -793,3 +847,16 @@ void gm_801A9D0C_OnFrame(void)
         }
     }
 }
+
+/* Data reconstruction (w31): dead .sdata tail objects (zero importers across
+ * all link inputs; symbols.txt scope:global). gm_804D42B8 is all-zero and
+ * spelled as a braced-zero array so it stays in .sdata (idiom 223/266). */
+u32 gm_804D42B8[1] = { 0 };
+u32 gm_804D42BC = 0x0000003C;
+u32 gm_804D42C0 = 0x000000FF;
+u32 gm_804D42C4 = 0xFFFFFFFF;
+u32 gm_804D42C8 = 0xFF648CFF;
+u32 gm_804D42CC = 0xB4FFFFFF;
+static char gm_804D42D0[] = "jobj.h";
+static char gm_804D42D8[] = "jobj";
+static char gm_804D42E0[] = "gobj";

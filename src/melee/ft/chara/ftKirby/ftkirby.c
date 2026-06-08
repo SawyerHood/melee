@@ -2526,458 +2526,132 @@ MotionState ftKb_Init_UnkMotionStates0[] = {
     },
 };
 
-/* 0EE854 */ static void ftKb_Init_800EE854(void);
-/* 0EE874 */ static void ftKb_Init_800EE874(void);
-/* 0EE8B0 */ static void ftKb_Init_800EE8B0(void);
-/* 0EE8EC */ static void ftKb_Init_800EE8EC(void);
-/* 0EE904 */ static void ftKb_Init_800EE904(void);
 /* 0F1CA0 */ static bool fn_800F1CA0(HSD_GObj* gobj);
 /* 0F6AC8 */ static void fn_800F6AC8(HSD_GObj* gobj);
 /* 10C288 */ static void fn_8010C288(HSD_GObj* gobj);
-
-jtbl_t ftKb_Init_803CA0CC = {
-    ftKb_Init_800EE854, ftKb_Init_800EE904, ftKb_Init_800EE904,
-    ftKb_Init_800EE904, ftKb_Init_800EE8EC, ftKb_Init_800EE904,
-    ftKb_Init_800EE904, ftKb_Init_800EE904, ftKb_Init_800EE904,
-    ftKb_Init_800EE904, ftKb_Init_800EE874, ftKb_Init_800EE904,
-    ftKb_Init_800EE904, ftKb_Init_800EE8B0,
-};
-
-char ftKb_Init_assert_msg_0[] = "fighter parts model dobj num over!\n";
-char ftKb_Init_assert_msg_1[] = "ftkirby.c";
-char ftKb_Init_assert_msg_2[] = "fighter dobj num over!\n";
-
-/* static */ void ftKb_SpecialN_800F1708(void);
-/* static */ void ftKb_SpecialN_800F171C(void);
-/* static */ void ftKb_SpecialN_800F1730(void);
-/* static */ void ftKb_SpecialN_800F1744(void);
-/* static */ void ftKb_SpecialN_800F1764(void);
-/* static */ void ftKb_SpecialN_800F1784(void);
-/* static */ void ftKb_SpecialN_800F17A4(void);
-/* static */ void ftKb_SpecialN_800F17C4(void);
-/* static */ void ftKb_SpecialN_800F17E4(void);
-/* static */ void ftKb_SpecialN_800F17F8(void);
-/* static */ void ftKb_SpecialN_800F1818(void);
-/* static */ void ftKb_SpecialN_800F1838(void);
-/* static */ void ftKb_SpecialN_800F1858(void);
-/* static */ void ftKb_SpecialN_800F186C(void);
-/* static */ void ftKb_SpecialN_800F1880(void);
-/* static */ void ftKb_SpecialN_800F1894(void);
-/* static */ void ftKb_SpecialN_800F18B4(void);
-/* static */ void ftKb_SpecialN_800F18C8(void);
-/* static */ void ftKb_SpecialN_800F18E8(void);
-/* static */ void ftKb_SpecialN_800F18F8(void);
-
-jtbl_t ftKb_Init_803CA14C = {
-    ftKb_SpecialN_800F1708, ftKb_SpecialN_800F1764, ftKb_SpecialN_800F18F8,
-    ftKb_SpecialN_800F18F8, ftKb_SpecialN_800F18F8, ftKb_SpecialN_800F186C,
-    ftKb_SpecialN_800F17A4, ftKb_SpecialN_800F1894, ftKb_SpecialN_800F17F8,
-    ftKb_SpecialN_800F1744, ftKb_SpecialN_800F1730, ftKb_SpecialN_800F18F8,
-    ftKb_SpecialN_800F1818, ftKb_SpecialN_800F1858, ftKb_SpecialN_800F18E8,
-    ftKb_SpecialN_800F18F8, ftKb_SpecialN_800F17E4, ftKb_SpecialN_800F171C,
-    ftKb_SpecialN_800F18F8, ftKb_SpecialN_800F18F8, ftKb_SpecialN_800F17C4,
-    ftKb_SpecialN_800F18B4, ftKb_SpecialN_800F1784, ftKb_SpecialN_800F1838,
-    ftKb_SpecialN_800F18C8, ftKb_SpecialN_800F18F8, ftKb_SpecialN_800F18F8,
-    ftKb_SpecialN_800F18F8, ftKb_SpecialN_800F18F8, ftKb_SpecialN_800F18F8,
-    ftKb_SpecialN_800F18F8, ftKb_SpecialN_800F1880,
-};
-
-/* static */ void ftKb_SpecialN_800F19E8(void);
-/* static */ void ftKb_SpecialN_800F19F4(void);
-/* static */ void ftKb_SpecialN_800F1A00(void);
-/* static */ void ftKb_SpecialN_800F1A0C(void);
-/* static */ void ftKb_SpecialN_800F1A20(void);
-/* static */ void ftKb_SpecialN_800F1A2C(void);
-/* static */ void ftKb_SpecialN_800F1A38(void);
-/* static */ void ftKb_SpecialN_800F1A44(void);
-/* static */ void ftKb_SpecialN_800F1A50(void);
-/* static */ void ftKb_SpecialN_800F1A64(void);
-/* static */ void ftKb_SpecialN_800F1A70(void);
-/* static */ void ftKb_SpecialN_800F1A78(void);
-
-jtbl_t ftKb_Init_803CA1CC = {
-    ftKb_SpecialN_800F1A78, ftKb_SpecialN_800F1A00, ftKb_SpecialN_800F1A78,
-    ftKb_SpecialN_800F1A64, ftKb_SpecialN_800F1A78, ftKb_SpecialN_800F1A78,
-    ftKb_SpecialN_800F1A0C, ftKb_SpecialN_800F1A44, ftKb_SpecialN_800F1A2C,
-    ftKb_SpecialN_800F19F4, ftKb_SpecialN_800F19E8, ftKb_SpecialN_800F1A78,
-    ftKb_SpecialN_800F1A78, ftKb_SpecialN_800F1A38, ftKb_SpecialN_800F1A50,
-    ftKb_SpecialN_800F1A78, ftKb_SpecialN_800F1A20, ftKb_SpecialN_800F1A78,
-    ftKb_SpecialN_800F1A78, ftKb_SpecialN_800F1A78, ftKb_SpecialN_800F1A0C,
-    ftKb_SpecialN_800F1A78, ftKb_SpecialN_800F1A00, ftKb_SpecialN_800F1A78,
-    ftKb_SpecialN_800F1A70,
-};
-
-/* static */ void ftKb_SpecialN_800F1AC8(void);
-/* static */ void ftKb_SpecialN_800F1AD4(void);
-/* static */ void ftKb_SpecialN_800F1AE0(void);
-/* static */ void ftKb_SpecialN_800F1AEC(void);
-/* static */ void ftKb_SpecialN_800F1B00(void);
-/* static */ void ftKb_SpecialN_800F1B0C(void);
-/* static */ void ftKb_SpecialN_800F1B18(void);
-/* static */ void ftKb_SpecialN_800F1B24(void);
-/* static */ void ftKb_SpecialN_800F1B30(void);
-/* static */ void ftKb_SpecialN_800F1B44(void);
-/* static */ void ftKb_SpecialN_800F1B50(void);
-/* static */ void ftKb_SpecialN_800F1B58(void);
-
-jtbl_t ftKb_Init_803CA230 = {
-    ftKb_SpecialN_800F1B58, ftKb_SpecialN_800F1AE0, ftKb_SpecialN_800F1B58,
-    ftKb_SpecialN_800F1B44, ftKb_SpecialN_800F1B58, ftKb_SpecialN_800F1B58,
-    ftKb_SpecialN_800F1AEC, ftKb_SpecialN_800F1B24, ftKb_SpecialN_800F1B0C,
-    ftKb_SpecialN_800F1AD4, ftKb_SpecialN_800F1AC8, ftKb_SpecialN_800F1B58,
-    ftKb_SpecialN_800F1B58, ftKb_SpecialN_800F1B18, ftKb_SpecialN_800F1B30,
-    ftKb_SpecialN_800F1B58, ftKb_SpecialN_800F1B00, ftKb_SpecialN_800F1B58,
-    ftKb_SpecialN_800F1B58, ftKb_SpecialN_800F1B58, ftKb_SpecialN_800F1AEC,
-    ftKb_SpecialN_800F1B58, ftKb_SpecialN_800F1AE0, ftKb_SpecialN_800F1B58,
-    ftKb_SpecialN_800F1B50,
-};
-
-/* static */ void ftKb_SpecialN_800F1CC8(void);
-/* static */ void ftKb_SpecialN_800F1CD0(void);
-
-jtbl_t ftKb_Init_803CA294 = {
-    ftKb_SpecialN_800F1CD0, ftKb_SpecialN_800F1CD0, ftKb_SpecialN_800F1CC8,
-    ftKb_SpecialN_800F1CD0, ftKb_SpecialN_800F1CD0, ftKb_SpecialN_800F1CD0,
-    ftKb_SpecialN_800F1CD0, ftKb_SpecialN_800F1CC8, ftKb_SpecialN_800F1CD0,
-    ftKb_SpecialN_800F1CD0, ftKb_SpecialN_800F1CC8, ftKb_SpecialN_800F1CC8,
-    ftKb_SpecialN_800F1CD0, ftKb_SpecialN_800F1CC8,
-};
-
-/* static */ void ftKb_SpecialN_800F1D00(void);
-/* static */ void ftKb_SpecialN_800F1D08(void);
-
-jtbl_t ftKb_Init_803CA2CC = {
-    ftKb_SpecialN_800F1D08, ftKb_SpecialN_800F1D08, ftKb_SpecialN_800F1D00,
-    ftKb_SpecialN_800F1D08, ftKb_SpecialN_800F1D08, ftKb_SpecialN_800F1D08,
-    ftKb_SpecialN_800F1D08, ftKb_SpecialN_800F1D00, ftKb_SpecialN_800F1D08,
-    ftKb_SpecialN_800F1D08, ftKb_SpecialN_800F1D00, ftKb_SpecialN_800F1D00,
-    ftKb_SpecialN_800F1D08, ftKb_SpecialN_800F1D00, NULL
-};
-
-char ftKb_Init_DatFilename[] = "PlKb.dat";
-char ftKb_Init_DataName[] = "ftDataKirby";
-char ftKb_Init_803CA320[] = "PlKbNr.dat";
-char ftKb_Init_803CA32C[] = "PlyKirby5K_Share_joint";
-char ftKb_Init_803CA344[] = "PlyKirby5K_Share_matanim_joint";
-char ftKb_Init_803CA364[] = "PlKbYe.dat";
-char ftKb_Init_803CA370[] = "PlyKirby5KYe_Share_joint";
-char ftKb_Init_803CA38C[] = "PlyKirby5KYe_Share_matanim_joint";
-char ftKb_Init_803CA3B0[] = "PlKbBu.dat";
-char ftKb_Init_803CA3BC[] = "PlyKirby5KBu_Share_joint";
-char ftKb_Init_803CA3D8[] = "PlyKirby5KBu_Share_matanim_joint";
-char ftKb_Init_803CA3FC[] = "PlKbRe.dat";
-char ftKb_Init_803CA408[] = "PlyKirby5KRe_Share_joint";
-char ftKb_Init_803CA424[] = "PlyKirby5KRe_Share_matanim_joint";
-char ftKb_Init_803CA448[] = "PlKbGr.dat";
-char ftKb_Init_803CA454[] = "PlyKirby5KGr_Share_joint";
-char ftKb_Init_803CA470[] = "PlyKirby5KGr_Share_matanim_joint";
-char ftKb_Init_803CA494[] = "PlKbWh.dat";
-char ftKb_Init_803CA4A0[] = "PlyKirby5KWh_Share_joint";
-char ftKb_Init_803CA4BC[] = "PlyKirby5KWh_Share_matanim_joint";
-char ftKb_Init_AnimDatFilename[] = "PlKbAJ.dat";
-
-Fighter_DemoStrings ftKb_Init_DemoMotionFilenames = {
-    "ftDemoResultMotionFileKirby",
-    "ftDemoIntroMotionFileKirby",
-    "ftDemoEndingMotionFileKirby",
-    "ftDemoViWaitMotionFileKirby",
-};
-
-char* ftKb_Init_803CA5A4[] = {
-    "ftDemoVi0501MotionFileKirby",
-    NULL,
-    NULL,
-    "ftDemoVi0502MotionFileKirby",
-};
-
-Fighter_CostumeStrings ftKb_Init_CostumeStrings[] = {
-    { ftKb_Init_803CA320, ftKb_Init_803CA32C, ftKb_Init_803CA344 },
-    { ftKb_Init_803CA364, ftKb_Init_803CA370, ftKb_Init_803CA38C },
-    { ftKb_Init_803CA3B0, ftKb_Init_803CA3BC, ftKb_Init_803CA3D8 },
-    { ftKb_Init_803CA3FC, ftKb_Init_803CA408, ftKb_Init_803CA424 },
-    { ftKb_Init_803CA448, ftKb_Init_803CA454, ftKb_Init_803CA470 },
-    { ftKb_Init_803CA494, ftKb_Init_803CA4A0, ftKb_Init_803CA4BC },
-};
 
 typedef struct ftKirby_CopyName {
     char* filename;
     char* name;
 } ftKirby_CopyName;
 
-ftKirby_CopyName ftKb_Init_803CA9D0[FTKIND_MAX] = {
-    { "PlKbCpMr.dat", "ftDataKirbyCopyMario" },
-    { "PlKbCpFx.dat", "ftDataKirbyCopyFox" },
-    { "PlKbCpCa.dat", "ftDataKirbyCopyCaptain" },
-    { "PlKbCpDk.dat", "ftDataKirbyCopyDonkey" },
-    { NULL, NULL },
-    { "PlKbCpKp.dat", "ftDataKirbyCopyKoopa" },
-    { "PlKbCpLk.dat", "ftDataKirbyCopyLink" },
-    { "PlKbCpSk.dat", "ftDataKirbyCopySeak" },
-    { "PlKbCpNs.dat", "ftDataKirbyCopyNess" },
-    { "PlKbCpPe.dat", "ftDataKirbyCopyPeach" },
-    { "PlKbCpPp.dat", "ftDataKirbyCopyPopo" },
-    { NULL, NULL },
-    { "PlKbCpPk.dat", "ftDataKirbyCopyPikachu" },
-    { "PlKbCpSs.dat", "ftDataKirbyCopySamus" },
-    { "PlKbCpYs.dat", "ftDataKirbyCopyYoshi" },
-    { "PlKbCpPr.dat", "ftDataKirbyCopyPurin" },
-    { "PlKbCpMt.dat", "ftDataKirbyCopyMewtwo" },
-    { "PlKbCpLg.dat", "ftDataKirbyCopyLuigi" },
-    { "PlKbCpMs.dat", "ftDataKirbyCopyMars" },
-    { "PlKbCpZd.dat", "ftDataKirbyCopyZelda" },
-    { "PlKbCpCl.dat", "ftDataKirbyCopyClink" },
-    { "PlKbCpDr.dat", "ftDataKirbyCopyDrmario" },
-    { "PlKbCpFc.dat", "ftDataKirbyCopyFalco" },
-    { "PlKbCpPc.dat", "ftDataKirbyCopyPichu" },
-    { "PlKbCpGw.dat", "ftDataKirbyCopyGamewatch" },
-    { "PlKbCpGn.dat", "ftDataKirbyCopyGanon" },
-    { "PlKbCpFe.dat", "ftDataKirbyCopyEmblem" },
-    { NULL, NULL },
-    { NULL, NULL },
-    { NULL, NULL },
-    { NULL, NULL },
-    { NULL, NULL },
-    { NULL, NULL },
-};
-
-char ftKb_Init_803CAAD8[] = "PlKbNrCpDk.dat";
-char ftKb_Init_803CAAE8[] = "PlyKirbyDk_Share_joint";
-char ftKb_Init_803CAB00[] = "PlyKirbyDk_Share_matanim_joint";
-char ftKb_Init_803CAB20[] = "PlKbYeCpDk.dat";
-char ftKb_Init_803CAB30[] = "PlyKirbyDkYe_Share_joint";
-char ftKb_Init_803CAB4C[] = "PlyKirbyDkYe_Share_matanim_joint";
-char ftKb_Init_803CAB70[] = "PlKbBuCpDk.dat";
-char ftKb_Init_803CAB80[] = "PlyKirbyDkBu_Share_joint";
-char ftKb_Init_803CAB9C[] = "PlyKirbyDkBu_Share_matanim_joint";
-char ftKb_Init_803CABC0[] = "PlKbReCpDk.dat";
-char ftKb_Init_803CABD0[] = "PlyKirbyDkRe_Share_joint";
-char ftKb_Init_803CABEC[] = "PlyKirbyDkRe_Share_matanim_joint";
-char ftKb_Init_803CAC10[] = "PlKbGrCpDk.dat";
-char ftKb_Init_803CAC20[] = "PlyKirbyDkGr_Share_joint";
-char ftKb_Init_803CAC3C[] = "PlyKirbyDkGr_Share_matanim_joint";
-char ftKb_Init_803CAC60[] = "PlKbWhCpDk.dat";
-char ftKb_Init_803CAC70[] = "PlyKirbyDkWh_Share_joint";
-char ftKb_Init_803CAC8C[] = "PlyKirbyDkWh_Share_matanim_joint";
-
-Fighter_CostumeStrings ftKb_Init_803CACB0[] = {
-    { ftKb_Init_803CAAD8, ftKb_Init_803CAAE8, ftKb_Init_803CAB00 },
-    { ftKb_Init_803CAB20, ftKb_Init_803CAB30, ftKb_Init_803CAB4C },
-    { ftKb_Init_803CAB70, ftKb_Init_803CAB80, ftKb_Init_803CAB9C },
-    { ftKb_Init_803CABC0, ftKb_Init_803CABD0, ftKb_Init_803CABEC },
-    { ftKb_Init_803CAC10, ftKb_Init_803CAC20, ftKb_Init_803CAC3C },
-    { ftKb_Init_803CAC60, ftKb_Init_803CAC70, ftKb_Init_803CAC8C },
-};
-
-char ftKb_Init_803CACF8[] = "PlKbNrCpPr.dat";
-char ftKb_Init_803CAD08[] = "PlyKirbyPr_Share_joint";
-char ftKb_Init_803CAD20[] = "PlyKirbyPr_Share_matanim_joint";
-char ftKb_Init_803CAD40[] = "PlKbYeCpPr.dat";
-char ftKb_Init_803CAD50[] = "PlyKirbyPrYe_Share_joint";
-char ftKb_Init_803CAD6C[] = "PlyKirbyPrYe_Share_matanim_joint";
-char ftKb_Init_803CAD90[] = "PlKbBuCpPr.dat";
-char ftKb_Init_803CADA0[] = "PlyKirbyPrBu_Share_joint";
-char ftKb_Init_803CADBC[] = "PlyKirbyPrBu_Share_matanim_joint";
-char ftKb_Init_803CADE0[] = "PlKbReCpPr.dat";
-char ftKb_Init_803CADF0[] = "PlyKirbyPrRe_Share_joint";
-char ftKb_Init_803CAE0C[] = "PlyKirbyPrRe_Share_matanim_joint";
-char ftKb_Init_803CAE30[] = "PlKbGrCpPr.dat";
-char ftKb_Init_803CAE40[] = "PlyKirbyPrGr_Share_joint";
-char ftKb_Init_803CAE5C[] = "PlyKirbyPrGr_Share_matanim_joint";
-char ftKb_Init_803CAE80[] = "PlKbWhCpPr.dat";
-char ftKb_Init_803CAE90[] = "PlyKirbyPrWh_Share_joint";
-char ftKb_Init_803CAEAC[] = "PlyKirbyPrWh_Share_matanim_joint";
-
-Fighter_CostumeStrings ftKb_Init_803CAED0[] = {
-    { ftKb_Init_803CACF8, ftKb_Init_803CAD08, ftKb_Init_803CAD20 },
-    { ftKb_Init_803CAD40, ftKb_Init_803CAD50, ftKb_Init_803CAD6C },
-    { ftKb_Init_803CAD90, ftKb_Init_803CADA0, ftKb_Init_803CADBC },
-    { ftKb_Init_803CADE0, ftKb_Init_803CADF0, ftKb_Init_803CAE0C },
-    { ftKb_Init_803CAE30, ftKb_Init_803CAE40, ftKb_Init_803CAE5C },
-    { ftKb_Init_803CAE80, ftKb_Init_803CAE90, ftKb_Init_803CAEAC },
-};
-
-char ftKb_Init_803CAF18[] = "PlKbNrCpMt.dat";
-char ftKb_Init_803CAF28[] = "PlyKirbyMt_Share_joint";
-char ftKb_Init_803CAF40[] = "PlyKirbyMt_Share_matanim_joint";
-char ftKb_Init_803CAF60[] = "PlKbYeCpMt.dat";
-char ftKb_Init_803CAF70[] = "PlyKirbyMtYe_Share_joint";
-char ftKb_Init_803CAF8C[] = "PlyKirbyMtYe_Share_matanim_joint";
-char ftKb_Init_803CAFB0[] = "PlKbBuCpMt.dat";
-char ftKb_Init_803CAFC0[] = "PlyKirbyMtBu_Share_joint";
-char ftKb_Init_803CAFDC[] = "PlyKirbyMtBu_Share_matanim_joint";
-char ftKb_Init_803CB000[] = "PlKbReCpMt.dat";
-char ftKb_Init_803CB010[] = "PlyKirbyMtRe_Share_joint";
-char ftKb_Init_803CB02C[] = "PlyKirbyMtRe_Share_matanim_joint";
-char ftKb_Init_803CB050[] = "PlKbGrCpMt.dat";
-char ftKb_Init_803CB060[] = "PlyKirbyMtGr_Share_joint";
-char ftKb_Init_803CB07C[] = "PlyKirbyMtGr_Share_matanim_joint";
-char ftKb_Init_803CB0A0[] = "PlKbWhCpMt.dat";
-char ftKb_Init_803CB0B0[] = "PlyKirbyMtWh_Share_joint";
-char ftKb_Init_803CB0CC[] = "PlyKirbyMtWh_Share_matanim_joint";
-
-Fighter_CostumeStrings ftKb_Init_803CB0F0[] = {
-    { ftKb_Init_803CAF18, ftKb_Init_803CAF28, ftKb_Init_803CAF40 },
-    { ftKb_Init_803CAF60, ftKb_Init_803CAF70, ftKb_Init_803CAF8C },
-    { ftKb_Init_803CAFB0, ftKb_Init_803CAFC0, ftKb_Init_803CAFDC },
-    { ftKb_Init_803CB000, ftKb_Init_803CB010, ftKb_Init_803CB02C },
-    { ftKb_Init_803CB050, ftKb_Init_803CB060, ftKb_Init_803CB07C },
-    { ftKb_Init_803CB0A0, ftKb_Init_803CB0B0, ftKb_Init_803CB0CC },
-};
-
-char ftKb_Init_803CB138[] = "PlKbNrCpFc.dat";
-char ftKb_Init_803CB148[] = "PlyKirbyFc_Share_joint";
-char ftKb_Init_803CB160[] = "PlyKirbyFc_Share_matanim_joint";
-char ftKb_Init_803CB180[] = "PlKbYeCpFc.dat";
-char ftKb_Init_803CB190[] = "PlyKirbyFcYe_Share_joint";
-char ftKb_Init_803CB1AC[] = "PlyKirbyFcYe_Share_matanim_joint";
-char ftKb_Init_803CB1D0[] = "PlKbBuCpFc.dat";
-char ftKb_Init_803CB1E0[] = "PlyKirbyFcBu_Share_joint";
-char ftKb_Init_803CB1FC[] = "PlyKirbyFcBu_Share_matanim_joint";
-char ftKb_Init_803CB220[] = "PlKbReCpFc.dat";
-char ftKb_Init_803CB230[] = "PlyKirbyFcRe_Share_joint";
-char ftKb_Init_803CB24C[] = "PlyKirbyFcRe_Share_matanim_joint";
-char ftKb_Init_803CB270[] = "PlKbGrCpFc.dat";
-char ftKb_Init_803CB280[] = "PlyKirbyFcGr_Share_joint";
-char ftKb_Init_803CB29C[] = "PlyKirbyFcGr_Share_matanim_joint";
-char ftKb_Init_803CB2C0[] = "PlKbWhCpFc.dat";
-char ftKb_Init_803CB2D0[] = "PlyKirbyFcWh_Share_joint";
-char ftKb_Init_803CB2EC[] = "PlyKirbyFcWh_Share_matanim_joint";
-
-Fighter_CostumeStrings ftKb_Init_803CB310[] = {
-    { ftKb_Init_803CB138, ftKb_Init_803CB148, ftKb_Init_803CB160 },
-    { ftKb_Init_803CB180, ftKb_Init_803CB190, ftKb_Init_803CB1AC },
-    { ftKb_Init_803CB1D0, ftKb_Init_803CB1E0, ftKb_Init_803CB1FC },
-    { ftKb_Init_803CB220, ftKb_Init_803CB230, ftKb_Init_803CB24C },
-    { ftKb_Init_803CB270, ftKb_Init_803CB280, ftKb_Init_803CB29C },
-    { ftKb_Init_803CB2C0, ftKb_Init_803CB2D0, ftKb_Init_803CB2EC },
-};
-
-char ftKb_Init_803CB358[] = "PlKbNrCpGw.dat";
-char ftKb_Init_803CB368[] = "PlyKirbyGw_Share_joint";
-char ftKb_Init_803CB380[] = "PlyKirbyGw_Share_matanim_joint";
-
-Fighter_CostumeStrings ftKb_Init_803CB3A0[] = {
-    { ftKb_Init_803CB358, ftKb_Init_803CB368, ftKb_Init_803CB380 },
-    { ftKb_Init_803CB358, ftKb_Init_803CB368, ftKb_Init_803CB380 },
-    { ftKb_Init_803CB358, ftKb_Init_803CB368, ftKb_Init_803CB380 },
-    { ftKb_Init_803CB358, ftKb_Init_803CB368, ftKb_Init_803CB380 },
-    { ftKb_Init_803CB358, ftKb_Init_803CB368, ftKb_Init_803CB380 },
-    { ftKb_Init_803CB358, ftKb_Init_803CB368, ftKb_Init_803CB380 },
-};
-
-Fighter_CostumeStrings* ftKb_Init_803CB3E8[] = {
-    NULL,
-    NULL,
-    NULL,
-    ftKb_Init_803CACB0,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    ftKb_Init_803CAED0,
-    ftKb_Init_803CB0F0,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    ftKb_Init_803CB310,
-    NULL,
-    ftKb_Init_803CB3A0,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-};
-
-s8 ftKb_Init_803CB46C[FTKIND_MAX] = {
-    32, 33, 38, 39, -1, 41, 35, 21, 42, 45, 46, 46, 36, 34, 40, 43, 44,
-    37, 20, 21, 35, 32, 33, 36, -1, 47, 48, -1, -1, -1, -1, -1, -1,
-};
-
-bool ftKb_Init_803CB490[] = {
-    false, true,  false, false, false, false, true,  true,
-    false, false, false, true,  true,  true,  false, false,
-    true,  true,  true,  true,  false, true,  true,
-};
-
-struct ftKb_Init_803CB4EC {
-    int ints[6];
-    Vec3 vec;
-} ftKb_Init_803CB4EC = {
-    { 0, 2, 3, 4, 5, 6 },
-    { 0.0F, 1.0F, 0.0F },
-};
-
-char ftKb_Init_803CB510[] = "Other Dead_Proc Existence";
-char ftKb_Init_803CB52C[] = "ftkirbyspecials.c";
-
-enum_t ftKb_Init_803CB540[] = {
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1,
-    1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 3, 3, 3, 3, 3, 3, 3, 3,
-    0, 0, 0, 0, 0, 0, 0, 0, 3, 3, 3, 3, 3, 3, 3, 3, 1, 1, 1, 1, 1, 1, 1, 1,
-    2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2,
-};
-
-u32 ftKb_Init_803CB6C0[] = { 260006, 260009, 260012, 260015, 260018, 0 };
-
-char ftKb_Init_803CB6D8[] = "ftToSpecialNFox::Caution!!!\n";
-char ftKb_Init_803CB6F8[] = "ftkirbyspecialfox.c\0\0\0\0";
-
-char ftKb_Init_assert_msg_3[] = "!(jobj->flags & JOBJ_USE_QUATERNION)";
-
-/* static */ void ftKb_SpecialNSk_80106464(void);
-/* static */ void ftKb_SpecialNSk_80106474(void);
-
-jtbl_t ftKb_Init_803CB794 = {
-    ftKb_SpecialNSk_80106474, ftKb_SpecialNSk_80106474,
-    ftKb_SpecialNSk_80106464, ftKb_SpecialNSk_80106474,
-    ftKb_SpecialNSk_80106474, ftKb_SpecialNSk_80106464,
-    ftKb_SpecialNSk_80106474, ftKb_SpecialNSk_80106474,
-    ftKb_SpecialNSk_80106464, ftKb_SpecialNSk_80106474,
-    ftKb_SpecialNSk_80106474, ftKb_SpecialNSk_80106464,
-    ftKb_SpecialNSk_80106474, ftKb_SpecialNSk_80106474,
-    ftKb_SpecialNSk_80106464, ftKb_SpecialNSk_80106474,
-    ftKb_SpecialNSk_80106474, ftKb_SpecialNSk_80106464,
-};
-
-/* static */ void ftKb_SpecialNSk_801066B4(void);
-/* static */ void ftKb_SpecialNSk_801066C4(void);
-
-jtbl_t ftKb_Init_803CB7DC = {
-    ftKb_SpecialNSk_801066C4,
-    ftKb_SpecialNSk_801066C4,
-    ftKb_SpecialNSk_801066B4,
-    ftKb_SpecialNSk_801066C4,
-    ftKb_SpecialNSk_801066C4,
-    ftKb_SpecialNSk_801066B4,
-    ftKb_SpecialNSk_801066C4,
-    ftKb_SpecialNSk_801066C4,
-    ftKb_SpecialNSk_801066B4,
-    ftKb_SpecialNSk_801066C4,
-    ftKb_SpecialNSk_801066C4,
-    ftKb_SpecialNSk_801066B4,
-    ftKb_SpecialNSk_801066C4,
-    ftKb_SpecialNSk_801066C4,
-    ftKb_SpecialNSk_801066B4,
-    ftKb_SpecialNSk_801066C4,
-    ftKb_SpecialNSk_801066C4,
-    ftKb_SpecialNSk_801066B4,
-    NULL,
-};
-
-u32 ftKb_Init_803CB828[] = { 0x00030DB9, 0x00030DBC, 0x00030DBF, 0x00030DC2 };
+/* forward decls for data defined later in this TU (defs placed for
+ * .data stream order; decls are emission-neutral) */
+extern char ftKb_Init_DatFilename[];
+extern char ftKb_Init_DataName[];
+extern char ftKb_Init_803CA320[];
+extern char ftKb_Init_803CA32C[];
+extern char ftKb_Init_803CA344[];
+extern char ftKb_Init_803CA364[];
+extern char ftKb_Init_803CA370[];
+extern char ftKb_Init_803CA38C[];
+extern char ftKb_Init_803CA3B0[];
+extern char ftKb_Init_803CA3BC[];
+extern char ftKb_Init_803CA3D8[];
+extern char ftKb_Init_803CA3FC[];
+extern char ftKb_Init_803CA408[];
+extern char ftKb_Init_803CA424[];
+extern char ftKb_Init_803CA448[];
+extern char ftKb_Init_803CA454[];
+extern char ftKb_Init_803CA470[];
+extern char ftKb_Init_803CA494[];
+extern char ftKb_Init_803CA4A0[];
+extern char ftKb_Init_803CA4BC[];
+extern char ftKb_Init_AnimDatFilename[];
+extern Fighter_DemoStrings ftKb_Init_DemoMotionFilenames;
+extern char* ftKb_Init_803CA5A4[];
+extern Fighter_CostumeStrings ftKb_Init_CostumeStrings[];
+extern ftKirby_CopyName ftKb_Init_803CA9D0[FTKIND_MAX];
+extern char ftKb_Init_803CAAD8[];
+extern char ftKb_Init_803CAAE8[];
+extern char ftKb_Init_803CAB00[];
+extern char ftKb_Init_803CAB20[];
+extern char ftKb_Init_803CAB30[];
+extern char ftKb_Init_803CAB4C[];
+extern char ftKb_Init_803CAB70[];
+extern char ftKb_Init_803CAB80[];
+extern char ftKb_Init_803CAB9C[];
+extern char ftKb_Init_803CABC0[];
+extern char ftKb_Init_803CABD0[];
+extern char ftKb_Init_803CABEC[];
+extern char ftKb_Init_803CAC10[];
+extern char ftKb_Init_803CAC20[];
+extern char ftKb_Init_803CAC3C[];
+extern char ftKb_Init_803CAC60[];
+extern char ftKb_Init_803CAC70[];
+extern char ftKb_Init_803CAC8C[];
+extern Fighter_CostumeStrings ftKb_Init_803CACB0[];
+extern char ftKb_Init_803CACF8[];
+extern char ftKb_Init_803CAD08[];
+extern char ftKb_Init_803CAD20[];
+extern char ftKb_Init_803CAD40[];
+extern char ftKb_Init_803CAD50[];
+extern char ftKb_Init_803CAD6C[];
+extern char ftKb_Init_803CAD90[];
+extern char ftKb_Init_803CADA0[];
+extern char ftKb_Init_803CADBC[];
+extern char ftKb_Init_803CADE0[];
+extern char ftKb_Init_803CADF0[];
+extern char ftKb_Init_803CAE0C[];
+extern char ftKb_Init_803CAE30[];
+extern char ftKb_Init_803CAE40[];
+extern char ftKb_Init_803CAE5C[];
+extern char ftKb_Init_803CAE80[];
+extern char ftKb_Init_803CAE90[];
+extern char ftKb_Init_803CAEAC[];
+extern Fighter_CostumeStrings ftKb_Init_803CAED0[];
+extern char ftKb_Init_803CAF18[];
+extern char ftKb_Init_803CAF28[];
+extern char ftKb_Init_803CAF40[];
+extern char ftKb_Init_803CAF60[];
+extern char ftKb_Init_803CAF70[];
+extern char ftKb_Init_803CAF8C[];
+extern char ftKb_Init_803CAFB0[];
+extern char ftKb_Init_803CAFC0[];
+extern char ftKb_Init_803CAFDC[];
+extern char ftKb_Init_803CB000[];
+extern char ftKb_Init_803CB010[];
+extern char ftKb_Init_803CB02C[];
+extern char ftKb_Init_803CB050[];
+extern char ftKb_Init_803CB060[];
+extern char ftKb_Init_803CB07C[];
+extern char ftKb_Init_803CB0A0[];
+extern char ftKb_Init_803CB0B0[];
+extern char ftKb_Init_803CB0CC[];
+extern Fighter_CostumeStrings ftKb_Init_803CB0F0[];
+extern char ftKb_Init_803CB138[];
+extern char ftKb_Init_803CB148[];
+extern char ftKb_Init_803CB160[];
+extern char ftKb_Init_803CB180[];
+extern char ftKb_Init_803CB190[];
+extern char ftKb_Init_803CB1AC[];
+extern char ftKb_Init_803CB1D0[];
+extern char ftKb_Init_803CB1E0[];
+extern char ftKb_Init_803CB1FC[];
+extern char ftKb_Init_803CB220[];
+extern char ftKb_Init_803CB230[];
+extern char ftKb_Init_803CB24C[];
+extern char ftKb_Init_803CB270[];
+extern char ftKb_Init_803CB280[];
+extern char ftKb_Init_803CB29C[];
+extern char ftKb_Init_803CB2C0[];
+extern char ftKb_Init_803CB2D0[];
+extern char ftKb_Init_803CB2EC[];
+extern Fighter_CostumeStrings ftKb_Init_803CB310[];
+extern char ftKb_Init_803CB358[];
+extern char ftKb_Init_803CB368[];
+extern char ftKb_Init_803CB380[];
+extern Fighter_CostumeStrings ftKb_Init_803CB3A0[];
+extern Fighter_CostumeStrings* ftKb_Init_803CB3E8[];
+extern s8 ftKb_Init_803CB46C[FTKIND_MAX];
+extern bool ftKb_Init_803CB490[];
+extern char ftKb_Init_803CB510[];
+extern char ftKb_Init_803CB52C[];
+extern enum_t ftKb_Init_803CB540[];
+extern u32 ftKb_Init_803CB6C0[];
+extern char ftKb_Init_assert_msg_0[];
+extern char ftKb_Init_assert_msg_1[];
+extern char ftKb_Init_assert_msg_2[];
 
 float const ftKb_Init_803B7548[10] = { 0 };
 
@@ -3109,6 +2783,10 @@ void ftKb_Init_UnkMotionStates4(HSD_GObj* gobj)
         break;
     }
 }
+
+char ftKb_Init_assert_msg_0[] = "fighter parts model dobj num over!\n";
+char ftKb_Init_assert_msg_1[] = "ftkirby.c";
+char ftKb_Init_assert_msg_2[] = "fighter dobj num over!\n";
 
 void ftKb_Init_OnItemPickup(HSD_GObj* gobj, bool arg1)
 {
@@ -4698,6 +4376,279 @@ s32 ftKb_SpecialN_800F1CD8(HSD_GObj* gobj)
     }
     return false;
 }
+
+char ftKb_Init_DatFilename[] ATTRIBUTE_ALIGN(8) = "PlKb.dat";
+char ftKb_Init_DataName[] = "ftDataKirby";
+char ftKb_Init_803CA320[] = "PlKbNr.dat";
+char ftKb_Init_803CA32C[] = "PlyKirby5K_Share_joint";
+char ftKb_Init_803CA344[] = "PlyKirby5K_Share_matanim_joint";
+char ftKb_Init_803CA364[] = "PlKbYe.dat";
+char ftKb_Init_803CA370[] = "PlyKirby5KYe_Share_joint";
+char ftKb_Init_803CA38C[] = "PlyKirby5KYe_Share_matanim_joint";
+char ftKb_Init_803CA3B0[] = "PlKbBu.dat";
+char ftKb_Init_803CA3BC[] = "PlyKirby5KBu_Share_joint";
+char ftKb_Init_803CA3D8[] = "PlyKirby5KBu_Share_matanim_joint";
+char ftKb_Init_803CA3FC[] = "PlKbRe.dat";
+char ftKb_Init_803CA408[] = "PlyKirby5KRe_Share_joint";
+char ftKb_Init_803CA424[] = "PlyKirby5KRe_Share_matanim_joint";
+char ftKb_Init_803CA448[] = "PlKbGr.dat";
+char ftKb_Init_803CA454[] = "PlyKirby5KGr_Share_joint";
+char ftKb_Init_803CA470[] = "PlyKirby5KGr_Share_matanim_joint";
+char ftKb_Init_803CA494[] = "PlKbWh.dat";
+char ftKb_Init_803CA4A0[] = "PlyKirby5KWh_Share_joint";
+char ftKb_Init_803CA4BC[] = "PlyKirby5KWh_Share_matanim_joint";
+char ftKb_Init_AnimDatFilename[] = "PlKbAJ.dat";
+
+Fighter_DemoStrings ftKb_Init_DemoMotionFilenames = {
+    "ftDemoResultMotionFileKirby",
+    "ftDemoIntroMotionFileKirby",
+    "ftDemoEndingMotionFileKirby",
+    "ftDemoViWaitMotionFileKirby",
+};
+
+char* ftKb_Init_803CA5A4[] = {
+    "ftDemoVi0501MotionFileKirby",
+    NULL,
+    NULL,
+    "ftDemoVi0502MotionFileKirby",
+};
+
+Fighter_CostumeStrings ftKb_Init_CostumeStrings[] = {
+    { ftKb_Init_803CA320, ftKb_Init_803CA32C, ftKb_Init_803CA344 },
+    { ftKb_Init_803CA364, ftKb_Init_803CA370, ftKb_Init_803CA38C },
+    { ftKb_Init_803CA3B0, ftKb_Init_803CA3BC, ftKb_Init_803CA3D8 },
+    { ftKb_Init_803CA3FC, ftKb_Init_803CA408, ftKb_Init_803CA424 },
+    { ftKb_Init_803CA448, ftKb_Init_803CA454, ftKb_Init_803CA470 },
+    { ftKb_Init_803CA494, ftKb_Init_803CA4A0, ftKb_Init_803CA4BC },
+};
+
+ftKirby_CopyName ftKb_Init_803CA9D0[FTKIND_MAX] = {
+    { "PlKbCpMr.dat", "ftDataKirbyCopyMario" },
+    { "PlKbCpFx.dat", "ftDataKirbyCopyFox" },
+    { "PlKbCpCa.dat", "ftDataKirbyCopyCaptain" },
+    { "PlKbCpDk.dat", "ftDataKirbyCopyDonkey" },
+    { NULL, NULL },
+    { "PlKbCpKp.dat", "ftDataKirbyCopyKoopa" },
+    { "PlKbCpLk.dat", "ftDataKirbyCopyLink" },
+    { "PlKbCpSk.dat", "ftDataKirbyCopySeak" },
+    { "PlKbCpNs.dat", "ftDataKirbyCopyNess" },
+    { "PlKbCpPe.dat", "ftDataKirbyCopyPeach" },
+    { "PlKbCpPp.dat", "ftDataKirbyCopyPopo" },
+    { NULL, NULL },
+    { "PlKbCpPk.dat", "ftDataKirbyCopyPikachu" },
+    { "PlKbCpSs.dat", "ftDataKirbyCopySamus" },
+    { "PlKbCpYs.dat", "ftDataKirbyCopyYoshi" },
+    { "PlKbCpPr.dat", "ftDataKirbyCopyPurin" },
+    { "PlKbCpMt.dat", "ftDataKirbyCopyMewtwo" },
+    { "PlKbCpLg.dat", "ftDataKirbyCopyLuigi" },
+    { "PlKbCpMs.dat", "ftDataKirbyCopyMars" },
+    { "PlKbCpZd.dat", "ftDataKirbyCopyZelda" },
+    { "PlKbCpCl.dat", "ftDataKirbyCopyClink" },
+    { "PlKbCpDr.dat", "ftDataKirbyCopyDrmario" },
+    { "PlKbCpFc.dat", "ftDataKirbyCopyFalco" },
+    { "PlKbCpPc.dat", "ftDataKirbyCopyPichu" },
+    { "PlKbCpGw.dat", "ftDataKirbyCopyGamewatch" },
+    { "PlKbCpGn.dat", "ftDataKirbyCopyGanon" },
+    { "PlKbCpFe.dat", "ftDataKirbyCopyEmblem" },
+    { NULL, NULL },
+    { NULL, NULL },
+    { NULL, NULL },
+    { NULL, NULL },
+    { NULL, NULL },
+    { NULL, NULL },
+};
+
+char ftKb_Init_803CAAD8[] = "PlKbNrCpDk.dat";
+char ftKb_Init_803CAAE8[] = "PlyKirbyDk_Share_joint";
+char ftKb_Init_803CAB00[] = "PlyKirbyDk_Share_matanim_joint";
+char ftKb_Init_803CAB20[] = "PlKbYeCpDk.dat";
+char ftKb_Init_803CAB30[] = "PlyKirbyDkYe_Share_joint";
+char ftKb_Init_803CAB4C[] = "PlyKirbyDkYe_Share_matanim_joint";
+char ftKb_Init_803CAB70[] = "PlKbBuCpDk.dat";
+char ftKb_Init_803CAB80[] = "PlyKirbyDkBu_Share_joint";
+char ftKb_Init_803CAB9C[] = "PlyKirbyDkBu_Share_matanim_joint";
+char ftKb_Init_803CABC0[] = "PlKbReCpDk.dat";
+char ftKb_Init_803CABD0[] = "PlyKirbyDkRe_Share_joint";
+char ftKb_Init_803CABEC[] = "PlyKirbyDkRe_Share_matanim_joint";
+char ftKb_Init_803CAC10[] = "PlKbGrCpDk.dat";
+char ftKb_Init_803CAC20[] = "PlyKirbyDkGr_Share_joint";
+char ftKb_Init_803CAC3C[] = "PlyKirbyDkGr_Share_matanim_joint";
+char ftKb_Init_803CAC60[] = "PlKbWhCpDk.dat";
+char ftKb_Init_803CAC70[] = "PlyKirbyDkWh_Share_joint";
+char ftKb_Init_803CAC8C[] = "PlyKirbyDkWh_Share_matanim_joint";
+
+Fighter_CostumeStrings ftKb_Init_803CACB0[] = {
+    { ftKb_Init_803CAAD8, ftKb_Init_803CAAE8, ftKb_Init_803CAB00 },
+    { ftKb_Init_803CAB20, ftKb_Init_803CAB30, ftKb_Init_803CAB4C },
+    { ftKb_Init_803CAB70, ftKb_Init_803CAB80, ftKb_Init_803CAB9C },
+    { ftKb_Init_803CABC0, ftKb_Init_803CABD0, ftKb_Init_803CABEC },
+    { ftKb_Init_803CAC10, ftKb_Init_803CAC20, ftKb_Init_803CAC3C },
+    { ftKb_Init_803CAC60, ftKb_Init_803CAC70, ftKb_Init_803CAC8C },
+};
+
+char ftKb_Init_803CACF8[] = "PlKbNrCpPr.dat";
+char ftKb_Init_803CAD08[] = "PlyKirbyPr_Share_joint";
+char ftKb_Init_803CAD20[] = "PlyKirbyPr_Share_matanim_joint";
+char ftKb_Init_803CAD40[] = "PlKbYeCpPr.dat";
+char ftKb_Init_803CAD50[] = "PlyKirbyPrYe_Share_joint";
+char ftKb_Init_803CAD6C[] = "PlyKirbyPrYe_Share_matanim_joint";
+char ftKb_Init_803CAD90[] = "PlKbBuCpPr.dat";
+char ftKb_Init_803CADA0[] = "PlyKirbyPrBu_Share_joint";
+char ftKb_Init_803CADBC[] = "PlyKirbyPrBu_Share_matanim_joint";
+char ftKb_Init_803CADE0[] = "PlKbReCpPr.dat";
+char ftKb_Init_803CADF0[] = "PlyKirbyPrRe_Share_joint";
+char ftKb_Init_803CAE0C[] = "PlyKirbyPrRe_Share_matanim_joint";
+char ftKb_Init_803CAE30[] = "PlKbGrCpPr.dat";
+char ftKb_Init_803CAE40[] = "PlyKirbyPrGr_Share_joint";
+char ftKb_Init_803CAE5C[] = "PlyKirbyPrGr_Share_matanim_joint";
+char ftKb_Init_803CAE80[] = "PlKbWhCpPr.dat";
+char ftKb_Init_803CAE90[] = "PlyKirbyPrWh_Share_joint";
+char ftKb_Init_803CAEAC[] = "PlyKirbyPrWh_Share_matanim_joint";
+
+Fighter_CostumeStrings ftKb_Init_803CAED0[] = {
+    { ftKb_Init_803CACF8, ftKb_Init_803CAD08, ftKb_Init_803CAD20 },
+    { ftKb_Init_803CAD40, ftKb_Init_803CAD50, ftKb_Init_803CAD6C },
+    { ftKb_Init_803CAD90, ftKb_Init_803CADA0, ftKb_Init_803CADBC },
+    { ftKb_Init_803CADE0, ftKb_Init_803CADF0, ftKb_Init_803CAE0C },
+    { ftKb_Init_803CAE30, ftKb_Init_803CAE40, ftKb_Init_803CAE5C },
+    { ftKb_Init_803CAE80, ftKb_Init_803CAE90, ftKb_Init_803CAEAC },
+};
+
+char ftKb_Init_803CAF18[] = "PlKbNrCpMt.dat";
+char ftKb_Init_803CAF28[] = "PlyKirbyMt_Share_joint";
+char ftKb_Init_803CAF40[] = "PlyKirbyMt_Share_matanim_joint";
+char ftKb_Init_803CAF60[] = "PlKbYeCpMt.dat";
+char ftKb_Init_803CAF70[] = "PlyKirbyMtYe_Share_joint";
+char ftKb_Init_803CAF8C[] = "PlyKirbyMtYe_Share_matanim_joint";
+char ftKb_Init_803CAFB0[] = "PlKbBuCpMt.dat";
+char ftKb_Init_803CAFC0[] = "PlyKirbyMtBu_Share_joint";
+char ftKb_Init_803CAFDC[] = "PlyKirbyMtBu_Share_matanim_joint";
+char ftKb_Init_803CB000[] = "PlKbReCpMt.dat";
+char ftKb_Init_803CB010[] = "PlyKirbyMtRe_Share_joint";
+char ftKb_Init_803CB02C[] = "PlyKirbyMtRe_Share_matanim_joint";
+char ftKb_Init_803CB050[] = "PlKbGrCpMt.dat";
+char ftKb_Init_803CB060[] = "PlyKirbyMtGr_Share_joint";
+char ftKb_Init_803CB07C[] = "PlyKirbyMtGr_Share_matanim_joint";
+char ftKb_Init_803CB0A0[] = "PlKbWhCpMt.dat";
+char ftKb_Init_803CB0B0[] = "PlyKirbyMtWh_Share_joint";
+char ftKb_Init_803CB0CC[] = "PlyKirbyMtWh_Share_matanim_joint";
+
+Fighter_CostumeStrings ftKb_Init_803CB0F0[] = {
+    { ftKb_Init_803CAF18, ftKb_Init_803CAF28, ftKb_Init_803CAF40 },
+    { ftKb_Init_803CAF60, ftKb_Init_803CAF70, ftKb_Init_803CAF8C },
+    { ftKb_Init_803CAFB0, ftKb_Init_803CAFC0, ftKb_Init_803CAFDC },
+    { ftKb_Init_803CB000, ftKb_Init_803CB010, ftKb_Init_803CB02C },
+    { ftKb_Init_803CB050, ftKb_Init_803CB060, ftKb_Init_803CB07C },
+    { ftKb_Init_803CB0A0, ftKb_Init_803CB0B0, ftKb_Init_803CB0CC },
+};
+
+char ftKb_Init_803CB138[] = "PlKbNrCpFc.dat";
+char ftKb_Init_803CB148[] = "PlyKirbyFc_Share_joint";
+char ftKb_Init_803CB160[] = "PlyKirbyFc_Share_matanim_joint";
+char ftKb_Init_803CB180[] = "PlKbYeCpFc.dat";
+char ftKb_Init_803CB190[] = "PlyKirbyFcYe_Share_joint";
+char ftKb_Init_803CB1AC[] = "PlyKirbyFcYe_Share_matanim_joint";
+char ftKb_Init_803CB1D0[] = "PlKbBuCpFc.dat";
+char ftKb_Init_803CB1E0[] = "PlyKirbyFcBu_Share_joint";
+char ftKb_Init_803CB1FC[] = "PlyKirbyFcBu_Share_matanim_joint";
+char ftKb_Init_803CB220[] = "PlKbReCpFc.dat";
+char ftKb_Init_803CB230[] = "PlyKirbyFcRe_Share_joint";
+char ftKb_Init_803CB24C[] = "PlyKirbyFcRe_Share_matanim_joint";
+char ftKb_Init_803CB270[] = "PlKbGrCpFc.dat";
+char ftKb_Init_803CB280[] = "PlyKirbyFcGr_Share_joint";
+char ftKb_Init_803CB29C[] = "PlyKirbyFcGr_Share_matanim_joint";
+char ftKb_Init_803CB2C0[] = "PlKbWhCpFc.dat";
+char ftKb_Init_803CB2D0[] = "PlyKirbyFcWh_Share_joint";
+char ftKb_Init_803CB2EC[] = "PlyKirbyFcWh_Share_matanim_joint";
+
+Fighter_CostumeStrings ftKb_Init_803CB310[] = {
+    { ftKb_Init_803CB138, ftKb_Init_803CB148, ftKb_Init_803CB160 },
+    { ftKb_Init_803CB180, ftKb_Init_803CB190, ftKb_Init_803CB1AC },
+    { ftKb_Init_803CB1D0, ftKb_Init_803CB1E0, ftKb_Init_803CB1FC },
+    { ftKb_Init_803CB220, ftKb_Init_803CB230, ftKb_Init_803CB24C },
+    { ftKb_Init_803CB270, ftKb_Init_803CB280, ftKb_Init_803CB29C },
+    { ftKb_Init_803CB2C0, ftKb_Init_803CB2D0, ftKb_Init_803CB2EC },
+};
+
+char ftKb_Init_803CB358[] = "PlKbNrCpGw.dat";
+char ftKb_Init_803CB368[] = "PlyKirbyGw_Share_joint";
+char ftKb_Init_803CB380[] = "PlyKirbyGw_Share_matanim_joint";
+
+Fighter_CostumeStrings ftKb_Init_803CB3A0[] = {
+    { ftKb_Init_803CB358, ftKb_Init_803CB368, ftKb_Init_803CB380 },
+    { ftKb_Init_803CB358, ftKb_Init_803CB368, ftKb_Init_803CB380 },
+    { ftKb_Init_803CB358, ftKb_Init_803CB368, ftKb_Init_803CB380 },
+    { ftKb_Init_803CB358, ftKb_Init_803CB368, ftKb_Init_803CB380 },
+    { ftKb_Init_803CB358, ftKb_Init_803CB368, ftKb_Init_803CB380 },
+    { ftKb_Init_803CB358, ftKb_Init_803CB368, ftKb_Init_803CB380 },
+};
+
+Fighter_CostumeStrings* ftKb_Init_803CB3E8[] = {
+    NULL,
+    NULL,
+    NULL,
+    ftKb_Init_803CACB0,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    ftKb_Init_803CAED0,
+    ftKb_Init_803CB0F0,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    ftKb_Init_803CB310,
+    NULL,
+    ftKb_Init_803CB3A0,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+};
+
+s8 ftKb_Init_803CB46C[FTKIND_MAX] = {
+    32, 33, 38, 39, -1, 41, 35, 21, 42, 45, 46, 46, 36, 34, 40, 43, 44,
+    37, 20, 21, 35, 32, 33, 36, -1, 47, 48, -1, -1, -1, -1, -1, -1,
+};
+
+bool ftKb_Init_803CB490[] = {
+    false, true,  false, false, false, false, true,  true,
+    false, false, false, true,  true,  true,  false, false,
+    true,  true,  true,  true,  false, true,  true,
+};
+
+struct ftKb_Init_803CB4EC {
+    int ints[6];
+    Vec3 vec;
+} ftKb_Init_803CB4EC = {
+    { 0, 2, 3, 4, 5, 6 },
+    { 0.0F, 1.0F, 0.0F },
+};
+
+char ftKb_Init_803CB510[] = "Other Dead_Proc Existence";
+char ftKb_Init_803CB52C[] = "ftkirbyspecials.c";
+
+enum_t ftKb_Init_803CB540[] = {
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1,
+    1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 3, 3, 3, 3, 3, 3, 3, 3,
+    0, 0, 0, 0, 0, 0, 0, 0, 3, 3, 3, 3, 3, 3, 3, 3, 1, 1, 1, 1, 1, 1, 1, 1,
+    2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2,
+};
+
+u32 ftKb_Init_803CB6C0[] = { 260006, 260009, 260012, 260015, 260018, 0 };
 
 void ftKb_SpecialN_800F1D24(Fighter_GObj* gobj)
 {

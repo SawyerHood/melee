@@ -36,7 +36,7 @@
 #define M_TAU 6.283185307179586
 
 extern ItemKind grBb_803B8120[5];
-extern grBb_LineIds grBb_803B8134;
+extern s32 grBb_803B8134_ids[33];
 
 extern f32 grBb_804DB2F0;
 extern f32 grBb_804DB2F4;
@@ -45,7 +45,7 @@ extern f32 grBb_804DB308;
 extern f32 grBb_804DB30C;
 extern f32 grBb_804DB310;
 extern f32 grBb_804DB3F0;
-extern char grBb_804D46B8;
+extern char grBb_804D46B8[2];
 
 static grBb_YakumonoParams* grBb_804D69C8;
 
@@ -61,15 +61,22 @@ typedef struct grBb_Data803E2EB8 {
     u32 x58[4];
 } grBb_Data803E2EB8;
 
-u8 grBb_803E2938[0xA8] = { 0 };
-extern grBb_Data803E2D78 grBb_803E2D78;
-extern grBb_Data803E2EB8 grBb_803E2EB8;
+/* w31: target content (28 s16 triples {id, 34, dur}; was zero-init) */
+S16Vec3 grBb_803E2938[28] = {
+    { 36, 34, 10 }, { 37, 34, 10 }, { 38, 34, 7 }, { 39, 34, 7 },
+    { 40, 34, 7 }, { 41, 34, 14 }, { 42, 34, 14 }, { 43, 34, 14 },
+    { 44, 34, 15 }, { 45, 34, 15 }, { 46, 34, 15 }, { 47, 34, 16 },
+    { 48, 34, 16 }, { 49, 34, 16 }, { 52, 34, 32 }, { 53, 34, 32 },
+    { 54, 34, 32 }, { 55, 34, 35 }, { 56, 34, 35 }, { 57, 34, 35 },
+    { 58, 34, 38 }, { 59, 34, 38 }, { 60, 34, 38 }, { 61, 34, 41 },
+    { 62, 34, 41 }, { 63, 34, 41 }, { 64, 34, 44 }, { 65, 34, 44 },
+};
 
 StageCallbacks grBb_803E29E0[] = {
     { grBigBlue_801E5AE4, grBigBlue_801E5B10, grBigBlue_801E5B18,
       grBigBlue_801E5B1C, 0 },
     { grBigBlue_801E6298, grBigBlue_801E6354, grBigBlue_801E635C,
-      grBigBlue_801E6360, 40000000 },
+      grBigBlue_801E6360, 0x40000000 },
     { grBigBlue_801E6200, grBigBlue_801E6288, grBigBlue_801E6290,
       grBigBlue_801E6294, 0 },
     { NULL, NULL, NULL, NULL, 0 },
@@ -109,7 +116,7 @@ StageCallbacks grBb_803E29E0[] = {
     { grBigBlue_801E613C, grBigBlue_801E61BC, grBigBlue_801E61C4,
       grBigBlue_801E61FC, 0 },
     { grBigBlue_801E8D64, grBigBlue_801E93D0, grBigBlue_801E93D8,
-      grBigBlue_801E9F38, 80000000 },
+      grBigBlue_801E9F38, 0x80000000 },
     { grBigBlue_801E9F3C, grBigBlue_801EA054, grBigBlue_801EA05C,
       grBigBlue_801EAB4C, 0 },
     { NULL, NULL, NULL, NULL, 0 },
@@ -144,17 +151,30 @@ grBb_StageData grBb_803E2D20 = {
     "%s:%d: couldn t get gobj(id=%d)\n",
 };
 
-static const Vec3 grBb_803B8108 = { -1.0F, 0.0F, 0.0F };
-static const Vec3 grBb_803B8114 = { 56.0F, 40.0F, 24.0F };
-
-static grBb_TrackEntry grBb_TrackEntries[12] = {
-    { 4, 6, 5, 0, { 0, 0, 0 } },    { 19, 21, 20, 0, { 0, 0, 0 } },
-    { 7, 9, 8, 0, { 0, 0, 0 } },    { 10, 12, 11, 0, { 0, 0, 0 } },
-    { 44, 46, 45, 0, { 0, 0, 0 } }, { 1, 3, 2, 0, { 0, 0, 0 } },
-    { 32, 34, 33, 0, { 0, 0, 0 } }, { 35, 37, 36, 0, { 0, 0, 0 } },
-    { 38, 40, 39, 0, { 0, 0, 0 } }, { 41, 43, 42, 0, { 0, 0, 0 } },
-    { 29, 31, 30, 0, { 0, 0, 0 } }, { 13, 18, 17, 0, { 0, 0, 0 } },
+/* w31 .data reconstruction: 2D78 blob head = "grbigblue.c" + 3 s16 track
+ * lists (positions 0x440..0x500; code reads them via grBb_803E2938+0x44C/
+ * +0x488 anchor exprs, so the def is layout-only) */
+grBb_Data803E2D78 grBb_803E2D78 = {
+    { 0x67, 0x72, 0x62, 0x69, 0x67, 0x62, 0x6C, 0x75, 0x65, 0x2E, 0x63, 0x00 },  /* "grbigblue.c" */
+    { /* xC */
+        4, 5, 6, 8, 9, 10, 11, 12, 13, 14,
+        3, 15, 16, 17, 18, 19, 20, 21, 22, 23,
+        24, 25, 26, 27, 28, 29, 37, 38, 39, 40,
+    },
+    { /* x48 */
+        1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
+        11, 12, 13, 14, 15, 16, 17, 18, 19, 20,
+        21, 22, 23, 24, 25, 26, 27, 28, 29, 30,
+    },
+    { /* x84 */
+        3, 4, 5, 6, 7, 8, 9, 10, 11, 12,
+        13, 14, 15, 16, 17, 18, 19, 20, 21, 22,
+        23, 24, 25, 26, 27, 28, 29, 30, 31, 32,
+    },
 };
+
+const Vec3 grBb_803B8108 = { -1.0F, 0.0F, 0.0F };
+const Vec3 grBb_803B8114 = { 56.0F, 40.0F, 24.0F };
 
 void grBigBlue_801E57BC(bool arg) {}
 
@@ -344,6 +364,11 @@ void grBigBlue_801E61C4(Ground_GObj* gobj)
     Ground_801C2FE0(gobj);
 }
 
+/* .sdata 0x10/0x14: defs after the @374/@375 creators (jobj.h inlines in
+ * 801E5B20); "gp2" is target-proven dead our-side (801ED694 S1 park) */
+char grBb_804D46B8[2] = { '0', 0 };
+char grBb_804D46BC[4] = { 'g', 'p', '2', 0 };
+
 void grBigBlue_801E61FC(Ground_GObj* arg) {}
 
 void grBigBlue_801E6200(Ground_GObj* gobj)
@@ -430,11 +455,14 @@ void grBigBlue_801E6364(Ground_GObj* gobj)
     HSD_JObjSetScale(jobj, &scale);
 
     gp->gv.bigblue.xC8 = HSD_MemAlloc(120);
-    HSD_ASSERTMSG(774, gp->gv.bigblue.xC8 != NULL,
-                  "gp->u.carnull.coll_jobj");
+    ((gp->gv.bigblue.xC8 != NULL)
+         ? ((void) 0)
+         : __assert((char*) &grBb_803E2D78, 774, "gp->u.carnull.coll_jobj"));
 
     gp->gv.bigblue.xCC = HSD_MemAlloc(30);
-    HSD_ASSERTMSG(776, gp->gv.bigblue.xCC != NULL, "gp->u.carnull.rank");
+    ((gp->gv.bigblue.xCC != NULL)
+         ? ((void) 0)
+         : __assert((char*) &grBb_803E2D78, 776, "gp->u.carnull.rank"));
 
     for (i = 0; i < 30; i++) {
         ((HSD_JObj**) gp->gv.bigblue.xC8)[i] = Ground_801C3FA4(
@@ -442,7 +470,7 @@ void grBigBlue_801E6364(Ground_GObj* gobj)
     }
 
     car_gobj = grBigBlue_801E59F8(4);
-    HSD_ASSERT(783, car_gobj);
+    ((car_gobj) ? ((void) 0) : __assert((char*) &grBb_803E2D78, 783, "car_gobj"));
     /* @bug binary passes the xC array (blob+0x44C), not x48 */
     grFZeroCar_801CAFBC(car_gobj, (u8*) grBb_803E2938 + 0x44C, 30, 1);
 
@@ -501,6 +529,20 @@ void grBigBlue_801E6364(Ground_GObj* gobj)
         *(s16*) ((u8*) gp + 0xD0) = (s16) result;
     }
 }
+
+/* stream 0x560/0x580: dead-position OSReport strings (referenced via blob
+ * anchor exprs only) + 0x5a0 TrackEntries (idiom 69 positional move) */
+char grBb_803E2E98[31] = "*** Not Set Position!(FFlyer)\n";
+char grBb_803E2EB8[31] = "*** Not Set Position!(Tyukei)\n";
+
+static grBb_TrackEntry grBb_TrackEntries[12] = {
+    { 4, 6, 5, 0, { 0, 0, 0 } },    { 19, 21, 20, 0, { 0, 0, 0 } },
+    { 7, 9, 8, 0, { 0, 0, 0 } },    { 10, 12, 11, 0, { 0, 0, 0 } },
+    { 44, 46, 45, 0, { 0, 0, 0 } }, { 1, 3, 2, 0, { 0, 0, 0 } },
+    { 32, 34, 33, 0, { 0, 0, 0 } }, { 35, 37, 36, 0, { 0, 0, 0 } },
+    { 38, 40, 39, 0, { 0, 0, 0 } }, { 41, 43, 42, 0, { 0, 0, 0 } },
+    { 29, 31, 30, 0, { 0, 0, 0 } }, { 13, 18, 17, 0, { 0, 0, 0 } },
+};
 
 bool grBigBlue_801E687C(Ground_GObj* arg)
 {
@@ -1562,7 +1604,7 @@ void grBigBlue_801E93D8(Ground_GObj* gobj)
                     if (grBb_804DB310 == pos.y) {
                         OSReport((char*) grBb_803E2938 + 0x560);
                         __assert((char*) grBb_803E2938 + 0x440, 0x6CB,
-                                 &grBb_804D46B8);
+                                 grBb_804D46B8);
                     }
                     HSD_JObjSetTranslate(jobj, &pos);
                     *(f32*) (bp + 0xD0) = pos.y;
@@ -1884,8 +1926,8 @@ void grBigBlue_801EA05C(Ground_GObj* gobj)
 
                 if (collision == 0) {
                     if (grBb_804DB310 == pos.y) {
-                        OSReport((char*) &grBb_803E2EB8);
-                        __assert((char*) &grBb_803E2D78, 0x7CA, &grBb_804D46B8);
+                        OSReport(grBb_803E2EB8);
+                        __assert((char*) &grBb_803E2D78, 0x7CA, grBb_804D46B8);
                     }
 
                     HSD_JObjSetTranslate(jobj, &pos);
@@ -2278,9 +2320,13 @@ void grBigBlue_801EB004(Ground_GObj* gobj)
         continue;
 
     assert_block:
-        HSD_ASSERT(2328, child);
-        HSD_ASSERT(2329, start_jobj);
-        HSD_ASSERT(2330, end_jobj);
+        ((child) ? ((void) 0) : __assert((char*) &grBb_803E2D78, 2328, "jobj"));
+        ((start_jobj)
+             ? ((void) 0)
+             : __assert((char*) &grBb_803E2D78, 2329, "start_jobj"));
+        ((end_jobj)
+             ? ((void) 0)
+             : __assert((char*) &grBb_803E2D78, 2330, "end_jobj"));
     }
 
     *(u16*) (gp + 0xC4) = (*(u16*) (gp + 0xC4) & ~0x1FC0) | (0x7F << 6);
@@ -2431,7 +2477,7 @@ void grBigBlue_801EB4AC(Ground_GObj* gobj)
     delta_threshold = 0.0F;
 
     for (;;) {
-        HSD_ASSERT(2414, count <= 1000);
+        ((count <= 1000) ? ((void) 0) : __assert("jobj.h", 2414, "jobj"));
         count++;
 
         random_lane = HSD_Randi(12);
@@ -2497,7 +2543,7 @@ void grBigBlue_801EB4AC(Ground_GObj* gobj)
     /* Store new lane index into gp+0xC6 */
     *(u8*) (gp + 0xC6) = (*(u8*) (gp + 0xC6) & ~0x7F) | (random_lane & 0x7F);
 
-    HSD_ASSERT(979, jobj);
+    ((jobj) ? ((void) 0) : __assert("jobj.h", 979, "jobj"));
 
     /* Save current jobj translate (struct copy generates lwz/stw) */
     sp_pos = jobj->translate;
@@ -2860,7 +2906,7 @@ f32 grBigBlue_801EC58C(Vec3* pos, Vec3* normal_out, f32 half_height)
      * test the return value against grBb_804DB310); 0.0F was a decomp
      * deviation that also broke the no-hit sentinel semantics. */
     max_y = grBb_804DB310;
-    local_ids = grBb_803B8134;
+    local_ids = *(grBb_LineIds*) grBb_803B8134_ids;
 
     x1 = pos->x;
     x2 = pos->x;
@@ -2887,6 +2933,10 @@ f32 grBigBlue_801EC58C(Vec3* pos, Vec3* normal_out, f32 half_height)
 /// r23) and bitfield write pattern fix (rlwinm+ori vs rlwimi)
 #pragma push
 #pragma fp_contract on
+/* stream 0x6d8: u32 quad (target lbl_803E3010 head) before the translate
+ * minter */
+u32 lbl_803E3010[4] = { 0x6DDD2, 0x6DDD3, 0x6DDD4, 0x6DDD5 };
+
 void grBigBlue_801EC6C0(Ground_GObj* gobj)
 {
     Ground* gp = gobj->user_data;
@@ -3014,7 +3064,9 @@ void grBigBlue_801EC6C0(Ground_GObj* gobj)
             *(s32*) (car + 0xF0) = lo;
 
             {
-                Ground_801C5440(gp, k, grBb_803E2EB8.x58[HSD_Randi(4)]);
+                /* target reads the 0x6d8 sound-id quad as 2EB8+0x158 (reloc-proven) */
+                Ground_801C5440(
+                    gp, k, ((u32*) (grBb_803E2EB8 + 0x158))[HSD_Randi(4)]);
             }
 
             *(f32*) (car + 0xEC) = 1.0F;
@@ -3638,7 +3690,7 @@ void grBigBlue_801ED694(Ground_GObj* gobj, s32 lane)
         jobj = (HSD_JObj*) arr[(hw >> 4) & 0x1F];
     }
 
-    HSD_ASSERT(745, jobj);
+    ((jobj) ? ((void) 0) : __assert("jobj.h", 745, "jobj"));
 
     f31_rot = jobj->rotate.z;
 
@@ -3913,9 +3965,11 @@ void grBigBlue_801ED694(Ground_GObj* gobj, s32 lane)
             HSD_GObj* track_gobj = Ground_801C2BA4(34);
             u8* track_gp;
 
-            HSD_ASSERT(3255, track_gobj);
+            ((track_gobj) ? ((void) 0)
+                          : __assert((char*) &grBb_803E2D78, 3255, "map_gobj"));
             track_gp = (u8*) track_gobj->user_data;
-            HSD_ASSERT(3256, track_gp);
+            ((track_gp) ? ((void) 0)
+                        : __assert((char*) &grBb_803E2D78, 3256, "map_gobj"));
             *(f32*) (lane_gp + 0xE4) +=
                 *(f32*) (track_gp + 0xCC) - *(f32*) (track_gp + 0xD8);
         }
@@ -4980,3 +5034,23 @@ bool grBigBlue_801EFC14(Vec3* a, int b, HSD_JObj* jobj)
         return false;
     }
 }
+
+/* stream 0x758 (target lbl_803E3090): assert-cond string positioned at EOF;
+ * the minting assert lives in an S1-parked fn our decomp spells differently */
+char lbl_803E3090[26] = "car_num!=Gr_Fzero_Car_Max";
+
+/* .rodata 0x18/0x2c defs at EOF (idiom 104): uses above compile as extern
+ * accesses (per-use lis, target-shaped); stream order still 8108,8114,8120,
+ * 8134 since these are the only later .rodata items */
+#if defined(__MWERKS__) && !defined(M2CTX)
+__declspec(section ".rodata")
+#endif
+ItemKind grBb_803B8120[5] = { 12, 21, 31, 25, 4 };
+#if defined(__MWERKS__) && !defined(M2CTX)
+__declspec(section ".rodata")
+#endif
+s32 grBb_803B8134_ids[33] = {
+    0x21, 0x23, 0x26, 0x27, 0x28, 0x24, 0x25, 0x29, 0x2A, 0x2B, 0x2C,
+    0x2D, 0x2E, 0x2F, 0x30, 0x31, 0x32, 0x33, 0x34, 0x35, 0x36, 0x37,
+    0x38, 0x39, 0x3A, 0x3B, 0x3C, 0x3D, 0x3E, 0x3F, 0x40, 0x41, 0,
+};

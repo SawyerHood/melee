@@ -5,26 +5,58 @@
 #define HEAP_MAGIC 0x01234567
 
 typedef struct HSD_LeakChecker {
-    u32* table;                             /* 0x00 */
-    u32 x04;                                /* 0x04 */
-    u32 used;                               /* 0x08 */
-    u32 capacity;                           /* 0x0C */
-    u32 x10;                                /* 0x10 */
-    u32 x14;                                /* 0x14 */
-    u32 peak;                               /* 0x18 */
-    u32 x1C;                                /* 0x1C */
-    char str_now_registering[0x108 - 0x20]; /* 0x20 */
-    char str_not_init[0x12C - 0x108];       /* 0x108 */
-    char str_begin[0x14C - 0x12C];          /* 0x12C */
-    char str_numreg[0x17C - 0x14C];         /* 0x14C */
-    char str_leak_detected[0x1A8 - 0x17C];  /* 0x17C */
-    char str_leak_destroyed[0x1D0 - 0x1A8]; /* 0x1A8 */
-    char str_num_leaked[0x1F0 - 0x1D0];     /* 0x1D0 */
-    char str_no_leak[0x208 - 0x1F0];        /* 0x1F0 */
+    u32* table;                            /* 0x00 */
+    u32 x04;                               /* 0x04 */
+    u32 used;                              /* 0x08 */
+    u32 capacity;                          /* 0x0C */
+    u32 x10;                               /* 0x10 */
+    u32 x14;                               /* 0x14 */
+    u32 peak;                              /* 0x18 */
+    u32 x1C;                               /* 0x1C */
+    char str_now_registering[0x48 - 0x20]; /* 0x20 */
+    char str_warning[0x54 - 0x48];         /* 0x48 */
+    char str_too_many[0x90 - 0x54];        /* 0x54 */
+    char str_increase[0xB8 - 0x90];        /* 0x90 */
+    char str_non_registered[0xE8 - 0xB8];  /* 0xB8 */
+    char str_unregister[0x108 - 0xE8];     /* 0xE8 */
+    char str_not_init[0x12C - 0x108];      /* 0x108 */
+    char str_begin[0x14C - 0x12C];         /* 0x12C */
+    char str_numreg[0x17C - 0x14C];        /* 0x14C */
+    char str_leak_detected[0x1A8 - 0x17C]; /* 0x17C */
+    char str_leak_destroyed[0x1D0 - 0x1A8];/* 0x1A8 */
+    char str_num_leaked[0x1F0 - 0x1D0];    /* 0x1D0 */
+    char str_no_leak[0x208 - 0x1F0];       /* 0x1F0 */
 } HSD_LeakChecker;
 
 extern u32 lbCommand_803B9840[16];
-extern HSD_LeakChecker HSD_Leak_80407B58;
+
+HSD_LeakChecker HSD_Leak_80407B58 = {
+    NULL,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0xFFFFFFFF,
+    "now registering suspecting memory ...\n",
+    "WARNING!!\n",
+    "Too many memory blocks are registerd to memory checker.\n",
+    "Please increase a capacity of checker.\n",
+    "Non-registered memory block is specified (%p).\n",
+    "leak unregister range %p %p\n",
+    "Leak checker is not initialized.\n",
+    "Begin memory leak check ...\n",
+    "number of registered ptr: %d / %d (peak %d)\n",
+    "leak detected (%p) nb_reg (%d) mark (%08x)\n",
+    "leak detected (%p) [destroyed header]\n",
+    "number of leaked memory: %d.\n",
+    "leak is not detected.\n",
+};
+/* NOTE: symbols.txt says scope:global, but dropping `static` moves these
+ * <=8B string char[] objects .sdata -> .data and reshapes all sda21 consumer
+ * loads (probed -2.5pp). The static is load-bearing for section placement;
+ * EXPORT-MISSING rows are 0-importer soft. Bounds idiom 139. */
 static char HSD_Leak_804D6000[] = " ";
 static char HSD_Leak_804D6004[] = "done.\n";
 

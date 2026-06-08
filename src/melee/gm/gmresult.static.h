@@ -12,9 +12,10 @@
 #include <dolphin/mtx.h>
 
 static struct ResultsData lbl_8046DBE8;
-static u32 lbl_804D3F8C;
-u32 lbl_804D3FA0 = 0x817C0000;
-u32 lbl_804D3FA4 = 0x817B0000;
-static char lbl_804D3FB0[] = "0";
+extern u8 lbl_804D3F8C[8];
+extern u32 lbl_804D3FA0;
+extern u32 lbl_804D3FA4;
+extern u8 lbl_804D3FA8[8];
+extern char lbl_804D3FB0[2];
 
 #endif

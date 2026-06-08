@@ -45,7 +45,7 @@ void ftCo_800C4724(Fighter_GObj* gobj)
 {
     Fighter* fp = GET_FIGHTER(gobj);
     HSD_JObj* jobj = GET_JOBJ(gobj);
-    it_80294430(fp->item_gobj, fp->co_attrs.x164, fp->x2C4.y);
+    it_80294430(fp->item_gobj, fp->x2C4.y, fp->co_attrs.x164);
     fp->mv.co.warpstar.facing_dir = fp->facing_dir;
     fp->facing_dir = 0;
     fp->mv.co.warpstar.x1C = 120;
@@ -183,24 +183,29 @@ void ftCo_800C4C60(Fighter_GObj* gobj)
                       fp->mv.co.jump.jump_mul;
     fp->self_vel.y *= p_ftCommonData->x438;
     fp->self_vel.z = 0;
-    fp->self_vel.y =
-        fp->co_attrs.jump_v_initial_velocity * fp->mv.co.jump.jump_mul;
     {
-        float n0 = -fp->facing_dir * p_ftCommonData->x78;
-        float n1 = fp->co_attrs.jump_h_initial_velocity * n0;
-        float n2 = fp->mv.co.jump.jump_mul * n1;
-        float n3 = fp->self_vel.x + n2;
-        float n4 = fp->co_attrs.jump_h_max_velocity * fp->mv.co.jump.jump_mul;
-        if (ABS(n3) > n4) {
-            if (n3 < 0) {
-                n3 = -n4;
-            } else {
-                n3 = n4;
+        float n2 = fp->mv.co.jump.jump_mul *
+                   (fp->co_attrs.jump_h_initial_velocity *
+                    (-fp->facing_dir * p_ftCommonData->x78));
+        fp->self_vel.y =
+            fp->co_attrs.jump_v_initial_velocity * fp->mv.co.jump.jump_mul;
+        {
+            float n3 = fp->self_vel.x;
+            float n4 =
+                fp->co_attrs.jump_h_max_velocity * fp->mv.co.jump.jump_mul;
+            n3 += n2;
+            if (ABS(n3) > n4) {
+                if (n3 < 0) {
+                    n3 = -n4;
+                } else {
+                    n3 = n4;
+                }
             }
+            fp->self_vel.x = n3;
         }
-        fp->self_vel.x = n3;
     }
     it_802947CC(fp->item_gobj, &fp->cur_pos);
+    PAD_STACK(8);
     {
         Vec3 vec;
         vec.x = 0;
@@ -208,7 +213,7 @@ void ftCo_800C4C60(Fighter_GObj* gobj)
         vec.z = 0;
         vec.x += fp->cur_pos.x;
         vec.y += fp->cur_pos.y;
-        vec.z = 0 + fp->cur_pos.z;
+        vec.z += fp->cur_pos.z;
         {
             float param = atan2f(-fp->coll_data.floor.normal.x,
                                  fp->coll_data.floor.normal.y);
@@ -218,6 +223,7 @@ void ftCo_800C4C60(Fighter_GObj* gobj)
         Camera_80030E44(4, &vec);
     }
     ftCommon_8007EBAC(fp, 14, 0);
+    PAD_STACK(8);
 }
 
 void ftCo_WarpStarFall_Cam(Fighter_GObj* gobj)
