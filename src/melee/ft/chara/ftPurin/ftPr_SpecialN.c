@@ -36,7 +36,26 @@
 #include <melee/ef/efsync.h>
 #include <melee/mp/mplib.h>
 
-#define SIGNF(x) ((x) > 0.0f ? 1.0f : -1.0f)
+static float sdata2_ordering(void)
+{
+    double data_0 = M_PI_2;
+    float data_1 = 0.0f;
+    float data_2 = M_PI_2;
+    float data_3 = 1.0f;
+    float data_4 = 0.5f;
+    double data_5 = M_TAU;
+    float data_6 = -1.0f;
+    float data_7 = 0.0001f;
+    float data_8 = 0.017453292f;
+    double data_9 = 4503601774854144.0;
+    double data_10 = 0.2;
+    double data_11 = 3 * M_PI_2;
+    double data_12 = M_PI;
+    float data_13 = -0.05f;
+
+    return data_12 + data_13 + data_11 + data_10 + data_9 + data_8 + data_7 +
+           data_6 + data_5 + data_4 + data_3 + data_2 + data_1 + data_0;
+}
 
 static inline void ftPr_JObjSetRotationY(HSD_JObj* jobj, f32 y, f32* base)
 {
@@ -239,15 +258,6 @@ void ftPr_SpecialS_8013DC64(HSD_GObj* gobj)
     fp->deal_dmg_cb = ftPr_SpecialS_8013D764;
     fp->x21F8 = ftPr_SpecialN_8014222C;
 }
-
-/// The original TU pools 0.5F at this slot (between the literal creations
-/// of ftPr_SpecialS_8013DC64 and ftPr_SpecialS_8013DD54) even though its
-/// only code uses are in the two Release_Coll functions far below. A bare
-/// literal at the use site would pool at the .sdata2 tail instead, so the
-/// value is defined here as the named object dtk emits for it; the use
-/// site reads it via *(f32*)& to defeat const-propagation, which would
-/// otherwise re-pool an anonymous duplicate (idiom 127b/c, flip-link law).
-const f32 ftPr_Init_804D9C54 = 0.5F;
 
 static inline void playRollSFX(HSD_GObj* gobj)
 {
@@ -1139,8 +1149,8 @@ static inline void wallBounceEffect(HSD_GObj* gobj, Fighter* fp, f32 dir,
     } else {
         pos->x -= ABS(fp2->coll_data.ecb.left.x);
     }
-    pos->y += *(f32*) &ftPr_Init_804D9C54 *
-              ABS(fp2->coll_data.ecb.top.y + fp2->coll_data.ecb.bottom.y);
+    pos->y +=
+        0.5f * ABS(fp2->coll_data.ecb.top.y + fp2->coll_data.ecb.bottom.y);
     efSync_Spawn(0x406, gobj, pos, angle);
     Camera_80030E44(3, pos);
     ftCommon_8007EBAC(fp2, 0xC, 0xA);
@@ -1461,11 +1471,3 @@ void ftPr_SpecialN_8014222C(HSD_GObj* gobj)
     fp->mv.pr.specialn.x34.x = -fp->mv.pr.specialn.x34.x;
     fp->mv.pr.specialn.x34.y = -fp->mv.pr.specialn.x34.y;
 }
-
-/// dtk emits the 4-byte alignment tail of this TU's .sdata2 as a named
-/// global (gap_11_804D9C94_sdata2). It must be defined in-TU for a
-/// byte-exact Matching link (flip-link law; same device as the quatlib
-/// gap_11_804DE764_sdata2 def). Zero bytes of code, never referenced;
-/// placed after all literal uses so it cannot disturb pool creation
-/// order (idiom 104 window).
-const f32 gap_11_804D9C94_sdata2 = 0.0F;

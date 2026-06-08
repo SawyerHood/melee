@@ -1,6 +1,15 @@
+#include "ftkirby.h"
+
 #include "ftKb_Init.static.h"
 
+#include "ftkirbyspecialdonkey.h"
+#include "ftkirbyspecialiceclimber.h"
+#include "ftkirbyspecialpikachu.h"
+#include "ftkirbyspecialzelda.h"
+#include "ftkirbyyoshiegg.h"
+
 #include "ef/efasync.h"
+#include "ft/chara/ftKirby/ftkirbyspecialmewtwo.h"
 #include "ft/fighter.h"
 #include "ft/ft_0877.h"
 #include "ft/ftanim.h"
@@ -14,6 +23,7 @@
 #include "ft/inlines.h"
 #include "ft/types.h"
 #include "ftCommon/ftCo_Attack100.h"
+#include "ftKirby/ftkirbyspecialpurin.h"
 #include "it/it_26B1.h"
 #include "lb/lb_00B0.h"
 #include "lb/lbarchive.h"
@@ -33,13 +43,11 @@ void ftAnim_80070458(Fighter* fp, CostumeTObjList*, u32 tobj_idx, float frame);
 void fn_800F9260(HSD_GObj*);
 void ftCommon_8007D9A0(Fighter* fp);
 void fn_8010B1F4(Fighter_GObj*);
-void fn_801090D4(Fighter_GObj*);
 static void fn_801095DC(HSD_GObj*);
 static void fn_80109680(HSD_GObj*);
 static void fn_80109714(HSD_GObj*);
 static void fn_801097B8(HSD_GObj*);
 void fn_800F64C8(Fighter_GObj*, float);
-void fn_8010A930(Fighter_GObj*, Fighter_GObj*);
 
 MotionState ftKb_Init_MotionStateTable[ftKb_MS_SelfCount] = {
     {
@@ -2927,19 +2935,7 @@ u32 ftKb_Init_803CB6C0[] = { 260006, 260009, 260012, 260015, 260018, 0 };
 char ftKb_Init_803CB6D8[] = "ftToSpecialNFox::Caution!!!\n";
 char ftKb_Init_803CB6F8[] = "ftkirbyspecialfox.c\0\0\0\0";
 
-Vec4 ftKb_Init_803CB710 = { 0.65F, 0.7F, 0.8F, 1.0F };
-Vec4 ftKb_Init_803CB720 = { 1.1F, 1.35F, 1.3F, 1.2F };
-
 char ftKb_Init_assert_msg_3[] = "!(jobj->flags & JOBJ_USE_QUATERNION)";
-
-Vec3 ftKb_Init_803CB758[] = {
-    { +8, +0, -4 },
-    { +4, +4, +4 },
-};
-
-float ftKb_Init_803CB770[] = {
-    -1, -0.75, -0.5, -0.25, 0, +0.25, +0.5, +0.75, +1,
-};
 
 /* static */ void ftKb_SpecialNSk_80106464(void);
 /* static */ void ftKb_SpecialNSk_80106474(void);
@@ -2984,8 +2980,6 @@ jtbl_t ftKb_Init_803CB7DC = {
 u32 ftKb_Init_803CB828[] = { 0x00030DB9, 0x00030DBC, 0x00030DBF, 0x00030DC2 };
 
 float const ftKb_Init_803B7548[10] = { 0 };
-Vec3 const ftKb_Init_803B7570 = { 0, 4, 0 };
-Vec3 const ftKb_Init_803B757C = { 0, 4, 0 };
 
 void ftKb_Init_800EE528(void)
 {

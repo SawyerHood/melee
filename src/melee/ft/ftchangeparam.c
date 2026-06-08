@@ -114,19 +114,20 @@ void ftCo_800D0CBC(Fighter_GObj* fgp)
     f32 orig_scale;
     s32 i;
     s32 count;
+    PAD_STACK(8);
 
     fp = fgp->user_data;
     count = (temp_r30 = fp->x2D0)->x28;
     scale = 1.0f;
 
-    if (scale != (orig_scale = fp->x34_scale.y)) {
+    if (scale != fp->x34_scale.y) {
+        orig_scale = fp->x34_scale.y;
         scale *= ftCo_CalcYScaledKnockback(1.0f, orig_scale,
                                            Fighter_804D6524->x28);
     }
 
     if (fp->x197C != NULL) {
-        f32 t = Fighter_804D6520->x14;
-        scale *= t;
+        scale *= Fighter_804D6520->x14;
     }
 
     if (fp->is_metal) {

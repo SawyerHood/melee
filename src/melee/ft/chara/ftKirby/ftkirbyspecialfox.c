@@ -1,64 +1,37 @@
-#include "ftKb_Init.h"
-#include "types.h"
-
-#include <placeholder.h>
-
-#include "baselib/debug.h"
-
-#include "baselib/forward.h"
+#include "ftkirby.h"
 
 #include "ft/chara/ftCommon/ftCo_FallSpecial.h"
 #include "ft/chara/ftCommon/ftpickupitem.h"
 #include "ft/fighter.h"
-
-#include "ft/forward.h"
-
 #include "ft/ft_081B.h"
 #include "ft/ft_0877.h"
 #include "ft/ft_0881.h"
 #include "ft/ft_0892.h"
 #include "ft/ftcommon.h"
 #include "ft/inlines.h"
-#include "ft/types.h"
 #include "ftCommon/ftCo_Fall.h"
-
-#include "ftKirby/forward.h"
-
 #include "it/items/itfoxblaster.h"
 #include "it/items/itfoxlaser.h"
 #include "it/items/itnesspkflash.h"
 #include "lb/lb_00B0.h"
-#include "lb/lbrefract.h"
 
-#include <common_structs.h>
-#include <stddef.h>
-#include <baselib/gobj.h>
-#include <baselib/random.h>
 #include <MSL/math.h>
 
-/* Original-TU strings live in ftKb_Init's data ranges (dtk split). */
-extern char ftKb_Init_803CB6D8[];
-extern char ftKb_Init_803CB6F8[];
-extern char ftKb_Init_804D3DC8[2];
-
-/* Named constant pool defs in target .sdata2 slot order (idiom 139).
- * Use sites read via re-typed pointer casts to defeat const-prop
- * folding into anonymous pool duplicates (idiom 140). */
-const f32 ftKb_Init_804D9450 = 0.0F;
-const f32 ftKb_Init_804D9454 = 1.45F;
-const f32 ftKb_Init_804D9458 = 5.016F;
-const f32 ftKb_Init_804D945C = 0.016F;
-const f32 ftKb_Init_804D9460 = 1.0F;
-const f64 ftKb_Init_804D9468 = M_PI;
-const f32 ftKb_Init_804D9470 = -1.0F;
-
-#define KB_0_0F (*(f32*) &ftKb_Init_804D9450)
-#define KB_1_45F (*(f32*) &ftKb_Init_804D9454)
-#define KB_5_016F (*(f32*) &ftKb_Init_804D9458)
-#define KB_0_016F (*(f32*) &ftKb_Init_804D945C)
-#define KB_1_0F (*(f32*) &ftKb_Init_804D9460)
-#define KB_PI (*(f64*) &ftKb_Init_804D9468)
-#define KB_M1_0F (*(f32*) &ftKb_Init_804D9470)
+void ftKb_SpecialNFx_800FDC00(Fighter_GObj* gobj, Vec3* vec)
+{
+    if (gobj != NULL) {
+        Fighter* fp = GET_FIGHTER(gobj);
+        if (fp != NULL) {
+            Vec3 offset;
+            offset.x = 0.0f;
+            offset.y = 1.45f;
+            offset.z = 5.016f;
+            lb_8000B1CC(fp->parts[44].joint, &offset, vec);
+            return;
+        }
+    }
+    vec->x = vec->y = vec->z = 0.0f;
+}
 
 void ftKb_SpecialNFx_800FDC70(Fighter_GObj* gobj, Vec3* vec)
 {
@@ -66,14 +39,14 @@ void ftKb_SpecialNFx_800FDC70(Fighter_GObj* gobj, Vec3* vec)
     if (gobj != NULL) {
         Fighter* fp = GET_FIGHTER(gobj);
         if (fp != NULL) {
-            pos1.x = KB_0_0F;
-            pos1.y = KB_1_45F;
-            pos1.z = KB_0_016F;
+            pos1.x = 0.0f;
+            pos1.y = 1.45f;
+            pos1.z = 0.016f;
             lb_8000B1CC(fp->parts[FtPart_R3rdNa].joint, &pos1, vec);
             return;
         }
     }
-    vec->x = vec->y = vec->z = KB_0_0F;
+    vec->x = vec->y = vec->z = 0.0f;
 }
 
 void ftKb_SpecialNFx_OnChangeAction(Fighter_GObj* gobj)
@@ -144,6 +117,8 @@ ftFx_SpecialNIndex ftKb_SpecialNFx_800FDD4C(Fighter_GObj* gobj)
                 }
                 break;
             }
+            default:
+                break;
             }
         }
     }
@@ -194,6 +169,8 @@ bool ftKb_SpecialNFx_800FDDF4(Fighter_GObj* gobj)
                 }
                 break;
             }
+            default:
+                break;
             }
         }
     }
@@ -244,40 +221,42 @@ void ftKb_SpecialNFx_800FDF30(Fighter_GObj* gobj)
         Fighter* fp2;
         fp->cmd_vars[2] = 0;
         if ((gobj != NULL) && (fp2 = GET_FIGHTER(gobj)) != NULL) {
-            pos1.x = KB_0_0F;
-            pos1.y = KB_1_45F;
-            pos1.z = KB_5_016F;
+            pos1.x = 0.0f;
+            pos1.y = 1.45f;
+            pos1.z = 5.016f;
             lb_8000B1CC(fp2->parts[FtPart_R3rdNa].joint, &pos1, &sp2C);
         } else {
-            sp2C.x = sp2C.y = sp2C.z = KB_0_0F;
+            sp2C.x = sp2C.y = sp2C.z = 0.0f;
         }
-        sp2C.z = KB_0_0F;
+        sp2C.z = 0;
 
         switch (fp->fv.kb.hat.kind) {
         case FTKIND_FOX:
-            if (KB_1_0F == fp->facing_dir) {
+            if (1 == fp->facing_dir) {
                 launchAngle = da->specialn_fx_launch_angle;
             } else {
-                launchAngle = KB_PI - da->specialn_fx_launch_angle;
+                launchAngle = M_PI - da->specialn_fx_launch_angle;
             }
             it_8029C6A4(launchAngle, da->specialn_fx_launch_speed, gobj, &sp2C,
                         da->specialn_fx_blaster_projectile_id);
             it_802AE1D0(fp->fv.kb.xB0);
-            ft_PlaySFX(fp, ftKb_Init_804D3DB8[KB_M1_0F == fp->facing_dir],
-                       0x7F, 0x40);
+            ft_PlaySFX(fp, ftKb_Init_804D3DB8[-1 == fp->facing_dir], 0x7F,
+                       0x40);
             return;
 
         case FTKIND_FALCO:
-            if (KB_1_0F == fp->facing_dir) {
+            if (1 == fp->facing_dir) {
                 launchAngle = da->specialn_fc_launch_angle;
             } else {
-                launchAngle = KB_PI - da->specialn_fc_launch_angle;
+                launchAngle = M_PI - da->specialn_fc_launch_angle;
             }
             it_8029C6A4(launchAngle, da->specialn_fc_launch_speed, gobj, &sp2C,
                         da->specialn_fc_blaster_projectile_id);
             it_802AE1D0(fp->fv.kb.xB0);
-            ft_PlaySFX(fp, ftKb_Init_804D3DC0[KB_M1_0F == fp->facing_dir],
-                       0x7F, 0x40);
+            ft_PlaySFX(fp, ftKb_Init_804D3DC0[-1 == fp->facing_dir], 0x7F,
+                       0x40);
+            break;
+        default:
             break;
         }
     }
@@ -299,6 +278,8 @@ inline FtMotionId ftKbGetStartMotionId(HSD_GObj* gobj)
     case FTKIND_FOX:
         msid = ftKb_MS_FxSpecialNStart;
         break;
+    default:
+        break;
     }
     return msid;
 }
@@ -312,8 +293,8 @@ void ftKb_SpecialNFx_800FE100(HSD_GObj* gobj)
 
     ftCommon_8007D7FC(fp);
 
-    Fighter_ChangeMotionState(gobj, ftKbGetStartMotionId(gobj), 0.0f, KB_0_0F,
-                              KB_1_0F, KB_0_0F, NULL);
+    Fighter_ChangeMotionState(gobj, ftKbGetStartMotionId(gobj), 0.0f, 0.0f,
+                              1.0f, 0.0f, NULL);
 
     fp->cmd_vars[3] = 0;
     fp->cmd_vars[2] = 0;
@@ -322,10 +303,10 @@ void ftKb_SpecialNFx_800FE100(HSD_GObj* gobj)
 
     ftAnim_8006EBA4(gobj);
 
-    fp->gr_vel = KB_0_0F;
-    fp->self_vel.z = KB_0_0F;
-    fp->self_vel.y = KB_0_0F;
-    fp->self_vel.x = KB_0_0F;
+    fp->gr_vel = 0.0f;
+    fp->self_vel.z = 0.0f;
+    fp->self_vel.y = 0.0f;
+    fp->self_vel.x = 0.0f;
 
     fp->mv.fx.SpecialN.isBlasterLoop = false;
 
@@ -335,6 +316,8 @@ void ftKb_SpecialNFx_800FE100(HSD_GObj* gobj)
         break;
     case FTKIND_FALCO:
         blaster_id = da->specialn_fc_blaster_item_id;
+        break;
+    default:
         break;
     }
 
@@ -347,8 +330,8 @@ void ftKb_SpecialNFx_800FE100(HSD_GObj* gobj)
         return;
     }
 
-    OSReport(ftKb_Init_803CB6D8);
-    __assert(ftKb_Init_803CB6F8, 429, ftKb_Init_804D3DC8);
+    OSReport("ftToSpecialNFox::Caution!!!\n");
+    HSD_ASSERT(429, 0);
 }
 
 inline FtMotionId ftKbGetAirStartMotionId(HSD_GObj* gobj)
@@ -362,6 +345,8 @@ inline FtMotionId ftKbGetAirStartMotionId(HSD_GObj* gobj)
     case FTKIND_FOX:
         msid = ftKb_MS_FxSpecialAirNStart;
         break;
+    default:
+        break;
     }
     return msid;
 }
@@ -373,8 +358,8 @@ void ftKb_SpecialNFx_800FE240(HSD_GObj* gobj)
     HSD_GObj* blasterGObj;
     u32 blaster_id;
 
-    Fighter_ChangeMotionState(gobj, ftKbGetAirStartMotionId(gobj), 0.0f,
-                              KB_0_0F, KB_1_0F, KB_0_0F, NULL);
+    Fighter_ChangeMotionState(gobj, ftKbGetAirStartMotionId(gobj), 0.0f, 0.0f,
+                              1.0f, 0.0f, NULL);
 
     fp->cmd_vars[3] = 0;
     fp->cmd_vars[2] = 0;
@@ -392,6 +377,8 @@ void ftKb_SpecialNFx_800FE240(HSD_GObj* gobj)
     case FTKIND_FALCO:
         blaster_id = da->specialn_fc_blaster_item_id;
         break;
+    default:
+        break;
     }
 
     blasterGObj = it_802AE8A8(fp->facing_dir, gobj, &fp->cur_pos,
@@ -403,8 +390,8 @@ void ftKb_SpecialNFx_800FE240(HSD_GObj* gobj)
         return;
     }
 
-    OSReport(ftKb_Init_803CB6D8);
-    __assert(ftKb_Init_803CB6F8, 465, ftKb_Init_804D3DC8);
+    OSReport("ftToSpecialNFox::Caution!!!\n");
+    HSD_ASSERT(465, 0);
 }
 
 inline FtMotionId ftKbGetLoopMotionId(HSD_GObj* gobj)
@@ -417,6 +404,8 @@ inline FtMotionId ftKbGetLoopMotionId(HSD_GObj* gobj)
         break;
     case FTKIND_FOX:
         msid = ftKb_MS_FxSpecialNLoop;
+        break;
+    default:
         break;
     }
     return msid;
@@ -433,8 +422,8 @@ void ftKb_FxSpecialNStart_Anim(HSD_GObj* gobj)
     }
     if (!ftAnim_IsFramesRemaining(gobj)) {
         Fighter_ChangeMotionState(gobj, ftKbGetLoopMotionId(gobj),
-                                  (Ft_MF_SkipModel | Ft_MF_KeepGfx), KB_0_0F,
-                                  KB_1_0F, KB_0_0F, NULL);
+                                  (Ft_MF_SkipModel | Ft_MF_KeepGfx), 0, 1, 0,
+                                  NULL);
         ftKb_SpecialNFx_SetCall(gobj);
         fp->accessory4_cb = ftKb_SpecialNFx_CreateBlasterShot;
         it_802ADDD0(fp->fv.kb.xB0, 1);
@@ -451,6 +440,8 @@ inline FtMotionId ftKbGetEndMotionId(HSD_GObj* gobj)
         break;
     case FTKIND_FOX:
         msid = ftKb_MS_FxSpecialNEnd;
+        break;
+    default:
         break;
     }
     return msid;
@@ -471,16 +462,16 @@ void ftKb_FxSpecialNLoop_Anim(HSD_GObj* gobj)
             fp->x21EC = ftKb_SpecialNFx_OnChangeAction;
             Fighter_ChangeMotionState(
                 temp = gobj, ftKbGetLoopMotionId(gobj),
-                (Ft_MF_SkipAttackCount | Ft_MF_SkipModel | Ft_MF_KeepGfx),
-                KB_0_0F, KB_1_0F, KB_0_0F, NULL);
+                (Ft_MF_SkipAttackCount | Ft_MF_SkipModel | Ft_MF_KeepGfx), 0,
+                1, 0, NULL);
             fp->accessory4_cb = ftKb_SpecialNFx_CreateBlasterShot;
             fp->mv.fx.SpecialN.isBlasterLoop = false;
             it_802ADDD0(fp->fv.kb.xB0, 1);
         } else {
             HSD_GObj* temp;
             Fighter_ChangeMotionState(gobj, ftKbGetEndMotionId(gobj),
-                                      (Ft_MF_SkipModel | Ft_MF_KeepGfx),
-                                      KB_0_0F, KB_1_0F, KB_0_0F, NULL);
+                                      (Ft_MF_SkipModel | Ft_MF_KeepGfx), 0, 1,
+                                      0, NULL);
             temp = fp->fv.kb.xB0;
             fp->cmd_vars[1] = 1;
             it_802ADDD0(temp, 1);
@@ -522,6 +513,8 @@ inline FtMotionId ftKbGetAirLoopMotionId(HSD_GObj* gobj)
     case FTKIND_FOX:
         msid = ftKb_MS_FxSpecialAirNLoop;
         break;
+    default:
+        break;
     }
     return msid;
 }
@@ -537,8 +530,8 @@ void ftKb_FxSpecialAirNStart_Anim(HSD_GObj* gobj)
     }
     if (!ftAnim_IsFramesRemaining(gobj)) {
         Fighter_ChangeMotionState(gobj, ftKbGetAirLoopMotionId(gobj),
-                                  (Ft_MF_SkipModel | Ft_MF_KeepGfx), KB_0_0F,
-                                  KB_1_0F, KB_0_0F, NULL);
+                                  (Ft_MF_SkipModel | Ft_MF_KeepGfx), 0, 1, 0,
+                                  NULL);
         ftKb_SpecialNFx_SetCall(gobj);
         fp->accessory4_cb = ftKb_SpecialNFx_CreateBlasterShot;
         it_802ADDD0(fp->fv.kb.xB0, 1);
@@ -555,6 +548,8 @@ inline FtMotionId ftKbGetAirEndMotionId(HSD_GObj* gobj)
         break;
     case FTKIND_FOX:
         msid = ftKb_MS_FxSpecialAirNEnd;
+        break;
+    default:
         break;
     }
     return msid;
@@ -576,16 +571,16 @@ void ftKb_FxSpecialAirNLoop_Anim(HSD_GObj* gobj)
             fp->x21EC = ftKb_SpecialNFx_OnChangeAction;
             Fighter_ChangeMotionState(
                 temp = gobj, ftKbGetAirLoopMotionId(gobj),
-                (Ft_MF_SkipAttackCount | Ft_MF_SkipModel | Ft_MF_KeepGfx),
-                KB_0_0F, KB_1_0F, KB_0_0F, NULL);
+                (Ft_MF_SkipAttackCount | Ft_MF_SkipModel | Ft_MF_KeepGfx), 0,
+                1, 0, NULL);
             ftKb_SpecialNFx_SetCall(gobj);
             fp->accessory4_cb = ftKb_SpecialNFx_CreateBlasterShot;
             fp->mv.fx.SpecialN.isBlasterLoop = false;
             it_802ADDD0(fp->fv.kb.xB0, 1);
         } else {
             Fighter_ChangeMotionState(gobj, ftKbGetAirEndMotionId(gobj),
-                                      (Ft_MF_SkipModel | Ft_MF_KeepGfx),
-                                      KB_0_0F, KB_1_0F, KB_0_0F, NULL);
+                                      (Ft_MF_SkipModel | Ft_MF_KeepGfx), 0, 1,
+                                      0, NULL);
             ftKb_SpecialNFx_SetCall(gobj);
             temp = fp->fv.kb.xB0;
             fp->cmd_vars[1] = 1;
@@ -631,11 +626,11 @@ void ftKb_FxSpecialAirNEnd_Anim(Fighter_GObj* gobj)
         default:
             break;
         }
-        if (KB_0_0F == landing_lag) {
+        if (landing_lag == 0.0F) {
             ftCo_Fall_Enter(gobj);
             return;
         }
-        ftCo_80096900(gobj, 1, 0, 1, KB_1_0F, landing_lag);
+        ftCo_80096900(gobj, 1, 0, 1, 1.0F, landing_lag);
     }
 }
 
@@ -768,31 +763,5 @@ void ftKb_SpecialNNs_800FECE8(HSD_GObj* gobj)
             it_802AAA50(fp->fv.kb.ns_flash_gobj);
             fp->fv.kb.ns_flash_gobj = NULL;
         }
-    }
-}
-
-void ftKb_SpecialNNs_800FED38(HSD_GObj* gobj)
-{
-    Fighter* fp = GET_FIGHTER(gobj);
-    Fighter_ChangeMotionState(gobj, ftKb_MS_NsSpecialNStart, Ft_MF_None,
-                              ftKb_Init_804D9478, ftKb_Init_804D9480,
-                              ftKb_Init_804D9478, NULL);
-    fp->cmd_vars[0] = fp->cmd_vars[1] = fp->cmd_vars[2] = fp->cmd_vars[3] = 0;
-    {
-        /// @todo @c da can't move below @c fp
-        ftKb_DatAttrs* da;
-        Fighter* fp = GET_FIGHTER(gobj);
-        PAD_STACK(4 * 4);
-        da = fp->dat_attrs;
-        fp->mv.kb.specialn_ns.frames_to_loop_charge_ground =
-            da->specialn_ns_frames_to_loop_charge_ground;
-        fp->mv.kb.specialn_ns.frames_to_loop_charge_air =
-            da->specialn_ns_frames_to_loop_charge_air;
-        fp->mv.kb.specialn_ns.falling_acceleration_delay =
-            da->specialn_ns_falling_acceleration_delay;
-        fp->fv.kb.ns_flash_gobj = NULL;
-        fp->mv.kb.specialn_ns.charge_release_delay =
-            da->specialn_ns_charge_release_delay;
-        ftAnim_8006EBA4(gobj);
     }
 }

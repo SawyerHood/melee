@@ -3,7 +3,7 @@
 #include "baselib/forward.h"
 
 #include "db/db.h"
-#include "ftKirby/ftKb_Init.h"
+#include "ftKirby/ftkirbyyoshiegg.h"
 #include "ftPeach/ftPe_SpecialN.h"
 
 #include "it/forward.h"
