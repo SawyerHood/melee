@@ -368,33 +368,26 @@ bool grOldYoshi_8020F080(Ground_GObj* arg)
 {
     return false;
 }
-const int grOy_803B83F0[5] = { 1, 2, 3, 4, 5 };
 /// #grOldYoshi_8020F088
 void grOldYoshi_8020F088(Ground_GObj* arg)
 {
-    HSD_JObj* jobj = arg->hsd_obj;
+    HSD_JObj* jobj;
     Ground* gp = arg->user_data;
     s16 sVar5;
     float dVar9;
     float dVar10;
-    int local34[5];
-    PAD_STACK(8);
     if (gp->gv.oldyoshiguest.xC6 == -1) {
         sVar5 = gp->gv.oldyoshiguest.xC4;
         gp->gv.oldyoshiguest.xC4 = sVar5 - 1;
         if (sVar5 < 0) {
-            local34[0] = grOy_803B83F0[0];
-            local34[1] = grOy_803B83F0[1];
-            local34[2] = grOy_803B83F0[2];
-            local34[3] = grOy_803B83F0[3];
-            local34[4] = grOy_803B83F0[4];
+            int local34[5] = { 1, 2, 3, 4, 5 };
+            PAD_STACK(8);
             gp->gv.oldyoshiguest.xC6 = local34[HSD_Randi(5)];
         }
         grAnime_801C8138(arg, gp->map_id, 0);
         dVar10 = HSD_Randf();
-        jobj = arg->hsd_obj;
         dVar9 = grOy_804D6A88->x18 * (dVar10 * 2.0f - 1.0f);
-        HSD_JObjSetTranslateY(jobj, dVar9);
+        HSD_JObjSetTranslateY(arg->hsd_obj, dVar9);
     } else {
         jobj = Ground_801C3FA4(arg, gp->gv.oldyoshiguest.xC6);
         if (jobj == NULL) {
@@ -437,6 +430,7 @@ void fn_8020F2A8(Ground* gp, s32 param2, CollData* coll, s32 param4,
 float grOldYoshi_8020F31C(float param1, float param2, float param3,
                           float param4, float param5, float param6)
 {
+    float temp;
     float fVar1;
     float fVar2;
     float fVar3;
@@ -453,13 +447,12 @@ float grOldYoshi_8020F31C(float param1, float param2, float param3,
     } else {
         fVar2 = param1;
     }
-    fVar1 = param4 - param3;
-    if (fVar1 < 0.0f) {
+    temp = fVar3 * (-param2 * 0.5f * fVar3) + (fVar3 * fVar2);
+    if ((fVar1 = param4 - param3) < 0.0f) {
         fVar1 = -fVar1;
     }
-    if (fVar3 * (-param2 * 0.5f * fVar3) + (fVar3 * fVar2) < fVar1 &&
-        ((param4 > param3 && param1 > 0.0f) ||
-         (param4 < param3 && param1 < 0.0f)))
+    if (fVar1 < temp && ((param4 > param3 && param1 > 0.0f) ||
+                         (param4 < param3 && param1 < 0.0f)))
     {
         if (param1 > 0.0f) {
             param1 = param1 - param2;
@@ -476,10 +469,10 @@ float grOldYoshi_8020F31C(float param1, float param2, float param3,
     if (param1 > param5) {
         return param5;
     }
-    if (param1 > param6) {
-        return param1;
+    if (param1 < param6) {
+        return param6;
     }
-    return param6;
+    return param1;
 }
 
 DynamicsDesc* grOldYoshi_8020F404(enum_t arg)

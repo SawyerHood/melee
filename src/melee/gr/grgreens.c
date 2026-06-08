@@ -208,6 +208,9 @@ static inline struct grGreens_BlockVars* getBlock(Ground* gp, int i, int j)
     return &((struct grGreens_BlockVars(*)[6]) gp->gv.greens.x8_blocks)[i][j];
 }
 
+#define GREENS_BLOCKS(gp) \
+    ((struct grGreens_BlockVars(*)[6]) (gp)->gv.greens.x8_blocks)
+
 static inline Vec* getVec(Ground* gp, int i, int j);
 static inline Vec* getVec(Ground* gp, int i, int j)
 {
@@ -911,46 +914,46 @@ void grGreens_802150C4(Ground_GObj* gobj, int arg1, int arg2)
 {
     Ground* gp = GET_GROUND(gobj);
 
-    if (arg2 > 0 && arg1 > 0 && getBlock(gp, arg2 - 1, arg1 - 1)->status == 3)
+    if (arg2 > 0 && arg1 > 0 && GREENS_BLOCKS(gp)[arg2 - 1][arg1 - 1].status == 3)
     {
-        if (getBlock(gp, arg2 - 1, arg1)->status == 3) {
-            mpLib_800581DC(getBlock(gp, arg2 - 1, arg1 - 1)->x18,
-                           getBlock(gp, arg2 - 1, arg1)->x18);
-        } else if (getBlock(gp, arg2, arg1 - 1)->status == 3) {
-            mpLib_800581DC(getBlock(gp, arg2 - 1, arg1 - 1)->x18,
-                           getBlock(gp, arg2, arg1 - 1)->x18);
+        if (GREENS_BLOCKS(gp)[arg2 - 1][arg1].status == 3) {
+            mpLib_800581DC(GREENS_BLOCKS(gp)[arg2 - 1][arg1 - 1].x18,
+                           GREENS_BLOCKS(gp)[arg2 - 1][arg1].x18);
+        } else if (GREENS_BLOCKS(gp)[arg2][arg1 - 1].status == 3) {
+            mpLib_800581DC(GREENS_BLOCKS(gp)[arg2 - 1][arg1 - 1].x18,
+                           GREENS_BLOCKS(gp)[arg2][arg1 - 1].x18);
         }
     }
-    if (arg2 < 4 && arg1 > 0 && getBlock(gp, arg2 + 1, arg1 - 1)->status == 3)
+    if (arg2 < 4 && arg1 > 0 && GREENS_BLOCKS(gp)[arg2 + 1][arg1 - 1].status == 3)
     {
-        if (getBlock(gp, arg2 + 1, arg1)->status == 3) {
-            mpLib_800581DC(getBlock(gp, arg2 + 1, arg1 - 1)->x18,
-                           getBlock(gp, arg2 + 1, arg1)->x18);
-        } else if (getBlock(gp, arg2, arg1 - 1)->status == 3) {
-            mpLib_800581DC(getBlock(gp, arg2 + 1, arg1 - 1)->x18,
-                           getBlock(gp, arg2, arg1 - 1)->x18);
+        if (GREENS_BLOCKS(gp)[arg2 + 1][arg1].status == 3) {
+            mpLib_800581DC(GREENS_BLOCKS(gp)[arg2 + 1][arg1 - 1].x18,
+                           GREENS_BLOCKS(gp)[arg2 + 1][arg1].x18);
+        } else if (GREENS_BLOCKS(gp)[arg2][arg1 - 1].status == 3) {
+            mpLib_800581DC(GREENS_BLOCKS(gp)[arg2 + 1][arg1 - 1].x18,
+                           GREENS_BLOCKS(gp)[arg2][arg1 - 1].x18);
         }
     }
-    if (arg2 > 0 && arg1 < 5 && getBlock(gp, arg2 - 1, arg1 + 1)->status == 3)
+    if (arg2 > 0 && arg1 < 5 && GREENS_BLOCKS(gp)[arg2 - 1][arg1 + 1].status == 3)
     {
-        if (getBlock(gp, arg2 - 1, arg1)->status == 3) {
-            mpLib_800581DC(getBlock(gp, arg2 - 1, arg1 + 1)->x18,
-                           getBlock(gp, arg2 - 1, arg1)->x18);
-        } else if (getBlock(gp, arg2, arg1 + 1)->status == 3) {
-            mpLib_800581DC(getBlock(gp, arg2 - 1, arg1 + 1)->x18,
-                           getBlock(gp, arg2, arg1 + 1)->x18);
+        if (GREENS_BLOCKS(gp)[arg2 - 1][arg1].status == 3) {
+            mpLib_800581DC(GREENS_BLOCKS(gp)[arg2 - 1][arg1 + 1].x18,
+                           GREENS_BLOCKS(gp)[arg2 - 1][arg1].x18);
+        } else if (GREENS_BLOCKS(gp)[arg2][arg1 + 1].status == 3) {
+            mpLib_800581DC(GREENS_BLOCKS(gp)[arg2 - 1][arg1 + 1].x18,
+                           GREENS_BLOCKS(gp)[arg2][arg1 + 1].x18);
         }
     }
-    if (arg2 < 4 && arg1 < 5 && getBlock(gp, arg2 + 1, arg1 + 1)->status == 3)
+    if (arg2 < 4 && arg1 < 5 && GREENS_BLOCKS(gp)[arg2 + 1][arg1 + 1].status == 3)
     {
-        if (getBlock(gp, arg2 + 1, arg1)->status == 3) {
-            mpLib_800581DC(getBlock(gp, arg2 + 1, arg1 + 1)->x18,
-                           getBlock(gp, arg2 + 1, arg1)->x18);
+        if (GREENS_BLOCKS(gp)[arg2 + 1][arg1].status == 3) {
+            mpLib_800581DC(GREENS_BLOCKS(gp)[arg2 + 1][arg1 + 1].x18,
+                           GREENS_BLOCKS(gp)[arg2 + 1][arg1].x18);
             return;
         }
-        if (getBlock(gp, arg2, arg1 + 1)->status == 3) {
-            mpLib_800581DC(getBlock(gp, arg2 + 1, arg1 + 1)->x18,
-                           getBlock(gp, arg2, arg1 + 1)->x18);
+        if (GREENS_BLOCKS(gp)[arg2][arg1 + 1].status == 3) {
+            mpLib_800581DC(GREENS_BLOCKS(gp)[arg2 + 1][arg1 + 1].x18,
+                           GREENS_BLOCKS(gp)[arg2][arg1 + 1].x18);
         }
     }
 }
@@ -1116,6 +1119,7 @@ void fn_80215D50(Item_GObj* item_gobj, Ground* gp, HSD_GObj* gobj)
 
 s32 grGreens_80215D54(Ground_GObj* gobj, int arg1, int arg2)
 {
+    struct grGreens_BlockVars temp;
     Ground* gp = GET_GROUND(gobj);
     int row;
 
@@ -1124,19 +1128,14 @@ s32 grGreens_80215D54(Ground_GObj* gobj, int arg1, int arg2)
              getBlock(gp, row, arg1)->status == 2) &&
             getBlock(gp, row - 1, arg1)->status == 0)
         {
-            int r = row;
-            int count = 5 - row;
-            if (row < 5) {
-                do {
-                    struct grGreens_BlockVars temp = *getBlock(gp, r, arg1);
-                    *getBlock(gp, r, arg1) = *getBlock(gp, r - 1, arg1);
-                    *getBlock(gp, r - 1, arg1) = temp;
-                    r += 1;
-                    count -= 1;
-                } while (count != 0);
+            int r;
+            for (r = row; r < 5; r++) {
+                temp = GREENS_BLOCKS(gp)[r][arg1];
+                GREENS_BLOCKS(gp)[r][arg1] = GREENS_BLOCKS(gp)[r - 1][arg1];
+                GREENS_BLOCKS(gp)[r - 1][arg1] = temp;
             }
             if (getBlock(gp, row - 1, arg1)->status == 2) {
-                getBlock(gp, row - 1, arg1)->status |= 0x10;
+                getBlock(gp, row - 1, arg1)->status = 1;
             }
             row = 0;
         }
@@ -1419,31 +1418,33 @@ restart_cleanup:
 
 void grGreens_80216C20(Ground_GObj* gobj)
 {
+    s32 x18;
     Ground* gp = GET_GROUND(gobj);
     int i;
     int j;
 
     for (i = 0; i < 5; i++) {
         for (j = 0; j < 6; j++) {
-            struct grGreens_BlockVars* block = getBlock(gp, i, j);
+            if (GREENS_BLOCKS(gp)[i][j].x1_5) {
+                Ground* gp2 = GET_GROUND(gobj);
+                x18 = GREENS_BLOCKS(gp2)[i][j].x18;
 
-            if (block->x1_6) {
-                if (i > 0 && getBlock(gp, i - 1, j)->status == 3) {
-                    mpLib_800581DC(block->x18, getBlock(gp, i - 1, j)->x18);
+                if (i > 0 && GREENS_BLOCKS(gp2)[i - 1][j].status == 3) {
+                    mpLib_800581DC(x18, GREENS_BLOCKS(gp2)[i - 1][j].x18);
                 }
-                if (j > 0 && getBlock(gp, i, j - 1)->status == 3) {
-                    mpLib_800581DC(block->x18, getBlock(gp, i, j - 1)->x18);
+                if (j > 0 && GREENS_BLOCKS(gp2)[i][j - 1].status == 3) {
+                    mpLib_800581DC(x18, GREENS_BLOCKS(gp2)[i][j - 1].x18);
                 }
-                if (i < 4 && getBlock(gp, i + 1, j)->status == 3) {
-                    mpLib_800581DC(block->x18, getBlock(gp, i + 1, j)->x18);
+                if (i < 4 && GREENS_BLOCKS(gp2)[i + 1][j].status == 3) {
+                    mpLib_800581DC(x18, GREENS_BLOCKS(gp2)[i + 1][j].x18);
                 }
-                if (j < 5 && getBlock(gp, i, j + 1)->status == 3) {
-                    mpLib_800581DC(block->x18, getBlock(gp, i, j + 1)->x18);
+                if (j < 5 && GREENS_BLOCKS(gp2)[i][j + 1].status == 3) {
+                    mpLib_800581DC(x18, GREENS_BLOCKS(gp2)[i][j + 1].x18);
                 }
-                block->x1_6 = 0;
-            } else if (block->x1_7) {
+                GREENS_BLOCKS(gp)[i][j].x1_5 = 0;
+            } else if (GREENS_BLOCKS(gp)[i][j].x1_6) {
                 grGreens_802150C4(gobj, j, i);
-                block->x1_7 = 0;
+                GREENS_BLOCKS(gp)[i][j].x1_6 = 0;
             }
         }
     }

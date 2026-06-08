@@ -1043,7 +1043,9 @@ typedef struct CssSubStruct {
     /* 0x144 */ s32 anim_frames[39];
     /* 0x1E0 */ s32 menu_values[7];
     /* 0x1FC */ HSD_Text* text;
-    /* 0x200 */ u8 pad200[0x0C];
+    /* 0x200 */ u8 pad200[0x04]; ///< binary-proven: 0x80473700 region ends
+                                 ///< at 0x80473A18 (UnkAllstarData), so the
+                                 ///< merged state struct is 0x318, not 0x320
 } CssSubStruct;
 
 typedef struct TrainingModeState {

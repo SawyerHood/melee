@@ -48,6 +48,20 @@
 #include <melee/vi/vi1201v1.h>
 #include <melee/vi/vi1201v2.h>
 
+#if defined(__MWERKS__) && !defined(M2CTX)
+#define SECTION_SDATA2 __declspec(section ".sdata2")
+#else
+#define SECTION_SDATA2
+#endif
+
+/// Named float-constant pool (idiom 259); every literal use below is
+/// respelled onto these so no anonymous duplicates pool up.
+SECTION_SDATA2 f32 gm_804DAC78 = 1.0F;
+SECTION_SDATA2 f32 gm_804DAC7C = 0.2F;
+SECTION_SDATA2 f32 gm_804DAC80 = 0.5F;
+SECTION_SDATA2 f32 gm_804DAC84 = 2.0F;
+SECTION_SDATA2 f32 gm_804DAC88 = 1.0F; /* target keeps a second one-point-zero slot */
+
 GameScene gm_803DF618_Scenes[] = {
     {
         0,
@@ -76,15 +90,46 @@ GameScene gm_803DF618_Scenes[] = {
     { 0xFF },
 };
 
-/* 49E548 */ static struct gm_8049E548_t gm_8049E548;
+/// gm_803DF660 / gm_803DF66C are NAMED statics in the
+/// target (gm_803DF660/gm_803DF66C); the call sites use these arrays.
+static char gm_803DF660[] = "GmEvent.dat";
+static char gm_803DF66C[] = "sqEventInitDataLevelTbl";
+
+/// .bss layout is binary-proven: 9 globals, 0x6e00 total (decl order probed).
+CSSData gm_80497758;
+StartMeleeData gm_804978A0;
+MatchExitInfo gm_804979D8[2];
+CSSData gm_8049BEE8;
+CSSData gm_8049C030;
+u8 gm_8049C178[16];
+StartMeleeData gm_8049C188;
+MatchExitInfo gm_8049C2C0;
+struct gm_8049E548_t gm_8049E548;
+
+/// .sbss: 10 globals, 0x40 total; the u64 spelling 8-aligns the 8-byte
+/// scene-data slots (w16 u64-alignment law).
+/// declared in REVERSE: zero-init .sbss globals emit reverse-decl-order
+/// (w30 law, byte-proven on gm_1884 + here); target order is 6900..693C.
+s32 gm_804D693C;
+s32 gm_804D6938;
+u64 gm_804D6930;
+s32 gm_804D692C;
+s32 gm_804D6928;
+u64 gm_804D6920;
+u64 gm_804D6918;
+u64 gm_804D6910;
+u64 gm_804D6908;
+struct gm_804D6900_t** gm_804D6900;
 
 extern u8 gm_804D68F8;
 extern u8 gm_804D68F9;
+extern u8 un_804D6FA8[8];
+extern u8 un_804D7004[];
+extern u8 un_804D7038[8];
 
 void gm_801BA8FC(void)
 {
-    lbArchive_LoadSymbols("GmEvent.dat", &gm_804D6900,
-                          "sqEventInitDataLevelTbl", 0);
+    lbArchive_LoadSymbols(gm_803DF660, &gm_804D6900, gm_803DF66C, 0);
 }
 
 void gm_801BA938(struct EventData* arg0, int lo, int hi, bool arg3)
@@ -289,7 +334,7 @@ void gm_801BAD70(GameScene* arg0)
     void* sd;
     PAD_STACK(0x20);
 
-    lbArchive_LoadSymbols("GmEvent.dat", &gm_804D6900, "sqEventInitDataLevelTbl",
+    lbArchive_LoadSymbols(gm_803DF660, &gm_804D6900, gm_803DF66C,
                           0);
     levels = gm_804D6900;
     gm_80167A64(&md->rules);
@@ -346,7 +391,7 @@ void gm_801BAD70(GameScene* arg0)
     if ((((struct gm_evinit*) (*lvlpp)->x8)->unk1 >> 7) & 1) {
         ev->xB_6 = 1;
     }
-    if (((struct gm_evinit*) (*lvlpp)->x8)->unk24 != 1.0f) {
+    if (((struct gm_evinit*) (*lvlpp)->x8)->unk24 != gm_804DAC78) {
         ev->x1C = ((struct gm_evinit*) (*lvlpp)->x8)->unk24;
     }
     if (((u8*) *lvlpp)[0] == 2) {
@@ -714,7 +759,7 @@ void gm_801BBA60_OnInit(void)
     temp_r6->x10 = 0;
     temp_r6->x14 = 0;
     temp_r6->x18 = 0;
-    temp_r6->x1C = 1.0F;
+    temp_r6->x1C = gm_804DAC78;
     temp_r6->x20 = 0;
     temp_r6->x24 = 0;
     temp_r6->x28 = 0;
@@ -881,7 +926,7 @@ void gm_801BBEA8_OnLoad(void)
     temp_r30->x10 = 0;
     temp_r30->x14 = 0;
     temp_r30->x18 = 0;
-    temp_r30->x1C = 1.0F;
+    temp_r30->x1C = gm_804DAC78;
     temp_r30->x20 = 0;
     temp_r30->x24 = 0;
     temp_r30->x28 = 0;
@@ -938,8 +983,8 @@ s32 gm_801BC00C(void)
     case 43:
     case 44:
     case 48:
-        lbArchive_LoadSymbols("GmEvent.dat", &gm_804D6900,
-                              "sqEventInitDataLevelTbl", 0);
+        lbArchive_LoadSymbols(gm_803DF660, &gm_804D6900,
+                              gm_803DF66C, 0);
         var_r29 = gm_804D6900;
         break;
     }
@@ -1074,7 +1119,7 @@ s32 gm_801BC00C(void)
     }
 
     if (idx == 0x24) {
-        lbBgFlash_80021A10(0.2f);
+        lbBgFlash_80021A10(gm_804DAC7C);
     }
     Camera_80030E34(ev->x1C);
     return (s32) HSD_GObj_SetupProc(GObj_Create(0xF, 0x11, 0),
@@ -1089,17 +1134,59 @@ static u8 gm_803DF918[] = {
     0x2C, 0x2D, 0x2E, 0x22, 0x30, 0x31, 0x32,
 };
 
-extern gm_803DF94C_t gm_804D4330, gm_804D43B8, gm_804D4340, gm_804D4348,
-    gm_804D4350, gm_804D4358, gm_804D4360, gm_804D4368, gm_804D4370,
-    gm_804D4378, gm_804D4380, gm_804D4388, gm_804D4390, gm_804D4398,
-    gm_804D4450, gm_804D43A8, gm_804D43B0, gm_804D4338, gm_804D43C0,
-    gm_804D43C8, gm_804D43D0, gm_804D43D8, gm_804D4400, gm_804D43E8,
-    gm_804D43F0, gm_804D43F8, gm_804D43E0, gm_804D4408, gm_804D4410,
-    gm_804D4418, gm_804D4420, gm_804D4428, gm_804D4430, gm_804D4438,
-    gm_804D44A8, gm_804D4448, gm_804D43A0, gm_804D4458, gm_804D4460,
-    gm_804D4468, gm_804D4470, gm_804D4478, gm_804D4480, gm_804D4488,
-    gm_804D4490, gm_804D4498, gm_804D44A0, gm_804D4440, gm_804D44B0,
-    gm_804D44B8, gm_804D44C0;
+/// 51 event-handler pairs (binary-proven .sdata contents + relocs).
+gm_803DF94C_t gm_804D4330 = { gm_801BC754, NULL };
+gm_803DF94C_t gm_804D4338 = { gm_801BC754, NULL };
+gm_803DF94C_t gm_804D4340 = { gm_801BC754, NULL };
+gm_803DF94C_t gm_804D4348 = { gm_801BC754, NULL };
+gm_803DF94C_t gm_804D4350 = { gm_801BC9E8, NULL };
+gm_803DF94C_t gm_804D4358 = { gm_801BC754, NULL };
+gm_803DF94C_t gm_804D4360 = { gm_801BC754, NULL };
+gm_803DF94C_t gm_804D4368 = { gm_801BC754, NULL };
+gm_803DF94C_t gm_804D4370 = { gm_801BCAF0, NULL };
+gm_803DF94C_t gm_804D4378 = { gm_801BCF20, NULL };
+gm_803DF94C_t gm_804D4380 = { gm_801BCF40, NULL };
+gm_803DF94C_t gm_804D4388 = { gm_801BC754, NULL };
+gm_803DF94C_t gm_804D4390 = { gm_801BD028, NULL };
+gm_803DF94C_t gm_804D4398 = { gm_801BC754, NULL };
+gm_803DF94C_t gm_804D43A0 = { gm_801BC754, NULL };
+gm_803DF94C_t gm_804D43A8 = { gm_801BC754, gm_801BEA10 };
+gm_803DF94C_t gm_804D43B0 = { gm_801BD164, NULL };
+gm_803DF94C_t gm_804D43B8 = { gm_801BC754, NULL };
+gm_803DF94C_t gm_804D43C0 = { gm_801BD30C, NULL };
+gm_803DF94C_t gm_804D43C8 = { gm_801BD44C, NULL };
+gm_803DF94C_t gm_804D43D0 = { gm_801BD46C, NULL };
+gm_803DF94C_t gm_804D43D8 = { gm_801BD658, gm_801BEA4C };
+gm_803DF94C_t gm_804D43E0 = { gm_801BC754, NULL };
+gm_803DF94C_t gm_804D43E8 = { gm_801BC754,
+                              (void (*)(int)) gm_801BEA88 };
+gm_803DF94C_t gm_804D43F0 = { gm_801BD7FC, NULL };
+gm_803DF94C_t gm_804D43F8 = { gm_801BC754, NULL };
+gm_803DF94C_t gm_804D4400 = { gm_801BC754, NULL };
+gm_803DF94C_t gm_804D4408 = { gm_801BC754, gm_801BEAF0 };
+gm_803DF94C_t gm_804D4410 = { gm_801BD93C, NULL };
+gm_803DF94C_t gm_804D4418 = { gm_801BDAD4, NULL };
+gm_803DF94C_t gm_804D4420 = { gm_801BC754, NULL };
+gm_803DF94C_t gm_804D4428 = { gm_801BDAF4, NULL };
+gm_803DF94C_t gm_804D4430 = { gm_801BDC08, NULL };
+gm_803DF94C_t gm_804D4438 = { gm_801BC754, NULL };
+gm_803DF94C_t gm_804D4440 = { gm_801BDD44, NULL };
+gm_803DF94C_t gm_804D4448 = { gm_801BDE94, NULL };
+gm_803DF94C_t gm_804D4450 = { gm_801BC754, NULL };
+gm_803DF94C_t gm_804D4458 = { gm_801BC754, NULL };
+gm_803DF94C_t gm_804D4460 = { gm_801BC754, NULL };
+gm_803DF94C_t gm_804D4468 = { gm_801BE37C, NULL };
+gm_803DF94C_t gm_804D4470 = { gm_801BC754, NULL };
+gm_803DF94C_t gm_804D4478 = { gm_801BC754, NULL };
+gm_803DF94C_t gm_804D4480 = { gm_801BC754, NULL };
+gm_803DF94C_t gm_804D4488 = { gm_801BE39C, NULL };
+gm_803DF94C_t gm_804D4490 = { gm_801BC754, gm_801BEB2C };
+gm_803DF94C_t gm_804D4498 = { gm_801BC754, NULL };
+gm_803DF94C_t gm_804D44A0 = { gm_801BC754, NULL };
+gm_803DF94C_t gm_804D44A8 = { gm_801BC754, NULL };
+gm_803DF94C_t gm_804D44B0 = { gm_801BE618, NULL };
+gm_803DF94C_t gm_804D44B8 = { gm_801BE638, NULL };
+gm_803DF94C_t gm_804D44C0 = { gm_801BC754, NULL };
 
 gm_803DF94C_t* gm_803DF94C[] = {
     &gm_804D4330, &gm_804D43B8, &gm_804D4340, &gm_804D4348, &gm_804D4350,
@@ -1113,6 +1200,76 @@ gm_803DF94C_t* gm_803DF94C[] = {
     &gm_804D4470, &gm_804D4478, &gm_804D4480, &gm_804D4488, &gm_804D4490,
     &gm_804D4498, &gm_804D44A0, &gm_804D4440, &gm_804D44B0, &gm_804D44B8,
     &gm_804D44C0
+};
+
+GameScene gm_803DFA18_Scenes[] = {
+    { 0, 2, 0x0, NULL, gm_801BEC80, { 0x0b, NULL, &gm_804D6908 } },
+    { 0xFF, 0, 0x0, NULL, NULL, { 0x00, NULL, NULL } },
+};
+
+GameScene gm_803DFA48_Scenes[] = {
+    { 0, 2, 0x0, gm_801BECA8, gm_801BECD0, { 0x0c, NULL, &gm_804D6910 } },
+    { 0xFF, 0, 0x0, NULL, NULL, { 0x00, NULL, NULL } },
+};
+
+GameScene gm_803DFA78_Scenes[] = {
+    { 0, 2, 0x0, NULL, gm_801BED14, { 0x0d, NULL, &gm_804D6918 } },
+    { 0xFF, 0, 0x0, NULL, NULL, { 0x00, NULL, NULL } },
+};
+
+GameScene gm_803DFAA8_Scenes[] = {
+    { 0, 2, 0x0, gm_801BED3C, gm_801BEDA8, { 0x08, &gm_8049BEE8, NULL } },
+    { 0xFF, 0, 0x0, NULL, NULL, { 0x00, NULL, NULL } },
+};
+
+GameScene gm_803DFAD8_Scenes[] = {
+    { 0, 2, 0x0, gm_801BEE58, NULL, { 0x09, &gm_8049C030, NULL } },
+    { 0xFF, 0, 0x0, NULL, NULL, { 0x00, NULL, NULL } },
+};
+
+GameScene gm_803DFB08[] = {
+    { 0, 2, 0x0, NULL, NULL, { 0x0f, NULL, &gm_804D6920 } },
+    { 1, 2, 0x0, NULL, NULL, { 0x2b, NULL, NULL } },
+    { 2, 2, 0x0, NULL, gm_801BEF84, { 0x1d, NULL, NULL } },
+    { 3, 2, 0x0, NULL, gm_801BEE9C, { 0x10, NULL, &gm_804D6920 } },
+    { 0xFF, 0, 0x0, NULL, NULL, { 0x00, NULL, NULL } },
+};
+
+GameScene gm_803DFB80_Scenes[] = {
+    { 0, 2, 0x0, NULL, NULL, { 0x0f, NULL, &gm_804D6920 } },
+    { 1, 2, 0x0, NULL, gm_801BEE9C, { 0x10, NULL, &gm_804D6920 } },
+    { 0xFF, 0, 0x0, NULL, NULL, { 0x00, NULL, NULL } },
+};
+
+GameScene gm_803DFBC8_Scenes[] = {
+    { 0, 3, 0x0, gm_801BF85C, gm_801BF898, { 0x1c, NULL, NULL } },
+    { 1, 3, 0x0, gm_801BF4DC, NULL, { 0x02, &gm_8049C188, &gm_8049C2C0 } },
+    { 2, 3, 0x0, gm_801B087C, gm_801BF060, { 0x00, NULL, &gm_804D6930 } },
+    { 3, 3, 0x0, gm_801BF4DC, NULL, { 0x02, &gm_8049C188, &gm_8049C2C0 } },
+    { 4, 3, 0x0, NULL, gm_801BF8B8, { 0x1e, NULL, NULL } },
+    { 5, 3, 0x0, NULL, gm_801BF8D8, { 0x1f, NULL, NULL } },
+    { 0xFF, 0, 0x0, NULL, NULL, { 0x00, NULL, NULL } },
+};
+
+GameScene gm_803DFC70_Scenes[] = {
+    { 0, 2, 0x0, gm_801BF728, NULL, { 0x11, &un_804D6F3C, NULL } },
+    { 1, 2, 0x0, NULL, NULL, { 0x12, &un_804D6F60, NULL } },
+    { 2, 2, 0x0, NULL, NULL, { 0x13, NULL, NULL } },
+    { 3, 2, 0x0, NULL, NULL, { 0x14, &un_804D6F84, NULL } },
+    { 4, 2, 0x0, NULL, NULL, { 0x15, &un_804D6FA8, NULL } },
+    { 5, 2, 0x0, NULL, NULL, { 0x16, NULL, NULL } },
+    { 6, 2, 0x0, NULL, NULL, { 0x17, NULL, NULL } },
+    { 7, 2, 0x0, NULL, NULL, { 0x18, &un_804D6FD8, NULL } },
+    { 8, 2, 0x0, NULL, NULL, { 0x19, &un_804D7004, NULL } },
+    { 9, 2, 0x0, NULL, NULL, { 0x1a, &un_804D7038, NULL } },
+    { 10, 2, 0x0, NULL, NULL, { 0x1b, NULL, NULL } },
+    { 11, 2, 0x0, NULL, gm_801BF834, { 0x10, &gm_804D6928, &gm_804D692C } },
+    { 0xFF, 0, 0x0, NULL, NULL, { 0x00, NULL, NULL } },
+};
+
+GameScene gm_803DFDA8_Scenes[] = {
+    { 0, 2, 0x0, gm_801BF8F8, gm_801BF920, { 0x28, &gm_804D6938, &gm_804D693C } },
+    { 0xFF, 0, 0x0, NULL, NULL, { 0x00, NULL, NULL } },
 };
 
 int gm_801BC488(void)
@@ -1180,7 +1337,7 @@ void gm_801BC4F4(HSD_GObj* gobj)
     }
     Player_80036844(0, 1);
     lbAudioAx_80028B90();
-    gm_SetGameSpeed(1.0F);
+    gm_SetGameSpeed(gm_804DAC78);
     if (var_r25) {
         gm_8016B33C(2);
         gm_8016B350(0x9C40);
@@ -1215,7 +1372,7 @@ void gm_801BC670(HSD_GObj* arg0)
     temp_r31->x34 += gm_8016AEDC();
     Player_80036844(0, 1);
     lbAudioAx_80028B90();
-    gm_SetGameSpeed(1.0F);
+    gm_SetGameSpeed(gm_804DAC78);
     gm_8016B33C(8);
     gm_8016B328();
 }
@@ -1257,7 +1414,7 @@ void gm_801BC754(HSD_GObj* gobj)
         if (Player_GetP1Stock() <= 0) {
             gmMainLib_804D3EE0->unk_530.xB_1 = false;
             lbAudioAx_80028B90();
-            gm_SetGameSpeed(1.0F);
+            gm_SetGameSpeed(gm_804DAC78);
             gm_8016B33C(6);
             gm_8016B364(0x148);
             gm_8016B378(0x28);
@@ -1279,7 +1436,7 @@ void gm_801BC754(HSD_GObj* gobj)
         if (var_r0) {
             gmMainLib_804D3EE0->unk_530.xB_1 = false;
             lbAudioAx_80028B90();
-            gm_SetGameSpeed(1.0F);
+            gm_SetGameSpeed(gm_804DAC78);
             gm_8016B33C(6);
             gm_8016B364(0x148);
             gm_8016B378(0x28);
@@ -1307,7 +1464,7 @@ void gm_801BC754(HSD_GObj* gobj)
             }
             gmMainLib_804D3EE0->unk_530.xB_1 = false;
             lbAudioAx_80028B90();
-            gm_SetGameSpeed(1.0F);
+            gm_SetGameSpeed(gm_804DAC78);
             gm_8016B33C(6);
             gm_8016B364(0x148);
             gm_8016B378(0x28);
@@ -1346,7 +1503,7 @@ void gm_801BC9E8(HSD_GObj* gobj)
     if (var_r0) {
         gmMainLib_804D3EE0->unk_530.xB_1 = false;
         lbAudioAx_80028B90();
-        gm_SetGameSpeed(1.0F);
+        gm_SetGameSpeed(gm_804DAC78);
         gm_8016B33C(6);
         gm_8016B364(0x148);
         gm_8016B378(0x28);
@@ -1395,7 +1552,7 @@ void gm_801BCAF0(HSD_GObj* gobj)
     if (Player_GetP1Stock() <= 0) {
         gmMainLib_804D3EE0->unk_530.xB_1 = false;
         lbAudioAx_80028B90();
-        gm_SetGameSpeed(1.0F);
+        gm_SetGameSpeed(gm_804DAC78);
         gm_8016B33C(6);
         gm_8016B364(0x148);
         gm_8016B378(0x28);
@@ -1417,7 +1574,7 @@ void gm_801BCAF0(HSD_GObj* gobj)
     if (var_r0_2 != 0) {
         gmMainLib_804D3EE0->unk_530.xB_1 = false;
         lbAudioAx_80028B90();
-        gm_SetGameSpeed(1.0F);
+        gm_SetGameSpeed(gm_804DAC78);
         gm_8016B33C(6);
         gm_8016B364(0x148);
         gm_8016B378(0x28);
@@ -1469,7 +1626,7 @@ void gm_801BCC9C(HSD_GObj* arg0)
         if (Player_GetP1Stock() <= 0) {
             gmMainLib_804D3EE0->unk_530.xB_1 = false;
             lbAudioAx_80028B90();
-            gm_SetGameSpeed(1.0f);
+            gm_SetGameSpeed(gm_804DAC78);
             gm_8016B33C(6);
             gm_8016B364(0x148);
             gm_8016B378(0x28);
@@ -1483,7 +1640,7 @@ void gm_801BCC9C(HSD_GObj* arg0)
     if (Player_GetP1Stock() <= 0) {
         gmMainLib_804D3EE0->unk_530.xB_1 = false;
         lbAudioAx_80028B90();
-        gm_SetGameSpeed(1.0f);
+        gm_SetGameSpeed(gm_804DAC78);
         gm_8016B33C(6);
         gm_8016B364(0x148);
         gm_8016B378(0x28);
@@ -1503,7 +1660,7 @@ void gm_801BCC9C(HSD_GObj* arg0)
     if (var_r0 != 0) {
         gmMainLib_804D3EE0->unk_530.xB_1 = false;
         lbAudioAx_80028B90();
-        gm_SetGameSpeed(1.0f);
+        gm_SetGameSpeed(gm_804DAC78);
         gm_8016B33C(6);
         gm_8016B364(0x148);
         gm_8016B378(0x28);
@@ -1527,7 +1684,7 @@ void gm_801BCF40(HSD_GObj* gobj)
     if (Player_GetP1Stock() <= 0) {
         gmMainLib_804D3EE0->unk_530.xB_1 = false;
         lbAudioAx_80028B90();
-        gm_SetGameSpeed(1.0F);
+        gm_SetGameSpeed(gm_804DAC78);
         gm_8016B33C(6);
         gm_8016B364(0x148);
         gm_8016B378(0x28);
@@ -1569,7 +1726,7 @@ void gm_801BD028(HSD_GObj* arg0)
     if (ev->x18 != 0) {
         ev->xB_1 = 0;
         lbAudioAx_80028B90();
-        gm_SetGameSpeed(1.0f);
+        gm_SetGameSpeed(gm_804DAC78);
         gm_8016B33C(6);
         gm_8016B364(0x148);
         gm_8016B378(0x28);
@@ -1606,7 +1763,7 @@ void gm_801BD164(HSD_GObj* gobj)
         } else {
             gmMainLib_804D3EE0->unk_530.xB_1 = false;
             lbAudioAx_80028B90();
-            gm_SetGameSpeed(1.0F);
+            gm_SetGameSpeed(gm_804DAC78);
             gm_8016B33C(6);
             gm_8016B364(0x148);
             gm_8016B378(0x28);
@@ -1617,7 +1774,7 @@ void gm_801BD164(HSD_GObj* gobj)
     if (Player_GetP1Stock() <= 0) {
         gmMainLib_804D3EE0->unk_530.xB_1 = false;
         lbAudioAx_80028B90();
-        gm_SetGameSpeed(1.0F);
+        gm_SetGameSpeed(gm_804DAC78);
         gm_8016B33C(6);
         gm_8016B364(0x148);
         gm_8016B378(0x28);
@@ -1639,7 +1796,7 @@ void gm_801BD164(HSD_GObj* gobj)
     if (var_r0 != 0) {
         gmMainLib_804D3EE0->unk_530.xB_1 = false;
         lbAudioAx_80028B90();
-        gm_SetGameSpeed(1.0F);
+        gm_SetGameSpeed(gm_804DAC78);
         gm_8016B33C(6);
         gm_8016B364(0x148);
         gm_8016B378(0x28);
@@ -1658,7 +1815,7 @@ void gm_801BD30C(HSD_GObj* gobj)
     if (Player_GetStocks(1) <= 0) {
         gmMainLib_804D3EE0->unk_530.xB_1 = false;
         lbAudioAx_80028B90();
-        gm_SetGameSpeed(1.0F);
+        gm_SetGameSpeed(gm_804DAC78);
         gm_8016B33C(6);
         gm_8016B364(0x148);
         gm_8016B378(0x28);
@@ -1669,7 +1826,7 @@ void gm_801BD30C(HSD_GObj* gobj)
     if (Player_GetP1Stock() <= 0) {
         gmMainLib_804D3EE0->unk_530.xB_1 = false;
         lbAudioAx_80028B90();
-        gm_SetGameSpeed(1.0F);
+        gm_SetGameSpeed(gm_804DAC78);
         gm_8016B33C(6);
         gm_8016B364(0x148);
         gm_8016B378(0x28);
@@ -1727,7 +1884,7 @@ void gm_801BD46C(HSD_GObj* gobj)
         if (Player_GetStocks(i) <= 0) {
             gmMainLib_804D3EE0->unk_530.xB_1 = false;
             lbAudioAx_80028B90();
-            gm_SetGameSpeed(1.0F);
+            gm_SetGameSpeed(gm_804DAC78);
             gm_8016B33C(6);
             gm_8016B364(0x148);
             gm_8016B378(0x28);
@@ -1739,7 +1896,7 @@ void gm_801BD46C(HSD_GObj* gobj)
     if (Player_GetP1Stock() <= 0) {
         gmMainLib_804D3EE0->unk_530.xB_1 = false;
         lbAudioAx_80028B90();
-        gm_SetGameSpeed(1.0F);
+        gm_SetGameSpeed(gm_804DAC78);
         gm_8016B33C(6);
         gm_8016B364(0x148);
         gm_8016B378(0x28);
@@ -1761,7 +1918,7 @@ void gm_801BD46C(HSD_GObj* gobj)
     if (var_r0 != 0) {
         gmMainLib_804D3EE0->unk_530.xB_1 = false;
         lbAudioAx_80028B90();
-        gm_SetGameSpeed(1.0F);
+        gm_SetGameSpeed(gm_804DAC78);
         gm_8016B33C(6);
         gm_8016B364(0x148);
         gm_8016B378(0x28);
@@ -1800,7 +1957,7 @@ void gm_801BD658(HSD_GObj* gobj)
     if (Player_GetP1Stock() <= 0) {
         gmMainLib_804D3EE0->unk_530.xB_1 = false;
         lbAudioAx_80028B90();
-        gm_SetGameSpeed(1.0F);
+        gm_SetGameSpeed(gm_804DAC78);
         gm_8016B33C(6);
         gm_8016B364(0x148);
         gm_8016B378(0x28);
@@ -1822,7 +1979,7 @@ void gm_801BD658(HSD_GObj* gobj)
     if (var_r0 != 0) {
         gmMainLib_804D3EE0->unk_530.xB_1 = false;
         lbAudioAx_80028B90();
-        gm_SetGameSpeed(1.0F);
+        gm_SetGameSpeed(gm_804DAC78);
         gm_8016B33C(6);
         gm_8016B364(0x148);
         gm_8016B378(0x28);
@@ -1845,7 +2002,7 @@ void gm_801BD7FC(HSD_GObj* gobj)
     if (Player_GetP1Stock() <= 0) {
         gmMainLib_804D3EE0->unk_530.xB_1 = false;
         lbAudioAx_80028B90();
-        gm_SetGameSpeed(1.0F);
+        gm_SetGameSpeed(gm_804DAC78);
         gm_8016B33C(6);
         gm_8016B364(0x148);
         gm_8016B378(0x28);
@@ -1867,7 +2024,7 @@ void gm_801BD7FC(HSD_GObj* gobj)
     if (var_r0) {
         gmMainLib_804D3EE0->unk_530.xB_1 = false;
         lbAudioAx_80028B90();
-        gm_SetGameSpeed(1.0F);
+        gm_SetGameSpeed(gm_804DAC78);
         gm_8016B33C(6);
         gm_8016B364(0x148);
         gm_8016B378(0x28);
@@ -1890,7 +2047,7 @@ void gm_801BD93C(HSD_GObj* gobj)
     if (Player_GetStocks(1) <= 0) {
         gmMainLib_804D3EE0->unk_530.xB_1 = false;
         lbAudioAx_80028B90();
-        gm_SetGameSpeed(1.0F);
+        gm_SetGameSpeed(gm_804DAC78);
         gm_8016B33C(6);
         gm_8016B364(0x148);
         gm_8016B378(0x28);
@@ -1901,7 +2058,7 @@ void gm_801BD93C(HSD_GObj* gobj)
     if (Player_GetP1Stock() <= 0) {
         gmMainLib_804D3EE0->unk_530.xB_1 = false;
         lbAudioAx_80028B90();
-        gm_SetGameSpeed(1.0F);
+        gm_SetGameSpeed(gm_804DAC78);
         gm_8016B33C(6);
         gm_8016B364(0x148);
         gm_8016B378(0x28);
@@ -1923,7 +2080,7 @@ void gm_801BD93C(HSD_GObj* gobj)
     if (var_r0) {
         gmMainLib_804D3EE0->unk_530.xB_1 = false;
         lbAudioAx_80028B90();
-        gm_SetGameSpeed(1.0F);
+        gm_SetGameSpeed(gm_804DAC78);
         gm_8016B33C(6);
         gm_8016B364(0x148);
         gm_8016B378(0x28);
@@ -1966,7 +2123,7 @@ void gm_801BDAF4(HSD_GObj* arg0)
         }
         gmMainLib_804D3EE0->unk_530.xB_1 = false;
         lbAudioAx_80028B90();
-        gm_SetGameSpeed(1.0F);
+        gm_SetGameSpeed(gm_804DAC78);
         gm_8016B33C(6);
         gm_8016B364(0x148);
         gm_8016B378(0x28);
@@ -1989,7 +2146,7 @@ void gm_801BDC08(HSD_GObj* arg0)
     if (Player_GetP1Stock() <= 0) {
         gmMainLib_804D3EE0->unk_530.xB_1 = false;
         lbAudioAx_80028B90();
-        gm_SetGameSpeed(1.0F);
+        gm_SetGameSpeed(gm_804DAC78);
         gm_8016B33C(6);
         gm_8016B364(0x148);
         gm_8016B378(0x28);
@@ -2011,7 +2168,7 @@ void gm_801BDC08(HSD_GObj* arg0)
     if (var_r0) {
         gmMainLib_804D3EE0->unk_530.xB_1 = false;
         lbAudioAx_80028B90();
-        gm_SetGameSpeed(1.0F);
+        gm_SetGameSpeed(gm_804DAC78);
         gm_8016B33C(6);
         gm_8016B364(0x148);
         gm_8016B378(0x28);
@@ -2034,7 +2191,7 @@ void gm_801BDD44(HSD_GObj* arg0)
     if (Player_GetP1Stock() <= 0) {
         gmMainLib_804D3EE0->unk_530.xB_1 = false;
         lbAudioAx_80028B90();
-        gm_SetGameSpeed(1.0F);
+        gm_SetGameSpeed(gm_804DAC78);
         gm_8016B33C(6);
         gm_8016B364(0x148);
         gm_8016B378(0x28);
@@ -2056,7 +2213,7 @@ void gm_801BDD44(HSD_GObj* arg0)
     if (var_r0 != 0) {
         gmMainLib_804D3EE0->unk_530.xB_1 = false;
         lbAudioAx_80028B90();
-        gm_SetGameSpeed(1.0F);
+        gm_SetGameSpeed(gm_804DAC78);
         gm_8016B33C(6);
         gm_8016B364(0x148);
         gm_8016B378(0x28);
@@ -2143,7 +2300,7 @@ void gm_801BDE94(HSD_GObj* arg0)
                 if (Player_GetP1Stock() <= 0) {
                     gmMainLib_804D3EE0->unk_530.xB_1 = false;
                     lbAudioAx_80028B90();
-                    gm_SetGameSpeed(1.0f);
+                    gm_SetGameSpeed(gm_804DAC78);
                     gm_8016B33C(6);
                     gm_8016B364(0x148);
                     gm_8016B378(0x28);
@@ -2168,7 +2325,7 @@ void gm_801BDE94(HSD_GObj* arg0)
             if (Player_GetP1Stock() <= 0) {
                 gmMainLib_804D3EE0->unk_530.xB_1 = false;
                 lbAudioAx_80028B90();
-                gm_SetGameSpeed(1.0f);
+                gm_SetGameSpeed(gm_804DAC78);
                 gm_8016B33C(6);
                 gm_8016B364(0x148);
                 gm_8016B378(0x28);
@@ -2191,7 +2348,7 @@ void gm_801BDE94(HSD_GObj* arg0)
                 if (do_end != 0) {
                     gmMainLib_804D3EE0->unk_530.xB_1 = false;
                     lbAudioAx_80028B90();
-                    gm_SetGameSpeed(1.0f);
+                    gm_SetGameSpeed(gm_804DAC78);
                     gm_8016B33C(6);
                     gm_8016B364(0x148);
                     gm_8016B378(0x28);
@@ -2261,7 +2418,7 @@ void gm_801BE39C(HSD_GObj* gobj)
     if (Player_GetStocks(1) <= 0) {
         gmMainLib_804D3EE0->unk_530.xB_1 = false;
         lbAudioAx_80028B90();
-        gm_SetGameSpeed(1.0f);
+        gm_SetGameSpeed(gm_804DAC78);
         gm_8016B33C(6);
         gm_8016B364(0x148);
         gm_8016B378(0x28);
@@ -2272,7 +2429,7 @@ void gm_801BE39C(HSD_GObj* gobj)
     if (Player_GetP1Stock() <= 0) {
         gmMainLib_804D3EE0->unk_530.xB_1 = false;
         lbAudioAx_80028B90();
-        gm_SetGameSpeed(1.0f);
+        gm_SetGameSpeed(gm_804DAC78);
         gm_8016B33C(6);
         gm_8016B364(0x148);
         gm_8016B378(0x28);
@@ -2300,7 +2457,7 @@ void gm_801BE39C(HSD_GObj* gobj)
     if (var_r0) {
         gmMainLib_804D3EE0->unk_530.xB_1 = false;
         lbAudioAx_80028B90();
-        gm_SetGameSpeed(1.0f);
+        gm_SetGameSpeed(gm_804DAC78);
         gm_8016B33C(6);
         gm_8016B364(0x148);
         gm_8016B378(0x28);
@@ -2374,7 +2531,7 @@ void gm_801BE638(HSD_GObj* gobj)
             lbAudioAx_8002438C(0x4E200);
             ftBossLib_8015CC14();
             gm_801A4674(6);
-            gm_SetGameSpeed(0.5F);
+            gm_SetGameSpeed(gm_804DAC80);
             lbBgFlash_80020688(temp_r29);
         }
         temp_r0_2 = temp_r30->x10;
@@ -2410,10 +2567,10 @@ void gm_801BE638(HSD_GObj* gobj)
             lbAudioAx_8002438C(0x4E200);
             ftBossLib_8015CC14();
             gm_801A4674(6);
-            gm_SetGameSpeed(0.5F);
+            gm_SetGameSpeed(gm_804DAC80);
         }
         if ((s32) temp_r30->x10 == temp_r28_3) {
-            gm_SetGameSpeed(1.0F);
+            gm_SetGameSpeed(gm_804DAC78);
         }
         temp_r3_3 = temp_r30->x10;
         if (temp_r3_3 <= temp_r28_3) {
@@ -2423,7 +2580,7 @@ void gm_801BE638(HSD_GObj* gobj)
     if (Player_GetP1Stock() <= 0) {
         gmMainLib_804D3EE0->unk_530.xB_1 = false;
         lbAudioAx_80028B90();
-        gm_SetGameSpeed(1.0F);
+        gm_SetGameSpeed(gm_804DAC78);
         gm_8016B33C(6);
         gm_8016B364(0x148);
         gm_8016B378(0x28);
@@ -2445,7 +2602,7 @@ void gm_801BE638(HSD_GObj* gobj)
     if (var_r0 != 0) {
         gmMainLib_804D3EE0->unk_530.xB_1 = false;
         lbAudioAx_80028B90();
-        gm_SetGameSpeed(1.0F);
+        gm_SetGameSpeed(gm_804DAC78);
         gm_8016B33C(6);
         gm_8016B364(0x148);
         gm_8016B378(0x28);
@@ -2470,7 +2627,7 @@ void gm_801BEA88(int arg0, int arg1)
     PAD_STACK(0x10);
     gm_801BEA10(arg0);
     if (arg1 == 0) {
-        Player_SetModelScale(arg0, 2.0F);
+        Player_SetModelScale(arg0, gm_804DAC84);
     }
 }
 
@@ -2648,7 +2805,6 @@ void gm_801BEF84(GameScene* arg)
     lbMthp_8001F800();
 }
 
-/* 49C178 */ static u8 gm_8049C178[16];
 
 void gm_801BEFA4(int ckind)
 {
@@ -2921,7 +3077,7 @@ void gm_801BF4DC(GameScene* arg0)
     temp_r31->rules.x2_4 = true;
     temp_r31->rules.x7 = 0;
     temp_r31->rules.x44 = gm_80183218;
-    temp_r31->rules.x34 = 1.0F;
+    temp_r31->rules.x34 = gm_804DAC88;
     temp_r31->rules.xE = (u16) gm_801BF694();
     gm_80167A14(temp_r31->players);
 

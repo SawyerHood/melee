@@ -264,6 +264,7 @@ void grGreatBay_801F454C(Ground_GObj* gobj)
     Ground* gp = GET_GROUND(gobj);
     HSD_JObj* jobj = GET_JOBJ(gobj);
 
+    gobj = (Ground_GObj*) (u8*) gobj;
     Ground_801C2ED0(jobj, gp->map_id);
     grAnime_801C8138(gobj, gp->map_id, 0);
     gp->x8_callback = NULL;
@@ -304,6 +305,7 @@ void grGreatBay_801F4694(Ground_GObj* gobj)
     s16 max_val, min_val;
     f32 factor;
 
+    gobj = (Ground_GObj*) (u8*) gobj;
     Ground_801C2ED0(jobj, gp->map_id);
     grAnime_801C8138(gobj, gp->map_id, 0);
 
@@ -524,15 +526,9 @@ void grGreatBay_801F545C(Ground_GObj* gobj)
     return;
 }
 
-void grGreatBay_801F5460(Ground_GObj* gobj)
+static inline void grGreatBay_801F5460_inline(HSD_JObj* jobj,
+                                               Ground_GObj* gobj, Ground* gp)
 {
-    HSD_JObj* jobj = gobj->hsd_obj;
-    Ground* gp = GET_GROUND(gobj);
-
-    /* Zero-instruction regalloc blockers (idiom 34): promote jobj+gobj to
-     * multi-def webs so the gobj home takes r30 as in the target.
-     * Residual = one r29/r31 jobj-gp transposition (idiom-129 park). */
-    jobj = (HSD_JObj*) (u8*) jobj;
     gobj = (Ground_GObj*) (u8*) gobj;
     Ground_801C2ED0(jobj, gp->map_id);
     gp->xC_callback = NULL;
@@ -550,6 +546,11 @@ void grGreatBay_801F5460(Ground_GObj* gobj)
     gp->gv.greatbay4.xD8 = 0;
     gp->gv.greatbay4.xDC = 0;
     gp->gv.greatbay4.xE0 = 0.0f;
+}
+
+void grGreatBay_801F5460(Ground_GObj* gobj)
+{
+    grGreatBay_801F5460_inline(gobj->hsd_obj, gobj, GET_GROUND(gobj));
 }
 
 bool grGreatBay_801F55F8(Ground_GObj* gobj)

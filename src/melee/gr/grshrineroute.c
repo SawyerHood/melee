@@ -107,6 +107,15 @@ StageData grSh_Route_803E5988 = {
     0,
 };
 
+/* w30b: target-named OSReport fmt string (was anon @235); 0x21 incl NUL --
+ * the NUL doubles as the dtk gap byte before @236 */
+char grSh_Route_803E59BC[0x21] = {
+    0x25, 0x73, 0x3A, 0x25, 0x64, 0x3A, 0x20, 0x63, 0x6F, 0x75, 0x6C, 0x64, /* %s:%d: could */
+    0x6E, 0x20, 0x74, 0x20, 0x67, 0x65, 0x74, 0x20, 0x67, 0x6F, 0x62, 0x6A, /* n t get gobj */
+    0x28, 0x69, 0x64, 0x3D, 0x25, 0x64, 0x29, 0x0A, 0x00, /* (id=%d).. */
+};
+
+
 static struct {
     int x0;
     int x4;
@@ -124,11 +133,18 @@ static struct {
 extern float grNKr_804DB868;
 extern HSD_LightDesc grSh_Route_803E5D74;
 extern HSD_LightDesc grSh_Route_803E5D90;
-extern Vec3 grSh_Route_803B8360;
-extern Vec3 grSh_Route_803B836C;
-extern Vec3 grSh_Route_803B8378;
-extern Vec3 grSh_Route_803B8384;
-extern Vec3 grSh_Route_803B8390;
+/* .rodata -- datarecon w30b; non-const + __declspec sidesteps the
+ * idiom-24 fold (259 family) */
+#if defined(__MWERKS__) && !defined(M2CTX)
+#define GRSH_RODATA __declspec(section ".rodata")
+#else
+#define GRSH_RODATA
+#endif
+GRSH_RODATA Vec3 grSh_Route_803B8360 = { 0.0F, 0.0F, 0.0F };
+GRSH_RODATA Vec3 grSh_Route_803B836C = { 0.0F, 100.0F, 0.0F };
+GRSH_RODATA Vec3 grSh_Route_803B8378 = { 0.0F, 100.0F, 0.0F };
+GRSH_RODATA Vec3 grSh_Route_803B8384 = { -285.93F, -226.1F, 0.0F };
+GRSH_RODATA Vec3 grSh_Route_803B8390 = { -161.56F, -226.1F, 0.0F };
 
 extern struct grSh_Route_LightConfig {
     /* 0x00 */ GXColor x0;
@@ -209,7 +225,7 @@ HSD_GObj* grShrineRoute_802088C0(int gobj_id)
             HSD_GObj_SetupProc(gobj, callbacks->callback2, 4);
         }
     } else {
-        OSReport("%s:%d: couldn t get gobj(id=%d)\n", __FILE__, 271, gobj_id);
+        OSReport(grSh_Route_803E59BC, __FILE__, 271, gobj_id);
     }
 
     return gobj;
@@ -405,7 +421,9 @@ void grShrineRoute_80208F70(Ground_GObj* gobj)
         if (result != -1) {
             s32 ix = result - 0xBD;
             if (!(gp->gv.shrineroute.xC6 & (1 << ix))) {
-                HSD_ASSERT(0x213, gp->gv.shrineroute.symbols[ix]);
+                ((gp->gv.shrineroute.symbols[ix]) ? ((void) 0)
+                              : __assert(__FILE__, 0x213,
+                                         "gp->u.map.symbol[ix]"));
                 gp->gv.shrineroute.xC8 = (u16) result;
                 {
                     s32 mid =
@@ -1142,6 +1160,72 @@ void grShrineRoute_8020A8A4(Ground_GObj* gobj)
     }
 }
 
+/* w30b positional defs: emit after the QUAT @-string, before @939 */
+struct grSh_Route_LightConfig grSh_Route_803E5A58[15] = {
+    { { 0x80, 0x66, 0x4D, 0xFF },
+      { 790.0F, -320.0F, 70.0F },
+      { 0.0F, 0.0F, 0.0F },
+      2, 0.0F, 0, 0.01F, 800.0F, 3 },
+    { { 0x80, 0x80, 0x80, 0xFF },
+      { 510.0F, -10.0F, 70.0F },
+      { 0.0F, 0.0F, 0.0F },
+      2, 0.0F, 0, 0.01F, 500.0F, 3 },
+    { { 0xB3, 0x99, 0x66, 0xFF },
+      { 840.0F, 210.0F, 40.0F },
+      { 0.0F, 0.0F, 0.0F },
+      2, 0.0F, 0, 0.1F, 260.0F, 3 },
+    { { 0xFF, 0xCC, 0x66, 0xFF },
+      { 600.0F, 120.0F, 30.0F },
+      { 0.0F, 0.0F, 0.0F },
+      2, 0.0F, 0, 0.01F, 500.0F, 3 },
+    { { 0x80, 0x80, 0x80, 0xFF },
+      { 800.0F, -130.0F, 28.0F },
+      { 0.0F, 0.0F, 0.0F },
+      2, 0.0F, 0, 0.01F, 400.0F, 3 },
+    { { 0xCC, 0x99, 0xA5, 0xFF },
+      { 710.0F, -50.0F, 20.0F },
+      { 0.0F, 0.0F, 0.0F },
+      2, 0.0F, 0, 0.01F, 500.0F, 3 },
+    { { 0x90, 0xC2, 0xFF, 0xFF },
+      { 10.0F, 18.0F, 9.0F },
+      { 0.0F, 0.0F, 0.0F },
+      2, 0.0F, 0, 0.03F, 810.0F, 3 },
+    { { 0xFF, 0x82, 0x82, 0xFF },
+      { -260.0F, -220.0F, 20.0F },
+      { 0.0F, 0.0F, 0.0F },
+      2, 0.0F, 0, 0.03F, 300.0F, 3 },
+    { { 0x78, 0xB4, 0xFF, 0xFF },
+      { 244.0F, -288.0F, 22.0F },
+      { 0.0F, 0.0F, 0.0F },
+      2, 0.0F, 0, 0.03F, 300.0F, 3 },
+    { { 0xF0, 0xF0, 0xF0, 0xFF },
+      { -66.0F, 140.0F, 27.0F },
+      { 0.0F, 0.0F, 0.0F },
+      2, 0.0F, 0, 0.03F, 400.0F, 3 },
+    { { 0x80, 0x99, 0x66, 0xFF },
+      { 500.0F, -150.0F, 60.0F },
+      { 500.0F, -330.0F, -20.0F },
+      3, 30.0F, 3, 0.99F, 200.0F, 3 },
+    { { 0xC8, 0xF0, 0xFF, 0xFF },
+      { 560.0F, 310.0F, 160.0F },
+      { 560.0F, 290.0F, -10.0F },
+      3, 45.0F, 3, 0.99F, 24.0F, 3 },
+    { { 0xA4, 0xD8, 0xFF, 0xFF },
+      { 260.0F, 444.0F, 88.0F },
+      { 242.0F, -166.0F, -33.0F },
+      3, 25.0F, 3, 0.99F, 450.0F, 3 },
+    { { 0xFF, 0x4D, 0x4D, 0xFF },
+      { -162.0F, -300.0F, 23.0F },
+      { -314.0F, 111.0F, -5.0F },
+      3, 31.0F, 3, 0.99F, 370.0F, 3 },
+    { { 0x64, 0x80, 0x4D, 0xFF },
+      { -88.0F, -131.0F, 66.0F },
+      { -91.0F, -227.0F, -25.0F },
+      3, 45.0F, 3, 0.99F, 125.0F, 3 },
+};
+
+f32 grSh_Route_804D4824 = 16.0F; /* shininess, pointed to by 5D74 */
+
 void grShrineRoute_8020AA40(HSD_GObj* gobj)
 {
     struct grSh_Route_LightConfig* config;
@@ -1367,3 +1451,16 @@ bool grShrineRoute_OnCheckShadowRender(Vec3* a, int b, HSD_JObj* jobj)
         return false;
     }
 }
+
+/* w30b tail defs: .sdata light point pair after the lobj.h @-strings, then
+ * the two HSD_LightDesc records that close .data at 0x494/0x4b0 */
+f32 grSh_Route_804D4838[2] = { 16.0F, 0.0F };
+
+HSD_LightDesc grSh_Route_803E5D74 = {
+    NULL, NULL, 6,  0, { 0xFF, 0xFF, 0xFF, 0xFF },
+    NULL, NULL, { (void*) &grSh_Route_804D4824 },
+};
+HSD_LightDesc grSh_Route_803E5D90 = {
+    NULL, NULL, 10, 0, { 0xFF, 0xFF, 0xFF, 0xFF },
+    NULL, NULL, { (void*) &grSh_Route_804D4838 },
+};

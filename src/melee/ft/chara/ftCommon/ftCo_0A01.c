@@ -3037,6 +3037,8 @@ bool ftCo_800A6700(Fighter* fp, Vec3* arg1, Vec3* arg2)
     f32 dx;
     f32 dy;
     f32 dist;
+    f32 fx;
+    f32 fy;
 
     best = -1.0f;
     for (island = mpIsland_80458E88.next; island != NULL;
@@ -3117,17 +3119,17 @@ s32 ftCo_800A6A98(Fighter* fp, Vec3* arg1)
 {
     struct Fighter_x1A88_t* data = &fp->x1A88;
     mp_UnkStruct0* island;
+    UNUSED u8 _pad[8];
     f32 best;
+    Vec3 b;
+    Vec3 a;
     Vec3 floor_pos;
     Vec3 floor_normal;
     int line_id;
     u32 flags;
-    Vec3 a;
-    Vec3 b;
     f32 mx;
     f32 my;
     s32 result;
-    s32 blocked;
     f32 dx;
     f32 dy;
     f32 dist;
@@ -3137,7 +3139,6 @@ s32 ftCo_800A6A98(Fighter* fp, Vec3* arg1)
          island = island->next)
     {
         if (ftCo_800A2718(island) == 0) {
-            blocked = 0;
             a = island->x8;
             b = island->x14;
             line_id = -1;
@@ -3148,9 +3149,6 @@ s32 ftCo_800A6A98(Fighter* fp, Vec3* arg1)
                                   -1, -1, -1, NULL, NULL);
             if (result != 0) {
                 if (ftCo_800A6A98_inline0(line_id)) {
-                    blocked = 1;
-                }
-                if (blocked != 0) {
                     result = 0;
                 }
             }
@@ -3190,17 +3188,18 @@ s32 ftCo_800A6D2C(Fighter* fp, Vec3* arg1)
     struct Fighter_x1A88_t* data = &fp->x1A88;
     mp_UnkStruct0* island;
     mp_UnkStruct0* cur_island;
+    UNUSED u8 _pad[4];
     f32 best;
-    Vec3 a;
     Vec3 b;
+    Vec3 a;
     Vec3 floor_pos;
     Vec3 floor_normal;
     int line_id;
     u32 flags;
+    UNUSED u8 _pad2[4];
     f32 mx;
     f32 my;
     s32 result;
-    s32 blocked;
     f32 dx;
     f32 dy;
     f32 dist;
@@ -3214,7 +3213,6 @@ s32 ftCo_800A6D2C(Fighter* fp, Vec3* arg1)
             a = island->x8;
             b = island->x14;
             HSD_Randf();
-            blocked = 0;
             line_id = -1;
             mx = 0.5f * (b.x + a.x);
             my = 0.5f * (b.y + a.y);
@@ -3223,9 +3221,6 @@ s32 ftCo_800A6D2C(Fighter* fp, Vec3* arg1)
                                   -1, -1, -1, NULL, NULL);
             if (result != 0) {
                 if (ftCo_800A6A98_inline0(line_id)) {
-                    blocked = 1;
-                }
-                if (blocked != 0) {
                     result = 0;
                 }
             }
