@@ -1055,7 +1055,7 @@ config.libs = [
             Object(NonMatching, "melee/gr/grbigblue.c"),
             Object(NonMatching, "melee/gr/grmutecity.c"),
             Object(NonMatching, "melee/gr/grfourside.c"),
-            Object(NonMatching, "melee/gr/grgreatbay.c"),
+            Object(Matching, "melee/gr/grgreatbay.c"),
             Object(NonMatching, "melee/gr/gricemt.c"),
             Object(NonMatching, "melee/gr/grinishie1.c"),
             Object(NonMatching, "melee/gr/grinishie2.c"),
