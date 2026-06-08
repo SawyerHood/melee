@@ -25,6 +25,7 @@
 #include <baselib/memory.h>
 #include <baselib/particle.h>
 #include <baselib/sislib.h>
+#include <baselib/wobj.h>
 #include <MSL/stdio.h>
 #include <MSL/string.h>
 
@@ -47,8 +48,51 @@
 } un_803F9E08 = {
     { 0 }, 0, 0, 0, 0, 0, 0, "IfCoGet.dat", "ScInfCgt_scene_data"
 };
-/* 3F9E60 */ static HSD_CObjDesc un_803F9E60 = { 0 };
-/* 3F9ED4 */ static HSD_LightDesc un_803F9ED4 = { 0 };
+/* 3F9E38 */ static HSD_WObjDesc un_803F9E38 = {
+    NULL, { 0.0f, 40.241424560546875f, 100.2409896850586f }, NULL
+};
+/* 3F9E4C */ static HSD_WObjDesc un_803F9E4C = { NULL,
+                                                 { 0.0f, 10.0f, 0.0f },
+                                                 NULL };
+/* 3F9E60 */ static HSD_CameraDescPerspective un_803F9E60 = {
+    NULL,
+    0,
+    1,
+    0,
+    640,
+    0,
+    480,
+    0,
+    640,
+    0,
+    480,
+    &un_803F9E38,
+    &un_803F9E4C,
+    0,
+    NULL,
+    0.1f,
+    32768.0f,
+    30.0f,
+    1.18f,
+};
+/* 3F9E98 */ static HSD_WObjDesc un_803F9E98 = {
+    NULL, { 6.360198974609375f, 14.943239212036133f, 59.982383728027344f },
+    NULL
+};
+/* 3F9EAC */ static HSD_LightPointDesc un_803F9EAC = { 0.99f, 10000.0f, 3 };
+/* 3F9EB8 */ static HSD_LightDesc un_803F9EB8 = {
+    NULL, NULL, 8, 0, { 0xFF, 0xFF, 0xFF, 0xFF },
+    &un_803F9E98, NULL, { &un_803F9EAC }
+};
+/* 3F9ED4 */ static HSD_LightDesc un_803F9ED4 = {
+    NULL, &un_803F9EB8, 1, 0, { 0xFF, 0xFF, 0xFF, 0xFF },
+    NULL, NULL, { NULL }
+};
+/* Dead debug strings (target bytes inside the dtk-merged un_803F9ED4 sym
+ * span 0x54; their OSReport users were compiled out of retail). */
+/* 3F9EF0 */ static char pool_803F9EF0[0x1f] =
+    "Remove Target %x (n %x) Id %d\n";
+/* 3F9F10 */ static char pool_803F9F10[0x11] = "Remove All Over\n";
 
 /// .bss
 struct un_804A1F58_x8_t {
@@ -174,7 +218,7 @@ static inline void fn_802FF218_update(int found)
     if (found >= 0) {
         thing = un_804A1F58_slot(found);
         if (thing->x10 == 1) {
-            HSD_SisLib_803A70A0(thing->x4, thing->x8, "");
+            HSD_SisLib_803A70A0(thing->x4, thing->x8, "  ");
         } else {
             gm_8016B774();
             y = gm_8016C658(y);
@@ -309,7 +353,7 @@ void un_802FF710(void)
     HSD_CObj* new_var;
     HSD_GObj* gobj = GObj_Create(0x13, 20, 0);
     if (gobj) {
-        new_var = HSD_CObjLoadDesc(&un_803F9E60);
+        new_var = HSD_CObjLoadDesc((HSD_CObjDesc*) &un_803F9E60);
         HSD_GObjObject_80390A70(gobj, HSD_GObj_804D784B, new_var);
         GObj_SetupGXLinkMax(gobj, HSD_GObj_803910D8, 11);
         gobj->gxlink_prios = 0x20000;

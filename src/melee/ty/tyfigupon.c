@@ -39,6 +39,7 @@
 #include <baselib/random.h>
 #include <baselib/sislib.h>
 #include <baselib/tobj.h>
+#include <baselib/wobj.h>
 
 typedef struct {
     /* 0x00 */ HSD_GObj* x0;
@@ -63,7 +64,9 @@ extern s32 un_804D6F00;
 extern char un_803FE5E8[];
 extern void* un_804D6EF8;
 
-/* .data string literals for tyfigupon.c */
+/* .data string literals for tyfigupon.c (target blob un_803FEA10 spans
+ * exactly these 8 head defs, 0x00-0xdf; all other .data objects emit at
+ * later source epochs to reproduce the target stream) */
 static char str_panel_joint[] = "ToyFigurePonPanel_Top_joint";
 static char str_bg_joint[] = "ToyFigurePonBg_Top_joint";
 static char str_archive_jp[] = "TyMnFigp.dat";
@@ -72,60 +75,6 @@ static char str_coin_joint[] = "ToyFigurePonCoin_Top_joint";
 static char str_coin_animjoint[] = "ToyFigurePonCoin_Top_animjoint";
 static char str_coin_matanim[] = "ToyFigurePonCoin_Top_matanim_joint";
 static char str_coin_shapeanim[] = "ToyFigurePonCoin_Top_shapeanim_joint";
-static char str_file[] = "tyfigupon.c";
-static u16 str_jobj_indices[] = {
-    0x4, 0x2, 0x3, 0x5, 0x6, 0x7, 0x8, 0x9, 0xD, 0xA, 0xB, 0xC, 0xE,
-};
-static char str_err_bg[] = "*** BG data aren't being loaded!\n";
-static char str_panel_smash_matanim[] =
-    "ToyFigurePonPanel_zsmash_matanim_joint";
-static char str_bg_animjoint[] = "ToyFigurePonBg_Top_animjoint";
-static char str_bg_matanim[] = "ToyFigurePonBg_Top_matanim_joint";
-static char str_bg_shapeanim[] = "ToyFigurePonBg_Top_shapeanim_joint";
-static char str_nm_joint[] = "ToyFigurePonNm_Top_joint";
-static char str_nm_animjoint[] = "ToyFigurePonNm_Top_animjoint";
-static char str_nm_matanim[] = "ToyFigurePonNm_Top_matanim_joint";
-static char str_nm_shapeanim[] = "ToyFigurePonNm_Top_shapeanim_joint";
-static char str_bet_joint[] = "ToyFigurePonBet_Top_joint";
-static char str_bet_animjoint[] = "ToyFigurePonBet_Top_animjoint";
-static char str_bet_matanim[] = "ToyFigurePonBet_Top_matanim_joint";
-static char str_bet_shapeanim[] = "ToyFigurePonBet_Top_shapeanim_joint";
-static char str_panel_arrow_matanim[] =
-    "ToyFigurePonPanel_zarrow_matanim_joint";
-static char str_lever_joint[] = "ToyFigurePonLever_Top_joint";
-static char str_lever_animjoint[] = "ToyFigurePonLever_Top_animjoint";
-static char str_lever_matanim[] = "ToyFigurePonLever_Top_matanim_joint";
-static char str_lever_shapeanim[] = "ToyFigurePonLever_Top_shapeanim_joint";
-static char str_par_joint[] = "ToyFigurePonPar_Top_joint";
-static char str_par_animjoint[] = "ToyFigurePonPar_Top_animjoint";
-static char str_par_matanim[] = "ToyFigurePonPar_Top_matanim_joint";
-static char str_par_shapeanim[] = "ToyFigurePonPar_Top_shapeanim_joint";
-static char str_err_panel[] = "*** Can not Load Panel Label(%s)\n";
-static char str_scene_lights[] = "ScMenFigure_scene_lights";
-static char str_sdtoy_jp[] = "SdToy.dat";
-static char str_sdtoy_data_jp[] = "SIS_ToyData";
-static char str_sdtoy_us[] = "SdToy.usd";
-static char str_sdtoy_data_us[] = "SIS_ToyData_E";
-static char str_nget_joint[] = "ToyFigurePonNget_Top_joint";
-static char str_nget_animjoint[] = "ToyFigurePonNget_Top_animjoint";
-static char str_nget_matanim[] = "ToyFigurePonNget_Top_matanim_joint";
-static char str_nget_shapeanim[] = "ToyFigurePonNget_Top_shapeanim_joint";
-
-static HSD_CameraDescPerspective tyfigupon_cam_desc = {
-    NULL,
-    0,
-    1,
-    { 0, 640, 0, 480 },
-    { 0, 640, 0, 480 },
-    NULL,
-    NULL,
-    0.0f,
-    NULL,
-    0.1f,
-    32768.0f,
-    40.0f,
-    1.2173333f,
-};
 
 typedef struct {
     u8 pad[0x4D];
@@ -185,6 +134,14 @@ void tyFigupon_80314AA8(HSD_JObj* jobj, char* anim_str, char* matanim_str,
 }
 
 #pragma dont_inline on
+/* link-stripped .sdata2 sequencer: mints the s32->f32 conversion f64
+ * (0x4330000080000000) at slot 0x8, before tyFigupon_80314C5C's pool
+ * group (target order; idiom 375-family). */
+static f32 sdata2_ordering(s32 x)
+{
+    return (f32) x;
+}
+
 s32 un_80314B54(void)
 {
     s32 i;
@@ -358,6 +315,16 @@ void fn_80315574(void)
     } else {
         data->x24 = data->x24 - 1;
     }
+}
+
+/* link-stripped .sdata2 sequencer: pre-mints [100.0, 999.0, 1000.0]
+ * so fn_803155C8's group lands [100,999,1000,1.62,50,99.9] as in the
+ * target. */
+static void sdata2_ordering_2(f32* out)
+{
+    out[0] = 100.0F;
+    out[1] = 999.0F;
+    out[2] = 1000.0F;
 }
 
 void fn_803155C8(void)
@@ -557,6 +524,11 @@ void fn_803155C8(void)
         break;
     }
 }
+
+/* 0x108: dead in the decompiled control flow; binary-proven target
+ * bytes (lbl_803FEB18 spans this and str_file). */
+static char lbl_803FEB18[] = "*** Not Get Figure!\n";
+static char str_file[] = "tyfigupon.c";
 
 void fn_80315C44(HSD_GObj* arg0)
 {
@@ -794,6 +766,64 @@ void un_80316420(s16 arg0)
         ((TyFiguponData*) un_804D6EF0)->x18->hidden = 0;
     }
 }
+static u16 str_jobj_indices[] = {
+    0x4, 0x2, 0x3, 0x5, 0x6, 0x7, 0x8, 0x9, 0xD, 0xA, 0xB, 0xC, 0xE,
+};
+static char str_err_bg[] = "*** BG data aren't being loaded!\n";
+static char str_panel_smash_matanim[] =
+    "ToyFigurePonPanel_zsmash_matanim_joint";
+static char str_bg_animjoint[] = "ToyFigurePonBg_Top_animjoint";
+static char str_bg_matanim[] = "ToyFigurePonBg_Top_matanim_joint";
+static char str_bg_shapeanim[] = "ToyFigurePonBg_Top_shapeanim_joint";
+static char str_nm_joint[] = "ToyFigurePonNm_Top_joint";
+static char str_nm_animjoint[] = "ToyFigurePonNm_Top_animjoint";
+static char str_nm_matanim[] = "ToyFigurePonNm_Top_matanim_joint";
+static char str_nm_shapeanim[] = "ToyFigurePonNm_Top_shapeanim_joint";
+static char str_bet_joint[] = "ToyFigurePonBet_Top_joint";
+static char str_bet_animjoint[] = "ToyFigurePonBet_Top_animjoint";
+static char str_bet_matanim[] = "ToyFigurePonBet_Top_matanim_joint";
+static char str_bet_shapeanim[] = "ToyFigurePonBet_Top_shapeanim_joint";
+static char str_panel_arrow_matanim[] =
+    "ToyFigurePonPanel_zarrow_matanim_joint";
+static char str_lever_joint[] = "ToyFigurePonLever_Top_joint";
+static char str_lever_animjoint[] = "ToyFigurePonLever_Top_animjoint";
+static char str_lever_matanim[] = "ToyFigurePonLever_Top_matanim_joint";
+static char str_lever_shapeanim[] = "ToyFigurePonLever_Top_shapeanim_joint";
+static char str_par_joint[] = "ToyFigurePonPar_Top_joint";
+static char str_par_animjoint[] = "ToyFigurePonPar_Top_animjoint";
+static char str_par_matanim[] = "ToyFigurePonPar_Top_matanim_joint";
+static char str_par_shapeanim[] = "ToyFigurePonPar_Top_shapeanim_joint";
+static char str_err_panel[] = "*** Can not Load Panel Label(%s)\n";
+static char str_scene_lights[] = "ScMenFigure_scene_lights";
+
+static HSD_WObjDesc un_803FEED4 = { NULL, { 0.0f, 0.0f, 50.0f }, NULL };
+static HSD_WObjDesc un_803FEEE8 = { NULL, { 0.0f, 0.0f, 0.0f }, NULL };
+
+static HSD_CameraDescPerspective tyfigupon_cam_desc = {
+    NULL,
+    0,
+    1,
+    { 0, 640, 0, 480 },
+    { 0, 640, 0, 480 },
+    &un_803FEED4,
+    &un_803FEEE8,
+    0.0f,
+    NULL,
+    0.1f,
+    32768.0f,
+    40.0f,
+    1.2173333f,
+};
+
+static char str_sdtoy_jp[] = "SdToy.dat";
+static char str_sdtoy_data_jp[] = "SIS_ToyData";
+static char str_sdtoy_us[] = "SdToy.usd";
+static char str_sdtoy_data_us[] = "SIS_ToyData_E";
+static char str_nget_joint[] = "ToyFigurePonNget_Top_joint";
+static char str_nget_animjoint[] = "ToyFigurePonNget_Top_animjoint";
+static char str_nget_matanim[] = "ToyFigurePonNget_Top_matanim_joint";
+static char str_nget_shapeanim[] = "ToyFigurePonNget_Top_shapeanim_joint";
+
 static const Vec3 un_803B8968 = { 0.0f, 1.0f, 0.0f };
 
 void fn_803168DC(HSD_GObj* arg0)
@@ -1148,8 +1178,8 @@ void fn_80316C24(HSD_GObj* arg0)
     }
 }
 
-static u16 un_804D5AA0 = 0xC;
-static char un_804D5AA4 = 0;
+static u16 un_804D5AA0[2] = { 0xC, 0 };
+static char un_804D5AA4[4] = "";
 
 typedef struct {
     s32 x0, x4, x8, xC;
@@ -1172,7 +1202,7 @@ void un_8031753C(void)
 
     if (ef4->archive == NULL) {
         OSReport(str_err_bg);
-        OSPanic(str_file, 0x55C, &un_804D5AA4);
+        OSPanic(str_file, 0x55C, un_804D5AA4);
     }
     if (ef4->x00 != 0) {
         HSD_GObjPLink_80390228((HSD_GObj*) ef4->x00);
@@ -1248,7 +1278,7 @@ void un_8031753C(void)
         GObj_SetupGXLink((HSD_GObj*) ef4->x08, HSD_GObj_JObjCallback, 0x3C, 0);
         tyFigupon_80314AA8(jobj, str_lever_animjoint, str_lever_matanim,
                            str_lever_shapeanim);
-        lb_8001204C(jobj, &ef4->jobjs[0xE], &un_804D5AA0, 1);
+        lb_8001204C(jobj, &ef4->jobjs[0xE], un_804D5AA0, 1);
 
         trophy_total = un_80314B54();
         new_count = 0;
@@ -1277,7 +1307,7 @@ void un_8031753C(void)
         return;
     }
     OSReport(str_err_panel, str_panel_joint, joint);
-    OSPanic(str_file, 0x610, &un_804D5AA4);
+    OSPanic(str_file, 0x610, un_804D5AA4);
 }
 
 void un_80317A60(void)
@@ -1421,7 +1451,7 @@ void un_80317D80_OnEnter(void* arg0)
     ed4 = un_804D6ED4;
     if (ef4->archive == NULL) {
         OSReport(str_err_bg);
-        OSPanic(str_file, 0x627, "");
+        OSPanic(str_file, 0x627, un_804D5AA4);
     }
     {
         LightList** temp =

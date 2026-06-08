@@ -1,5 +1,6 @@
 #include "textdraw.h"
 
+#include "if/textlib.h"
 #include "if/types.h"
 
 #include <printf.h>
@@ -51,8 +52,40 @@
     1.3636000156402588f,
 };
 
+/* Split-boundary orphans from textlib.c (idiom-69/235 class): the original
+ * textlib TU's tail .data (two strings + three switch jumptables of the
+ * un_80302FFC/444/720 functions) lands inside textdraw's .data region in the
+ * DOL. Dead reconstructions from target bytes; un_803FDC98 padded to 0x10 so
+ * the first jumptable lands at +0x88 like the target (gap_07_803FDCA2). */
+/* 3FDC80 */ static char un_803FDC80[0x18] = "TW : Screen alloc Fail\n";
+/* 3FDC98 */ static char un_803FDC98[0x10] = "textlib.c";
+/* 3FDCA8 */ static void* un_803FDCA8[9] = {
+    (void*) ((u8*) un_80302FFC + 0x41c), (void*) ((u8*) un_80302FFC + 0x41c),
+    (void*) ((u8*) un_80302FFC + 0x360), (void*) ((u8*) un_80302FFC + 0x380),
+    (void*) ((u8*) un_80302FFC + 0x394), (void*) ((u8*) un_80302FFC + 0x3b0),
+    (void*) ((u8*) un_80302FFC + 0x3cc), (void*) ((u8*) un_80302FFC + 0x3e8),
+    (void*) ((u8*) un_80302FFC + 0x404)
+};
+/* 3FDCCC */ static void* un_803FDCCC[9] = {
+    (void*) ((u8*) un_80303444 + 0x2b8), (void*) ((u8*) un_80303444 + 0x2b8),
+    (void*) ((u8*) un_80303444 + 0x54),  (void*) ((u8*) un_80303444 + 0xb4),
+    (void*) ((u8*) un_80303444 + 0x20c), (void*) ((u8*) un_80303444 + 0x134),
+    (void*) ((u8*) un_80303444 + 0x19c), (void*) ((u8*) un_80303444 + 0x20c),
+    (void*) ((u8*) un_80303444 + 0x278)
+};
+/* 3FDCF0 */ static void* un_803FDCF0[9] = {
+    (void*) ((u8*) un_80303720 + 0x268), (void*) ((u8*) un_80303720 + 0x268),
+    (void*) ((u8*) un_80303720 + 0x4c),  (void*) ((u8*) un_80303720 + 0xa4),
+    (void*) ((u8*) un_80303720 + 0x1f0), (void*) ((u8*) un_80303720 + 0x124),
+    (void*) ((u8*) un_80303720 + 0x188), (void*) ((u8*) un_80303720 + 0x1f0),
+    (void*) ((u8*) un_80303720 + 0x228)
+};
+
 /// .bss
 /* 4A1FD8 */ static DevText devtext_pool[32];
+/* 4A2658 */ static u8 pool_804A2658[0x30]; /* tail of un_804A1FD8 (0x6b0):
+                                             * 0x30 past devtext_pool, dead
+                                             * textlib-coupled scratch */
 
 /// .sbss
 /* 4D6E18 */ static DevText* un_804D6E18;

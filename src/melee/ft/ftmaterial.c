@@ -25,6 +25,15 @@
 
 HSD_MObjInfo ftMObj = { ftMaterial_800BF260 };
 
+/* Dead 0x8C table at .data+0x50 (unreferenced tree-wide; target bytes,
+ * TEV color-register default block shape). Reconstructed from
+ * build/GALE01/obj/melee/ft/ftmaterial.o. */
+u32 lbl_803C69D0[0x23] = {
+    0, 1,          0, 0xFF, 0xFF, 0xFF, 0, 0, 0xF, 0xF, 0xF, 0,
+    0, 0x01000000, 0, 0,    7,    7,    7, 0, 0,   0,   0,   0,
+    0, 0,          0, 0,    0,    4,    0, 0, 1,   0,   0xFFFF0000
+};
+
 #pragma force_active on
 
 void ftMaterial_800BF260(void)

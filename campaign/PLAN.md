@@ -6,13 +6,13 @@ the end of every session.
 
 > **⭐⭐ ENDGAME METRIC (live since wave 18): LINKED Matching file count.**
 > Currently **875/1057 linked COMMITTED (47.24% complete code; matched
-> 72.85%, fuzzy 97.636; data **59.45% COMMITTED**; matched fns
-> **18852/19829 = 95.07%**)** at **2e104422d = FLIP #18
+> 72.85%, fuzzy 97.636; data **60.72% COMMITTED (w36 in-tree
+> 60.77)**; matched fns **18852/19829 = 95.07% pends w35/w36
+> re-measure**)** at **2e104422d = FLIP #18
 > itmewtwoshadowball (landed at the w32→33 boundary, zero src work in
 > the flip commit — the w32 recon cleared its last hard rows;
-> re-rank-after-recon policy proven a THIRD time)**, on c5c632d9b
-> (wave 34 grants LANDED; data % pends re-measure post w33/w34 recon
-> lands). Commit
+> re-rank-after-recon policy proven a THIRD time)**, on c18ffaf79
+> (wave 35 grants + naming-19 LANDED). Commit
 > chain since the merge: **a76c460359 = W29 MERGE of upstream/master
 > ed970616e (25 commits), still NOT pushed** → f28cf5166 (w30
 > symbols-truth fix) → ec8fbdf41 (w30 rebalanced kept edits) →
@@ -28,15 +28,15 @@ the end of every session.
 > (status-dashboard routine; campaign-only) → **c5c632d9b (wave 34:
 > ALL 19 files COMMITTED — ~1.15KB rank weight + 6 fn 100s landed;
 > naming-18 pins 1-26 commingled in symbols.txt, remainder superseded
-> by naming-19)**. DOL sha 08e0bf20 EXACT at every
-> gate, dtk OK, idempotence EXACT; working-tree dirt =
-> backlog.json (editor-owned, stale) + config/GALE01/symbols.txt
-> (**naming-19 per-pin DOL-gated loop IN FLIGHT**, 469 pins re-derived
-> fresh per 290; commits itself iff clean) **+ the 27 w35 kept-edit
-> src files (ALL lane gates PASS, UNCOMMITTED PEND GRANT — 499B recon
-> + ~320B sqrtf ballast cleared + 2 NEW fn 100s in-tree; 14 of the
-> sweep's 20 files are Matching units, incl. the link-load-bearing
-> lbvector weak-emitter cure 382; see W35)**.
+> by naming-19)** → **c18ffaf79 (wave 35: ALL 27 lane files +
+> naming-19 symbols.txt COMMITTED — 499B recon + ~320B sqrtf
+> class-(a) ballast + 2 fn 100s landed)**. DOL sha 08e0bf20 EXACT at
+> every gate, dtk OK, idempotence EXACT; working-tree dirt =
+> backlog.json (editor-owned, stale) **+ the 19 w36 kept-edit src
+> files (ALL lane gates PASS, UNCOMMITTED PEND GRANT — 882B recon
+> ×6 units + 192B class-(b) sqrtf ballast off (10 units, 3 are
+> extern/dolphin; GXPixel + ityoshiegglay go linkcheck-CLEAN) + 5
+> NEW fn 100s + mnInfo_80252758 →99.86 in-tree; see W36)**.
 > Denominator 1041→1057 = upstream
 > resplit (18 kirby TUs
 > + crowdsfx/sfx_unk + 4 dtk filler data units; no real unit lost).

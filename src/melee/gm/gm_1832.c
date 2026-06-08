@@ -178,36 +178,36 @@ extern ClassicStageEntry lbl_803D9910[65];
 
 void fn_8018325C(HSD_GObj* arg0, int arg1)
 {
+    int i;
     Vec3 pos;
     HSD_JObj* jobj = arg0->hsd_obj;
     HSD_JObj* src = lbl_804735A8.x4[0];
-    int i;
     HSD_JObj* arrow;
 
     HSD_JObjGetTranslation(src, &pos);
     HSD_JObjSetTranslate(jobj, &pos);
 
     switch (arg1) {
+    case 0:
+        break;
     case 1:
         HSD_JObjAddTranslationZ(jobj, -10.0f);
         if (lbl_804735A8.x38 > 0x50U) {
-            arrow = lbl_804735A8.x4[2];
-            HSD_JObjSetTranslateX(arrow, -1.0f);
-            HSD_JObjSetTranslateY(arrow, 0.0f);
-            HSD_JObjSetTranslateZ(arrow, 5.0f);
-            HSD_JObjSetScaleX(arrow, 2.8f);
-            HSD_JObjSetScaleY(arrow, 2.8f);
+            HSD_JObjSetTranslateX(lbl_804735A8.x4[2], -1.0f);
+            HSD_JObjSetTranslateY(lbl_804735A8.x4[2], 0.0f);
+            HSD_JObjSetTranslateZ(lbl_804735A8.x4[2], 5.0f);
+            HSD_JObjSetScaleX(lbl_804735A8.x4[2], 2.8f);
+            HSD_JObjSetScaleY(lbl_804735A8.x4[2], 2.8f);
         }
         break;
     case 2:
         HSD_JObjAddTranslationZ(jobj, -30.0f);
         if (lbl_804735A8.x38 > 0x5AU) {
-            arrow = lbl_804735A8.x4[3];
-            HSD_JObjSetTranslateX(arrow, -0.5f);
-            HSD_JObjSetTranslateY(arrow, 3.0f);
-            HSD_JObjSetTranslateZ(arrow, 5.0f);
-            HSD_JObjSetScaleX(arrow, 2.2f);
-            HSD_JObjSetScaleY(arrow, 2.2f);
+            HSD_JObjSetTranslateX(lbl_804735A8.x4[3], -0.5f);
+            HSD_JObjSetTranslateY(lbl_804735A8.x4[3], 3.0f);
+            HSD_JObjSetTranslateZ(lbl_804735A8.x4[3], 5.0f);
+            HSD_JObjSetScaleX(lbl_804735A8.x4[3], 2.2f);
+            HSD_JObjSetScaleY(lbl_804735A8.x4[3], 2.2f);
         }
         break;
     }
@@ -238,18 +238,15 @@ void fn_8018325C(HSD_GObj* arg0, int arg1)
             jobj, lbl_804D6604->x6C[lbl_8047368C.xF1[arg1]].x04 +
                       lbl_804D6604->x18[lbl_8047368C.xEF].vals[arg1]);
 
-        {
-            f32 scale_factor = lbl_804D6604->x3C[lbl_8047368C.xEF].vals[arg1];
-            HSD_JObjSetScaleX(jobj,
-                              lbl_804D6604->x6C[lbl_8047368C.xF1[arg1]].x08.x *
-                                  scale_factor);
-            HSD_JObjSetScaleY(jobj,
-                              lbl_804D6604->x6C[lbl_8047368C.xF1[arg1]].x08.y *
-                                  scale_factor);
-            HSD_JObjSetScaleZ(jobj,
-                              lbl_804D6604->x6C[lbl_8047368C.xF1[arg1]].x08.z *
-                                  scale_factor);
-        }
+        HSD_JObjSetScaleX(jobj,
+                          lbl_804D6604->x6C[lbl_8047368C.xF1[arg1]].x08.x *
+                              lbl_804D6604->x3C[lbl_8047368C.xEF].vals[arg1]);
+        HSD_JObjSetScaleY(jobj,
+                          lbl_804D6604->x6C[lbl_8047368C.xF1[arg1]].x08.y *
+                              lbl_804D6604->x3C[lbl_8047368C.xEF].vals[arg1]);
+        HSD_JObjSetScaleZ(jobj,
+                          lbl_804D6604->x6C[lbl_8047368C.xF1[arg1]].x08.z *
+                              lbl_804D6604->x3C[lbl_8047368C.xEF].vals[arg1]);
     }
 
     for (i = 0; i < 6; i++) {
@@ -270,6 +267,7 @@ void fn_80184138(HSD_GObj* arg0, int arg1)
 {
     u8 _padA[8];
     Vec3 pos;
+    f32 pad[4];
     Vec3 scale;
     HSD_JObj* jobj = arg0->hsd_obj;
     HSD_JObj* src = lbl_804735A8.x4[1];
@@ -322,16 +320,15 @@ void fn_80184138(HSD_GObj* arg0, int arg1)
         HSD_JObjSetScaleZ(
             jobj, lbl_804D6604->x6C[lbl_8047368C.xF4[arg1]].x08.z * scl);
     } else {
-        f32 scale_factor = lbl_804D6604->x3C[lbl_8047368C.xF0].vals[arg1];
         HSD_JObjSetScaleX(jobj,
                           lbl_804D6604->x6C[lbl_8047368C.xF4[arg1]].x08.x *
-                              scale_factor);
+                              lbl_804D6604->x3C[lbl_8047368C.xF0].vals[arg1]);
         HSD_JObjSetScaleY(jobj,
                           lbl_804D6604->x6C[lbl_8047368C.xF4[arg1]].x08.y *
-                              scale_factor);
+                              lbl_804D6604->x3C[lbl_8047368C.xF0].vals[arg1]);
         HSD_JObjSetScaleZ(jobj,
                           lbl_804D6604->x6C[lbl_8047368C.xF4[arg1]].x08.z *
-                              scale_factor);
+                              lbl_804D6604->x3C[lbl_8047368C.xF0].vals[arg1]);
     }
 
     for (i = 0; i < 6; i++) {
@@ -1170,7 +1167,12 @@ void fn_80186634(void* arg0)
         GObj_SetupGXLink(gobj, HSD_GObj_FogCallback, 0xB, 0);
         fn_80186080();
         break;
-    default:
+    /// Binary truth: values outside 0-4 skip the switch entirely
+    /// (cmpwi 0/bge + cmpwi 5/bge END in the DOL) -- the original spells
+    /// explicit cases 0-2, NOT default.
+    case 0:
+    case 1:
+    case 2:
         gobj2 = GObj_Create(0x13, 0x14, 0);
         cobj1 = HSD_CObjLoadDesc(lbl_804D65FC->cameras[0].desc);
         cobj2 = HSD_CObjLoadDesc(lbl_804D6600->cameras[0].desc);

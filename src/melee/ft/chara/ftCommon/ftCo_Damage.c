@@ -56,7 +56,24 @@
 
 #include <common_structs.h>
 #include <math.h>
-#include <math_ppc.h>
+/* math_ppc.h dropped: its sqrtf inline emits dead _half/_three localstatics
+ * the target .sdata2 does not have (idiom 329). xsqrtf below is the same
+ * inline with pool-literal 0.5/3.0 (= target @-anon doubles). */
+extern double __frsqrte(double);
+
+static inline float xsqrtf(float x)
+{
+    volatile float y;
+    if (x > 0.0f) {
+        double guess = __frsqrte((double) x);
+        guess = 0.5 * guess * (3.0 - guess * guess * x);
+        guess = 0.5 * guess * (3.0 - guess * guess * x);
+        guess = 0.5 * guess * (3.0 - guess * guess * x);
+        y = (float) (x * guess);
+        return y;
+    }
+    return x;
+}
 #include <dolphin/mtx.h>
 #include <baselib/mtx.h>
 #include <baselib/random.h>
@@ -611,7 +628,7 @@ void ftCo_8008E5A4(Fighter* fp)
             {
                 float angle = atan2f(kb_y, kb_x);
                 float scale;
-                kb_mag = sqrtf(kb_x * kb_x + kb_y * kb_y);
+                kb_mag = xsqrtf(kb_x * kb_x + kb_y * kb_y);
                 scale = deg_to_rad * p_ftCommonData->x1A8;
                 angle += scale * f30;
                 fp->x8c_kb_vel.x = kb_mag * cosf(angle);
@@ -657,7 +674,7 @@ void ftCo_Damage_OnExitHitlag(Fighter_GObj* gobj)
         if (kb_x || kb_y) {
             float kb_angle = atan2f(kb_y, kb_x);
             float scaled_kb_mag =
-                sqrtf(kb_x * kb_x + kb_y * kb_y) * p_ftCommonData->x1AC;
+                xsqrtf(kb_x * kb_x + kb_y * kb_y) * p_ftCommonData->x1AC;
             fp->x8c_kb_vel.x = scaled_kb_mag * cosf(kb_angle);
             fp->x8c_kb_vel.y = scaled_kb_mag * sinf(kb_angle);
         }
@@ -1048,7 +1065,7 @@ void ftCo_Damage_Coll(Fighter_GObj* gobj)
         if (fp->x2224_b2) {
             ftCo_80097D40(gobj);
         } else {
-            float mag = sqrtf(VEC2_SQ_LEN(fp->x8c_kb_vel));
+            float mag = xsqrtf(VEC2_SQ_LEN(fp->x8c_kb_vel));
             if (mag >= p_ftCommonData->x1E0) {
                 ftCo_80097D40(gobj);
             } else if (mag >= p_ftCommonData->x1E4) {
@@ -1160,7 +1177,7 @@ void ftCo_DamageFly_Phys(Fighter_GObj* gobj)
         doFlyRoll(gobj);
     }
     if (fp->x1064_thrownHitbox.owner != NULL &&
-        sqrtf(VEC3_SQ_LEN(fp->x8c_kb_vel)) < p_ftCommonData->x1C8)
+        xsqrtf(VEC3_SQ_LEN(fp->x8c_kb_vel)) < p_ftCommonData->x1C8)
     {
         ftColl_8007AFF8(gobj);
     }

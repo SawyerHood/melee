@@ -42,7 +42,24 @@
 #include <baselib/forward.h>
 
 #include <common_structs.h>
-#include <math_ppc.h>
+/* math_ppc.h dropped: its sqrtf inline emits dead _half/_three localstatics
+ * the target .sdata2 does not have (idiom 329). xsqrtf below is the same
+ * inline with pool-literal 0.5/3.0 (= target @-anon doubles). */
+extern double __frsqrte(double);
+
+static inline float xsqrtf(float x)
+{
+    volatile float y;
+    if (x > 0.0f) {
+        double guess = __frsqrte((double) x);
+        guess = 0.5 * guess * (3.0 - guess * guess * x);
+        guess = 0.5 * guess * (3.0 - guess * guess * x);
+        guess = 0.5 * guess * (3.0 - guess * guess * x);
+        y = (float) (x * guess);
+        return y;
+    }
+    return x;
+}
 #include <dolphin/mtx.h>
 #include <baselib/debug.h>
 #include <baselib/jobj.h>
@@ -359,7 +376,7 @@ static inline void ftCo_SpawnEffect_x406(Fighter_GObj* gobj, Vec3* vec, f32 f)
 
 static inline f32 ftCo_Speed(Fighter* fp)
 {
-    return sqrtf((fp->self_vel.x * fp->self_vel.x) +
+    return xsqrtf((fp->self_vel.x * fp->self_vel.x) +
                  (fp->self_vel.y * fp->self_vel.y) +
                  (fp->self_vel.z * fp->self_vel.z));
 }

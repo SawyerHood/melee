@@ -27,7 +27,13 @@
 
 #include "mp/mplib.h"
 #include "MSL/math.h"
-#include "MSL/math_ppc.h" // IWYU pragma: keep
+/* math_ppc.h dropped (382/W1 pre-check done: target grkongo.o carries NO
+ * sqrtf__Ff body and no _half/_three ballast -- the original INLINED its
+ * one sqrtf call (0.5/3.0 f64 pool mints sit inside grKongo_801D6668).
+ * grkongo is NOT the in-link weak emitter (lbvector is), so no weak def
+ * is kept here. */
+extern double __frsqrte(double);
+
 
 #include <baselib/gobj.h>
 #include <baselib/gobjgxlink.h>
@@ -323,9 +329,9 @@ static inline void compare(f32 a, f32 b, f32* c)
 
 static inline f32 tau_range(f32 a)
 {
-    if (a > (f32) M_TAU) {
+    if (a > M_TAU) {
         return (f64) a - M_TAU;
-    } else if (a < (f32) -M_TAU) {
+    } else if (a < -M_TAU) {
         return (f64) a + M_TAU;
     }
     return 0.0F;
@@ -425,7 +431,7 @@ void grKongo_801D577C(Ground_GObj* arg0)
         s16 val = temp_r31->gv.kongo2.xCE;
         temp_r31->gv.kongo2.xCE -= 1;
         if (val < 0) {
-            temp_r31->gv.kongo2.xC8 = 1;
+            temp_r31->gv.kongo3.xC8 = 1;
         }
     } break;
     case 1:
@@ -434,13 +440,13 @@ void grKongo_801D577C(Ground_GObj* arg0)
             temp_r31->gv.kongo2.xE8 = grKg_804D6980->unk60;
             temp_r31->gv.kongo2.xCE =
                 random_adder(grKg_804D6980->unk68, grKg_804D6980->unk64);
-            temp_r31->gv.kongo2.xC8 = 2;
+            temp_r31->gv.kongo3.xC8 = 2;
         }
         break;
     case 2:
         temp_r31->gv.kongo2.xCE -= 1;
         if (temp_r31->gv.kongo2.xCE < 0) {
-            temp_r31->gv.kongo2.xC8 = 3;
+            temp_r31->gv.kongo3.xC8 = 3;
         }
         break;
     case 3:
@@ -449,7 +455,7 @@ void grKongo_801D577C(Ground_GObj* arg0)
             temp_r31->gv.kongo2.xE8 = 0.0f;
             temp_r31->gv.kongo2.xCE =
                 random_adder(grKg_804D6980->unk58, grKg_804D6980->unk54);
-            temp_r31->gv.kongo2.xC8 = 0;
+            temp_r31->gv.kongo3.xC8 = 0;
         }
         break;
     }
@@ -494,7 +500,7 @@ void grKongo_801D577C(Ground_GObj* arg0)
         angle = (f32) (1.5707963267948966 + (f64) temp_r31->gv.kongo3.xD8);
         if (angle < 0.0f) {
             angle = (f32) ((f64) angle + M_TAU);
-        } else if (angle > (f32) M_TAU) {
+        } else if (angle > M_TAU) {
             angle = (f32) ((f64) angle - M_TAU);
         }
         kept_gobj = temp_r31->gv.kongo.u.taru.keep;
@@ -652,22 +658,6 @@ void grKongo_801D6378(Ground_GObj* arg)
     return;
 }
 
-void grKongo_801D828C(HSD_GObj* gobj)
-{
-    Ground* gp = gobj->user_data;
-    if (gp->gv.kongo3.xC6 != 1) {
-        return;
-    }
-    if (gp->gv.kongo.u.taru.keep == NULL) {
-        __assert(grKg_803E1858, 1719, "gp->u.taru.keep");
-    }
-    if (((u8*) gp->gv.kongo.u.taru.keep)[2] == 8) {
-        gp->gv.kongo3.xC6 = 0;
-        gp->gv.kongo.u.taru.keep = NULL;
-        grMaterial_801C95C4(gobj);
-    }
-}
-
 void grKongo_801D637C(Ground_GObj* arg0)
 {
     Ground* temp_r31;
@@ -749,7 +739,15 @@ static inline Vec3* lbVector_Diff_t(Vec3* a, Vec3* b, Vec3* result)
 
 static inline float lbVector_Len_t(Vec3* vec)
 {
-    return sqrtf(vec->x * vec->x + vec->y * vec->y + vec->z * vec->z);
+    f32 sq = vec->x * vec->x + vec->y * vec->y + vec->z * vec->z;
+    if (sq > 0.0f) {
+        f64 guess = __frsqrte(sq);
+        guess = 0.5 * guess * (3.0 - guess * guess * sq);
+        guess = 0.5 * guess * (3.0 - guess * guess * sq);
+        guess = 0.5 * guess * (3.0 - guess * guess * sq);
+        return sq * guess;
+    }
+    return sq;
 }
 
 void grKongo_801D6668(Ground_GObj* arg0)
@@ -786,13 +784,13 @@ void grKongo_801D6668(Ground_GObj* arg0)
     temp_r4 = arg0->user_data;
     temp_r30 = arg0->hsd_obj;
 
-    if ((temp_r4->gv.kongo.xCC + 0.001F) <= 1.0F) {
+    if ((temp_r4->gv.kongo.xCC + 0.001F) <= 1.0) {
         splArcLengthPoint(&sp28, temp_r4->gv.kongo2.xC4,
                           temp_r4->gv.kongo.xCC);
         splArcLengthPoint(&sp1C, temp_r4->gv.kongo2.xC4,
                           temp_r4->gv.kongo.xCC + 0.001F);
         len = lbVector_Len_t(lbVector_Diff_t(&sp28, &sp1C, &vec));
-        if (len > 0.0F) {
+        if (len > 0.0) {
             temp_r4->gv.kongo.xCC += 0.001F * (grKg_804D6980->unk14 / len);
             if (temp_r4->gv.kongo.xCC > 1.0F) {
                 temp_r4->gv.kongo.xCC = 1.0F;
@@ -865,7 +863,6 @@ static struct _struct_grKg_803E188C_0x18 grKg_803E188C[0xF] = {
     { 0x2D, 0, NULL, 0.10471976f, 0.0f, 0.0f },
 };
 
-char grKg_803E1A00[] = "gp->u.taru.keep";
 
 struct _struct_grKg_804D6984 {
     HSD_JObj* unk0;
@@ -1116,6 +1113,15 @@ extern ? grKg_804D6984;
 static ? grKg_803B7FB0;                             /* unable to generate initializer: unknown type; const */
 #endif
 
+/* link-stripped .sdata2 sequencer: pre-mints [pi/4 f64, 6.0f] so
+ * grKongo_801D7134's pool group lands [pi/4, 6.0, 37.8] as in the
+ * target (its in-fn use order mints 37.8 first). */
+static void sdata2_ordering(f64* a, f32* b)
+{
+    a[0] = 0.7853981633974483;
+    b[0] = 6.0f;
+}
+
 void grKongo_801D7134(HSD_GObj* gobj, s32 arg1)
 {
     Ground* gp;
@@ -1222,66 +1228,6 @@ void grKongo_801D7134(HSD_GObj* gobj, s32 arg1)
         line_id += 2;
         entry++;
     }
-}
-
-f32 grKongo_801D8314(void)
-{
-    s32 var_r3;
-    f32 var_f31;
-    s32 temp_r3 = grKg_804D6980->unk44 + grKg_804D6980->unk46 +
-                  grKg_804D6980->unk48 + grKg_804D6980->unk4A +
-                  grKg_804D6980->unk4C + grKg_804D6980->unk4E +
-                  grKg_804D6980->unk50 + grKg_804D6980->unk52;
-    if (temp_r3 != 0) {
-        var_r3 = HSD_Randi(temp_r3);
-    } else {
-        var_r3 = 0;
-    }
-    {
-        s32 temp_r3_2 = var_r3 - grKg_804D6980->unk44;
-        if (temp_r3_2 < 0) {
-            var_f31 = 2.3561945f;
-        } else {
-            s32 temp_r3_3 = temp_r3_2 - grKg_804D6980->unk46;
-            if (temp_r3_3 < 0) {
-                var_f31 = 1.5707964f;
-            } else {
-                s32 temp_r3_4 = temp_r3_3 - grKg_804D6980->unk48;
-                if (temp_r3_4 < 0) {
-                    var_f31 = 0.7853982f;
-                } else {
-                    s32 temp_r3_5 = temp_r3_4 - grKg_804D6980->unk4A;
-                    if (temp_r3_5 < 0) {
-                        var_f31 = 0.0f;
-                    } else {
-                        s32 temp_r3_6 = temp_r3_5 - grKg_804D6980->unk4C;
-                        if (temp_r3_6 < 0) {
-                            var_f31 = -0.7853982f;
-                        } else {
-                            s32 temp_r3_7 = temp_r3_6 - grKg_804D6980->unk4E;
-                            if (temp_r3_7 < 0) {
-                                var_f31 = -1.5707964f;
-                            } else {
-                                s32 temp_r3_8 =
-                                    temp_r3_7 - grKg_804D6980->unk50;
-                                if (temp_r3_8 < 0) {
-                                    var_f31 = -2.3561945f;
-                                } else {
-                                    temp_r3_8 -= grKg_804D6980->unk52;
-                                    if (temp_r3_8 < 0) {
-                                        var_f31 = -3.1415927f;
-                                    } else {
-                                        __assert("grkongo.c", 1753, "0");
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-    return var_f31;
 }
 
 void grKongo_801D5238(bool arg) {}
@@ -1806,9 +1752,83 @@ void grKongo_801D8270(Ground_GObj* gobj)
     }
 }
 
-/// #grKongo_801D828C
+char grKg_803E1A00[] = "gp->u.taru.keep";
 
-/// #grKongo_801D8314
+void grKongo_801D828C(HSD_GObj* gobj)
+{
+    Ground* gp = gobj->user_data;
+    if (gp->gv.kongo3.xC6 != 1) {
+        return;
+    }
+    if (gp->gv.kongo.u.taru.keep == NULL) {
+        __assert(grKg_803E1858, 1719, grKg_803E1A00);
+    }
+    if (((u8*) gp->gv.kongo.u.taru.keep)[2] == 8) {
+        gp->gv.kongo3.xC6 = 0;
+        gp->gv.kongo.u.taru.keep = NULL;
+        grMaterial_801C95C4(gobj);
+    }
+}
+
+f32 grKongo_801D8314(void)
+{
+    s32 var_r3;
+    f32 var_f31;
+    s32 temp_r3 = grKg_804D6980->unk44 + grKg_804D6980->unk46 +
+                  grKg_804D6980->unk48 + grKg_804D6980->unk4A +
+                  grKg_804D6980->unk4C + grKg_804D6980->unk4E +
+                  grKg_804D6980->unk50 + grKg_804D6980->unk52;
+    if (temp_r3 != 0) {
+        var_r3 = HSD_Randi(temp_r3);
+    } else {
+        var_r3 = 0;
+    }
+    {
+        s32 temp_r3_2 = var_r3 - grKg_804D6980->unk44;
+        if (temp_r3_2 < 0) {
+            var_f31 = 2.3561945f;
+        } else {
+            s32 temp_r3_3 = temp_r3_2 - grKg_804D6980->unk46;
+            if (temp_r3_3 < 0) {
+                var_f31 = 1.5707964f;
+            } else {
+                s32 temp_r3_4 = temp_r3_3 - grKg_804D6980->unk48;
+                if (temp_r3_4 < 0) {
+                    var_f31 = 0.7853982f;
+                } else {
+                    s32 temp_r3_5 = temp_r3_4 - grKg_804D6980->unk4A;
+                    if (temp_r3_5 < 0) {
+                        var_f31 = 0.0f;
+                    } else {
+                        s32 temp_r3_6 = temp_r3_5 - grKg_804D6980->unk4C;
+                        if (temp_r3_6 < 0) {
+                            var_f31 = -0.7853982f;
+                        } else {
+                            s32 temp_r3_7 = temp_r3_6 - grKg_804D6980->unk4E;
+                            if (temp_r3_7 < 0) {
+                                var_f31 = -1.5707964f;
+                            } else {
+                                s32 temp_r3_8 =
+                                    temp_r3_7 - grKg_804D6980->unk50;
+                                if (temp_r3_8 < 0) {
+                                    var_f31 = -2.3561945f;
+                                } else {
+                                    temp_r3_8 -= grKg_804D6980->unk52;
+                                    if (temp_r3_8 < 0) {
+                                        var_f31 = -3.1415927f;
+                                    } else {
+                                        __assert(grKg_803E1858, 1753, "0");
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    return var_f31;
+}
 
 DynamicsDesc* grKongo_801D8444(enum_t arg)
 {

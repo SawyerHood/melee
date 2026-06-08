@@ -14,7 +14,8 @@
 #include "it/items/types.h"
 #include "it/types.h"
 
-#include <math_ppc.h>
+/* math_ppc.h dropped: it emits dead _half/_three sqrtf localstatics the
+ * target .sdata2 does not have (idiom 329); nothing from it was used. */
 #include <baselib/gobj.h>
 #include <baselib/jobj.h>
 #include <melee/it/item.h>

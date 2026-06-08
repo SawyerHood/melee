@@ -43,6 +43,15 @@ u8 mnInfo_804A0968[0x48];
 HSD_GObj* mnInfo_804D6C78;
 extern GXColor mn_804D4B64;
 
+/// .bss emission order keeper: the original TU's first code reference is
+/// mnInfo_804A0958 (target .bss order 0958 < 0968); our first live ref is
+/// mnInfo_804A0968 (line ~91). Dead static fn (never deleted, link-stripped;
+/// 356-soft) re-pins the epoch. Idiom 375-family.
+static void mnInfo_BssOrderKeeper(void)
+{
+    *(volatile void**) &mnInfo_804A0958.joint;
+}
+
 #pragma push
 #pragma dont_inline on
 s32 mnInfo_80251A08(s32 arg0)
@@ -502,16 +511,14 @@ void mnInfo_80252720(MnInfoData* data)
 
 s32 mnInfo_80252758(void)
 {
+    MnInfoData* temp_r29;
     s32 spC;
     void* sp8;
-    HSD_GObj* temp_r3_2;
-    HSD_GObjProc* temp_r3;
-    HSD_GObjProc* temp_r3_4;
-    HSD_Text* temp_r3_5;
-    HSD_Text* temp_r3_6;
     MnInfoData* temp_r3_3;
-    MnInfoData* temp_ret;
-    MnInfoData* temp_r29;
+    HSD_Text* temp_r3_6;
+    HSD_GObj* temp_r3_2;
+    HSD_GObjProc* temp_r3_4;
+    HSD_Archive* archive;
 
     mn_804D6BC8.cooldown = 5;
     mn_804A04F0.prev_menu = mn_804A04F0.cur_menu;
@@ -519,11 +526,12 @@ s32 mnInfo_80252758(void)
     mn_804A04F0.hovered_selection = 0;
     sp8 = NULL;
     spC = 0;
+    archive = mn_804D6BB8;
 
     /// The section names are the MenMainConCo_Top_* strings inside
     /// mnInfo_803EFC08 (+0x64/+0x7C/+0x98/+0xB8), addressed reloc-free off
     /// the data anchor like the original (idioms 366/314).
-    lbArchive_LoadSections(mn_804D6BB8, (void**) &mnInfo_804A0958.joint,
+    lbArchive_LoadSections(archive, (void**) &mnInfo_804A0958.joint,
                            (char*) mnInfo_803EFC08 + 0x64,
                            &mnInfo_804A0958.animjoint,
                            (char*) mnInfo_803EFC08 + 0x7C,
@@ -537,16 +545,15 @@ s32 mnInfo_80252758(void)
     temp_r3_2 = GObj_Create(6, 7, 0x80);
     mnInfo_804D6C78 = temp_r3_2;
 
-    temp_ret = HSD_MemAlloc(sizeof(MnInfoData));
-    temp_r3_3 = temp_ret;
+    temp_r3_3 = HSD_MemAlloc(sizeof(MnInfoData));
     /// HSD_ASSERTREPORT(0x267, temp_r3_3, "Can't get user_data.\n") with
     /// all three strings addressed inside mnInfo_803EFC08 (+0x34 message,
     /// +0x4C file, +0x58 condition) like the original.
-    temp_r3_3 != NULL
-        ? (void) 0
-        : (OSReport((char*) mnInfo_803EFC08 + 0x34),
-           __assert((char*) mnInfo_803EFC08 + 0x4C, 0x267,
-                    (char*) mnInfo_803EFC08 + 0x58));
+    if (temp_r3_3 == NULL) {
+        OSReport((char*) mnInfo_803EFC08 + 0x34);
+        __assert((char*) mnInfo_803EFC08 + 0x4C, 0x267,
+                 (char*) mnInfo_803EFC08 + 0x58);
+    }
     mnInfo_80252720(temp_r3_3);
     GObj_InitUserData(temp_r3_2, 0, HSD_Free, temp_r3_3);
 
@@ -554,9 +561,8 @@ s32 mnInfo_80252758(void)
     temp_r3_4->flags_3 = HSD_GObj_804D783C;
 
     temp_r29 = temp_r3_2->user_data;
-    temp_r3_5 = temp_r29->description;
-    if (temp_r3_5 != NULL) {
-        HSD_SisLib_803A5CC4(temp_r3_5);
+    if (temp_r29->description != NULL) {
+        HSD_SisLib_803A5CC4(temp_r29->description);
     }
     temp_r3_6 =
         HSD_SisLib_803A5ACC(0, 1, -9.5f, 9.1f, 17.0f, 364.68332f, 38.38772f);
@@ -565,8 +571,10 @@ s32 mnInfo_80252758(void)
     temp_r3_6->font_size.y = 0.0521f;
     HSD_SisLib_803A6368(temp_r3_6, 0xA3);
 
-    temp_r3 = HSD_GObj_SetupProc(GObj_Create(0, 1, 0x80),
-                                 (HSD_GObjEvent) fn_80251FE4, 0);
-    temp_r3->flags_3 = HSD_GObj_804D783C;
-    return (s32) temp_r3;
+    temp_r3_2 = GObj_Create(0, 1, 0x80);
+    temp_r3_4 = HSD_GObj_SetupProc(temp_r3_2, (HSD_GObjEvent) fn_80251FE4, 0);
+    temp_r3_4->flags_3 = HSD_GObj_804D783C;
+    /// (no return statement: the original leaves the proc pointer in r3;
+    /// an explicit `return (s32) temp_r3_4` mints a stray clrlwi at the
+    /// flags_3 store -- mncount sibling site is return-free and clean)
 }

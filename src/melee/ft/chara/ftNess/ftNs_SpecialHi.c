@@ -25,7 +25,24 @@
 #include "mp/forward.h"
 
 #include <math.h>
-#include <math_ppc.h>
+/* math_ppc.h dropped: its sqrtf inline emits dead _half/_three localstatics
+ * the target .sdata2 does not have (idiom 329). xsqrtf below is the same
+ * inline with pool-literal 0.5/3.0 (= target @-anon doubles). */
+extern double __frsqrte(double);
+
+static inline float xsqrtf(float x)
+{
+    volatile float y;
+    if (x > 0.0f) {
+        double guess = __frsqrte((double) x);
+        guess = 0.5 * guess * (3.0 - guess * guess * x);
+        guess = 0.5 * guess * (3.0 - guess * guess * x);
+        guess = 0.5 * guess * (3.0 - guess * guess * x);
+        y = (float) (x * guess);
+        return y;
+    }
+    return x;
+}
 #include <trigf.h>
 #include <dolphin/mtx.h>
 #include <MetroTRK/intrinsics.h>
@@ -1354,7 +1371,7 @@ void ftNs_SpecialAirHi_Phys(HSD_GObj* gobj)
     temp_fmuls = temp_f2 * temp_f2;
     temp_fmuls2 = temp_f1 * temp_f1;
 
-    temp_sqrt = sqrtf(temp_fmuls + temp_fmuls2);
+    temp_sqrt = xsqrtf(temp_fmuls + temp_fmuls2);
     if (temp_sqrt < 0.0f) {
         temp_f1_5 = fp->self_vel.x;
         temp_f0 = fp->self_vel.y;

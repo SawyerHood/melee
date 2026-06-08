@@ -1,7 +1,10 @@
 #include "itsamusbomb.h"
 
 #include "math.h"
-#include "math_ppc.h"
+/* math_ppc.h dropped: it emits dead _half/_three sqrtf localstatics the
+ * target .sdata2 does not have (idiom 329); only __frsqrte was needed
+ * (my_sqrtf below carries its own literal-folded body). */
+extern double __frsqrte(double);
 
 #include <placeholder.h>
 #include <platform.h>
