@@ -29,6 +29,8 @@
 #include "sysdolphin/baselib/memory.h"
 
 #include <math.h>
+
+extern double __frsqrte(double);
 #include <baselib/archive.h>
 #include <baselib/dobj.h>
 #include <baselib/gobj.h>
@@ -36,7 +38,6 @@
 #include <baselib/gobjproc.h>
 #include <baselib/jobj.h>
 #include <baselib/random.h>
-#include <MSL/math_ppc.h>
 #include <MSL/trigf.h>
 
 S16Vec3 grRc_803E4DA8[] = {
@@ -86,7 +87,7 @@ extern Vec3 grRc_803B8288;
 extern s16 grRc_803E4FF0[];
 extern s16 grRc_804D4790[4];
 
-static struct {
+struct {
     f32 x0;
     f32 x4;
     f32 x8;
@@ -372,7 +373,8 @@ void grRCruise_801FF924(Ground_GObj* gobj)
     gp->u.scroll.x34[2] = Ground_801C3FA4(gobj, 6);
     gp->u.scroll.x40 = Ground_801C3FA4(gobj, 7);
     gp->u.scroll.scroll_jobj = Ground_801C3FA4(gobj, 3);
-    HSD_ASSERT(0x2B0, gp->u.scroll.scroll_jobj);
+    /* target string proves the original field name (types.h queue) */
+    HSD_ASSERTMSG(0x2B0, gp->u.scroll.scroll_jobj, "gp->u.scroll.int_jobj");
     gp->u.scroll.cam_jobj = Ground_801C3FA4(gobj, 2);
     HSD_ASSERT(0x2B2, gp->u.scroll.cam_jobj);
 
@@ -654,7 +656,15 @@ void grRCruise_80200578(Ground* gp_arg, s32 joint_id, CollData* cd, s32 arg3,
         dy = pos.y - cd->cur_pos.y;
         dist = dx * dx + dy * dy;
         if (dist > 0.0f) {
-            dist = sqrtf(dist);
+            /* literal-pool Newton (MSL sqrtf would emit dead _half/_three
+               localstatics the target .sdata2 does not have) */
+            volatile float y;
+            double guess = __frsqrte((double) dist);
+            guess = 0.5 * guess * (3.0 - guess * guess * dist);
+            guess = 0.5 * guess * (3.0 - guess * guess * dist);
+            guess = 0.5 * guess * (3.0 - guess * guess * dist);
+            y = (float) (dist * guess);
+            dist = y;
         }
         if (dist > 4.0f) {
             if (pos.x < cd->cur_pos.x) {
@@ -752,6 +762,18 @@ void grRCruise_80200B48(Ground_GObj* gobj)
         entry->x00 = 0;
     }
 }
+
+/* 3E4FF0 */ /* joint-id table + 20 dead 8B records (dtk merges both into
+   grRc_803E4FF0; bytes from target .data 0x248-0x30b) */
+s16 grRc_803E4FF0[] = {
+    0x20, 0x29, 0x2A, 0x2B, 0x2C, 0x2D, 0x2E, 0x2F, 0x30, 0x21, 0x22, 0x23,
+    0x24, 0x25, 0x26, 0x27, 0x28, 0,
+    0x06, 0x04, 0, 0, 0x08, 0x05, 0, 0, 0x10, 0x0A, 0, 0, 0x0B, 0x06, 0, 0,
+    0x0C, 0x07, 0, 0, 0x0D, 0x08, 0, 0, 0x0E, 0x09, 0, 0, 0x0F, 0x08, 0, 0,
+    0x13, 0x0C, 0, 1, 0x14, 0x0D, 0, 1, 0x15, 0x0E, 0, 1, 0x1E, 0x0F, 0, 1,
+    0x16, 0x10, 0, 1, 0x17, 0x11, 0, 1, 0x18, 0x12, 0, 1, 0x19, 0x13, 0, 1,
+    0x1A, 0x14, 0, 1, 0x1B, 0x15, 0, 1, 0x1C, 0x16, 0, 1, 0x1D, 0x17, 0, 1,
+};
 
 void grRCruise_80200C04(Ground_GObj* gobj)
 {
@@ -1191,3 +1213,9 @@ bool grRCruise_80201C58(Vec3* arg, int arg0, HSD_JObj* jobj)
 {
     return true;
 }
+
+/* EOF defs (293: keep the in-fn reads extern-shaped). */
+/* 3B8288 */ __declspec(section ".rodata") Vec3 grRc_803B8288 = {
+    1.0f, 0.0f, 0.0f,
+};
+/* 4D4790 */ s16 grRc_804D4790[4] = { 1, 0x1A, 0x33, 0 };

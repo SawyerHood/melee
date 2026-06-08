@@ -46,9 +46,8 @@ void fn_80123218(Fighter_GObj* nana_gobj);
 void ftNn_Init_80123B3C(Fighter_GObj* nana_gobj);
 void ftNn_Init_80123BF0(Fighter_GObj* gobj);
 
-char ftNn_Init_803CD7F8[] = "!(jobj->flags & JOBJ_USE_QUATERNION)";
-
-ftCollisionBox ftNn_Unk_28 = { 12, 0, -6, 6, 6, 6 };
+const f32 ftNn_Init_804D9898 = 0.0F;
+const f64 ftNn_Init_804D98A0 = M_PI_2;
 
 MotionState ftNn_Init_MotionStateTable[ftPp_MS_SelfCount] = {
     {
@@ -403,7 +402,7 @@ void ftNn_Init_OnDeath(Fighter_GObj* gobj)
     fp->fv.nn.x2230_b0 = 0;
     fp->fv.nn.x2238 = 0;
     fp->fv.nn.x224C = 0;
-    fp->fv.nn.x2250 = 0.0f;
+    fp->fv.nn.x2250 = *(volatile f32*) &ftNn_Init_804D9898;
 }
 
 void ftNn_Init_80122FAC(Fighter_GObj* gobj)
@@ -478,7 +477,9 @@ bool ftNn_Init_801230D0(Fighter_GObj* nana_gobj)
             }
             if (nana_fp->facing_dir != popo_fp->facing_dir) {
                 nana_fp->facing_dir = popo_fp->facing_dir;
-                ftPartSetRotY(nana_fp, 0, M_PI_2 * nana_fp->facing_dir);
+                ftPartSetRotY(nana_fp, 0,
+                              *(volatile f64*) &ftNn_Init_804D98A0 *
+                                  nana_fp->facing_dir);
             }
             lb_8000B1CC(popo_fp->parts[FtPart_R4thNb].joint, NULL, &popo_vec);
             lb_8000B1CC(nana_fp->parts[FtPart_XRotN].joint, NULL, &nana_vec);
@@ -586,10 +587,14 @@ void ftPp_SpecialHi_3_Coll(Fighter_GObj* gobj)
     return;
 }
 
+const f32 ftNn_Init_804D98B0 = 1.0F;
+
 void ftNn_Init_801233F8(Fighter_GObj* gobj)
 {
     Fighter* fp = GET_FIGHTER(gobj);
-    Fighter_ChangeMotionState(gobj, 0x169, 0, 0.0f, 1.0f, 0.0f, NULL);
+    Fighter_ChangeMotionState(gobj, 0x169, 0, 0.0f,
+                              *(volatile f32*) &ftNn_Init_804D98B0, 0.0f,
+                              NULL);
     fp->accessory4_cb = fn_80123218;
 }
 
@@ -659,7 +664,9 @@ void ftPp_SpecialHi_4_Coll(Fighter_GObj* gobj)
         if (fp->self_vel.x > 0.0f) {
             fp->self_vel.x *= -1 * attrs->x14C;
             fp->facing_dir *= -1;
-            ftPartSetRotY(fp, 0, M_PI_2 * fp->facing_dir);
+            ftPartSetRotY(fp, 0,
+                          *(volatile f64*) &ftNn_Init_804D98A0 *
+                              fp->facing_dir);
             return;
         }
     }
@@ -667,7 +674,9 @@ void ftPp_SpecialHi_4_Coll(Fighter_GObj* gobj)
         if (fp->self_vel.x < 0.0f) {
             fp->self_vel.x *= -1 * attrs->x14C;
             fp->facing_dir *= -1;
-            ftPartSetRotY(fp, 0, M_PI_2 * fp->facing_dir);
+            ftPartSetRotY(fp, 0,
+                          *(volatile f64*) &ftNn_Init_804D98A0 *
+                              fp->facing_dir);
             return;
         }
     }
@@ -680,8 +689,9 @@ void ftNn_Init_80123720(Fighter_GObj* gobj)
 {
     Fighter* fp = GET_FIGHTER(gobj);
     ftCommon_8007D60C(fp);
-    Fighter_ChangeMotionState(gobj, 365, 0x0C4C508A, fp->cur_anim_frame, 1.0f,
-                              0.0f, NULL);
+    Fighter_ChangeMotionState(gobj, 365, 0x0C4C508A, fp->cur_anim_frame,
+                              *(volatile f32*) &ftNn_Init_804D98B0, 0.0f,
+                              NULL);
     fp->accessory4_cb = fn_80123218;
 }
 
@@ -689,8 +699,9 @@ void ftNn_Init_8012378C(Fighter_GObj* gobj)
 {
     Fighter* fp = GET_FIGHTER(gobj);
     ftCommon_8007D7FC(fp);
-    Fighter_ChangeMotionState(gobj, 362, 0x0C4C508A, fp->cur_anim_frame, 1.0f,
-                              0.0f, NULL);
+    Fighter_ChangeMotionState(gobj, 362, 0x0C4C508A, fp->cur_anim_frame,
+                              *(volatile f32*) &ftNn_Init_804D98B0, 0.0f,
+                              NULL);
     fp->accessory4_cb = fn_80123218;
 }
 
@@ -709,14 +720,18 @@ void ftNn_Init_801237F8(Fighter_GObj* nana_gobj)
     nana_fp->self_vel.y = attrs->x13C * sinf(attrs->x140);
     nana_fp->cur_pos.x += 4.0f * nana_fp->facing_dir * nana_fp->x34_scale.y;
     nana_fp->cur_pos.y += 7.0f * nana_fp->x34_scale.y;
-    Fighter_ChangeMotionState(nana_gobj, 365, 0, 0.0f, 1.0f, 0.0f, NULL);
+    Fighter_ChangeMotionState(nana_gobj, 365, 0, 0.0f,
+                              *(volatile f32*) &ftNn_Init_804D98B0, 0.0f,
+                              NULL);
     nana_fp->accessory4_cb = fn_80123218;
 }
+
+static const f32 ftNn_Init_804D98C0 = 0.0F;
 
 void ftNn_Init_801238E4(Fighter_GObj* gobj)
 {
     Fighter* fp = GET_FIGHTER(gobj);
-    ftPartSetRotX(fp, 0, 0.0F);
+    ftPartSetRotX(fp, 0, *(volatile f32*) &ftNn_Init_804D98C0);
     Fighter_UnkSetFlag_8006CFBC(gobj);
     if (fp->x1A5C != NULL) {
         Fighter* fp2 = GET_FIGHTER(fp->x1A5C);
@@ -725,6 +740,8 @@ void ftNn_Init_801238E4(Fighter_GObj* gobj)
     }
     fp->x1A5C = NULL;
 }
+
+const f64 ftNn_Init_804D98C8 = M_PI_2;
 
 bool ftNn_Init_80123954(Fighter_GObj* nana_gobj, GroundOrAir pp_ga)
 {
@@ -778,7 +795,9 @@ bool ftNn_Init_80123954(Fighter_GObj* nana_gobj, GroundOrAir pp_ga)
                 nana_fp->self_vel = popo_fp->self_vel;
                 nana_fp->gr_vel = popo_fp->gr_vel;
                 nana_fp->facing_dir = popo_fp->facing_dir;
-                ftPartSetRotY(nana_fp, 0, M_PI_2 * nana_fp->facing_dir);
+                ftPartSetRotY(nana_fp, 0,
+                              *(volatile f64*) &ftNn_Init_804D98C8 *
+                                  nana_fp->facing_dir);
                 nana_fp->x1A5C =
                     Player_GetEntityAtIndex(nana_fp->player_id, 0);
             } else {
@@ -817,28 +836,36 @@ static inline void ftNn_Init_80123B3C_inline(Fighter_GObj* gobj)
 
 void ftNn_Init_80123B3C(Fighter_GObj* gobj)
 {
+    f32 z;
     Fighter* fp = GET_FIGHTER(gobj);
     PAD_STACK(0x10);
     fp->cmd_vars[0] = fp->cmd_vars[1] = fp->cmd_vars[2] = fp->cmd_vars[3] = 0;
     ftNn_Init_80123B3C_inline(gobj);
-    Fighter_ChangeMotionState(gobj, 359, 0, 0.0f, 1.0f, 0.0f, NULL);
+    Fighter_ChangeMotionState(gobj, 359, 0,
+                              (z = *(volatile f32*) &ftNn_Init_804D98C0),
+                              1.0f, z, NULL);
     ftNn_Init_80123B3C_inline(gobj);
     ftAnim_8006EBA4(gobj);
-    fp->x74_anim_vel.y = 0.0f;
-    fp->self_vel.y = 0.0f;
+    z = *(volatile f32*) &ftNn_Init_804D98C0;
+    fp->x74_anim_vel.y = z;
+    fp->self_vel.y = z;
 }
 
 void ftNn_Init_80123BF0(Fighter_GObj* gobj)
 {
+    f32 z;
     Fighter* fp = GET_FIGHTER(gobj);
     PAD_STACK(0x10);
     fp->cmd_vars[0] = fp->cmd_vars[1] = fp->cmd_vars[2] = fp->cmd_vars[3] = 0;
     ftNn_Init_80123B3C_inline(gobj);
-    Fighter_ChangeMotionState(gobj, 360, 0, 0.0f, 1.0f, 0.0f, NULL);
+    Fighter_ChangeMotionState(gobj, 360, 0,
+                              (z = *(volatile f32*) &ftNn_Init_804D98C0),
+                              1.0f, z, NULL);
     ftNn_Init_80123B3C_inline(gobj);
     ftAnim_8006EBA4(gobj);
-    fp->x74_anim_vel.y = 0.0f;
-    fp->self_vel.y = 0.0f;
+    z = *(volatile f32*) &ftNn_Init_804D98C0;
+    fp->x74_anim_vel.y = z;
+    fp->self_vel.y = z;
 }
 
 static inline void ftPp_SpecialS_0_Anim_inline(Fighter_GObj* nana_gobj)
@@ -907,7 +934,8 @@ void ftPp_SpecialS_0_Phys(Fighter_GObj* nana_gobj)
     nana_fp->gr_vel = popo_fp->gr_vel;
     nana_fp->xE4_ground_accel_1 = popo_fp->xE4_ground_accel_1;
     nana_fp->facing_dir = popo_fp->facing_dir;
-    ftPartSetRotY(nana_fp, 0, M_PI_2 * nana_fp->facing_dir);
+    ftPartSetRotY(nana_fp, 0,
+                  *(volatile f64*) &ftNn_Init_804D98C8 * nana_fp->facing_dir);
 }
 
 void ftPp_SpecialS_1_Phys(Fighter_GObj* nana_gobj)
@@ -921,7 +949,8 @@ void ftPp_SpecialS_1_Phys(Fighter_GObj* nana_gobj)
     nana_fp->gr_vel = popo_fp->gr_vel;
     nana_fp->xE4_ground_accel_1 = popo_fp->xE4_ground_accel_1;
     nana_fp->facing_dir = popo_fp->facing_dir;
-    ftPartSetRotY(nana_fp, 0, M_PI_2 * nana_fp->facing_dir);
+    ftPartSetRotY(nana_fp, 0,
+                  *(volatile f64*) &ftNn_Init_804D98C8 * nana_fp->facing_dir);
 }
 
 static inline void ftPp_SpecialS_0_Coll_inline(Fighter_GObj* nana_gobj)
@@ -949,7 +978,7 @@ static inline void ftPp_SpecialS_0_Coll_inline3(Fighter_GObj* gobj)
     ftNn_Init_80123B3C_inline(gobj);
     ftCommon_8007D5D4(fp);
     Fighter_ChangeMotionState(gobj, 360, 0x0C4C528A, fp->cur_anim_frame, 1.0f,
-                              0.0f, NULL);
+                              *(volatile f32*) &ftNn_Init_804D98C0, NULL);
     ftNn_Init_80123B3C_inline(gobj);
 }
 
@@ -966,7 +995,8 @@ void ftPp_SpecialS_0_Coll(Fighter_GObj* nana_gobj)
         ft_800849EC(popo_fp, nana_fp);
         if (nana_fp->ground_or_air != popo_fp->ground_or_air) {
             Fighter_ChangeMotionState(nana_gobj, 360, 0x0C4C528A,
-                                      nana_fp->cur_anim_frame, 1.0f, 0.0f,
+                                      nana_fp->cur_anim_frame, 1.0f,
+                                      *(volatile f32*) &ftNn_Init_804D98C0,
                                       NULL);
         }
         nana_fp->ground_or_air = popo_fp->ground_or_air;
@@ -988,13 +1018,14 @@ void ftPp_SpecialS_0_Coll(Fighter_GObj* nana_gobj)
 
 static inline void ftPp_SpecialS_1_Coll_inline3(Fighter_GObj* gobj)
 {
+    f32 z;
     Fighter* fp = GET_FIGHTER(gobj);
     fp->cmd_vars[0] = fp->cmd_vars[1] = fp->cmd_vars[2] = fp->cmd_vars[3] = 0;
     ftNn_Init_80123B3C_inline(gobj);
     ftCommon_8007D7FC(fp);
-    fp->self_vel.y = 0.0f;
+    fp->self_vel.y = (z = *(volatile f32*) &ftNn_Init_804D98C0);
     Fighter_ChangeMotionState(gobj, 359, 0x0C4C528A, fp->cur_anim_frame, 1.0f,
-                              0.0f, NULL);
+                              z, NULL);
     ftNn_Init_80123B3C_inline(gobj);
 }
 
@@ -1011,7 +1042,8 @@ void ftPp_SpecialS_1_Coll(Fighter_GObj* nana_gobj)
         ft_800849EC(popo_fp, nana_fp);
         if (nana_fp->ground_or_air != popo_fp->ground_or_air) {
             Fighter_ChangeMotionState(nana_gobj, 359, 0x0C4C528A,
-                                      nana_fp->cur_anim_frame, 1.0f, 0.0f,
+                                      nana_fp->cur_anim_frame, 1.0f,
+                                      *(volatile f32*) &ftNn_Init_804D98C0,
                                       NULL);
         }
         nana_fp->ground_or_air = popo_fp->ground_or_air;

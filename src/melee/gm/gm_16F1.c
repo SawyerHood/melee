@@ -33,51 +33,6 @@ struct lbl_803D6300_t {
     bool (*x4)(void);
 };
 
-struct lbl_803D6300_t lbl_803D6300[] = {
-    { 0x0016, 0xFFFF, fn_801735F0 },
-    { 0x0017, 0x0001, fn_80173644 },
-    { 0x0018, 0xFFFF, fn_80173510 },
-    { 0x0019, 0xFFFF, NULL },
-    { 0x001A, 0xFFFF, NULL },
-    { 0x001B, 0xFFFF, fn_8017367C },
-    { 0x001C, 0xFFFF, gm_80164ABC },
-    { 0x001D, 0xFFFF, gm_80164600 },
-    { 0x001E, 0x0040, fn_80162CCC },
-    { 0x001F, 0x0040, gm_80162EC8 },
-    { 0x0020, 0x0040, fn_801630C4 },
-    { 0x0021, 0x0040, gm_80162D1C },
-    { 0x0022, 0x0040, gm_80162F18 },
-    { 0x0023, 0x0040, gm_80163114 },
-    { 0x0024, 0x0010, fn_801722BC },
-    { 0x0025, 0x0010, fn_801722F4 },
-    { 0x0026, 0x0080, gmMainLib_8015D508 },
-    { 0x0027, 0x0020, fn_80163D24 },
-    { 0x0028, 0x0020, fn_80163D74 },
-    { 0x0029, 0x0040, fn_8017232C },
-    { 0x002A, 0x0040, fn_80172428 },
-    { 0x002B, 0x0040, fn_80172380 },
-    { 0x002C, 0x0040, fn_80172478 },
-    { 0x002D, 0x0040, fn_801723D4 },
-    { 0x002E, 0x0040, fn_801724C8 },
-    { 0x002F, 0x0001, fn_801724D0 },
-    { 0x0030, 0x0001, fn_80172504 },
-    { 0x0031, 0x0001, fn_80172538 },
-    { 0x0032, 0x0001, fn_8017256C },
-    { 0x0033, 0x0001, fn_801725A8 },
-    { 0x0034, 0x0001, fn_801725E4 },
-    { 0x0035, 0x0001, fn_80172624 },
-    { 0x0036, 0x0001, fn_80172664 },
-    { 0x0037, 0xFFFF, fn_80172698 },
-    { 0x0038, 0xFFFF, fn_801726CC },
-    { 0x0039, 0xFFFF, fn_80172700 },
-    { 0x003A, 0xFFFF, fn_80172734 },
-    { 0x003B, 0xFFFF, fn_80172768 },
-    { 0x003C, 0xFFFF, un_80304470 },
-    { 0x003D, 0xFFFF, un_80304510 },
-    { 0x0041, 0x0010, gmMainLib_8015CF94 },
-    { 0x0042, 0x0000, NULL },
-};
-
 int fn_8016F180(int kind)
 {
     struct lbl_803D5A4C_t* curr = lbl_803D5A4C;
@@ -503,6 +458,16 @@ int fn_801701B8(void)
     return lbl_804D65A0;
 }
 
+/* 4B zero filler at .data+0xc0c: the 8-align pad of the original TU band
+   ahead of fn_801701C0's @jumptable (Attack100 zero-pad instrument). */
+__declspec(section ".data") char pad_803D6254[4] = "";
+
+/* .sdata2 stream slots 0x8/0xc/0xe; zero const scalars stay .sdata2
+   (mpisland precedent); readers are volatile-cast (defs precede them). */
+const s32 lbl_804DA2F0 = 0;
+const s16 lbl_804DA2F4 = 0;
+const s8 lbl_804DA2F6 = 0;
+
 int fn_801701C0(void* arg0, int arg1, int arg2)
 {
     struct lbl_8046B6A0_24C_t* rules = arg0;
@@ -514,9 +479,9 @@ int fn_801701C0(void* arg0, int arg1, int arg2)
 
     {
         u8 is_teams = (u8) lbl_804D65A0;
-        *(s32*) &rankings[0] = lbl_804DA2F0;
-        *(u16*) &rankings[4] = lbl_804DA2F4;
-        rankings[6] = lbl_804DA2F6;
+        *(s32*) &rankings[0] = *(s32*) &lbl_804DA2F0;
+        *(u16*) &rankings[4] = *(u16*) &lbl_804DA2F4;
+        rankings[6] = *(u8*) &lbl_804DA2F6;
         if (is_teams != 0) {
             return 0;
         }
@@ -1260,6 +1225,53 @@ int fn_801701C0(void* arg0, int arg1, int arg2)
     PAD_STACK(4);
 }
 
+/* def placed after fn_801701C0: its @jumptable flushes here (idiom 292),
+   landing the jtbl band at .data+0xc10 before this 8-aligned def. */
+struct lbl_803D6300_t lbl_803D6300[] ATTRIBUTE_ALIGN(8) = {
+    { 0x0016, 0xFFFF, fn_801735F0 },
+    { 0x0017, 0x0001, fn_80173644 },
+    { 0x0018, 0xFFFF, fn_80173510 },
+    { 0x0019, 0xFFFF, NULL },
+    { 0x001A, 0xFFFF, NULL },
+    { 0x001B, 0xFFFF, fn_8017367C },
+    { 0x001C, 0xFFFF, gm_80164ABC },
+    { 0x001D, 0xFFFF, gm_80164600 },
+    { 0x001E, 0x0040, fn_80162CCC },
+    { 0x001F, 0x0040, gm_80162EC8 },
+    { 0x0020, 0x0040, fn_801630C4 },
+    { 0x0021, 0x0040, gm_80162D1C },
+    { 0x0022, 0x0040, gm_80162F18 },
+    { 0x0023, 0x0040, gm_80163114 },
+    { 0x0024, 0x0010, fn_801722BC },
+    { 0x0025, 0x0010, fn_801722F4 },
+    { 0x0026, 0x0080, gmMainLib_8015D508 },
+    { 0x0027, 0x0020, fn_80163D24 },
+    { 0x0028, 0x0020, fn_80163D74 },
+    { 0x0029, 0x0040, fn_8017232C },
+    { 0x002A, 0x0040, fn_80172428 },
+    { 0x002B, 0x0040, fn_80172380 },
+    { 0x002C, 0x0040, fn_80172478 },
+    { 0x002D, 0x0040, fn_801723D4 },
+    { 0x002E, 0x0040, fn_801724C8 },
+    { 0x002F, 0x0001, fn_801724D0 },
+    { 0x0030, 0x0001, fn_80172504 },
+    { 0x0031, 0x0001, fn_80172538 },
+    { 0x0032, 0x0001, fn_8017256C },
+    { 0x0033, 0x0001, fn_801725A8 },
+    { 0x0034, 0x0001, fn_801725E4 },
+    { 0x0035, 0x0001, fn_80172624 },
+    { 0x0036, 0x0001, fn_80172664 },
+    { 0x0037, 0xFFFF, fn_80172698 },
+    { 0x0038, 0xFFFF, fn_801726CC },
+    { 0x0039, 0xFFFF, fn_80172700 },
+    { 0x003A, 0xFFFF, fn_80172734 },
+    { 0x003B, 0xFFFF, fn_80172768 },
+    { 0x003C, 0xFFFF, un_80304470 },
+    { 0x003D, 0xFFFF, un_80304510 },
+    { 0x0041, 0x0010, gmMainLib_8015CF94 },
+    { 0x0042, 0x0000, NULL },
+};
+
 int fn_80171A88(void)
 {
     int result = 0;
@@ -1885,16 +1897,18 @@ bool fn_80172C78(int arg0)
 }
 #pragma pop
 
-static const struct lbl_803B7AD0_t {
+const struct lbl_803B7AD0_t {
     u8 x0;
     u8 x1;
     u8 x2;
     u16 x4;
-} lbl_803B7AD0[0xB] = {
+} lbl_803B7AD0[0xC] = {
     { 0, 5, 2, 0x3E8 }, { 1, 5, 2, 0x320 },  { 2, 5, 2, 0x190 },
     { 3, 5, 2, 0x2BC }, { 4, 5, 2, 0x032 },  { 5, 5, 2, 0x12C },
     { 6, 5, 2, 0x1F4 }, { 7, 5, 2, 0x064 },  { 8, 5, 2, 0x384 },
     { 9, 5, 2, 0x0C8 }, { 10, 5, 2, 0x258 },
+    /* zero terminator row (target size 0x48; loops scan 0xB entries) */
+    { 0, 0, 0, 0x000 },
 };
 
 static inline const struct lbl_803B7AD0_t* inline2(u8 arg0)
@@ -2423,7 +2437,7 @@ void gm_80173C70(s8 c_kind, u32 arg1, u32 arg2, int arg3)
     }
 }
 
-static struct lbl_803D6450_t {
+struct lbl_803D6450_t {
     u8 x0;
     u8 x1;
     u16 x2;
@@ -2455,7 +2469,7 @@ void gm_80173D3C(int arg0)
     }
 }
 
-static struct lbl_803D646C_t {
+struct lbl_803D646C_t {
     u16 x0;
     u16 x2;
 } lbl_803D646C[] = {

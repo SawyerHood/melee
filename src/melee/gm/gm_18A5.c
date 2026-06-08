@@ -403,8 +403,8 @@ void fn_8018AA74(HSD_JObj* jobj, s32 entry_idx, s32 slot_idx)
     HSD_JObjSetTranslateY(jobj, -(f32) *p48);
 }
 
-extern s32 lbl_804D6630;
-extern s32 lbl_804D6634;
+s32 lbl_804D6630;
+s32 lbl_804D6634;
 extern struct lbl_803B7C80_t {
     s32 unk0;
     s32 unk4;
@@ -1243,6 +1243,8 @@ void fn_8018DC18(void* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5,
     }
 }
 
+static const GXColor lbl_804DA69C = { 255, 255, 0, 255 };
+
 void fn_8018DF68(void* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5,
                  s32 arg6, f32 farg0)
 {
@@ -1256,10 +1258,10 @@ void fn_8018DF68(void* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5,
     s32 half;
     GXColor c0, c1, c2, c3, c4, c5, c6, c7, c8, c9, c10;
 
-    c0 = (GXColor){ 255, 255, 0, 255 };
-    c10 = (GXColor){ 255, 255, 0, 255 };
+    c0 = lbl_804DA69C;
+    c10 = lbl_804DA69C;
     thickness = ((BracketEntry*) data)->x1C;
-    c1 = (GXColor){ 255, 255, 0, 255 };
+    c1 = lbl_804DA69C;
     DrawRectangle((f32) arg1, (f32) arg2, thickness, (f32) arg4, &c1);
 
     right = arg1 + arg3;
@@ -1318,6 +1320,12 @@ void fn_8018DF68(void* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5,
                       neg_thickness, &c10);
     }
 }
+
+char lbl_803D9EE8[0xC] = "\x83\x51\x83\x58\x83\x67 00";
+char lbl_803D9EF4[0xC] = "\x82\x67\x82\x6C\x82\x6D 00";
+char lbl_803D9F00[0xC] = "\x82\x62\x82\x6F\x82\x74 00";
+
+struct lbl_803D9F0C_t lbl_803D9F0C = { -1, -1, -1 };
 
 /// @todo Currently 98.8% match - permuter couldn't improve beyond score 140
 
@@ -1566,6 +1574,17 @@ void fn_8018EC7C(void)
     mn_8022F0F0(0x14);
 }
 #pragma pop
+
+/* HMN/CPU name-template pointer block (target .sdata2 0x64-0x80; the
+ * strings live in .data right after the fn_8018B090 jumptable). */
+__declspec(section ".sdata2") char* lbl_804DA6B4 = lbl_803D9EE8;
+__declspec(section ".sdata2") char* lbl_804DA6B8 = lbl_803D9EF4;
+__declspec(section ".sdata2") char* lbl_804DA6BC = lbl_803D9F00;
+__declspec(section ".sdata2") char* lbl_804DA6C0 = lbl_803D9F00;
+__declspec(section ".sdata2") char* lbl_804DA6C4 = lbl_803D9EE8;
+__declspec(section ".sdata2") char* lbl_804DA6C8 = lbl_803D9EF4;
+__declspec(section ".sdata2") char* lbl_804DA6CC = lbl_803D9F00;
+__declspec(section ".sdata2") char* lbl_804DA6D0 = lbl_803D9F00;
 
 void fn_8018ECA8(s32 char_id, s32 name_type, s32 jobj_idx1, f32 pos_x,
                  f32 pos_y, s32 jobj_idx2)
@@ -2277,6 +2296,13 @@ void fn_80190520(f32 x, f32 y, f32 z)
 #pragma pop
 
 /// #fn_80190520
+
+/* Camera scalars imported by gm_190A.c (extern f32 there); dead in this
+ * TU (target .sdata2 tail 0x88-0x94). */
+const f32 lbl_804DA6D8 = 4.5F;
+const f32 lbl_804DA6DC = 130.0F;
+const f32 lbl_804DA6E0 = -278.0F;
+const f32 lbl_804DA6E4 = 255.0F;
 
 static inline int gm_801905F0_inline0(int c_kind)
 {

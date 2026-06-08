@@ -12,11 +12,11 @@
 #include <melee/cm/types.h>
 
 /// .bss
-/* 452C68 */ static Camera cm_80452C68;
+/* 452C68 */ Camera cm_80452C68;
 /* 453004 */ CameraDebugMode cm_80453004;
 
 /// .data
-/* 3BCB18 */ static CameraModeCallbacks cm_803BCB18 = { Camera_8002B3D4,
+/* 3BCB18 */ CameraModeCallbacks cm_803BCB18 = { Camera_8002B3D4,
                                                         Camera_8002CDDC,
                                                         Camera_8002D318,
                                                         Camera_8002D85C,
@@ -25,13 +25,13 @@
                                                         Camera_8002E490,
                                                         0,
                                                         0 };
-/* 3BCB3C */ static HSD_WObjDesc cm_803BCB3C = {
+/* 3BCB3C */ HSD_WObjDesc cm_803BCB3C = {
     NULL, { 0.0f, 40.241425f, 300.241f }, 0
 };
-/* 3BCB50 */ static HSD_WObjDesc cm_803BCB50 = { NULL,
+/* 3BCB50 */ HSD_WObjDesc cm_803BCB50 = { NULL,
                                                  { 0.0f, 10.0f, 0.0f },
                                                  0 };
-/* 3BCB64 */ static HSD_CameraDescPerspective cm_803BCB64 = {
+/* 3BCB64 */ HSD_CameraDescPerspective cm_803BCB64 = {
     0,
     0,
     1,
@@ -47,13 +47,13 @@
     1.2173333f
 };
 
-/* 3BCB9C */ static f32 cm_803BCB9C[5] = { 0.0f, 1.5f, 1.32f, 1.16f, 1.0f };
-/* 3BCBB0 */ static char cm_803BCBB0[0x20] = "couldn't get CmSubject struct.\n";
-/* 3BCBD0 */ static char cm_803BCBD0[0xB] = "camera.c";
-/* 3BCBDC */ static char cm_803BCBDC[0x1B] = "fov_u<MTXDegToRad(90.0F)";
-/* 3BCBF8 */ static char cm_803BCBF8[0x1B] = "fov_d<MTXDegToRad(90.0F)";
-/* 3BCC14 */ static char cm_803BCC14[0x1B] = "fov_r<MTXDegToRad(90.0F)";
-/* 3BCC30 */ static char cm_803BCC30[0x1B] = "fov_l<MTXDegToRad(90.0F)";
+/* 3BCB9C */ f32 cm_803BCB9C[5] = { 0.0f, 1.5f, 1.32f, 1.16f, 1.0f };
+/* 3BCBB0 */ char cm_803BCBB0[0x20] = "couldn't get CmSubject struct.\n";
+/* 3BCBD0 */ char cm_803BCBD0[0x7C] = "camera.c\0\0\0\0"
+                                      "fov_u<MTXDegToRad(90.0F)\0\0\0\0"
+                                      "fov_d<MTXDegToRad(90.0F)\0\0\0\0"
+                                      "fov_r<MTXDegToRad(90.0F)\0\0\0\0"
+                                      "fov_l<MTXDegToRad(90.0F)";
 /// /* 3BCC4C */ static void* jumptable_803BCC4C[8] = {
 ///     (void*)0x8002a4f8,
 ///     (void*)0x8002a554,
@@ -64,8 +64,6 @@
 ///     (void*)0x8002a700,
 ///     (void*)0x8002a728,
 /// };
-/* 3BCC70 */ static char lbl_803BCC70[0x17] = "rate>0.0F&&rate<=1.0F";
-/* 3BCC88 */ static char lbl_803BCC88[0x17] = "snapshot! ptr=%08x\n";
 
 // /* 3BCCA0 */ static CameraUnkGlobals cm_803BCCA0 = {
 //     83.0f,  1000.0f, -30.0f,  5.0f,  -7.0f,  17.5f,  -17.5f, 0.0f,  0.0682f,
@@ -78,19 +76,22 @@
 // };
 
 /// .rodata
-/* 3B73B8 */ static Vec3 const cm_WorldForward = { 0.0f, 0.0f, -1.0f };
-/* 3B73C4 */ static Vec3 const cm_803B73C4 = { 0.0f };
-/* 3B73D0 */ static Vec3 const cm_WorldUp = { 0.0f, 1.0f, 0.0f };
-/* 3B73DC */ static Vec3 const cm_803B73DC = { 0.0f, 1.0f, 0.0f };
+/* 3B73B8 */ Vec3 const cm_803B73B8 = { 0.0f, 0.0f, -1.0f };
+/* 3B73C4 */ Vec3 const cm_803B73C4 = { 0.0f };
+/* 3B73D0 */ Vec3 const cm_803B73D0 = { 0.0f, 1.0f, 0.0f };
+/* 3B73DC */ Vec3 const cm_803B73DC = { 0.0f, 1.0f, 0.0f };
 
 /// .sbss
-/* 4D6458 */ static CmSubject* cm_804D6458;
-/* 4D645C */ static CmSubject* cm_804D645C;
-/* 4D6460 */ static CmSubject* cm_804D6460;
+/// non-static tentative defs emit in REVERSE lexical order; reverse-target
+/// declaration order yields .sbss [6458, 645C, 6460, 6464, 6468]
 /* 4D6468 */ CmSubject* cm_804D6468; // requires a size of 8?
+/* 4D6464 */ HSD_CObj* cm_804D6464;
+/* 4D6460 */ CmSubject* cm_804D6460;
+/* 4D645C */ CmSubject* cm_804D645C;
+/* 4D6458 */ CmSubject* cm_804D6458;
 
 /// .sdata
-/* 4D3938 */ static char cm_804D3938[0x8] = "0";
+/* 4D3938 */ __declspec(section ".sdata") char cm_804D3938[0x8] = "0";
 
 /// sdata2
 /* 4D7E00 */ extern f32 const cm_804D7E00;

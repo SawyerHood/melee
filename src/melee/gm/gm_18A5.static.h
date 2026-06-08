@@ -205,10 +205,11 @@ static u32 lbl_803D9E1C[] = {
     0x014000F0, 0x014000F0,
 };
 
-static u8 lbl_803D9E9C[0x70] = { 0 };
-
-struct {
+struct lbl_803D9F0C_t {
     int x0, x4, x8;
-} lbl_803D9F0C = { -1, -1, -1 };
+};
+
+// lbl_803D9F0C def moved to gm_18A5.c (data recon: emits after the
+// fn_8018B090 jumptable, matching target .data order).
 
 // struct lbl_803DA0D0_t + extern lbl_803DA0D0 moved to gm_1965.c (TU split).

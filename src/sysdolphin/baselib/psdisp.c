@@ -18,7 +18,7 @@ extern float __fabsf(float);
 #include <dolphin/gx.h>
 
 typedef struct {
-    u8 filename[9];
+    u8 filename[12]; /* 9 chars + 3 pad: target message field is at +0xC */
     u8 message[39];
     UNK_T pointers[3];
     u32 bitfields[8];
@@ -45,35 +45,37 @@ typedef struct {
 STATIC_ASSERT(sizeof(psdisp_ParticleSortBucket) == 8);
 STATIC_ASSERT(sizeof(psdisp_ParticleSortCache) == 0xF0);
 
-/* 39F89C */ static void calcTornadoLastPos(HSD_Particle*, f32*, f32*, f32*);
-/* 39FA28 */ static void getColorPrimEnv(HSD_Particle*, GXColor*, GXColor*);
-/* 39FB74 */ static void getColorMatAmb(HSD_Particle*, GXColor*, GXColor*);
+/* 39F89C */ void calcTornadoLastPos(HSD_Particle*, f32*, f32*, f32*);
+/* 39FA28 */ void getColorPrimEnv(HSD_Particle*, GXColor*, GXColor*);
+/* 39FB74 */ void getColorMatAmb(HSD_Particle*, GXColor*, GXColor*);
 /* 3B9628 */ extern f32 HSD_PSDisp_803B9628[12];
 /* 40C300 */ extern psdisp_UnknownType001 HSD_PSDisp_8040C300;
 /* 40C360 */ extern psdisp_UnknownType002 HSD_PSDisp_8040C360;
-/* 4D6380 */ extern u8 HSD_PSDisp_804D6380[2];
+/* 4D6380 */ u8 HSD_PSDisp_804D6380[2] = { 123, 0 };
 /* 4D6384 */ extern u8 HSD_PSDisp_804D6384[2];
 /* 4D0908 */ extern HSD_Particle* hsd_804D0908[146];
 /* 4D0B50 */ extern void* psTexGroupArray_804D0B50;
 /* 4D0C54 */ extern void* psNumCmdList_804D0C54;
 /* 4D0FC0 */ extern psdisp_ParticleSortCache HSD_PSDisp_804D0FC0;
-/* 4D7908 */ extern HSD_Fog* HSD_PSDisp_804D7908;
-/* 4D790C */ extern s32 HSD_PSDisp_804D790C;
-/* 4D7910 */ extern s32 HSD_PSDisp_804D7910;
-/* 4D7914 */ extern f32 HSD_PSDisp_804D7914;
-/* 4D7918 */ extern f32 HSD_PSDisp_804D7918;
-/* 4D791C */ extern f32 HSD_PSDisp_804D791C;
-/* 4D7920 */ extern f32 HSD_PSDisp_804D7920;
-/* 4D7924 */ extern f32 HSD_PSDisp_804D7924;
-/* 4D7928 */ extern f32 HSD_PSDisp_804D7928;
-/* 4D792C */ extern s32 HSD_PSDisp_804D792C;
-/* 4D7930 */ extern s32 HSD_PSDisp_804D7930;
-/* 4D7934 */ extern GXColor HSD_PSDisp_804D7934;
-/* 4D7938 */ extern GXColor HSD_PSDisp_804D7938;
-/* 4D793C */ extern GXColor HSD_PSDisp_804D793C;
-/* 4D7940 */ extern GXColor HSD_PSDisp_804D7940;
-/* 4D7944 */ extern GXColor HSD_PSDisp_804D7944;
-/* 4D7948 */ extern s32 HSD_PSDisp_804D7948;
+/* uninit smalldata globals emit in REVERSE decl order (idiom 265):
+   declared 7948..7908 so .sbss lays out 7908@0x0 .. 7948@0x40. */
+/* 4D7948 */ s32 HSD_PSDisp_804D7948;
+/* 4D7944 */ GXColor HSD_PSDisp_804D7944;
+/* 4D7940 */ GXColor HSD_PSDisp_804D7940;
+/* 4D793C */ GXColor HSD_PSDisp_804D793C;
+/* 4D7938 */ GXColor HSD_PSDisp_804D7938;
+/* 4D7934 */ GXColor HSD_PSDisp_804D7934;
+/* 4D7930 */ s32 HSD_PSDisp_804D7930;
+/* 4D792C */ s32 HSD_PSDisp_804D792C;
+/* 4D7928 */ f32 HSD_PSDisp_804D7928;
+/* 4D7924 */ f32 HSD_PSDisp_804D7924;
+/* 4D7920 */ f32 HSD_PSDisp_804D7920;
+/* 4D791C */ f32 HSD_PSDisp_804D791C;
+/* 4D7918 */ f32 HSD_PSDisp_804D7918;
+/* 4D7914 */ f32 HSD_PSDisp_804D7914;
+/* 4D7910 */ s32 HSD_PSDisp_804D7910;
+/* 4D790C */ s32 HSD_PSDisp_804D790C;
+/* 4D7908 */ HSD_Fog* HSD_PSDisp_804D7908;
 
 void setVtxDesc(s32 fmt)
 {
@@ -107,7 +109,7 @@ void setVtxDesc(s32 fmt)
     }
 }
 
-static void calcTornadoLastPos(HSD_Particle* pp, f32* x, f32* y, f32* z)
+void calcTornadoLastPos(HSD_Particle* pp, f32* x, f32* y, f32* z)
 {
     f32 radius;
     f32 px, py, pz;
@@ -144,7 +146,7 @@ static void calcTornadoLastPos(HSD_Particle* pp, f32* x, f32* y, f32* z)
     *z = -px * cosa * sinb - py * sina + pz * cosa * cosb + gp->pos.z;
 }
 
-static void getColorPrimEnv(HSD_Particle* pp, GXColor* primCol,
+void getColorPrimEnv(HSD_Particle* pp, GXColor* primCol,
                             GXColor* envCol)
 {
     if (pp->primColCount) {
@@ -183,7 +185,7 @@ static void getColorPrimEnv(HSD_Particle* pp, GXColor* primCol,
     }
 }
 
-static void getColorMatAmb(HSD_Particle* pp, GXColor* matCol, GXColor* ambCol)
+void getColorMatAmb(HSD_Particle* pp, GXColor* matCol, GXColor* ambCol)
 {
     if (pp->matColCount) {
         int scale = 65536 * pp->matColRemain / pp->matColCount;
@@ -356,7 +358,7 @@ static inline HSD_Particle* psDispSubPoint(HSD_Particle* pp)
     f32 fw;
     s32 w;
 
-    fw = (pp->size > 42.5f) ? 255.0f : 6.0f * pp->size;
+    fw = (pp->size > 42.5) ? 255.0f : 6.0f * pp->size;
     w = (s32) fw;
     if (HSD_PSDisp_804D790C != (s32) (u8) w) {
         HSD_PSDisp_804D790C = (u8) w;
@@ -451,7 +453,7 @@ static inline HSD_Particle* psDispSubPointTrail(HSD_Particle* pp)
     f32 fw;
     s32 w;
 
-    fw = (pp->size > 42.5f) ? 255.0f : 6.0f * pp->size;
+    fw = (pp->size > 42.5) ? 255.0f : 6.0f * pp->size;
     w = (s32) fw;
     if (HSD_PSDisp_804D7910 != (s32) (u8) w) {
         HSD_PSDisp_804D7910 = (u8) w;
@@ -578,14 +580,9 @@ void psDispParticles(s32 arg0, u32 arg1)
 {
     s32 sp8BC;
     s32 sp8B8;
-    f64 sp8B0;
-    f64 sp8A8;
-    f64 sp8A0;
-    f64 sp898;
     f64 sp890;
     f64 sp888;
     f64 sp880;
-    f64 sp878;
     f64 sp870;
     f64 sp868;
     f64 sp860;
@@ -595,9 +592,6 @@ void psDispParticles(s32 arg0, u32 arg1)
     f64 sp840;
     f64 sp838;
     f64 sp830;
-    f64 sp828;
-    f64 sp820;
-    f64 sp818;
     f32 sp814;
     f32 sp810;
     f32 sp80C;
@@ -794,14 +788,6 @@ void psDispParticles(s32 arg0, u32 arg1)
     sp7DC = &sp6D8;
     sp7E0 = &sp6DC;
     sp7E4 = &sp6E0;
-    sp8B0 = 0.0;
-    sp8A8 = 4503599627370496.0;
-    sp8A0 = 0.01;
-    sp898 = 0.00001;
-    sp878 = 1.0;
-    sp828 = 6.0;
-    sp820 = 42.5;
-    sp818 = 0.000001;
     sp7A8 = (u32) -1;
     sp7AC = (u32) -1;
     sp79C = NULL;
@@ -859,7 +845,7 @@ void psDispParticles(s32 arg0, u32 arg1)
                     pp = pp->next;
                     continue;
                 }
-                if (pp->size < (f32) sp818) {
+                if (pp->size < 1.1920928955078125e-07f) {
                     prev_kind = pp->kind;
                     pp = pp->next;
                     continue;
@@ -912,7 +898,7 @@ void psDispParticles(s32 arg0, u32 arg1)
                     HSD_CObjGetViewingMtx(HSD_CObjGetCurrent(), (MtxPtr) cache);
                     PSMTXInverse((MtxPtr) cache, (MtxPtr) (cache + 0xC));
                     GXGetProjectionv(&cache[0x18]);
-                    if (cache[0x18] == (f32) sp8B0) {
+                    if (cache[0x18] == 0.0f) {
                         cache[0x1F] = cache[0x19] * cache[0] + cache[0x1A] * cache[8];
                         cache[0x20] = cache[0x19] * cache[1] + cache[0x1A] * cache[9];
                         cache[0x21] = cache[0x19] * cache[2] + cache[0x1A] * cache[10];
@@ -1244,7 +1230,7 @@ void psDispParticles(s32 arg0, u32 arg1)
                             }
                             PSMTXConcat((MtxPtr) cache, appsrt->mmtx, (MtxPtr) &appsrt->ssx);
                             ax = appsrt->ssx * appsrt->ssx + appsrt->x74 * appsrt->x74 + appsrt->x84 * appsrt->x84;
-                            if (ax > (f32) sp8B0) {
+                            if (ax > 0.0f) {
                                 double e = __frsqrte((double) ax);
                                 e = 0.5 * e * (3.0 - (double) ax * e * e);
                                 e = 0.5 * e * (3.0 - (double) ax * e * e);
@@ -1253,7 +1239,7 @@ void psDispParticles(s32 arg0, u32 arg1)
                             }
                             appsrt->x94 = ax;
                             ay = appsrt->ssy * appsrt->ssy + appsrt->x78 * appsrt->x78 + appsrt->x88 * appsrt->x88;
-                            if (ay > (f32) sp8B0) {
+                            if (ay > 0.0f) {
                                 double e = __frsqrte((double) ay);
                                 e = 0.5 * e * (3.0 - (double) ay * e * e);
                                 e = 0.5 * e * (3.0 - (double) ay * e * e);
@@ -1297,8 +1283,7 @@ void psDispParticles(s32 arg0, u32 arg1)
                         prev_pos.x = draw_mtx[0][0] * last_pos.x + draw_mtx[0][1] * last_pos.y + draw_mtx[0][2] * last_pos.z + draw_mtx[0][3];
                         prev_pos.y = draw_mtx[1][0] * last_pos.x + draw_mtx[1][1] * last_pos.y + draw_mtx[1][2] * last_pos.z + draw_mtx[1][3];
                         prev_pos.z = draw_mtx[2][0] * last_pos.x + draw_mtx[2][1] * last_pos.y + draw_mtx[2][2] * last_pos.z + draw_mtx[2][3];
-                        ax = (pp->size > (f32) sp820) ? 255.0f
-                                                      : (f32) sp828 * pp->size;
+                        ax = (pp->size > 42.5) ? 255.0f : 6.0f * pp->size;
                         if (pp->kind & Trail) {
                             tail_color.a =
                                 (u8) ((f32) tail_color.a * pp->trail);
@@ -1374,7 +1359,7 @@ void psDispParticles(s32 arg0, u32 arg1)
                         }
                         PSMTXConcat((MtxPtr) cache, appsrt->mmtx, (MtxPtr) &appsrt->ssx);
                         ax = appsrt->ssx * appsrt->ssx + appsrt->x74 * appsrt->x74 + appsrt->x84 * appsrt->x84;
-                        if (ax > (f32) sp8B0) {
+                        if (ax > 0.0f) {
                             double e = __frsqrte((double) ax);
                             e = 0.5 * e * (3.0 - (double) ax * e * e);
                             e = 0.5 * e * (3.0 - (double) ax * e * e);
@@ -1383,7 +1368,7 @@ void psDispParticles(s32 arg0, u32 arg1)
                         }
                         appsrt->x94 = ax;
                         ay = appsrt->ssy * appsrt->ssy + appsrt->x78 * appsrt->x78 + appsrt->x88 * appsrt->x88;
-                        if (ay > (f32) sp8B0) {
+                        if (ay > 0.0f) {
                             double e = __frsqrte((double) ay);
                             e = 0.5 * e * (3.0 - (double) ay * e * e);
                             e = 0.5 * e * (3.0 - (double) ay * e * e);
@@ -1438,7 +1423,7 @@ void psDispParticles(s32 arg0, u32 arg1)
                     if ((pp->kind & Trail) || (pp->kind & DirVec)) {
                         f32 vf1 = 0.0f;
                         f32 vf2 = 0.0f;
-                        if ((f32) sp8B0 == cache[0x18]) {
+                        if (0.0f == cache[0x18]) {
                             Vec3 d;
                             f32 x84 = appsrt->x84;
                             f32 x88 = appsrt->x88;
@@ -1473,10 +1458,10 @@ void psDispParticles(s32 arg0, u32 arg1)
                                 d.z = pp->pos.z - pp->vel.z;
                             }
                             if (cache[0x18] != w0) {
-                                f32 w0inv = (f32) sp878 / w0;
+                                f32 w0inv = -1.0f / w0;
                                 f32 w1 = x90 + (x8C * d.z + (x84 * d.x + x88 * d.y));
                                 if (cache[0x18] != w1) {
-                                    f32 w1inv = (f32) sp878 / w1;
+                                    f32 w1inv = -1.0f / w1;
                                     vf1 = w0inv * (f20 + (f16 * pp->pos.z +
                                                           (s808 * pp->pos.x +
                                                            s804 * pp->pos.y))) -
@@ -1514,7 +1499,7 @@ void psDispParticles(s32 arg0, u32 arg1)
                                 vf2 = f20 * vz + (f17 * vx + f18 * vy);
                             }
                         }
-                        if (fabsf(vf2) < (f32) sp898) {
+                        if (fabsf(vf2) < 1.17549435e-38f) {
                             angle = (-vf1 >= 0.0f) ? 1.5707964f : -1.5707964f;
                         } else {
                             angle = atan2f(-vf1, vf2);
@@ -1525,7 +1510,7 @@ void psDispParticles(s32 arg0, u32 arg1)
                     } else {
                         angle = pp->rotate;
                     }
-                    if (fabsf(angle) > (f32) sp8A0) {
+                    if (fabsf(angle) > 0.01) {
                         f32 c = cosf(angle);
                         f32 s = sinf(angle);
                         f32 old_ax = ax;
@@ -1681,7 +1666,7 @@ void psDispParticles(s32 arg0, u32 arg1)
                     if ((pp->kind & Trail) || (pp->kind & DirVec)) {
                         f32 vf1 = 0.0f;
                         f32 vf2 = 0.0f;
-                        if ((f32) sp8B0 == cache[0x18]) {
+                        if (0.0f == cache[0x18]) {
                             Vec3 d;
                             if (pp->kind & Tornado) {
                                 calcTornadoLastPos(pp, &d.x, &d.y, &d.z);
@@ -1695,12 +1680,12 @@ void psDispParticles(s32 arg0, u32 arg1)
                                                        (cache[8] * pp->pos.x +
                                                         cache[9] * pp->pos.y));
                                 if (cache[0x18] != w0) {
-                                    f32 w0inv = (f32) sp878 / w0;
+                                    f32 w0inv = 1.0f / w0;
                                     f32 w1 = cache[0xB] +
                                              (cache[0xA] * d.z +
                                               (cache[8] * d.x + cache[9] * d.y));
                                     if (cache[0x18] != w1) {
-                                        f32 w1inv = (f32) sp878 / w1;
+                                        f32 w1inv = 1.0f / w1;
                                         f64 t888 = (f64) (cache[0x20] * pp->pos.y);
                                         f64 t890 = (f64) (cache[0x1F] * d.x +
                                                           cache[0x20] * d.y);
@@ -1745,7 +1730,7 @@ void psDispParticles(s32 arg0, u32 arg1)
                                       (cache[0x23] * vx + cache[0x24] * vy);
                             }
                         }
-                        if (fabsf(vf2) < (f32) sp898) {
+                        if (fabsf(vf2) < 1.17549435e-38f) {
                             angle = (vf1 >= 0.0f) ? 1.5707964f : -1.5707964f;
                         } else {
                             angle = atan2f(vf1, vf2);
@@ -1756,7 +1741,7 @@ void psDispParticles(s32 arg0, u32 arg1)
                     } else {
                         angle = pp->rotate;
                     }
-                    if (fabsf(angle) > (f32) sp8A0) {
+                    if (fabsf(angle) > 0.01) {
                         Vec3 axis;
                         f32 t1;
                         f32 t2;
@@ -1844,14 +1829,14 @@ void psDispParticles(s32 arg0, u32 arg1)
                             f32 trailA = 255.0f * (1.0f - pp->trail);
                             f32 upLen =
                                 up.x * up.x + up.y * up.y + up.z * up.z;
-                            if (upLen > (f32) sp8B0) {
+                            if (upLen > 0.0f) {
                                 double e = __frsqrte((double) upLen);
                                 e = 0.5 * e * (3.0 - (double) upLen * e * e);
                                 e = 0.5 * e * (3.0 - (double) upLen * e * e);
                                 e = 0.5 * e * (3.0 - (double) upLen * e * e);
                                 upLen = (f32) ((double) upLen * e);
                             }
-                            if ((f32) sp8B0 != upLen) {
+                            if (0.0f != upLen) {
                                 f32 sdx = cur_pos.x - prev_pos.x;
                                 f32 sdy = cur_pos.y - prev_pos.y;
                                 f32 sdz = cur_pos.z - prev_pos.z;
@@ -1859,7 +1844,7 @@ void psDispParticles(s32 arg0, u32 arg1)
                                 f32 ratio;
                                 u8* it;
                                 u32 primitive_count;
-                                if (segLen > (f32) sp8B0) {
+                                if (segLen > 0.0f) {
                                     double e = __frsqrte((double) segLen);
                                     e = 0.5 * e * (3.0 - (double) segLen * e * e);
                                     e = 0.5 * e * (3.0 - (double) segLen * e * e);
@@ -2006,3 +1991,25 @@ void psDispParticles(s32 arg0, u32 arg1)
         HSD_StateInvalidate(-1);
     }
 }
+
+/* EOF defs: 293 keeps all in-fn reads extern-shaped (visible defs folded
+   anchors and changed .text, probe ps1). */
+/* 40C300 */ psdisp_UnknownType001 HSD_PSDisp_8040C300 = {
+    "object.h",
+    "HSD_OBJ(o)->ref_count != HSD_OBJ_NOREF",
+    { NULL, NULL, NULL },
+    { 0x00010000, 0x01000101, 0x01010100, 0x00000001, 0x00000001, 0x01010100,
+      0x01000101, 0x00010000 },
+};
+/* 40C360 */ psdisp_UnknownType002 HSD_PSDisp_8040C360 = {
+    { NULL, NULL, NULL, NULL },
+    "Particle:setBlendMode:Unknown mode\n",
+    "psdisp.c",
+};
+/* 4D0FC0 */ psdisp_ParticleSortCache HSD_PSDisp_804D0FC0;
+
+/* 3B9628 */ /* declspec .rodata (271) avoids a const conflict with the decl
+   above. */
+__declspec(section ".rodata") f32 HSD_PSDisp_803B9628[12] = {
+    1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f,
+};

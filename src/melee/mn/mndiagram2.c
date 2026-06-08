@@ -82,6 +82,42 @@ typedef struct {
 /* mnDiagram_ArchiveData, mnDiagram2_804D6C18, mnDiagram_804A0834 defined in
  * mndiagram2.static.h */
 
+/* Four Vec3 anchors (rows 0-3) at +0x0/+0xC/+0x18/+0x24, then the stat
+ * label/icon/format u16 tables (indexed via base + (stat_type << 1)). */
+u8 mnDiagram2_803EEAD0[0x90] = {
+    0xC0, 0x20, 0x00, 0x00, 0x3E, 0x99, 0x99, 0x9A, 0x00, 0x00, 0x00, 0x00,
+    0xC0, 0x0C, 0xCC, 0xCD, 0x3F, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+    0xBF, 0x80, 0x00, 0x00, 0x3F, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+    0xC0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+    0x00, 0x4A, 0x00, 0x4B, 0x00, 0x4C, 0x00, 0x4D, 0x00, 0x4E, 0x00, 0x4F,
+    0x00, 0x50, 0x00, 0x51, 0x00, 0x52, 0x00, 0x53, 0x00, 0x54, 0x00, 0x55,
+    0x00, 0x56, 0x00, 0x57, 0x00, 0x58, 0x00, 0x59, 0x00, 0x5A, 0x00, 0x5B,
+    0x00, 0x5C, 0x00, 0x5D, 0x00, 0x5E, 0x00, 0x5F, 0x00, 0x60, 0x00, 0x61,
+    0x00, 0x7A, 0x00, 0x7A, 0x00, 0x7A, 0x00, 0x7C, 0x00, 0x7C, 0x00, 0x7C,
+    0x00, 0x7C, 0x00, 0x7C, 0x00, 0x7A, 0x00, 0x7A, 0x00, 0x7A, 0xFF, 0xFF,
+    0x00, 0x7C, 0x00, 0x7B, 0x00, 0x7E, 0x00, 0x7E, 0x00, 0x7E, 0x00, 0x7E,
+    0x00, 0x7D, 0x00, 0x7D, 0x00, 0x7D, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
+};
+
+AnimLoopSettings mnDiagram2_803EEB60[2] = {
+    { 10.0F, 19.0F, -0.1F },
+    { 0.0F, 199.0F, 0.0F },
+};
+
+GXColor mnDiagram2_804D4FB8 = { 0, 0, 0, 255 };
+GXColor mnDiagram2_804D4FBC = { 255, 200, 0, 255 };
+
+__declspec(section ".sdata2") f32 mnDiagram2_804DBFC8 = 0.045F;
+__declspec(section ".sdata2") f32 mnDiagram2_804DBFCC[1] = { 0 };
+__declspec(section ".sdata2") f32 mnDiagram2_804DBFD0 = 320.0F;
+__declspec(section ".sdata2") f32 mnDiagram2_804DBFD4 = 240.0F;
+__declspec(section ".sdata2") f32 mnDiagram2_804DBFD8 = 12.0F;
+__declspec(section ".sdata2") f32 mnDiagram2_804DBFDC = 1.0F;
+__declspec(section ".sdata2") f32 mnDiagram2_804DBFE0 = 0.03F;
+__declspec(section ".sdata2") f32 mnDiagram2_804DBFE4 = 0.035F;
+
+HSD_GObj* mnDiagram2_804D6C18;
+
 /// @brief Checks if stat type uses time format (H:MM:SS).
 /// @param stat_type The stat type index (VSRecordsStatType)
 /// @return true if stat should display as time
@@ -243,8 +279,8 @@ void mnDiagram2_UpdateHeader(HSD_GObj* gobj, u8 is_name_mode, u8 entity_idx)
 
     if (is_name_mode != 0) {
         char* str = GetNameText(name);
-        HSD_SisLib_803A6B98(text, mnDiagram2_804DBFCC, mnDiagram2_804DBFCC,
-                            str);
+        HSD_SisLib_803A6B98(text, mnDiagram2_804DBFCC[0],
+                            mnDiagram2_804DBFCC[0], str);
     } else {
         gm_80160B40(text, gm_8016400C(name), 0);
     }
@@ -627,11 +663,11 @@ void mnDiagram2_CreateStatRow(HSD_GObj* gobj, u8 is_name_mode, u8 stat_type,
     base = (char*) &mnDiagram2_803EEAD0;
 
     jobj = data->row0_ref;
-    HSD_ASSERT(0x3EE, jobj);
+    (jobj) ? ((void) 0) : __assert("jobj.h", 0x3EE, "jobj");
     f31 = jobj->translate.y;
 
     jobj = data->row1_ref;
-    HSD_ASSERT(0x3EE, jobj);
+    (jobj) ? ((void) 0) : __assert("jobj.h", 0x3EE, "jobj");
     f30 = jobj->translate.y - f31;
 
     lb_8000B1CC(data->row0_ref, (Vec3*) &mnDiagram2_803EEAD0[0xC], &sp20);
@@ -708,10 +744,11 @@ void mnDiagram2_CreateStatRow(HSD_GObj* gobj, u8 is_name_mode, u8 stat_type,
                             (u8) mnDiagram2_GetStatValue(
                                 is_name_mode, stat_type, entity_idx),
                             0);
-                        HSD_JObjSetTranslateX(jobj, -2.0f);
+                        Vec3* v = (Vec3*) (base + 0x24);
+                        HSD_JObjSetTranslateX(jobj, v->x);
                         HSD_JObjSetTranslateY(jobj, (f30 * (f32) row_idx) +
-                                                        0.0f);
-                        HSD_JObjSetTranslateZ(jobj, 0.0f);
+                                                        v->y);
+                        HSD_JObjSetTranslateZ(jobj, v->z);
 
                         HSD_JObjAddChild(data->icon_parent, jobj);
                         return;
@@ -805,13 +842,17 @@ void mnDiagram2_CreateStatRow(HSD_GObj* gobj, u8 is_name_mode, u8 stat_type,
                         }
                     }
 
-                    HSD_SisLib_803A6B98(text3, mnDiagram2_804DBFCC,
-                                        mnDiagram2_804DBFCC, (char*) str);
+                    HSD_SisLib_803A6B98(text3, mnDiagram2_804DBFCC[0],
+                                        mnDiagram2_804DBFCC[0], (char*) str);
                 }
             }
         }
     }
 }
+
+/* SJIS fullwidth dash for empty stat cells; emitted after CreateStatRow's
+ * jobj.h/jobj pool pair (target .sdata slot 0x18). */
+u8 mnDiagram2_804D4FD0[3] = { 0x81, 0x7C, 0x00 };
 
 /// @brief Populates all 10 visible stat rows in the diagram.
 /// @param gobj The diagram GObj
@@ -1046,7 +1087,7 @@ void mnDiagram2_Create(int arg0)
     HSD_GObjObject_80390A70(gobj, HSD_GObj_804D7849, jobj);
     GObj_SetupGXLink(gobj, HSD_GObj_JObjCallback, 6, 0x80);
     HSD_JObjAddAnimAll(jobj, archive->x4, archive->x8, archive->xC);
-    HSD_JObjReqAnimAll(jobj, mnDiagram2_804DBFCC);
+    HSD_JObjReqAnimAll(jobj, mnDiagram2_804DBFCC[0]);
 
     user_data = (Diagram2*) HSD_MemAlloc(0xC8);
     HSD_ASSERTREPORT(0x3E6, user_data, "Can't get user_data.\n");

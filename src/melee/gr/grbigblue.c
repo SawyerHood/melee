@@ -23,7 +23,7 @@
 #include "lb/lb_00F9.h"
 #include "lb/lbvector.h"
 #include "mp/mplib.h"
-#include "MSL/math_ppc.h"
+#include <MetroTRK/intrinsics.h>
 
 #include <math.h>
 #include <trigf.h>
@@ -36,18 +36,18 @@
 #define M_TAU 6.283185307179586
 
 extern ItemKind grBb_803B8120[5];
-extern s32 grBb_803B8134_ids[33];
+extern s32 grBb_803B8134[33];
 
 extern f32 grBb_804DB2F0;
 extern f32 grBb_804DB2F4;
-extern f32 grBb_804DB304;
+extern const f32 grBb_804DB304;
 extern f32 grBb_804DB308;
 extern f32 grBb_804DB30C;
 extern f32 grBb_804DB310;
-extern f32 grBb_804DB3F0;
+extern const f32 grBb_804DB3F0;
 extern char grBb_804D46B8[2];
 
-static grBb_YakumonoParams* grBb_804D69C8;
+grBb_YakumonoParams* grBb_804D69C8;
 
 typedef struct grBb_Data803E2D78 {
     u8 pad_0[0xC];
@@ -543,6 +543,8 @@ static grBb_TrackEntry grBb_TrackEntries[12] = {
     { 38, 40, 39, 0, { 0, 0, 0 } }, { 41, 43, 42, 0, { 0, 0, 0 } },
     { 29, 31, 30, 0, { 0, 0, 0 } }, { 13, 18, 17, 0, { 0, 0, 0 } },
 };
+
+const f32 grBb_804DB304 = 1.5707964f;
 
 bool grBigBlue_801E687C(Ground_GObj* arg)
 {
@@ -1206,6 +1208,24 @@ void grBigBlue_801E6C60(Ground_GObj* gobj)
 
 void grBigBlue_801E855C(Ground_GObj* arg) {}
 
+/// local clone of the MSL sqrtf inline with literal pool doubles: the MSL
+/// extern-inline's function-scope statics emit _half/_three localstatic
+/// ballast (0x10 at .sdata2+0) that the target lacks; its reads were
+/// const-propped to the same anon 0.5/3.0 slots this clone pools.
+static inline f32 grBb_sqrtf(f32 x)
+{
+    volatile f32 y;
+    if (x > 0.0f) {
+        f64 guess = __frsqrte((f64) x);
+        guess = .5 * guess * (3.0 - guess * guess * x);
+        guess = .5 * guess * (3.0 - guess * guess * x);
+        guess = .5 * guess * (3.0 - guess * guess * x);
+        y = (f32) (x * guess);
+        return y;
+    }
+    return x;
+}
+
 void fn_801E8560(Ground* gp, s32 param, CollData* coll, s32 time_param,
                  s32 env, f32 force)
 {
@@ -1241,7 +1261,7 @@ void fn_801E8560(Ground* gp, s32 param, CollData* coll, s32 time_param,
     {
         f32 dx = pos.x - coll->cur_pos.x;
         f32 dy = pos.y - coll->cur_pos.y;
-        dist = sqrtf(dy * dy + dx * dx);
+        dist = grBb_sqrtf(dy * dy + dx * dx);
     }
 
     if (dist > 2.0F) {
@@ -2641,6 +2661,9 @@ void grBigBlue_801EB4AC(Ground_GObj* gobj)
     mpLib_80058560();
 }
 
+const f32 grBb_804DB3A8 = 0.25f;
+const f32 grBb_804DB3AC = -700.0f;
+
 void grBigBlue_801EBAF8(Ground_GObj* gobj)
 {
     Ground* gp = GET_GROUND(gobj);
@@ -2906,7 +2929,7 @@ f32 grBigBlue_801EC58C(Vec3* pos, Vec3* normal_out, f32 half_height)
      * test the return value against grBb_804DB310); 0.0F was a decomp
      * deviation that also broke the no-hit sentinel semantics. */
     max_y = grBb_804DB310;
-    local_ids = *(grBb_LineIds*) grBb_803B8134_ids;
+    local_ids = *(grBb_LineIds*) grBb_803B8134;
 
     x1 = pos->x;
     x2 = pos->x;
@@ -4989,6 +5012,8 @@ void grBigBlue_801EF7D8(Vec3* pos)
     }
 }
 
+const f32 grBb_804DB3F0 = -10.0f;
+
 bool grBigBlue_801EF844(enum_t line_id)
 {
     if (stage_info.internal_stage_id == 19 && line_id != -1) {
@@ -5049,7 +5074,7 @@ ItemKind grBb_803B8120[5] = { 12, 21, 31, 25, 4 };
 #if defined(__MWERKS__) && !defined(M2CTX)
 __declspec(section ".rodata")
 #endif
-s32 grBb_803B8134_ids[33] = {
+s32 grBb_803B8134[33] = {
     0x21, 0x23, 0x26, 0x27, 0x28, 0x24, 0x25, 0x29, 0x2A, 0x2B, 0x2C,
     0x2D, 0x2E, 0x2F, 0x30, 0x31, 0x32, 0x33, 0x34, 0x35, 0x36, 0x37,
     0x38, 0x39, 0x3A, 0x3B, 0x3C, 0x3D, 0x3E, 0x3F, 0x40, 0x41, 0,

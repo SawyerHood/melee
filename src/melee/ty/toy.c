@@ -1700,10 +1700,10 @@ s32 un_804D5A40 = 0xE2E2E2FF;
 s32 un_804D5A44 = 0xFF8020FF;
 char un_804D5A48[6] = { 0x74, 0x6F, 0x79, 0x2E, 0x63, 0x00 }; /* "toy.c" */
 char un_804D5A50[2] = { 0x30, 0x00 }; /* "0" */
-char un_804D5A54[] = "lobj.h";
-char un_804D5A5C[] = "lobj";
-char un_804D5A64[] = "jobj.h";
-char un_804D5A6C[] = "jobj";
+__declspec(section ".sdata") char un_804D5A54[] = "lobj.h";
+__declspec(section ".sdata") char un_804D5A5C[] = "lobj";
+__declspec(section ".sdata") char un_804D5A64[] = "jobj.h";
+__declspec(section ".sdata") char un_804D5A6C[] = "jobj";
 static inline bool Toy_JObjMtxIsDirty(HSD_JObj* jobj)
 {
     bool result;

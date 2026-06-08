@@ -2,7 +2,7 @@
 
 #include <melee/gm/types.h>
 
-static struct {
+struct {
     u8 x0;
     u8 x1;
     struct {
@@ -11,9 +11,9 @@ static struct {
     } x2[6];
 } lbl_8046DBC8;
 
-/* 46DBD8 */ static lbl_8046DBD8_t lbl_8046DBD8;
+/* 46DBD8 */ lbl_8046DBD8_t lbl_8046DBD8;
 
-static int lbl_803D5648[] = {
+int lbl_803D5648[] = {
     ///< @todo this is the start of a data section
     0x000003E8, 0xFFFFFC18, 0x000007D0, 0xFFFFFA24, 0x00000BB8, 0x000005DC,
     0x000007D0, 0x000003E8, 0xFFFFFC18, 0xFFFFFE0C, 0xFFFFF830, 0xFFFFFC18,
@@ -68,7 +68,7 @@ struct lbl_803D5A4C_t {
     /* +6 */ u8 x6;
 };
 
-/* 3D5A4C */ static struct lbl_803D5A4C_t
+/* 3D5A4C */ struct lbl_803D5A4C_t
     lbl_803D5A4C[0x80C / sizeof(struct lbl_803D5A4C_t)] = {
         { 0, 0x011, 0xFF, 0, 2 },
         { 1, 0x012, 0xFF, 0, 0 },
@@ -329,15 +329,18 @@ struct lbl_803D5A4C_t {
         { 0x29A },
     };
 
-/* 4D65A0 */ static u8 lbl_804D65A0;
-/* 4D65A8 */ static u8 lbl_804D65A8[6];
-/* 4D65B0 */ static s32 lbl_804D65B0;
+/* sbss: globals flush in reverse decl order (idiom 265); target layout
+   65A0@0x0, 65A8@0x8 (8-aligned), 65B0@0x10. */
+/* 4D65B0 */ s32 lbl_804D65B0;
+/* 4D65A8 */ u8 lbl_804D65A8[6] ATTRIBUTE_ALIGN(8);
+/* 4D65A0 */ u8 lbl_804D65A0;
 
-static s32 lbl_804DA2F0;
-static s16 lbl_804DA2F4;
-static s8 lbl_804DA2F6;
-static float lbl_804DA2F8;
-static float lbl_804DA2FC;
+/* .sdata2 zero consts; defs in gm_16F1.c before fn_801701C0 (stream slots
+   0x8/0xc/0xe after the @-template from fn_8016FAD4). Reads are
+   volatile-cast (mpisland recipe) because the defs precede the reader. */
+extern const s32 lbl_804DA2F0;
+extern const s16 lbl_804DA2F4;
+extern const s8 lbl_804DA2F6;
 
 struct lbl_803B7A60_t {
     /* 0x00 */ s32 x0[4];
@@ -349,7 +352,13 @@ struct lbl_803B7A60_t {
     /* 0x60 */ u32 x60[4];
 };
 
-static struct lbl_803B7A60_t lbl_803B7A60 = {
+/* target .rodata: lbl_803B7A44 (dead def) @0x0, lbl_803B7A60 @0x1c,
+   lbl_803B7AD0 @0x8c; declspec keeps the types non-const (idiom 271). */
+__declspec(section ".rodata") f32 lbl_803B7A44[7] = {
+    0.0f, 1.0f, -1.0f, 2.0f, 0.0f, 0.0f, 0.0f,
+};
+
+__declspec(section ".rodata") struct lbl_803B7A60_t lbl_803B7A60 = {
     { 0, 0, 0, 0 },
     { 0, 0, 0, 0 },
     { 0, 0, 0, 0 },

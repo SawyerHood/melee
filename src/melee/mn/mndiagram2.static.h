@@ -23,7 +23,8 @@ typedef struct {
 /* 4D4FD0 */ extern u8 mnDiagram2_804D4FD0[3];
 /* 4D6C18 */ extern HSD_GObj* mnDiagram2_804D6C18;
 /* 4DBFC8 */ extern f32 mnDiagram2_804DBFC8;
-/* 4DBFCC */ extern f32 mnDiagram2_804DBFCC;
+/* 4DBFCC */ extern f32 mnDiagram2_804DBFCC[1]; /* 266 braced-zero array:
+                 declspec alone demotes a 0.0F f32 scalar to .sbss2 */
 /* 4DBFD0 */ extern f32 mnDiagram2_804DBFD0;
 /* 4DBFD4 */ extern f32 mnDiagram2_804DBFD4;
 /* 4DBFD8 */ extern f32 mnDiagram2_804DBFD8;
